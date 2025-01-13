@@ -62,7 +62,7 @@ jobs:
       # upload the generated code as an artifact for comparison
       - name: Upload artifact
         if: ${{failure() && steps.diff.conclusion == 'failure'}}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08
         with:
           name: dist
           path: ./dist
