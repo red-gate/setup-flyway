@@ -23,7 +23,7 @@ The `setup-flyway` action will download and set up a requested version of the Fl
 #### Typical setup
 
 ```yaml
-- uses: redgate/setup-flyway@v1
+- uses: red-gate/setup-flyway@v1
 ```
 
 #### Java version
@@ -33,7 +33,7 @@ The `setup-flyway` action will download and set up a requested version of the Fl
   with:
     distribution: 'zulu' # See 'Supported distributions' for available options
     java-version: '21'
-- uses: redgate/setup-flyway@v1
+- uses: red-gate/setup-flyway@v1
   with:
     architecture: 'java'
 ```
