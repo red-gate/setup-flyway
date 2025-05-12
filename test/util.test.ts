@@ -1,7 +1,7 @@
-import * as util from '../src/util.mjs';
+import * as util from '../src/util';
 import nock from 'nock';
-import {COMMUNITY_BASE_URL} from '../src/constants.mjs';
-import {expect, jest, test} from '@jest/globals';
+import {COMMUNITY_BASE_URL} from '../src/constants';
+import {expect, jest, describe, afterEach, it, test} from '@jest/globals';
 
 describe('Utils', () => {
   afterEach(() => {

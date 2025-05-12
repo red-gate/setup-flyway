@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 //import { fileURLToPath } from 'url';
 
-import {Fixture} from '../fixtures/index.mjs';
+import {Fixture} from '../fixtures';
 
 /**
  * Gets the path to a file in the fixtures directory.

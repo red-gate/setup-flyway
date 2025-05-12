@@ -3,8 +3,8 @@ import * as fs from 'fs';
 import os from 'os';
 import * as semver from 'semver';
 import * as tc from '@actions/tool-cache';
-import * as constants from './constants.mjs';
-import {Architecture} from './inputs.mjs';
+import * as constants from './constants';
+import {Architecture} from './inputs';
 
 /**
  * Gets the temporary directory

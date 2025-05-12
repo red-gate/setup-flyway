@@ -1,16 +1,24 @@
 import fs from 'fs';
 import nock from 'nock';
 import {URL} from 'url';
-import {expect, jest, test} from '@jest/globals';
+import {
+  expect,
+  jest,
+  describe,
+  beforeEach,
+  afterEach,
+  it,
+  test
+} from '@jest/globals';
 import type {SpyInstance} from 'jest-mock';
 
-import {privateExports} from '../src/metadata.mjs';
+import {privateExports} from '../src/metadata';
 import {
   ENTERPRISE_METADATA_URL,
   COMMUNITY_METADATA_URL
-} from '../src/constants.mjs';
-import {loadFixture} from './utils/fixtures.mjs';
-import {getMetadataFilePath} from '../src/util.mjs';
+} from '../src/constants';
+import {loadFixture} from './utils/fixtures';
+import {getMetadataFilePath} from '../src/util';
 
 describe('Metadata module', () => {
   const metadataContent = loadFixture('maven.xml');
@@ -113,8 +121,10 @@ describe('metadata write', () => {
   const metadataContent = loadFixture('maven.xml');
   const metadata = privateExports.functions!;
   const edition = 'community';
-  let writeSyncSpy: SpyInstance<any>;
-  let existsSpy: SpyInstance<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let writeSyncSpy: SpyInstance<any>; // - remove usage of 'any' type
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let existsSpy: SpyInstance<any>; // - remove usage of 'any' type
   beforeEach(async () => {
     writeSyncSpy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
     existsSpy = jest.spyOn(fs, 'existsSync').mockImplementation(() => {
