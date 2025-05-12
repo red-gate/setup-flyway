@@ -1,7 +1,7 @@
 import fs from 'fs';
 import nock from 'nock';
 import {URL} from 'url';
-import {expect, jest, test} from '@jest/globals';
+import {expect, jest, describe, beforeEach, afterEach, it, test} from '@jest/globals';
 import type {SpyInstance} from 'jest-mock';
 
 import {privateExports} from '../src/metadata';
