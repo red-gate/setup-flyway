@@ -4,7 +4,7 @@ import {
   isAllowedPlatformAndArch,
   Platform,
   Architecture
-} from '../src/inputs.mjs';
+} from '../src/inputs';
 
 describe('Inputs', () => {
   const OLD_ENV = process.env;
@@ -35,7 +35,7 @@ describe('Inputs', () => {
   });
 
   it('returns an error if the version is not specified', async () => {
-    import('../src/inputs.mjs').catch(error => {
+    import('../src/inputs').catch(error => {
       expect(error?.message).toBe('Input required and not supplied: version');
     });
   });

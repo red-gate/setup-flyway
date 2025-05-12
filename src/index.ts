@@ -1,10 +1,10 @@
 import * as core from '@actions/core';
 import * as tc from '@actions/tool-cache';
 import * as path from 'path';
-import * as constants from './constants.mjs';
-import {getInputs} from './inputs.mjs';
-import * as metadata from './metadata.mjs';
-import {downloadTool, extractTool, getSemanticVersion} from './util.mjs';
+import * as constants from './constants';
+import {getInputs} from './inputs';
+import * as metadata from './metadata';
+import {downloadTool, extractTool, getSemanticVersion} from './util';
 
 /**
  * Entry point of the script, called when the Action is executed

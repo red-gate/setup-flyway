@@ -4,13 +4,13 @@ import {URL} from 'url';
 import {expect, jest, test} from '@jest/globals';
 import type {SpyInstance} from 'jest-mock';
 
-import {privateExports} from '../src/metadata.mjs';
+import {privateExports} from '../src/metadata';
 import {
   ENTERPRISE_METADATA_URL,
   COMMUNITY_METADATA_URL
-} from '../src/constants.mjs';
-import {loadFixture} from './utils/fixtures.mjs';
-import {getMetadataFilePath} from '../src/util.mjs';
+} from '../src/constants';
+import {loadFixture} from './utils/fixtures';
+import {getMetadataFilePath} from '../src/util';
 
 describe('Metadata module', () => {
   const metadataContent = loadFixture('maven.xml');

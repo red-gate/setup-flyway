@@ -3,8 +3,8 @@ import {XMLParser} from 'fast-xml-parser';
 import * as fs from 'fs';
 import * as core from '@actions/core';
 
-import * as constants from './constants.mjs';
-import {getMetadataFilePath} from './util.mjs';
+import * as constants from './constants';
+import {getMetadataFilePath} from './util';
 
 /**
  * Interface for the parsed XML metadata file

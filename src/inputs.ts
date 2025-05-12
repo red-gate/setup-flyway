@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
 import os from 'os';
-import * as constants from './constants.mjs';
+import * as constants from './constants';
 
 /**
  * The allowed product editions

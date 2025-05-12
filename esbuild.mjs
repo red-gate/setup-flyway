@@ -4,7 +4,7 @@ import esbuild from 'esbuild';
 import fs from 'node:fs';
 
 let result = await esbuild.build({
-  entryPoints: ['src/index.mts', 'src/cleanup.mts'],
+  entryPoints: ['src/index.ts', 'src/cleanup.ts'],
   tsconfig: 'tsconfig.json',
   define: {
     "process.env.NODE_ENV": "\"production\""
