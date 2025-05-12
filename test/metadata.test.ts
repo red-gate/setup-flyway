@@ -121,8 +121,10 @@ describe('metadata write', () => {
   const metadataContent = loadFixture('maven.xml');
   const metadata = privateExports.functions!;
   const edition = 'community';
-  let writeSyncSpy: SpyInstance<any>;
-  let existsSpy: SpyInstance<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let writeSyncSpy: SpyInstance<any>; // - remove usage of 'any' type
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let existsSpy: SpyInstance<any>; // - remove usage of 'any' type
   beforeEach(async () => {
     writeSyncSpy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
     existsSpy = jest.spyOn(fs, 'existsSync').mockImplementation(() => {
