@@ -1,4 +1,12 @@
-import {expect, jest, describe, beforeEach, afterEach, it, test} from '@jest/globals';
+import {
+  expect,
+  jest,
+  describe,
+  beforeEach,
+  afterEach,
+  it,
+  test
+} from '@jest/globals';
 import {
   getInputs,
   isAllowedPlatformAndArch,
