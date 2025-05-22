@@ -4784,7 +4784,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.3.5, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.0, semver@npm:^7.7.1":
+"semver@npm:^7.3.5, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.0":
   version: 7.7.1
   resolution: "semver@npm:7.7.1"
   bin:
@@ -4833,7 +4833,7 @@ __metadata:
     jest-mock: "npm:^29.7.0"
     nock: "npm:^13.5.5"
     prettier: "npm:^3.5.3"
-    semver: "npm:^7.7.1"
+    semver: "npm:^7.7.2"
     ts-jest: "npm:^29.3.4"
     ts-jest-resolver: "npm:^2.0.1"
     ts-node: "npm:^10.9.2"
