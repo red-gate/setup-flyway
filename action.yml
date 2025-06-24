@@ -23,3 +23,7 @@ runs:
   using: 'node20'
   main: 'dist/index.mjs'
   post: 'dist/cleanup.mjs'
+
+branding:
+  icon: database
+  color: red
