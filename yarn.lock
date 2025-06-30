@@ -3828,6 +3828,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jest-mock@npm:^30.0.2":
+  version: 30.0.2
+  resolution: "jest-mock@npm:30.0.2"
+  dependencies:
+    "@jest/types": "npm:30.0.1"
+    "@types/node": "npm:*"
+    jest-util: "npm:30.0.2"
+  checksum: 10/79d13e7374f736919d9ad82858ba59771b7452b0c40fe5452aa3f5f07b2563f9d597e007f7c0ff8ed8fa9cdf12abe049868a6dd7b76d23995532039e894184f6
+  languageName: node
+  linkType: hard
+
 "jest-pnp-resolver@npm:^1.2.2":
   version: 1.2.3
   resolution: "jest-pnp-resolver@npm:1.2.3"
@@ -3968,6 +3979,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jest-util@npm:30.0.2, jest-util@npm:^30.0.2":
+  version: 30.0.2
+  resolution: "jest-util@npm:30.0.2"
+  dependencies:
+    "@jest/types": "npm:30.0.1"
+    "@types/node": "npm:*"
+    chalk: "npm:^4.1.2"
+    ci-info: "npm:^4.2.0"
+    graceful-fs: "npm:^4.2.11"
+    picomatch: "npm:^4.0.2"
+  checksum: 10/7fe3a9062ceac438e691037b0a246cee89b5f0f17e59d7226d00a6d2676c8a5cec4182e242722c2ea86863c46f2f23361e477d6039e0472ac0ec4bb6acef8551
+  languageName: node
+  linkType: hard
+
 "jest-util@npm:^29.7.0":
   version: 29.7.0
   resolution: "jest-util@npm:29.7.0"
@@ -3979,20 +4004,6 @@ __metadata:
     graceful-fs: "npm:^4.2.9"
     picomatch: "npm:^2.2.3"
   checksum: 10/30d58af6967e7d42bd903ccc098f3b4d3859ed46238fbc88d4add6a3f10bea00c226b93660285f058bc7a65f6f9529cf4eb80f8d4707f79f9e3a23686b4ab8f3
-  languageName: node
-  linkType: hard
-
-"jest-util@npm:^30.0.2":
-  version: 30.0.2
-  resolution: "jest-util@npm:30.0.2"
-  dependencies:
-    "@jest/types": "npm:30.0.1"
-    "@types/node": "npm:*"
-    chalk: "npm:^4.1.2"
-    ci-info: "npm:^4.2.0"
-    graceful-fs: "npm:^4.2.11"
-    picomatch: "npm:^4.0.2"
-  checksum: 10/7fe3a9062ceac438e691037b0a246cee89b5f0f17e59d7226d00a6d2676c8a5cec4182e242722c2ea86863c46f2f23361e477d6039e0472ac0ec4bb6acef8551
   languageName: node
   linkType: hard
 
@@ -5002,7 +5013,7 @@ __metadata:
     jest: "npm:^29.7.0"
     jest-circus: "npm:^29.7.0"
     jest-cli: "npm:^29.7.0"
-    jest-mock: "npm:^29.7.0"
+    jest-mock: "npm:^30.0.2"
     jest-util: "npm:^30.0.2"
     nock: "npm:^14.0.5"
     prettier: "npm:^3.6.0"
