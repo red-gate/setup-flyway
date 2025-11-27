@@ -1401,7 +1401,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/globals@npm:30.0.4":
+"@jest/globals@npm:30.0.4, @jest/globals@npm:^30.0.4":
   version: 30.0.4
   resolution: "@jest/globals@npm:30.0.4"
   dependencies:
@@ -5857,7 +5857,7 @@ __metadata:
     "@actions/tool-cache": "npm:^2.0.2"
     "@eslint-community/eslint-utils": "npm:^4.6.1"
     "@eslint/js": "npm:^9.29.0"
-    "@jest/globals": "npm:^29.7.0"
+    "@jest/globals": "npm:^30.0.4"
     "@types/jest": "npm:^29.5.14"
     "@types/node": "npm:^20.19.1"
     "@types/semver": "npm:^7.7.0"
