@@ -24,8 +24,13 @@ The `setup-flyway` action will download and set up a requested version of the Fl
 
 ```yaml
 - uses: red-gate/setup-flyway@v1
+  with:
+    version: '11.18.1'
+    architecture: 'x64'
+    platform: 'linux'
+    edition: 'community'
 ```
-
+`setup-flyway@v1` will use the ref `v1` which is the latest major version for the action. You can pin to a specific version of the action by using a full tag such as `v1.0.3`
 #### Java version
 
 ```yaml
