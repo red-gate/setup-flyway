@@ -31,10 +31,10 @@
     "@actions/core": "^1.11.1",
     "@actions/exec": "^1.1.1",
     "@actions/glob": "^0.5.0",
-    "@actions/http-client": "^3.0.0",
+    "@actions/http-client": "^3.0.1",
     "@actions/io": "^2.0.0",
     "@actions/tool-cache": "^2.0.2",
-    "fast-xml-parser": "^5.3.2",
+    "fast-xml-parser": "^5.3.3",
     "semver": "^7.7.3",
     "xmlbuilder2": "^4.0.3"
   },
