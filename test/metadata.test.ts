@@ -1,20 +1,25 @@
 import nock from 'nock';
 import {URL} from 'url';
-import {expect, jest, describe, afterEach, it, test} from '@jest/globals';
-
+import {expect, describe, afterEach, it, test} from 'vitest';
+import * as path from 'path';
+import {fileURLToPath} from 'url';
+import * as fs from 'fs';
 import {privateExports} from '../src/metadata';
 import {
   ENTERPRISE_METADATA_URL,
   COMMUNITY_METADATA_URL
 } from '../src/constants';
-import {loadFixture} from './utils/fixtures';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 describe('Metadata module', () => {
-  const metadataContent = loadFixture('maven.xml');
+  const metadataContent = fs.readFileSync(
+    path.join(__dirname, 'fixtures', 'maven.xml'),
+    'utf-8'
+  );
   const metadata = privateExports.functions!;
 
   afterEach(() => {
-    jest.restoreAllMocks();
     nock.cleanAll();
   });
 

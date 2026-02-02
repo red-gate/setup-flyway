@@ -1,12 +1,4 @@
-import {
-  expect,
-  jest,
-  describe,
-  beforeEach,
-  afterEach,
-  it,
-  test
-} from '@jest/globals';
+import {expect, vi, describe, beforeEach, afterEach, it, test} from 'vitest';
 import {
   getInputs,
   isAllowedPlatformAndArch,
@@ -22,9 +14,9 @@ describe('Inputs', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
+    vi.resetAllMocks();
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
     process.env = OLD_ENV;
   });
 

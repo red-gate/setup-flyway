@@ -1,13 +1,13 @@
 import * as util from '../src/util';
 import nock from 'nock';
 import {COMMUNITY_BASE_URL} from '../src/constants';
-import {expect, jest, describe, afterEach, it, test} from '@jest/globals';
+import {expect, vi, describe, afterEach, it, test} from 'vitest';
 
 describe('Utils', () => {
   afterEach(() => {
-    jest.resetAllMocks();
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
+    vi.resetAllMocks();
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
     nock.cleanAll();
   });
 
