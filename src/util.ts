@@ -125,18 +125,6 @@ export async function getToolCache(toolName: string) {
 }
 
 /**
- * Gets the local path to the metadata file
- * @param edition The edition of the CLI
- * @returns The path
- */
-export async function getMetadataFilePath(edition: string) {
-  return path.join(
-    await getToolCache(constants.TOOLNAME),
-    `${edition}-metadata.xml`
-  );
-}
-
-/**
  * Ensures that the version is in semver format
  * @param version the version to format
  * @returns A semver formatted version

@@ -1,10 +1,8 @@
 import * as httpm from '@actions/http-client';
 import {XMLParser} from 'fast-xml-parser';
-import * as fs from 'fs';
 import * as core from '@actions/core';
 
 import * as constants from './constants';
-import {getMetadataFilePath} from './util';
 
 /**
  * Interface for the parsed XML metadata file
@@ -55,10 +53,8 @@ async function parseMetadata(content: string): Promise<VersionMetadata> {
 }
 
 /**
- * Retrieves the metadata contents from the cache. If the cached copy is not available,
- * it will download the metadata file and cache it.
+ * Retrieves the metadata contents from the remote server.
  * @param edition the edition of the tool
- * @param metadataUrl the URL of the metadata file
  * @returns the contents of the metadata file
  */
 async function getToolVersionsFile(edition: string) {
@@ -67,37 +63,7 @@ async function getToolVersionsFile(edition: string) {
       ? constants.ENTERPRISE_METADATA_URL
       : constants.COMMUNITY_METADATA_URL;
   core.debug(`Using metadata endpoint: ${metadataUrl}`);
-  const contents =
-    (await readMetadataFile(edition)) ??
-    (await downloadAndCacheToolMetadata(edition, metadataUrl));
-  return contents;
-}
-
-/**
- * Reads the contents of the cached metadata file.
- * @param edition the edition of the tool
- * @returns the content of the metadata file or null if the file does not exist
- */
-async function readMetadataFile(edition: string) {
-  const filePath = await getMetadataFilePath(edition);
-  if (fs.existsSync(filePath)) {
-    return fs.readFileSync(filePath, {
-      encoding: 'utf-8',
-      flag: 'r'
-    });
-  }
-
-  return null;
-}
-
-/**
- * Writes the contents to the metadata file cache.
- * @param edition the edition of the tool
- * @param content the metadata content to write to the cache
- */
-async function writeMetadataFile(edition: string, content: string) {
-  const filePath = await getMetadataFilePath(edition);
-  fs.writeFileSync(filePath, content, {encoding: 'utf-8'});
+  return await downloadToolMetadata(metadataUrl);
 }
 
 /**
@@ -129,15 +95,6 @@ function isAllowedContentType(header: string | undefined) {
   return contentType === 'application/xml' || contentType === 'text/plain';
 }
 
-async function downloadAndCacheToolMetadata(
-  edition: string,
-  metadataUrl: string
-) {
-  const content = await downloadToolMetadata(metadataUrl);
-  await writeMetadataFile(edition, content);
-  return content!;
-}
-
 /** Exported values that are only available in a unit test environment */
 export const privateExports =
   process.env.NODE_ENV !== 'test'
@@ -147,8 +104,6 @@ export const privateExports =
           downloadToolMetadata,
           getAvailableVersions,
           isAllowedContentType,
-          parseAvailableVersions: parseMetadata,
-          readMetadataFile,
-          writeMetadataFile
+          parseAvailableVersions: parseMetadata
         }
       };
