@@ -5265,7 +5265,7 @@ __metadata:
     "@actions/exec": "npm:^1.1.1"
     "@actions/glob": "npm:^0.6.1"
     "@actions/http-client": "npm:^3.0.0"
-    "@actions/io": "npm:^2.0.0"
+    "@actions/io": "npm:^3.0.2"
     "@actions/tool-cache": "npm:^2.0.2"
     "@eslint-community/eslint-utils": "npm:^4.9.1"
     "@eslint/js": "npm:^9.39.2"
