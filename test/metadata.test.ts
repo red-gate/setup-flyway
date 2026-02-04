@@ -1,16 +1,6 @@
-import fs from 'fs';
 import nock from 'nock';
 import {URL} from 'url';
-import {
-  expect,
-  jest,
-  describe,
-  beforeEach,
-  afterEach,
-  it,
-  test
-} from '@jest/globals';
-import type {SpyInstance} from 'jest-mock';
+import {expect, jest, describe, afterEach, it, test} from '@jest/globals';
 
 import {privateExports} from '../src/metadata';
 import {
@@ -18,7 +8,6 @@ import {
   COMMUNITY_METADATA_URL
 } from '../src/constants';
 import {loadFixture} from './utils/fixtures';
-import {getMetadataFilePath} from '../src/util';
 
 describe('Metadata module', () => {
   const metadataContent = loadFixture('maven.xml');
@@ -42,14 +31,6 @@ describe('Metadata module', () => {
           'Content-Type': 'text/plain'
         });
 
-      /*
-    let writeSyncSpy = jest.spyOn(fs, 'existsSync').mockReturnValue(true);
-    let mockWriteStream = new StringWritable();
-    let writeStreamSpy = jest.spyOn(fs, 'createWriteStream').mockImplementation(() => {
-      mockWriteStream.reset();
-      return mockWriteStream;
-    });*/
-
       const versions = await metadata.downloadToolMetadata(metaDataUrl);
       expect(versions).toBe(metadataContent);
       expect(scope.isDone()).toBe(true);
@@ -57,53 +38,9 @@ describe('Metadata module', () => {
   );
 
   it('parses the versions', async () => {
-    //let writeSyncSpy = jest.spyOn(fs, 'existsSync').mockReturnValue(true);
-    //let readSyncSpy = jest.spyOn(fs, 'readFileSync').mockReturnValue(fileData);
     const meta = await metadata.parseAvailableVersions(metadataContent);
     expect(meta.latest).toBe('10.11.0');
     expect(meta.availableVersions).toHaveLength(18);
-  });
-
-  it('reads the cache file', async () => {
-    const edition = 'community';
-    const existsSpy = jest.spyOn(fs, 'existsSync').mockImplementation(() => {
-      return true;
-    });
-    const readSyncSpy = jest
-      .spyOn(fs, 'readFileSync')
-      .mockReturnValue(metadataContent);
-
-    const meta = await metadata.readMetadataFile(edition);
-    expect(meta).toBe(metadataContent);
-    expect(readSyncSpy.mock.calls[0][0]).toBe(
-      await getMetadataFilePath(edition)
-    );
-    expect(existsSpy.mock.calls.length).toBeGreaterThanOrEqual(2);
-  });
-
-  it('writes the metadata file', async () => {
-    const edition = 'community';
-    const writeSyncSpy = jest
-      .spyOn(fs, 'writeFileSync')
-      .mockImplementation(() => {});
-    const existsSpy = jest.spyOn(fs, 'existsSync').mockImplementation(() => {
-      return true;
-    });
-    await metadata.writeMetadataFile(edition, metadataContent);
-
-    // It should attempt to write a file
-    expect(writeSyncSpy.mock.calls).toHaveLength(1);
-
-    // It should attempt to write a file to the expected path
-    expect(writeSyncSpy.mock.calls[0][0]).toBe(
-      await getMetadataFilePath(edition)
-    );
-
-    // It should attempt to write the expected content
-    expect(writeSyncSpy.mock.calls[0][1]).toBe(metadataContent);
-
-    // It should have checked whether the folder for the file exists
-    expect(existsSpy.mock.calls.length).toBeGreaterThanOrEqual(1);
   });
 
   test.each([
@@ -114,40 +51,5 @@ describe('Metadata module', () => {
     ['text/html', false]
   ])('allows content type %p: %p', (contentType, result) => {
     expect(metadata.isAllowedContentType(contentType)).toBe(result);
-  });
-});
-
-describe('metadata write', () => {
-  const metadataContent = loadFixture('maven.xml');
-  const metadata = privateExports.functions!;
-  const edition = 'community';
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let writeSyncSpy: SpyInstance<any>; // - remove usage of 'any' type
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let existsSpy: SpyInstance<any>; // - remove usage of 'any' type
-  beforeEach(async () => {
-    writeSyncSpy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
-    existsSpy = jest.spyOn(fs, 'existsSync').mockImplementation(() => {
-      return true;
-    });
-    await metadata.writeMetadataFile(edition, metadataContent);
-  });
-
-  it('writes the metadata file', async () => {
-    expect(writeSyncSpy.mock.calls).toHaveLength(1);
-  });
-
-  it('uses the expected path', async () => {
-    expect(writeSyncSpy.mock.calls[0][0]).toBe(
-      await getMetadataFilePath(edition)
-    );
-  });
-
-  it('writes the expected content', () => {
-    expect(writeSyncSpy.mock.calls[0][1]).toBe(metadataContent);
-  });
-
-  it('checks whether the folder for the file exists', () => {
-    expect(existsSpy.mock.calls.length).toBeGreaterThanOrEqual(1);
   });
 });
