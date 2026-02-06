@@ -1,0 +1,21 @@
+######################################################################
+#
+# This is a work in progress
+#
+######################################################################
+
+name: Release to GitHub Marketplace
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The version to release (e.g. 1.2.3)
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo version
+        run: echo "${{ inputs.version }}"
