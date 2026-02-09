@@ -6,6 +6,12 @@ export const INPUT_PRODUCT_ARCH = 'architecture';
 export const INPUT_PRODUCT_PLATFORM = 'platform';
 /** Action input - edition */
 export const INPUT_PRODUCT_EDITION = 'edition';
+/** Action input - email for auth */
+export const INPUT_EMAIL = 'email';
+/** Action input - token for auth */
+export const INPUT_TOKEN = 'token';
+/** Action input - EULA agreement for auth */
+export const INPUT_EULA = 'i-agree-to-the-eula';
 
 /** Action output - resolved version */
 export const OUTPUT_VERSION = 'version';
