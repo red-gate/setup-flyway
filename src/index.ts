@@ -16,12 +16,11 @@ async function run() {
     const versionSpec = inputs.versionSpec;
     const architecture = inputs.architecture;
     const platform = inputs.platform;
-    const edition = inputs.edition;
 
     core.startGroup(`Installing ${constants.TOOLNAME}`);
 
     // Get the supported tool versions
-    const versionMetadata = await metadata.getAvailableVersions(edition);
+    const versionMetadata = await metadata.getAvailableVersions();
     core.info(`Latest version: ${versionMetadata.latest}`);
     core.debug(
       `Available versions: ${versionMetadata.availableVersions.join(', ')}`
@@ -40,20 +39,11 @@ async function run() {
     core.debug(`Resolved ${versionSpec} to version: ${version}`);
 
     // Does the version already exist?
-    let cachedPath = tc.find(
-      constants.TOOLNAME,
-      `${edition}-${version}`,
-      architecture
-    );
+    let cachedPath = tc.find(constants.TOOLNAME, version, architecture);
 
     if (!cachedPath) {
       // Download file and extract the archive
-      const download = await downloadTool(
-        version,
-        platform,
-        architecture,
-        edition
-      );
+      const download = await downloadTool(version, platform, architecture);
       const newPath = await extractTool(
         download.pathToArchive,
         download.downloadUrl.endsWith('.zip') ? 'zip' : 'tar.gz'
@@ -67,7 +57,7 @@ async function run() {
       cachedPath = await tc.cacheDir(
         toolPath,
         constants.TOOLNAME,
-        `${edition}-${version}`,
+        version,
         architecture
       );
     }

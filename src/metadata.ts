@@ -28,13 +28,10 @@ export type VersionMetadata = {
 
 /**
  * Retrieves the available versions of the tool from the metadata file.
- * @param metadataUrl the URL of the metadata file
  * @returns the available and latest versions of the tool
  */
-export async function getAvailableVersions(
-  metadataUrl: string
-): Promise<VersionMetadata> {
-  const content = await getToolVersionsFile(metadataUrl);
+export async function getAvailableVersions(): Promise<VersionMetadata> {
+  const content = await getToolVersionsFile();
   return parseMetadata(content);
 }
 
@@ -54,14 +51,10 @@ async function parseMetadata(content: string): Promise<VersionMetadata> {
 
 /**
  * Retrieves the metadata contents from the remote server.
- * @param edition the edition of the tool
  * @returns the contents of the metadata file
  */
-async function getToolVersionsFile(edition: string) {
-  const metadataUrl =
-    edition === 'enterprise' || edition === 'team'
-      ? constants.ENTERPRISE_METADATA_URL
-      : constants.COMMUNITY_METADATA_URL;
+async function getToolVersionsFile() {
+  const metadataUrl = constants.METADATA_URL;
   core.debug(`Using metadata endpoint: ${metadataUrl}`);
   return await downloadToolMetadata(metadataUrl);
 }

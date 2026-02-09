@@ -20,16 +20,14 @@ export function getTempDir() {
  * @param version the CLI version
  * @param platform the CLI platform
  * @param architecture the CLI architecture
- * @param edition the CLI edition
  * @returns the path and URL details
  */
 export async function downloadTool(
   version: string,
   platform: string,
-  architecture: string,
-  edition: string
+  architecture: string
 ) {
-  const downloadUrl = getDownloadUrl(version, platform, architecture, edition);
+  const downloadUrl = getDownloadUrl(version, platform, architecture);
   const pathToDownload = await tc.downloadTool(downloadUrl);
   return {
     downloadUrl,
@@ -140,20 +138,15 @@ export function convertVersionToSemver(version: number[] | string) {
  * @param version the version
  * @param platform the OS platform
  * @param arch the architecture
- * @param edition the edition
  * @returns A URL for downloading the CLI
  */
 export function getDownloadUrl(
   version: string,
   platform: string,
-  arch: string,
-  edition: string
+  arch: string
 ) {
   const extension = getDownloadArchiveExtension(platform);
-  const baseUrl =
-    edition === 'enterprise' || edition === 'team'
-      ? constants.ENTERPRISE_BASE_URL
-      : constants.COMMUNITY_BASE_URL;
+  const baseUrl = constants.BASE_URL;
   return arch == Architecture.JAVA
     ? `${baseUrl}/${version}/flyway-commandline-${version}.${extension}`
     : `${baseUrl}/${version}/flyway-commandline-${version}-${platform}-${arch}.${extension}`;

@@ -3,10 +3,7 @@ import {URL} from 'url';
 import {expect, jest, describe, afterEach, it, test} from '@jest/globals';
 
 import {privateExports} from '../src/metadata';
-import {
-  ENTERPRISE_METADATA_URL,
-  COMMUNITY_METADATA_URL
-} from '../src/constants';
+import {METADATA_URL} from '../src/constants';
 import {loadFixture} from './utils/fixtures';
 
 describe('Metadata module', () => {
@@ -18,24 +15,18 @@ describe('Metadata module', () => {
     nock.cleanAll();
   });
 
-  test.each([
-    ['community', COMMUNITY_METADATA_URL],
-    ['enterprise', ENTERPRISE_METADATA_URL]
-  ])(
-    'should loads remote metadata from %s endpoint',
-    async (edition, metaDataUrl) => {
-      const url = new URL(metaDataUrl);
-      const scope = nock(url.origin)
-        .get(url.pathname)
-        .reply(200, metadataContent, {
-          'Content-Type': 'text/plain'
-        });
+  it('should load remote metadata', async () => {
+    const url = new URL(METADATA_URL);
+    const scope = nock(url.origin)
+      .get(url.pathname)
+      .reply(200, metadataContent, {
+        'Content-Type': 'text/plain'
+      });
 
-      const versions = await metadata.downloadToolMetadata(metaDataUrl);
-      expect(versions).toBe(metadataContent);
-      expect(scope.isDone()).toBe(true);
-    }
-  );
+    const versions = await metadata.downloadToolMetadata(METADATA_URL);
+    expect(versions).toBe(metadataContent);
+    expect(scope.isDone()).toBe(true);
+  });
 
   it('parses the versions', async () => {
     const meta = await metadata.parseAvailableVersions(metadataContent);

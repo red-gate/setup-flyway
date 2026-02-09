@@ -29,15 +29,12 @@ permissions:
 
 jobs:
   setup-tool-check-versions:
-    name: Setup ${{ matrix.version }} (${{matrix.edition}}) - ${{ matrix.os }}
+    name: Setup ${{ matrix.version }} - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
       matrix:
         os: [macos, windows, ubuntu]
-        edition:
-          - community
-          - enterprise
         version:
           - 10.9.0
           - 10.10.0
@@ -51,21 +48,17 @@ jobs:
         id: setup-tool
         with:
           version: ${{ matrix.version }}
-          edition: ${{ matrix.edition }}
       - name: Verify Install
         run: ./test/verify-version.sh "${{ matrix.version }}" "${{ steps.setup-tool.outputs.path }}"
         shell: bash
 
   setup-tool-check-latest:
-    name: Setup latest (${{matrix.edition}}) - ${{ matrix.os }}
+    name: Setup latest - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
       matrix:
         os: [macos, windows, ubuntu]
-        edition:
-          - community
-          - enterprise
 
     steps:
       - name: Checkout
@@ -75,21 +68,17 @@ jobs:
         id: setup-tool
         with:
           version: latest
-          edition: ${{ matrix.edition }}
       - name: Verify Install
         run: ./test/verify-version.sh "${{ steps.setup-tool.outputs.version }}" "${{ steps.setup-tool.outputs.path }}"
         shell: bash
 
   setup-tool-check-java:
-    name: Setup Java latest (${{matrix.edition}}) - ${{ matrix.os }}
+    name: Setup Java latest - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
       matrix:
         os: [macos, windows, ubuntu]
-        edition:
-          - community
-          - enterprise
 
     steps:
       - name: Checkout
@@ -105,7 +94,6 @@ jobs:
         with:
           version: 10.8.1
           architecture: java
-          edition: ${{ matrix.edition }}
       - name: Verify Install
         run: ./test/verify-version.sh "10.8.1" "${{ steps.setup-tool.outputs.path }}"
         shell: bash
@@ -126,41 +114,20 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '21'
-      - name: Setup community
+      - name: Setup native
         uses: ./
-        id: setup-tool-community
+        id: setup-tool-native
         with:
           version: latest
-          edition: community
-      - name: Verify Community Install
-        run: ./test/verify-version.sh "${{ steps.setup-tool-community.outputs.version }}" "${{ steps.setup-tool-community.outputs.path }}"
+      - name: Verify Native Install
+        run: ./test/verify-version.sh "${{ steps.setup-tool-native.outputs.version }}" "${{ steps.setup-tool-native.outputs.path }}"
         shell: bash
-      - name: Setup Java Community
+      - name: Setup Java
         uses: ./
-        id: setup-tool-java-community
+        id: setup-tool-java
         with:
           version: latest
           architecture: java
-          edition: community
-      - name: Verify Java Community Install
-        run: ./test/verify-version.sh "${{ steps.setup-tool-java-community.outputs.version }}" "${{ steps.setup-tool-java-community.outputs.path }}"
-        shell: bash
-      - name: Setup enterprise
-        uses: ./
-        id: setup-tool-enterprise
-        with:
-          version: latest
-          edition: enterprise
-      - name: Verify Enterprise Install
-        run: ./test/verify-version.sh "${{ steps.setup-tool-enterprise.outputs.version }}" "${{ steps.setup-tool-enterprise.outputs.path }}"
-        shell: bash
-      - name: Setup Java Community
-        uses: ./
-        id: setup-tool-java-enterprise
-        with:
-          version: latest
-          architecture: java
-          edition: enterprise
-      - name: Verify Java Enterprise Install
-        run: ./test/verify-version.sh "${{ steps.setup-tool-java-enterprise.outputs.version }}" "${{ steps.setup-tool-java-enterprise.outputs.path }}"
+      - name: Verify Java Install
+        run: ./test/verify-version.sh "${{ steps.setup-tool-java.outputs.version }}" "${{ steps.setup-tool-java.outputs.path }}"
         shell: bash
