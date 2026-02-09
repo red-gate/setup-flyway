@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@eslint-community/eslint-utils": "4.9.1",
-    "@eslint/js": "9.39.2",
+    "@eslint/js": "10.0.1",
     "@jest/globals": "30.2.0",
     "@types/jest": "30.0.0",
     "@types/node": "20.19.30",
