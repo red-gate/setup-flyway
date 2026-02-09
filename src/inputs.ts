@@ -3,14 +3,6 @@ import os from 'os';
 import * as constants from './constants';
 
 /**
- * The allowed product editions
- * */
-export enum Edition {
-  COMMUNITY = 'community',
-  ENTERPRISE = 'enterprise'
-}
-
-/**
  * The allowed platforms
  * */
 export enum Architecture {
@@ -37,7 +29,6 @@ export interface Inputs {
   versionSpec: string;
   architecture: string;
   platform: string;
-  edition: string;
   email: string | undefined;
   token: string | undefined;
   agreeToEula: boolean | undefined;
@@ -67,16 +58,10 @@ export function getInputs(): Inputs {
     getPlatform
   );
 
-  const edition = getInputWithDefault(
-    constants.INPUT_PRODUCT_EDITION,
-    Edition,
-    () => Edition.COMMUNITY
-  );
-
   // Don't output during Jest tests
   if (process.env.NODE_ENV !== 'test') {
     core.debug(
-      `Inputs: version: ${versionSpec}, architecture: ${architecture}, platform: ${platform}, edition: ${edition}`
+      `Inputs: version: ${versionSpec}, architecture: ${architecture}, platform: ${platform}`
     );
   }
 
@@ -98,7 +83,6 @@ export function getInputs(): Inputs {
     versionSpec,
     architecture,
     platform,
-    edition,
     email,
     token,
     agreeToEula

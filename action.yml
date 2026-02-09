@@ -10,9 +10,6 @@ inputs:
     description: The target platform architecture. Defaults to the current platform's architecture.
   platform:
     description: The target OS platform. Defaults to the current platform.
-  edition:
-    description: The edition of the tool to use (enterprise/team or community). Defaults to community.
-    default: community
   email:
     description: A Redgate email to be used in conjunction with the token parameter to configure a personal access token (PAT). Used to authenticate Flyway to use either Teams or Enterprise.
     required: false

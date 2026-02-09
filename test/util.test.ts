@@ -1,6 +1,6 @@
 import * as util from '../src/util';
 import nock from 'nock';
-import {COMMUNITY_BASE_URL} from '../src/constants';
+import {BASE_URL} from '../src/constants';
 import {expect, jest, describe, afterEach, it, test} from '@jest/globals';
 
 describe('Utils', () => {
@@ -12,14 +12,9 @@ describe('Utils', () => {
   });
 
   it('can get download URL', async () => {
-    const target = util.getDownloadUrl(
-      '10.11.0',
-      'linux',
-      'arm64',
-      'community'
-    );
+    const target = util.getDownloadUrl('10.11.0', 'linux', 'arm64');
     expect(target).toBe(
-      `${COMMUNITY_BASE_URL}/10.11.0/flyway-commandline-10.11.0-linux-arm64.tar.gz`
+      `${BASE_URL}/10.11.0/flyway-commandline-10.11.0-linux-arm64.tar.gz`
     );
   });
 
