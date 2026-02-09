@@ -25,7 +25,7 @@ The `setup-flyway` action will download and set up a requested version of the Fl
 #### Typical setup
 
 ```yaml
-- uses: red-gate/setup-flyway@v1
+- uses: red-gate/setup-flyway@v2
 ```
 
 #### Java version
@@ -35,7 +35,7 @@ The `setup-flyway` action will download and set up a requested version of the Fl
   with:
     distribution: 'zulu' # See 'Supported distributions' for available options
     java-version: '21'
-- uses: red-gate/setup-flyway@v1
+- uses: red-gate/setup-flyway@v2
   with:
     architecture: 'java'
 ```
@@ -43,7 +43,7 @@ The `setup-flyway` action will download and set up a requested version of the Fl
 #### Authentication
 
 ```yaml
-- uses: red-gate/setup-flyway@v1
+- uses: red-gate/setup-flyway@v2
   with:
     email: ${{ secrets.FLYWAY_EMAIL }}
     token: ${{ secrets.FLYWAY_TOKEN }}
