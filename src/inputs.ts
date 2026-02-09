@@ -38,6 +38,9 @@ export interface Inputs {
   architecture: string;
   platform: string;
   edition: string;
+  email: string | undefined;
+  token: string | undefined;
+  agreeToEula: boolean | undefined;
 }
 
 /**
@@ -77,11 +80,29 @@ export function getInputs(): Inputs {
     );
   }
 
+  const rawEmail = core.getInput(constants.INPUT_EMAIL);
+  const email = rawEmail?.trim() ? rawEmail.trim() : undefined;
+
+  const rawToken = core.getInput(constants.INPUT_TOKEN);
+  const token = rawToken?.trim() ? rawToken.trim() : undefined;
+
+  const rawEula = core.getInput(constants.INPUT_EULA);
+  const agreeToEula =
+    rawEula?.trim().toLowerCase() === 'true' ? true : undefined;
+
   if (!isAllowedPlatformAndArch(platform, architecture)) {
     throw Error(`Unsupported platform: ${platform}-${architecture}`);
   }
 
-  return {versionSpec, architecture, platform, edition} as Inputs;
+  return {
+    versionSpec,
+    architecture,
+    platform,
+    edition,
+    email,
+    token,
+    agreeToEula
+  } as Inputs;
 }
 
 /**

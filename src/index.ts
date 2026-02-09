@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+import * as exec from '@actions/exec';
 import * as tc from '@actions/tool-cache';
 import * as path from 'path';
 import * as constants from './constants';
@@ -82,6 +83,23 @@ async function run() {
     core.addPath(cachedPath);
 
     core.endGroup();
+
+    // Authenticate if email and token are provided
+    if (inputs.email && inputs.token) {
+      core.startGroup('Authenticating Flyway');
+
+      core.setSecret(inputs.token);
+
+      const args = ['auth', `-email=${inputs.email}`, `-token=${inputs.token}`];
+
+      if (inputs.agreeToEula) {
+        args.push('-IAgreeToTheEula');
+      }
+
+      await exec.exec('flyway', args);
+
+      core.endGroup();
+    }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     core.setFailed(message);
