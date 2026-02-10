@@ -67,8 +67,8 @@ Contributions are welcome! See [Contributor's Guide](CONTRIBUTORS.md)
 
 ## Security Policy
 
-Find a security issue? Please review our [Security Policy](SECURITY.md).
+Find a security issue? Please review our [Security Policy](.github/SECURITY.md).
 
 ## Support
 
-For support, please see the [Support Policy](SUPPORT.md).
+For support, please see the [Support Policy](.github/SUPPORT.md).
