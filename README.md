@@ -1,11 +1,19 @@
 # Setup Flyway
 
-[![Basic validation](../..//actions/workflows/basic-validation.yml/badge.svg)](../..//actions/workflows/basic-validation.yml)
-[![E2E Validation](../..//actions/workflows/e2e-validation.yml/badge.svg)](../..//actions/workflows/e2e-validation.yml)
-[![License checks](../..//actions/workflows/license-checks.yml/badge.svg)](../..//actions/workflows/license-checks.yml)
-[![CodeQL Analysis](../..//actions/workflows/codeql-analysis.yml/badge.svg)](../..//actions/workflows/codeql-analysis.yml)
+<p align="center">
+  <img src="https://documentation.red-gate.com/download/attachments/138346876/FD?version=3&modificationDate=1633982869952&api=v2" alt="Flyway" height="80">
+</p>
 
-The `setup-flyway` action will download and set up a requested version of the Flyway CLI.
+### Deploy database changes with confidence
+
+[![Basic validation](../../actions/workflows/basic-validation.yml/badge.svg)](../../actions/workflows/basic-validation.yml)
+[![E2E Validation](../../actions/workflows/e2e-validation.yml/badge.svg)](../../actions/workflows/e2e-validation.yml)
+[![License checks](../../actions/workflows/license-checks.yml/badge.svg)](../../actions/workflows/license-checks.yml)
+[![CodeQL Analysis](../../actions/workflows/codeql-analysis.yml/badge.svg)](../../actions/workflows/codeql-analysis.yml)
+
+---
+
+The `setup-flyway` action installs the [Redgate Flyway](https://www.red-gate.com/products/flyway/) CLI into your GitHub Actions workflow, enabling automated database migrations, version control for your schema, and seamless CI/CD integration. Supports 50+ databases including PostgreSQL, MySQL, SQL Server, and Oracle.
 
 ## Usage
 
@@ -56,6 +64,19 @@ The `version` input supports an exact version or a version range using [SemVer](
 - major versions: `9`, `10`
 - more specific versions:  `10.11`, `10.12.0`, `10.13.x`
 - the current version: `latest`
+
+## Enterprise Features
+
+Authenticate with a Redgate personal access token to unlock powerful CLI capabilities for scaling database delivery:
+
+- **Code analysis & policies** — enforce best practices with a built-in policy library and custom rules via `flyway check -code`
+- **Drift detection** — identify uncontrolled database changes with `flyway check -drift`
+- **Change reports** — preview migration impact with `flyway check -changes`
+- **Undo migrations** — auto-generate and run rollback scripts to recover from failed deployments
+- **State-based deployments** — auto-generate migration scripts by comparing schemas
+- **Secrets manager integration** — connect to external secrets managers for secure credential handling
+
+[Learn more about Flyway editions →](https://www.red-gate.com/products/flyway/editions/)
 
 ## License
 
