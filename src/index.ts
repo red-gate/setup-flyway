@@ -98,6 +98,6 @@ async function run() {
 
 // Run the script if it's the main script, but allow import if it's
 // used as a module.
-if (process.argv[1].endsWith('index.mjs')) {
+if (process.argv[1].endsWith('index.js')) {
   run();
 }

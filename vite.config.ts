@@ -41,7 +41,7 @@ export default defineConfig({
         cleanup: 'src/cleanup.ts'
       },
       formats: ['es'],
-      fileName: (_format, entryName) => `${entryName}.mjs`
+      fileName: (_format, entryName) => `${entryName}.js`
     },
     rollupOptions: {
       external: nodeBuiltins,

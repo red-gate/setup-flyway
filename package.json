@@ -2,7 +2,7 @@
   "name": "setup-flyway",
   "version": "1.0.1",
   "description": "Setup Redgate Flyway for Actions",
-  "main": "dist/index.mjs",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
     "build": "vite build",
@@ -11,7 +11,7 @@
     "lint:check": "yarn eslint",
     "lint": "yarn eslint --fix",
     "prerelease": "yarn run build",
-    "release": "git add -f dist/index.mjs dist/cleanup.mjs",
+    "release": "git add -f dist/index.js dist/cleanup.js",
     "test": "vitest run"
   },
   "repository": "git+https://github.com/kenmuse/setup-flyway.git",

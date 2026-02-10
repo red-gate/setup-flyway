@@ -18593,4 +18593,4 @@ async function lE() {
     Ke.setFailed(n);
   }
 }
-process.argv[1].endsWith("index.mjs") && lE();
+process.argv[1].endsWith("index.js") && lE();
