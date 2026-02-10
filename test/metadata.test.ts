@@ -1,7 +1,5 @@
 import nock from 'nock';
 import {URL} from 'url';
-import {expect, jest, describe, afterEach, it, test} from '@jest/globals';
-
 import {privateExports} from '../src/metadata';
 import {METADATA_URL} from '../src/constants';
 import {loadFixture} from './utils/fixtures';
@@ -11,7 +9,7 @@ describe('Metadata module', () => {
   const metadata = privateExports.functions!;
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
     nock.cleanAll();
   });
 
