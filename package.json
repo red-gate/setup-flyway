@@ -6,11 +6,11 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "format": "yarn prettier --no-error-on-unmatched-pattern --config ./.prettierrc.yml --write \"**/*.{mts,ts,yml,yaml}\"",
-    "format:check": "yarn prettier --no-error-on-unmatched-pattern --config ./.prettierrc.yml --check \"**/*.{mts,ts,yml,yaml}\"",
-    "lint:check": "yarn eslint",
-    "lint": "yarn eslint --fix",
-    "prerelease": "yarn run build",
+    "format": "prettier --no-error-on-unmatched-pattern --config ./.prettierrc.yml --write \"**/*.{ts,yml,yaml}\"",
+    "format:check": "prettier --no-error-on-unmatched-pattern --config ./.prettierrc.yml --check \"**/*.{ts,yml,yaml}\"",
+    "lint": "eslint --fix",
+    "lint:check": "eslint",
+    "prerelease": "yarn build",
     "release": "git add -f dist/index.js dist/cleanup.js",
     "test": "vitest run"
   },

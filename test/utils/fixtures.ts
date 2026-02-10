@@ -1,8 +1,8 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import {fileURLToPath} from 'url';
+import * as fs from "fs";
+import * as path from "path";
+import { fileURLToPath } from "url";
 
-import {Fixture} from '../fixtures';
+import { Fixture } from "../fixtures";
 
 /**
  * Gets the path to a file in the fixtures directory.
@@ -12,7 +12,7 @@ import {Fixture} from '../fixtures';
 function getFixturePath(...fixture: string[]) {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
-  return path.join(...[__dirname, '..', 'fixtures', ...fixture]);
+  return path.join(...[__dirname, "..", "fixtures", ...fixture]);
 }
 
 /**
@@ -21,5 +21,5 @@ function getFixturePath(...fixture: string[]) {
  * @returns the contents of the fixture file
  */
 export function loadFixture(...fixture: Fixture[]) {
-  return fs.readFileSync(getFixturePath(...fixture), 'utf-8');
+  return fs.readFileSync(getFixturePath(...fixture), "utf-8");
 }
