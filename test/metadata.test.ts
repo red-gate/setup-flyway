@@ -9,7 +9,6 @@ describe("Metadata module", () => {
   const metadata = privateExports.functions!;
 
   afterEach(() => {
-    vi.restoreAllMocks();
     nock.cleanAll();
   });
 

@@ -8,9 +8,6 @@ describe("Inputs", () => {
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
-    vi.clearAllMocks();
-    vi.restoreAllMocks();
     process.env = OLD_ENV;
   });
 

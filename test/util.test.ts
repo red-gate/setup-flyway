@@ -3,9 +3,6 @@ import nock from "nock";
 import { BASE_URL } from "../src/constants";
 describe("Utils", () => {
   afterEach(() => {
-    vi.resetAllMocks();
-    vi.clearAllMocks();
-    vi.restoreAllMocks();
     nock.cleanAll();
   });
 
