@@ -1,11 +1,17 @@
-# Setup Flyway
+<p align="center">
+  <img src="https://documentation.red-gate.com/download/attachments/138346876/FD?version=3&modificationDate=1633982869952&api=v2" alt="Flyway" height="80">
+</p>
 
-[![Basic validation](../..//actions/workflows/basic-validation.yml/badge.svg)](../..//actions/workflows/basic-validation.yml)
-[![E2E Validation](../..//actions/workflows/e2e-validation.yml/badge.svg)](../..//actions/workflows/e2e-validation.yml)
-[![License checks](../..//actions/workflows/license-checks.yml/badge.svg)](../..//actions/workflows/license-checks.yml)
-[![CodeQL Analysis](../..//actions/workflows/codeql-analysis.yml/badge.svg)](../..//actions/workflows/codeql-analysis.yml)
+### Deploy database changes with confidence
 
-The `setup-flyway` action will download and set up a requested version of the Flyway CLI.
+[![Basic validation](../../actions/workflows/basic-validation.yml/badge.svg)](../../actions/workflows/basic-validation.yml)
+[![E2E Validation](../../actions/workflows/e2e-validation.yml/badge.svg)](../../actions/workflows/e2e-validation.yml)
+[![License checks](../../actions/workflows/license-checks.yml/badge.svg)](../../actions/workflows/license-checks.yml)
+[![CodeQL Analysis](../../actions/workflows/codeql-analysis.yml/badge.svg)](../../actions/workflows/codeql-analysis.yml)
+
+---
+
+The `setup-flyway` action installs the [Redgate Flyway](https://www.red-gate.com/products/flyway/) CLI into your GitHub Actions workflow, enabling automated database migrations, version control for your schema, and seamless CI/CD integration. Supports 50+ databases including PostgreSQL, MySQL, SQL Server, and Oracle.
 
 ## Usage
 
