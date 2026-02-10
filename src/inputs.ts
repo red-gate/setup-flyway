@@ -50,8 +50,8 @@ export function getInputs(): Inputs {
   // Get the user-provided input containing the platform (windows, macosx, linux)
   const platform = getInputWithDefault(constants.INPUT_PRODUCT_PLATFORM, Platform, getPlatform);
 
-  // Don't output during Jest tests
-  if (process.env.NODE_ENV !== "test") {
+  // Don't output during tests
+  if (import.meta.env.MODE !== "test") {
     core.debug(`Inputs: version: ${versionSpec}, architecture: ${architecture}, platform: ${platform}`);
   }
 

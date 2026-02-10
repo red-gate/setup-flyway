@@ -88,7 +88,7 @@ function isAllowedContentType(header: string | undefined) {
 
 /** Exported values that are only available in a unit test environment */
 export const privateExports =
-  process.env.NODE_ENV !== "test"
+  import.meta.env.MODE !== "test"
     ? {}
     : {
         functions: {
