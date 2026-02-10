@@ -59,7 +59,7 @@ The `version` input supports an exact version or a version range using [SemVer](
 
 ## License
 
-The scripts and documentation in this project are released under the [MIT License](LICENSE).
+The scripts and documentation in this project are released under the [MIT License](LICENSE.md).
 
 ## Contributions
 
