@@ -63,7 +63,7 @@ The scripts and documentation in this project are released under the [MIT Licens
 
 ## Contributions
 
-Contributions are welcome! See [Contributor's Guide](CONTRIBUTORS.md)
+Contributions are welcome! See [Code of Conduct](.github/CODE_OF_CONDUCT.md)
 
 ## Security Policy
 
