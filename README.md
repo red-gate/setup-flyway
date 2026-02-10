@@ -63,6 +63,19 @@ The `version` input supports an exact version or a version range using [SemVer](
 - more specific versions:  `10.11`, `10.12.0`, `10.13.x`
 - the current version: `latest`
 
+## Enterprise Features
+
+Authenticate with a Redgate personal access token to unlock powerful CLI capabilities for scaling database delivery:
+
+- **Code analysis & policies** — enforce best practices with a built-in policy library and custom rules via `flyway check -code`
+- **Drift detection** — identify uncontrolled database changes with `flyway check -drift`
+- **Change reports** — preview migration impact with `flyway check -changes`
+- **Undo migrations** — auto-generate and run rollback scripts to recover from failed deployments
+- **State-based deployments** — auto-generate migration scripts by comparing schemas
+- **Secrets manager integration** — connect to external secrets managers for secure credential handling
+
+[Learn more about Flyway editions →](https://www.red-gate.com/products/flyway/editions/)
+
 ## License
 
 The scripts and documentation in this project are released under the [MIT License](LICENSE).
