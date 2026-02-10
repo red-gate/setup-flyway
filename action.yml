@@ -1,6 +1,5 @@
 name: 'Setup Redgate Flyway'
-description: 'Set up a specific version of Flyway and add the
-  command-line tools to the PATH'
+description: 'Set up a specific version of Flyway and add the command-line tools to the PATH'
 author: 'Redgate'
 inputs:
   version:
@@ -26,7 +25,7 @@ outputs:
     description: The specific version installed
 
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'
   post: 'dist/cleanup.js'
 
