@@ -13,7 +13,7 @@ module.exports = tseslint.config(
   {
     ignores: [
       '**/eslint.config.cjs',
-      '**/jest.config.mjs',
+      '**/vite.config.ts',
       '**/dist/',
       '**/coverage/',
       '**/.yarn/',

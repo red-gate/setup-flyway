@@ -12,6 +12,7 @@
       "rootDirs":[ "src", "test" ],
       "newLine": "lf",
       "typeRoots": [ "src/typings", "node_modules/@types" ],
+      "types": [ "vitest/globals" ],
 
       "strict": true,
       "esModuleInterop": true,
@@ -22,8 +23,5 @@
 
       "allowSyntheticDefaultImports":  true
     },
-    "exclude": [ "node_modules", "jest.config.ts", "eslint.config.mjs", "test/**/*", "cjs-shim.ts" ],
-    "ts-node": {
-      "esm": true
-    }
+    "exclude": [ "node_modules", "vite.config.ts", "eslint.config.cjs", "test/**/*" ]
   }

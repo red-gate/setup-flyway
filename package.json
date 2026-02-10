@@ -5,14 +5,14 @@
   "main": "dist/index.mjs",
   "type": "module",
   "scripts": {
-    "build": "yarn node ./esbuild.mjs",
+    "build": "vite build",
     "format": "yarn prettier --no-error-on-unmatched-pattern --config ./.prettierrc.yml --write \"**/*.{mts,ts,yml,yaml}\"",
     "format:check": "yarn prettier --no-error-on-unmatched-pattern --config ./.prettierrc.yml --check \"**/*.{mts,ts,yml,yaml}\"",
     "lint:check": "yarn eslint",
     "lint": "yarn eslint --fix",
     "prerelease": "yarn run build",
     "release": "git add -f dist/index.mjs dist/cleanup.mjs",
-    "test": "yarn jest --config jest.config.ts"
+    "test": "vitest run"
   },
   "repository": "git+https://github.com/kenmuse/setup-flyway.git",
   "keywords": [
@@ -41,30 +41,21 @@
   "devDependencies": {
     "@eslint-community/eslint-utils": "4.9.1",
     "@eslint/js": "10.0.1",
-    "@jest/globals": "30.2.0",
-    "@types/jest": "30.0.0",
     "@types/node": "25.2.2",
     "@types/semver": "7.7.1",
     "@typescript-eslint/eslint-plugin": "8.55.0",
     "@typescript-eslint/parser": "8.55.0",
-    "esbuild": "0.27.3",
     "eslint": "10.0.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-node": "11.1.0",
     "globals": "17.3.0",
-    "jest": "30.2.0",
-    "jest-circus": "30.2.0",
-    "jest-cli": "30.2.0",
-    "jest-mock": "30.2.0",
-    "jest-util": "30.2.0",
     "nock": "14.0.11",
     "prettier": "3.8.1",
-    "ts-jest": "29.4.6",
-    "ts-jest-resolver": "2.0.1",
-    "ts-node": "10.9.2",
     "tslib": "2.8.1",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.55.0"
+    "typescript-eslint": "8.55.0",
+    "vite": "7.3.1",
+    "vitest": "4.0.18"
   },
   "packageManager": "yarn@4.9.1"
 }
