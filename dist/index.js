@@ -16451,18 +16451,8 @@ var Gs = /* @__PURE__ */ ((e) => (e.X64 = "x64", e.ARM64 = "arm64", e.JAVA = "ja
 function Mu() {
   const e = Ke.getInput(yu, {
     required: !0
-  }), n = oa(
-    mu,
-    Gs,
-    Tu
-  ), A = oa(
-    Ru,
-    Hc,
-    Lu
-  );
-  Ke.debug(
-    `Inputs: version: ${e}, architecture: ${n}, platform: ${A}`
-  );
+  }), n = oa(mu, Gs, Tu), A = oa(Ru, Hc, Lu);
+  Ke.debug(`Inputs: version: ${e}, architecture: ${n}, platform: ${A}`);
   const a = Ke.getInput(Du), t = a?.trim() ? a.trim() : void 0, i = Ke.getInput(Nu), c = i?.trim() ? i.trim() : void 0, l = Ke.getInput(Fu)?.trim().toLowerCase() === "true" ? !0 : void 0;
   if (!vu(A, n))
     throw Error(`Unsupported platform: ${A}-${n}`);
@@ -16514,13 +16504,7 @@ function Tu() {
 }
 function vu(e, n) {
   const A = `${e}-${n}`;
-  return n == "java" || [
-    "windows-x64",
-    "linux-x64",
-    "macosx-arm64",
-    "macosx-x64",
-    "linux-alpine-x64"
-  ].includes(A);
+  return n == "java" || ["windows-x64", "linux-x64", "macosx-arm64", "macosx-x64", "linux-alpine-x64"].includes(A);
 }
 var Gu = Ts();
 const Vc = ":A-Za-z_\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD", Yu = Vc + "\\-.\\d\\u00B7\\u0300-\\u036F\\u203F-\\u2040", Ju = "[" + Vc + "][" + Yu + "]*", Ou = new RegExp("^" + Ju + "$");
@@ -17494,9 +17478,7 @@ async function bg() {
 async function kg(e) {
   const A = await new Gu.HttpClient(ku).get(e);
   if (A.message.statusCode !== 200)
-    throw new Error(
-      `Failed to fetch versions from URL. Status code: ${A.message.statusCode}`
-    );
+    throw new Error(`Failed to fetch versions from URL. Status code: ${A.message.statusCode}`);
   const a = A.message.headers["content-type"];
   if (!Ug(a))
     throw new Error(`Unexpected content type: ${a}`);
@@ -18559,14 +18541,8 @@ async function lE() {
     const e = Mu(), n = e.versionSpec, A = e.architecture, a = e.platform;
     Ke.startGroup(`Installing ${Sn}`);
     const t = await Fg();
-    Ke.info(`Latest version: ${t.latest}`), Ke.debug(
-      `Available versions: ${t.availableVersions.join(", ")}`
-    );
-    const i = oE(
-      n,
-      t.availableVersions,
-      t.latest
-    );
+    Ke.info(`Latest version: ${t.latest}`), Ke.debug(`Available versions: ${t.availableVersions.join(", ")}`);
+    const i = oE(n, t.availableVersions, t.latest);
     if (i == null)
       throw Error(`Version specification ${n} is not available`);
     Ke.debug(`Resolved ${n} to version: ${i}`);
@@ -18576,12 +18552,7 @@ async function lE() {
         u.pathToArchive,
         u.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz"
       ), s = DA.join(l, `flyway-${i}`);
-      c = await JA.cacheDir(
-        s,
-        Sn,
-        i,
-        A
-      );
+      c = await JA.cacheDir(s, Sn, i, A);
     }
     if (Ke.setOutput(Su, i), Ke.setOutput(bu, c), Ke.exportVariable(`FLYWAY_HOME_${i}`, c), Ke.addPath(c), Ke.endGroup(), e.email && e.token) {
       Ke.startGroup("Authenticating Flyway"), Ke.setSecret(e.token);

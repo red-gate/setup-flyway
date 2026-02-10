@@ -49,7 +49,7 @@ export default defineConfig({
         banner: cjsShimBanner
       }
     },
-    target: 'node20',
+    target: 'node24',
     minify: 'esbuild',
     outDir: 'dist',
     emptyOutDir: true
