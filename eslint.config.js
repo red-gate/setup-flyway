@@ -1,18 +1,13 @@
 // @ts-check
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import eslintConfigPrettier from 'eslint-config-prettier';
+import globals from 'globals';
 
-const eslint = require('@eslint/js');
-const tseslint = require('typescript-eslint');
-const eslintConfigPrettier = require('eslint-config-prettier');
-const globals = require('globals');
-
-// import * as eslintplugin from "eslint-plugin-jest";
-// ...eslintplugin.configs['flat/recommended'].rules,
-
-// This is a reusable configuration file copied from https://github.com/actions/reusable-workflows/tree/main/reusable-configurations. Please don't make changes to this file as it's the subject of an automatic update.
-module.exports = tseslint.config(
+export default tseslint.config(
   {
     ignores: [
-      '**/eslint.config.cjs',
+      '**/eslint.config.js',
       '**/vite.config.ts',
       '**/dist/',
       '**/coverage/',
@@ -26,10 +21,7 @@ module.exports = tseslint.config(
   eslintConfigPrettier,
   ...tseslint.configs.recommended,
   {
-    files: [
-      'test/**/*.test.mts',
-      'src/**/*.mts',
-    ],
+    files: ['test/**/*.test.ts', 'src/**/*.ts'],
     languageOptions: {
       parser: tseslint.parser,
       globals: {

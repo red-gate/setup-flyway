@@ -23,5 +23,5 @@
 
       "allowSyntheticDefaultImports":  true
     },
-    "exclude": [ "node_modules", "vite.config.ts", "eslint.config.cjs", "test/**/*" ]
+    "exclude": [ "node_modules", "vite.config.ts", "eslint.config.js", "test/**/*" ]
   }
