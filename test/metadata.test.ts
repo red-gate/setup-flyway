@@ -4,7 +4,7 @@ import { privateExports } from "../src/metadata";
 import { METADATA_URL } from "../src/constants";
 import { loadFixture } from "./utils/fixtures";
 
-describe("Metadata module", () => {
+describe("metadata", () => {
   const metadataContent = loadFixture("maven.xml");
   const metadata = privateExports.functions!;
 

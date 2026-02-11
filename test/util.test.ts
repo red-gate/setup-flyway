@@ -1,7 +1,8 @@
 import * as util from "../src/util";
 import nock from "nock";
 import { BASE_URL } from "../src/constants";
-describe("Utils", () => {
+
+describe("util", () => {
   afterEach(() => {
     nock.cleanAll();
   });

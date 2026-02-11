@@ -1,6 +1,6 @@
 import { getInputs, isAllowedPlatformAndArch, Platform, Architecture } from "../src/inputs";
 
-describe("Inputs", () => {
+describe("inputs", () => {
   const OLD_ENV = process.env;
 
   beforeEach(() => {
