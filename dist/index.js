@@ -1102,9 +1102,9 @@ function Ue() {
   }
   function ae(T) {
     const z = T.length, ge = new Array(z);
-    let Qe = !1, fe = -1, Re, Ge, je = 0;
+    let Qe = !1, fe = -1, Re, Ge, ze = 0;
     for (let et = 0; et < T.length; et += 2)
-      Re = T[et], Ge = T[et + 1], typeof Re != "string" && (Re = Re.toString()), typeof Ge != "string" && (Ge = Ge.toString("utf8")), je = Re.length, je === 14 && Re[7] === "-" && (Re === "content-length" || Re.toLowerCase() === "content-length") ? Qe = !0 : je === 19 && Re[7] === "-" && (Re === "content-disposition" || Re.toLowerCase() === "content-disposition") && (fe = et + 1), ge[et] = Re, ge[et + 1] = Ge;
+      Re = T[et], Ge = T[et + 1], typeof Re != "string" && (Re = Re.toString()), typeof Ge != "string" && (Ge = Ge.toString("utf8")), ze = Re.length, ze === 14 && Re[7] === "-" && (Re === "content-length" || Re.toLowerCase() === "content-length") ? Qe = !0 : ze === 19 && Re[7] === "-" && (Re === "content-disposition" || Re.toLowerCase() === "content-disposition") && (fe = et + 1), ge[et] = Re, ge[et + 1] = Ge;
     return Qe && fe !== -1 && (ge[fe] = Buffer.from(ge[fe]).toString("latin1")), ge;
   }
   function ne(T) {
@@ -3645,7 +3645,7 @@ function dt() {
     let q = "bytes ";
     return q += T(`${G}`), q += "-", q += T(`${$}`), q += "/", q += T(`${v}`), q;
   }
-  class je extends e {
+  class ze extends e {
     #e;
     /** @param {zlib.ZlibOptions} [zlibOptions] */
     constructor($) {
@@ -3666,7 +3666,7 @@ function dt() {
     }
   }
   function et(G) {
-    return new je(G);
+    return new ze(G);
   }
   function Ce(G) {
     let $ = null, v = null, q = null;
@@ -4671,7 +4671,7 @@ upgrade: ${Ie}\r
           K += `${Fe}: ${ve}\r
 `;
       }
-    return t.sendHeaders.hasSubscribers && t.sendHeaders.publish({ request: H, headers: K, socket: _ }), !G || P === 0 ? Re(ce, null, Ce, H, _, v, K, q) : r.isBuffer(G) ? Re(ce, G, Ce, H, _, v, K, q) : r.isBlobLike(G) ? typeof G.stream == "function" ? je(ce, G.stream(), Ce, H, _, v, K, q) : Ge(ce, G, Ce, H, _, v, K, q) : r.isStream(G) ? fe(ce, G, Ce, H, _, v, K, q) : r.isIterable(G) ? je(ce, G, Ce, H, _, v, K, q) : e(!1), !0;
+    return t.sendHeaders.hasSubscribers && t.sendHeaders.publish({ request: H, headers: K, socket: _ }), !G || P === 0 ? Re(ce, null, Ce, H, _, v, K, q) : r.isBuffer(G) ? Re(ce, G, Ce, H, _, v, K, q) : r.isBlobLike(G) ? typeof G.stream == "function" ? ze(ce, G.stream(), Ce, H, _, v, K, q) : Ge(ce, G, Ce, H, _, v, K, q) : r.isStream(G) ? fe(ce, G, Ce, H, _, v, K, q) : r.isIterable(G) ? ze(ce, G, Ce, H, _, v, K, q) : e(!1), !0;
   }
   function fe(Ce, H, ie, te, oe, Ie, De, be) {
     e(Ie !== 0 || ie[D] === 0, "stream body cannot be pipelined");
@@ -4730,7 +4730,7 @@ upgrade: ${Ie}\r
       Ce(G);
     }
   }
-  async function je(Ce, H, ie, te, oe, Ie, De, be) {
+  async function ze(Ce, H, ie, te, oe, Ie, De, be) {
     e(Ie !== 0 || ie[D] === 0, "iterator body cannot be pipelined");
     let G = null;
     function $() {
@@ -5301,7 +5301,7 @@ function fA() {
       socketTimeout: fe,
       requestTimeout: Re,
       connectTimeout: Ge,
-      bodyTimeout: je,
+      bodyTimeout: ze,
       idleTimeout: et,
       keepAlive: Ce,
       keepAliveTimeout: H,
@@ -5348,7 +5348,7 @@ function fA() {
         throw new u("invalid keepAliveTimeoutThreshold");
       if (Qe != null && (!Number.isInteger(Qe) || Qe < 0))
         throw new u("headersTimeout must be a positive integer or zero");
-      if (je != null && (!Number.isInteger(je) || je < 0))
+      if (ze != null && (!Number.isInteger(ze) || ze < 0))
         throw new u("bodyTimeout must be a positive integer or zero");
       if (q != null && typeof q != "function" && typeof q != "object")
         throw new u("connect must be a function or an object");
@@ -5377,7 +5377,7 @@ function fA() {
       })), z?.Client && Array.isArray(z.Client) ? (this[Ae] = z.Client, ue || (ue = !0, process.emitWarning("Client.Options#interceptor is deprecated. Use Dispatcher#compose instead.", {
         code: "UNDICI-CLIENT-INTERCEPTOR-DEPRECATED"
       }))) : this[Ae] = [Ne({ maxRedirections: v })], this[c] = s.parseOrigin(T), this[x] = q, this[F] = De ?? 1, this[S] = ge || t.maxHeaderSize, this[d] = H ?? 4e3, this[b] = te ?? 6e5, this[M] = oe ?? 2e3, this[R] = this[d], this[g] = null, this[Z] = _ ?? null, this[Q] = 0, this[f] = 0, this[I] = `host: ${this[c].hostname}${this[c].port ? `:${this[c].port}` : ""}\r
-`, this[J] = je ?? 3e5, this[L] = Qe ?? 3e5, this[Y] = G ?? !0, this[O] = v, this[j] = P, this[pe] = null, this[se] = ce > -1 ? ce : -1, this[W] = Fe ?? 100, this[X] = null, this[k] = [], this[N] = 0, this[p] = 0, this[ee] = (Me) => Ve(this, Me), this[V] = (Me) => Se(this, Me);
+`, this[J] = ze ?? 3e5, this[L] = Qe ?? 3e5, this[Y] = G ?? !0, this[O] = v, this[j] = P, this[pe] = null, this[se] = ce > -1 ? ce : -1, this[W] = Fe ?? 100, this[X] = null, this[k] = [], this[N] = 0, this[p] = 0, this[ee] = (Me) => Ve(this, Me), this[V] = (Me) => Se(this, Me);
     }
     get pipelining() {
       return this[F];
@@ -5469,8 +5469,8 @@ function fA() {
           port: Qe,
           servername: re[g],
           localAddress: re[Z]
-        }, (je, et) => {
-          je ? Ge(je) : Re(et);
+        }, (ze, et) => {
+          ze ? Ge(ze) : Re(et);
         });
       });
       if (re.destroyed) {
@@ -9290,7 +9290,7 @@ function _A() {
     }
   }
   function Re(v) {
-    je(v, "fetch");
+    ze(v, "fetch");
   }
   function Ge(v, q = void 0) {
     re.argumentLengthCheck(arguments, 1, "globalThis.fetch");
@@ -9332,7 +9332,7 @@ function _A() {
       // undici
     }), P.promise;
   }
-  function je(v, q = "other") {
+  function ze(v, q = "other") {
     if (v.type === "error" && v.aborted || !v.urlList?.length)
       return;
     const P = v.urlList[0];
@@ -9646,8 +9646,8 @@ function _A() {
       if (Lt)
         ce = s({ status: tt, statusText: It, headersList: $e, socket: Lt });
       else {
-        const ze = ke[Symbol.asyncIterator]();
-        v.controller.next = () => ze.next(), ce = s({ status: tt, statusText: It, headersList: $e });
+        const Ke = ke[Symbol.asyncIterator]();
+        v.controller.next = () => Ke.next(), ce = s({ status: tt, statusText: It, headersList: $e });
       }
     } catch (ke) {
       return ke.name === "AbortError" ? (v.controller.connection.destroy(), r(v, ke)) : e(ke);
@@ -9721,23 +9721,23 @@ function _A() {
         {
           body: null,
           abort: null,
-          onConnect(ze) {
+          onConnect(Ke) {
             const { connection: ut } = v.controller;
-            K.finalConnectionTimingInfo = x(void 0, K.postRedirectStartTime, v.crossOriginIsolatedCapability), ut.destroyed ? ze(new DOMException("The operation was aborted.", "AbortError")) : (v.controller.on("terminated", ze), this.abort = ut.abort = ze), K.finalNetworkRequestStartTime = d(v.crossOriginIsolatedCapability);
+            K.finalConnectionTimingInfo = x(void 0, K.postRedirectStartTime, v.crossOriginIsolatedCapability), ut.destroyed ? Ke(new DOMException("The operation was aborted.", "AbortError")) : (v.controller.on("terminated", Ke), this.abort = ut.abort = Ke), K.finalNetworkRequestStartTime = d(v.crossOriginIsolatedCapability);
           },
           onResponseStarted() {
             K.finalNetworkResponseStartTime = d(v.crossOriginIsolatedCapability);
           },
-          onHeaders(ze, ut, cr, DA) {
-            if (ze < 200)
+          onHeaders(Ke, ut, cr, DA) {
+            if (Ke < 200)
               return;
             let Ot = "";
             const NA = new i();
             for (let Mt = 0; Mt < ut.length; Mt += 2)
               NA.append(Se(ut[Mt]), ut[Mt + 1].toString("latin1"), !0);
             Ot = NA.get("location", !0), this.body = new ue({ read: cr });
-            const Xt = [], pg = Ot && _.redirect === "follow" && V.has(ze);
-            if (_.method !== "HEAD" && _.method !== "CONNECT" && !X.includes(ze) && !pg) {
+            const Xt = [], pg = Ot && _.redirect === "follow" && V.has(Ke);
+            if (_.method !== "HEAD" && _.method !== "CONNECT" && !X.includes(Ke) && !pg) {
               const Mt = NA.get("content-encoding", !0), SA = Mt ? Mt.toLowerCase().split(",") : [], Eo = 5;
               if (SA.length > Eo)
                 return Lt(new Error(`too many content-encodings in response: ${SA.length}, maximum allowed is ${Eo}`)), !0;
@@ -9770,7 +9770,7 @@ function _A() {
             }
             const ho = this.onError.bind(this);
             return $e({
-              status: ze,
+              status: Ke,
               statusText: DA,
               headersList: NA,
               body: Xt.length ? pe(this.body, ...Xt, (Mt) => {
@@ -9778,27 +9778,27 @@ function _A() {
               }).on("error", ho) : this.body.on("error", ho)
             }), !0;
           },
-          onData(ze) {
+          onData(Ke) {
             if (v.controller.dump)
               return;
-            const ut = ze;
+            const ut = Ke;
             return K.encodedBodySize += ut.byteLength, this.body.push(ut);
           },
           onComplete() {
             this.abort && v.controller.off("terminated", this.abort), v.controller.onAborted && v.controller.off("terminated", v.controller.onAborted), v.controller.ended = !0, this.body.push(null);
           },
-          onError(ze) {
-            this.abort && v.controller.off("terminated", this.abort), this.body?.destroy(ze), v.controller.terminate(ze), Lt(ze);
+          onError(Ke) {
+            this.abort && v.controller.off("terminated", this.abort), this.body?.destroy(Ke), v.controller.terminate(Ke), Lt(Ke);
           },
-          onUpgrade(ze, ut, cr) {
-            if (ze !== 101)
+          onUpgrade(Ke, ut, cr) {
+            if (Ke !== 101)
               return;
             const DA = new i();
             for (let Ot = 0; Ot < ut.length; Ot += 2)
               DA.append(Se(ut[Ot]), ut[Ot + 1].toString("latin1"), !0);
             return $e({
-              status: ze,
-              statusText: T[ze],
+              status: Ke,
+              statusText: T[Ke],
               headersList: DA,
               socket: cr
             }), !0;
@@ -9811,7 +9811,7 @@ function _A() {
     fetch: Ge,
     Fetch: fe,
     fetching: H,
-    finalizeAndReportTiming: je
+    finalizeAndReportTiming: ze
   }, mn;
 }
 var Rn, Oa;
@@ -14782,7 +14782,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     } }), e.platform = s(Hh());
   })(pt)), pt;
 }
-var Ke = ju(), Zi = function(e, r, t, s) {
+var je = ju(), Zi = function(e, r, t, s) {
   function A(i) {
     return i instanceof t ? i : new t(function(o) {
       o(i);
@@ -17164,11 +17164,11 @@ function Ti(e, r) {
 const AQ = "version", rQ = "architecture", nQ = "platform", sQ = "email", iQ = "token", oQ = "i-agree-to-the-eula", aQ = "version", cQ = "path", xs = "flyway", lQ = "setup-flyway-action", gg = "https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline", uQ = `${gg}/maven-metadata.xml`;
 var io = /* @__PURE__ */ ((e) => (e.X64 = "x64", e.ARM64 = "arm64", e.JAVA = "java", e))(io || {}), hg = /* @__PURE__ */ ((e) => (e.WINDOWS = "windows", e.MACOSX = "macosx", e.LINUX = "linux", e.LINUX_ALPINE = "linux-alpine", e))(hg || {});
 function gQ() {
-  const e = Ke.getInput(AQ, {
+  const e = je.getInput(AQ, {
     required: !0
   }), r = Dl(rQ, io, EQ), t = Dl(nQ, hg, hQ);
-  Ke.debug(`Inputs: version: ${e}, architecture: ${r}, platform: ${t}`);
-  const s = Ke.getInput(sQ), A = s?.trim() ? s.trim() : void 0, i = Ke.getInput(iQ), o = i?.trim() ? i.trim() : void 0, l = Ke.getInput(oQ)?.trim().toLowerCase() === "true" ? !0 : void 0;
+  je.debug(`Inputs: version: ${e}, architecture: ${r}, platform: ${t}`);
+  const s = je.getInput(sQ), A = s?.trim() ? s.trim() : void 0, i = je.getInput(iQ), o = i?.trim() ? i.trim() : void 0, l = je.getInput(oQ)?.trim().toLowerCase() === "true" ? !0 : void 0;
   if (!QQ(t, r))
     throw Error(`Unsupported platform: ${t}-${r}`);
   return {
@@ -17181,8 +17181,8 @@ function gQ() {
   };
 }
 function Dl(e, r, t) {
-  const s = Ke.getInput(e);
-  if (s == null || typeof s == "string" && s.trim().length === 0)
+  const s = je.getInput(e);
+  if (s == null || s.trim().length === 0)
     return t();
   const A = r[s.toUpperCase()];
   if (!A)
@@ -17206,8 +17206,6 @@ function EQ() {
   const e = Yt.arch();
   switch (e) {
     case "x64":
-      return "x64";
-    case "amd64":
       return "x64";
     case "ia32":
       return "x64";
@@ -18188,7 +18186,7 @@ async function aI(e) {
 }
 async function cI() {
   const e = uQ;
-  return Ke.debug(`Using metadata endpoint: ${e}`), await lI(e);
+  return je.debug(`Using metadata endpoint: ${e}`), await lI(e);
 }
 async function lI(e) {
   const t = await new IQ.HttpClient(lQ).get(e);
@@ -19254,13 +19252,15 @@ function VI(e, r, t) {
 async function HI() {
   try {
     const e = gQ(), r = e.versionSpec, t = e.architecture, s = e.platform;
-    Ke.startGroup(`Installing ${xs}`);
+    je.startGroup(`Installing ${xs}`);
     const A = await oI();
-    Ke.info(`Latest version: ${A.latest}`), Ke.debug(`Available versions: ${A.availableVersions.join(", ")}`);
+    je.info(`Latest version: ${A.latest}`), je.debug(`Available versions: ${A.availableVersions.join(", ")}`);
     const i = OI(r, A.availableVersions, A.latest);
-    if (i == null)
-      throw Error(`Version specification ${r} is not available`);
-    Ke.debug(`Resolved ${r} to version: ${i}`);
+    if (i == null) {
+      je.setFailed(`Version specification ${r} is not available`);
+      return;
+    }
+    je.debug(`Resolved ${r} to version: ${i}`);
     let o = jE(xs, i, t);
     if (!o) {
       const u = await YI(i, s, t), l = await xI(
@@ -19269,14 +19269,14 @@ async function HI() {
       ), a = Pe.join(l, `flyway-${i}`);
       o = await XE(a, xs, i, t);
     }
-    if (Ke.setOutput(aQ, i), Ke.setOutput(cQ, o), Ke.exportVariable(`FLYWAY_HOME_${i}`, o), Ke.addPath(o), Ke.endGroup(), e.email && e.token) {
-      Ke.startGroup("Authenticating Flyway"), Ke.setSecret(e.token);
+    if (je.setOutput(aQ, i), je.setOutput(cQ, o), je.exportVariable(`FLYWAY_HOME_${i}`, o), je.addPath(o), je.endGroup(), e.email && e.token) {
+      je.startGroup("Authenticating Flyway"), je.setSecret(e.token);
       const u = ["auth", `-email=${e.email}`, `-token=${e.token}`];
-      e.agreeToEula && u.push("-IAgreeToTheEula"), await _t("flyway", u), Ke.endGroup();
+      e.agreeToEula && u.push("-IAgreeToTheEula"), await _t("flyway", u), je.endGroup();
     }
   } catch (e) {
     const r = e instanceof Error ? e.message : String(e);
-    Ke.setFailed(r);
+    je.setFailed(r);
   }
 }
-process.argv[1].endsWith("index.js") && HI();
+process.argv[1].endsWith("index.js") && await HI();
