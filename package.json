@@ -12,7 +12,8 @@
     "lint:check": "eslint",
     "prerelease": "yarn build",
     "release": "git add -f dist/index.js dist/cleanup.js",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "repository": "git+https://github.com/red-gate/setup-flyway.git",
   "keywords": [
@@ -42,6 +43,7 @@
     "@types/semver": "7.7.1",
     "@typescript-eslint/eslint-plugin": "8.55.0",
     "@typescript-eslint/parser": "8.55.0",
+    "@vitest/coverage-v8": "4.0.18",
     "eslint": "10.0.0",
     "eslint-config-prettier": "10.1.8",
     "globals": "17.3.0",

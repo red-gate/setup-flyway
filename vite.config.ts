@@ -38,6 +38,12 @@ export default defineConfig({
     globals: true,
     mockReset: true,
     environment: 'node',
-    include: ['test/**/*.test.ts']
+    include: ['test/**/*.test.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'lcov'],
+      include: ['src/**/*.ts'],
+      exclude: ['src/index.ts', 'src/cleanup.ts'],
+    },
   }
 });
