@@ -1,11 +1,11 @@
-import * as core from '@actions/core';
-import * as exec from '@actions/exec';
-import * as tc from '@actions/tool-cache';
-import * as path from 'path';
-import * as constants from './constants';
-import {getInputs} from './inputs';
-import * as metadata from './metadata';
-import {downloadTool, extractTool, getSemanticVersion} from './util';
+import * as core from "@actions/core";
+import * as exec from "@actions/exec";
+import * as tc from "@actions/tool-cache";
+import * as path from "path";
+import * as constants from "./constants";
+import { getInputs } from "./inputs";
+import * as metadata from "./metadata";
+import { downloadTool, extractTool, getSemanticVersion } from "./util";
 
 /**
  * Entry point of the script, called when the Action is executed
@@ -22,16 +22,10 @@ async function run() {
     // Get the supported tool versions
     const versionMetadata = await metadata.getAvailableVersions();
     core.info(`Latest version: ${versionMetadata.latest}`);
-    core.debug(
-      `Available versions: ${versionMetadata.availableVersions.join(', ')}`
-    );
+    core.debug(`Available versions: ${versionMetadata.availableVersions.join(", ")}`);
 
     // Resolve the version specification to an available version
-    const version = getSemanticVersion(
-      versionSpec,
-      versionMetadata.availableVersions,
-      versionMetadata.latest
-    );
+    const version = getSemanticVersion(versionSpec, versionMetadata.availableVersions, versionMetadata.latest);
     if (version == null) {
       throw Error(`Version specification ${versionSpec} is not available`);
     }
@@ -46,7 +40,7 @@ async function run() {
       const download = await downloadTool(version, platform, architecture);
       const newPath = await extractTool(
         download.pathToArchive,
-        download.downloadUrl.endsWith('.zip') ? 'zip' : 'tar.gz'
+        download.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz",
       );
 
       // Can't use the provided path as-is because the Flyway archive contains
@@ -54,12 +48,7 @@ async function run() {
       // in the root of the archive.
       const toolPath = path.join(newPath, `flyway-${version}`);
 
-      cachedPath = await tc.cacheDir(
-        toolPath,
-        constants.TOOLNAME,
-        version,
-        architecture
-      );
+      cachedPath = await tc.cacheDir(toolPath, constants.TOOLNAME, version, architecture);
     }
 
     // Update the output
@@ -76,17 +65,17 @@ async function run() {
 
     // Authenticate if email and token are provided
     if (inputs.email && inputs.token) {
-      core.startGroup('Authenticating Flyway');
+      core.startGroup("Authenticating Flyway");
 
       core.setSecret(inputs.token);
 
-      const args = ['auth', `-email=${inputs.email}`, `-token=${inputs.token}`];
+      const args = ["auth", `-email=${inputs.email}`, `-token=${inputs.token}`];
 
       if (inputs.agreeToEula) {
-        args.push('-IAgreeToTheEula');
+        args.push("-IAgreeToTheEula");
       }
 
-      await exec.exec('flyway', args);
+      await exec.exec("flyway", args);
 
       core.endGroup();
     }
@@ -98,6 +87,6 @@ async function run() {
 
 // Run the script if it's the main script, but allow import if it's
 // used as a module.
-if (process.argv[1].endsWith('index.mjs')) {
+if (process.argv[1].endsWith("index.js")) {
   run();
 }

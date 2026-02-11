@@ -3,5 +3,4 @@
 
 # Do not ignore these folders:
 !test/
-!.github/
 !src/

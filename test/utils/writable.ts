@@ -1,4 +1,4 @@
-import {Writable} from 'stream';
+import { Writable } from "stream";
 
 /**
  * Implements a writable stream that captures the results as a string buffer.
@@ -13,8 +13,8 @@ export class StringWritable extends Writable {
 
   constructor() {
     super();
-    this.buffer = '';
-    this.path = '';
+    this.buffer = "";
+    this.path = "";
   }
 
   get pending(): boolean {
@@ -32,7 +32,7 @@ export class StringWritable extends Writable {
   }
 
   reset() {
-    this.buffer = '';
+    this.buffer = "";
     this.isClosed = false;
   }
 

@@ -1,10 +1,10 @@
-import path from 'path';
-import * as fs from 'fs';
-import os from 'os';
-import * as semver from 'semver';
-import * as tc from '@actions/tool-cache';
-import * as constants from './constants';
-import {Architecture} from './inputs';
+import path from "path";
+import * as fs from "fs";
+import os from "os";
+import * as semver from "semver";
+import * as tc from "@actions/tool-cache";
+import * as constants from "./constants";
+import { Architecture } from "./inputs";
 
 /**
  * Gets the temporary directory
@@ -22,16 +22,12 @@ export function getTempDir() {
  * @param architecture the CLI architecture
  * @returns the path and URL details
  */
-export async function downloadTool(
-  version: string,
-  platform: string,
-  architecture: string
-) {
+export async function downloadTool(version: string, platform: string, architecture: string) {
   const downloadUrl = getDownloadUrl(version, platform, architecture);
   const pathToDownload = await tc.downloadTool(downloadUrl);
   return {
     downloadUrl,
-    pathToArchive: pathToDownload
+    pathToArchive: pathToDownload,
   };
 }
 
@@ -41,7 +37,7 @@ export async function downloadTool(
  * @returns the extension
  */
 export function getDownloadArchiveExtension(platform: string) {
-  const extension = platform === 'windows' ? 'zip' : 'tar.gz';
+  const extension = platform === "windows" ? "zip" : "tar.gz";
   return extension;
 }
 
@@ -53,14 +49,8 @@ export function getDownloadArchiveExtension(platform: string) {
  * @param latestVersion the latest version
  * @returns the best version
  */
-export function getSemanticVersion(
-  spec: string,
-  availableVersions: string[],
-  latestVersion: string
-) {
-  return spec == 'latest'
-    ? latestVersion
-    : semver.maxSatisfying(availableVersions, spec);
+export function getSemanticVersion(spec: string, availableVersions: string[], latestVersion: string) {
+  return spec == "latest" ? latestVersion : semver.maxSatisfying(availableVersions, spec);
 }
 
 /**
@@ -88,19 +78,17 @@ export function isVersionSatisfies(range: string, version: string): boolean {
  */
 export async function extractTool(archivePath: string, extension?: string) {
   if (!extension) {
-    extension = archivePath.endsWith('.tar.gz')
-      ? 'tar.gz'
-      : path.extname(archivePath);
-    if (extension.startsWith('.')) {
+    extension = archivePath.endsWith(".tar.gz") ? "tar.gz" : path.extname(archivePath);
+    if (extension.startsWith(".")) {
       extension = extension.substring(1);
     }
   }
 
   switch (extension) {
-    case 'tar.gz':
-    case 'tar':
+    case "tar.gz":
+    case "tar":
       return await tc.extractTar(archivePath);
-    case 'zip':
+    case "zip":
       return await tc.extractZip(archivePath);
     default:
       return await tc.extract7z(archivePath);
@@ -113,7 +101,7 @@ export async function extractTool(archivePath: string, extension?: string) {
  * @returns The path
  */
 export async function getToolCache(toolName: string) {
-  const toolcacheRoot = process.env.RUNNER_TOOL_CACHE ?? '';
+  const toolcacheRoot = process.env.RUNNER_TOOL_CACHE ?? "";
   const fullPath = path.join(toolcacheRoot, toolName);
   if (!fs.existsSync(fullPath)) {
     fs.mkdirSync(fullPath);
@@ -128,8 +116,8 @@ export async function getToolCache(toolName: string) {
  * @returns A semver formatted version
  */
 export function convertVersionToSemver(version: number[] | string) {
-  const versionArray = Array.isArray(version) ? version : version.split('.');
-  const mainVersion = versionArray.slice(0, 3).join('.');
+  const versionArray = Array.isArray(version) ? version : version.split(".");
+  const mainVersion = versionArray.slice(0, 3).join(".");
   return mainVersion;
 }
 
@@ -140,11 +128,7 @@ export function convertVersionToSemver(version: number[] | string) {
  * @param arch the architecture
  * @returns A URL for downloading the CLI
  */
-export function getDownloadUrl(
-  version: string,
-  platform: string,
-  arch: string
-) {
+export function getDownloadUrl(version: string, platform: string, arch: string) {
   const extension = getDownloadArchiveExtension(platform);
   const baseUrl = constants.BASE_URL;
   return arch == Architecture.JAVA

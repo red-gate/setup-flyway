@@ -1,8 +1,8 @@
-import * as httpm from '@actions/http-client';
-import {XMLParser} from 'fast-xml-parser';
-import * as core from '@actions/core';
+import * as httpm from "@actions/http-client";
+import { XMLParser } from "fast-xml-parser";
+import * as core from "@actions/core";
 
-import * as constants from './constants';
+import * as constants from "./constants";
 
 /**
  * Interface for the parsed XML metadata file
@@ -46,7 +46,7 @@ async function parseMetadata(content: string): Promise<VersionMetadata> {
   const versioning = xml.metadata.versioning;
   const latest = versioning.release;
   const versions = versioning.versions.version;
-  return {latest, availableVersions: versions};
+  return { latest, availableVersions: versions };
 }
 
 /**
@@ -70,12 +70,10 @@ async function downloadToolMetadata(metadataUrl: string) {
   const res: httpm.HttpClientResponse = await client.get(metadataUrl);
 
   if (res.message.statusCode !== 200) {
-    throw new Error(
-      `Failed to fetch versions from URL. Status code: ${res.message.statusCode}`
-    );
+    throw new Error(`Failed to fetch versions from URL. Status code: ${res.message.statusCode}`);
   }
 
-  const contentType = res.message.headers['content-type'];
+  const contentType = res.message.headers["content-type"];
   if (!isAllowedContentType(contentType)) {
     throw new Error(`Unexpected content type: ${contentType}`);
   }
@@ -84,19 +82,19 @@ async function downloadToolMetadata(metadataUrl: string) {
 }
 
 function isAllowedContentType(header: string | undefined) {
-  const contentType = header?.split(';')[0];
-  return contentType === 'application/xml' || contentType === 'text/plain';
+  const contentType = header?.split(";")[0];
+  return contentType === "application/xml" || contentType === "text/plain";
 }
 
 /** Exported values that are only available in a unit test environment */
 export const privateExports =
-  process.env.NODE_ENV !== 'test'
+  import.meta.env.MODE !== "test"
     ? {}
     : {
         functions: {
           downloadToolMetadata,
           getAvailableVersions,
           isAllowedContentType,
-          parseAvailableVersions: parseMetadata
-        }
+          parseAvailableVersions: parseMetadata,
+        },
       };
