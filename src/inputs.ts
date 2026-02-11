@@ -128,8 +128,6 @@ export function getArch(): string {
   switch (arch) {
     case "x64":
       return "x64";
-    case "amd64":
-      return "x64";
     case "ia32":
       return "x64";
     case "arm64":

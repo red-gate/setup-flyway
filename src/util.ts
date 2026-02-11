@@ -1,19 +1,8 @@
 import path from "path";
-import * as fs from "fs";
-import os from "os";
 import * as semver from "semver";
 import * as tc from "@actions/tool-cache";
 import * as constants from "./constants";
 import { Architecture } from "./inputs";
-
-/**
- * Gets the temporary directory
- * @returns The path to the temporary directory
- */
-export function getTempDir() {
-  const tempDirectory = process.env.RUNNER_TEMP || os.tmpdir();
-  return tempDirectory;
-}
 
 /**
  * Download the tool and return the URL and download path.
@@ -36,9 +25,8 @@ export async function downloadTool(version: string, platform: string, architectu
  * @param platform the platform
  * @returns the extension
  */
-export function getDownloadArchiveExtension(platform: string) {
-  const extension = platform === "windows" ? "zip" : "tar.gz";
-  return extension;
+function getDownloadArchiveExtension(platform: string) {
+  return platform === "windows" ? "zip" : "tar.gz";
 }
 
 /**
@@ -51,23 +39,6 @@ export function getDownloadArchiveExtension(platform: string) {
  */
 export function getSemanticVersion(spec: string, availableVersions: string[], latestVersion: string) {
   return spec == "latest" ? latestVersion : semver.maxSatisfying(availableVersions, spec);
-}
-
-/**
- * Checks if the version is satisfied.
- * @param range The range to check
- * @param version The version to be satisfied
- * @returns the comparison results
- */
-export function isVersionSatisfies(range: string, version: string): boolean {
-  if (semver.valid(range)) {
-    const semRange = semver.parse(range);
-    if (semRange && semRange.build?.length > 0) {
-      return semver.compareBuild(range, version) === 0;
-    }
-  }
-
-  return semver.satisfies(version, range);
 }
 
 /**
@@ -93,32 +64,6 @@ export async function extractTool(archivePath: string, extension?: string) {
     default:
       return await tc.extract7z(archivePath);
   }
-}
-
-/**
- * Gets the path to the tool cache
- * @param toolName the tool name
- * @returns The path
- */
-export async function getToolCache(toolName: string) {
-  const toolcacheRoot = process.env.RUNNER_TOOL_CACHE ?? "";
-  const fullPath = path.join(toolcacheRoot, toolName);
-  if (!fs.existsSync(fullPath)) {
-    fs.mkdirSync(fullPath);
-  }
-
-  return fullPath;
-}
-
-/**
- * Ensures that the version is in semver format
- * @param version the version to format
- * @returns A semver formatted version
- */
-export function convertVersionToSemver(version: number[] | string) {
-  const versionArray = Array.isArray(version) ? version : version.split(".");
-  const mainVersion = versionArray.slice(0, 3).join(".");
-  return mainVersion;
 }
 
 /**
