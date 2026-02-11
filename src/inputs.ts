@@ -75,7 +75,7 @@ export function getInputs(): Inputs {
     email,
     token,
     agreeToEula,
-  } as Inputs;
+  };
 }
 
 /**
@@ -88,7 +88,7 @@ export function getInputs(): Inputs {
  */
 function getInputWithDefault<TEnum>(input: string, type: TEnum, resolve: () => string): string {
   const raw = core.getInput(input);
-  if (raw == null || (typeof raw === "string" && raw.trim().length === 0)) {
+  if (raw == null || raw.trim().length === 0) {
     return resolve();
   }
 
