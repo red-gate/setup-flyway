@@ -15,7 +15,11 @@
     "test": "vitest run"
   },
   "repository": "git+https://github.com/red-gate/setup-flyway.git",
-  "keywords": ["actions", "setup", "flyway"],
+  "keywords": [
+    "actions",
+    "setup",
+    "flyway"
+  ],
   "author": "Redgate",
   "license": "MIT",
   "bugs": {
@@ -30,7 +34,7 @@
     "@actions/glob": "0.6.1",
     "@actions/http-client": "3.0.2",
     "@actions/io": "3.0.2",
-    "@actions/tool-cache": "3.0.1",
+    "@actions/tool-cache": "4.0.0",
     "fast-xml-parser": "5.3.5",
     "semver": "7.7.4",
     "xmlbuilder2": "4.0.3"
