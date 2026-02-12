@@ -7,6 +7,40 @@ import { getInputs } from "./inputs";
 import * as metadata from "./metadata";
 import { downloadTool, extractTool, getSemanticVersion } from "./util";
 
+async function verifyEdition(expectedEdition: string): Promise<void> {
+  let versionOutput = "";
+  const exitCode = await exec.exec("flyway", ["--version"], {
+    silent: true,
+    ignoreReturnCode: true,
+    listeners: {
+      stdout: (data: Buffer) => {
+        versionOutput += data.toString();
+      },
+      stderr: (data: Buffer) => {
+        versionOutput += data.toString();
+      },
+    },
+  });
+
+  const match = versionOutput.match(/Flyway\s+(Community|Teams|Enterprise)\s+Edition/);
+
+  if (exitCode !== 0 && !match) {
+    core.info(versionOutput);
+    core.warning(
+      `Could not verify Flyway edition (flyway --version exited with code ${exitCode}). Skipping edition check.`,
+    );
+    return;
+  }
+
+  const installedEdition = match ? match[1].toLowerCase() : "community";
+
+  if (installedEdition !== expectedEdition) {
+    throw new Error(`Edition mismatch: expected '${expectedEdition}' but Flyway reported '${installedEdition}'`);
+  }
+
+  core.info(`Verified Flyway edition: ${installedEdition}`);
+}
+
 async function run() {
   try {
     const inputs = getInputs();
@@ -58,42 +92,8 @@ async function run() {
 
     core.endGroup();
 
-    // Verify the installed edition matches the requested edition
     core.startGroup("Verifying Flyway edition");
-
-    let versionOutput = "";
-    const exitCode = await exec.exec("flyway", ["--version"], {
-      silent: true,
-      ignoreReturnCode: true,
-      listeners: {
-        stdout: (data: Buffer) => {
-          versionOutput += data.toString();
-        },
-        stderr: (data: Buffer) => {
-          versionOutput += data.toString();
-        },
-      },
-    });
-
-    const match = versionOutput.match(/Flyway\s+(Community|Teams|Enterprise)\s+Edition/);
-
-    if (exitCode !== 0 && !match) {
-      core.info(versionOutput);
-      core.warning(
-        `Could not verify Flyway edition (flyway --version exited with code ${exitCode}). Skipping edition check.`,
-      );
-    } else {
-      const installedEdition = match ? match[1].toLowerCase() : "community";
-
-      if (installedEdition !== inputs.edition) {
-        core.setFailed(`Edition mismatch: expected '${inputs.edition}' but Flyway reported '${installedEdition}'`);
-        core.endGroup();
-        return;
-      }
-
-      core.info(`Verified Flyway edition: ${installedEdition}`);
-    }
-
+    await verifyEdition(inputs.edition);
     core.endGroup();
 
     // Authenticate if email and token are provided
