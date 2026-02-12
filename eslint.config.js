@@ -1,56 +1,48 @@
-// @ts-check
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import eslintConfigPrettier from 'eslint-config-prettier';
-import globals from 'globals';
+import importPlugin from 'eslint-plugin-import';
+import vitestPlugin from '@vitest/eslint-plugin';
 
 export default tseslint.config(
-  {
-    ignores: [
-      '**/eslint.config.js',
-      '**/vite.config.ts',
-      '**/dist/',
-      '**/coverage/',
-      '**/.yarn/',
-      '.pnp.cjs',
-      '.pnp.loader.mjs',
-      'package.json'
-    ],
-  },
   eslint.configs.recommended,
-  eslintConfigPrettier,
   ...tseslint.configs.recommended,
   {
-    files: ['test/**/*.test.ts', 'src/**/*.ts'],
-    languageOptions: {
-      parser: tseslint.parser,
-      globals: {
-        ...globals.node
-      }
-    },
+    ignores: ['dist/**', 'node_modules/**', 'coverage/**', '.yarn/**', '*.js', '*.cjs', '*.mjs', '!eslint.config.js'],
+  },
+  {
     plugins: {
-      '@typescript-eslint': tseslint.plugin
+      import: importPlugin,
     },
     rules: {
-      '@typescript-eslint/no-require-imports': 'error',
-      '@typescript-eslint/no-non-null-assertion': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-empty-function': 'off',
-      '@typescript-eslint/ban-ts-comment': [
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'func-style': ['error', 'expression', { allowArrowFunctions: true }],
+      'import/group-exports': 'error',
+    },
+  },
+  {
+    files: ['test/**/*.test.ts'],
+    plugins: {
+      vitest: vitestPlugin,
+    },
+    rules: {
+      'no-restricted-syntax': [
         'error',
         {
-          'ts-ignore': 'allow-with-description'
-        }
+          selector: 'ImportDeclaration:not([importKind="type"])[source.value=vitest]',
+          message: 'Utilities from Vitest are available as globals and should not be imported',
+        },
       ],
-      'no-console': 'error',
-      'yoda': 'error',
-      'prefer-const': [
+      'vitest/no-restricted-vi-methods': [
         'error',
         {
-          destructuring: 'all'
-        }
+          mock: 'vi.mock is hoisted which can cause hard-to-debug errors. Prefer vi.doMock',
+        },
       ],
-      'no-control-regex': 'off',
-      'no-constant-condition': ['error', {checkLoops: false}]
-    }
-  });
+    },
+  }
+);

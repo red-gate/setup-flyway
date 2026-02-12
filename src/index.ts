@@ -7,7 +7,7 @@ import { getInputs } from "./inputs";
 import * as metadata from "./metadata";
 import { downloadTool, extractTool, getSemanticVersion } from "./util";
 
-async function verifyEdition(expectedEdition: string): Promise<void> {
+const verifyEdition = async (expectedEdition: string): Promise<void> => {
   let versionOutput = "";
   const exitCode = await exec.exec("flyway", ["--version"], {
     silent: true,
@@ -39,9 +39,9 @@ async function verifyEdition(expectedEdition: string): Promise<void> {
   }
 
   core.info(`Verified Flyway edition: ${installedEdition}`);
-}
+};
 
-async function authenticate(email: string, token: string, agreeToEula: boolean): Promise<void> {
+const authenticate = async (email: string, token: string, agreeToEula: boolean): Promise<void> => {
   core.setSecret(token);
 
   const args = ["auth", `-email=${email}`, `-token=${token}`];
@@ -49,9 +49,9 @@ async function authenticate(email: string, token: string, agreeToEula: boolean):
     args.push("-IAgreeToTheEula");
   }
   await exec.exec("flyway", args);
-}
+};
 
-async function installOrGetCached(version: string, platform: string, architecture: string): Promise<string> {
+const installOrGetCached = async (version: string, platform: string, architecture: string): Promise<string> => {
   let cachedPath = tc.find(constants.TOOL_NAME, version, architecture);
   if (!cachedPath) {
     const download = await downloadTool(version, platform, architecture);
@@ -65,9 +65,9 @@ async function installOrGetCached(version: string, platform: string, architectur
     cachedPath = await tc.cacheDir(toolPath, constants.TOOL_NAME, version, architecture);
   }
   return cachedPath;
-}
+};
 
-async function run() {
+const run = async () => {
   try {
     const inputs = getInputs();
     const { versionSpec, architecture, platform } = inputs;
@@ -108,7 +108,7 @@ async function run() {
     const message = error instanceof Error ? error.message : String(error);
     core.setFailed(message);
   }
-}
+};
 
 if (process.argv[1].endsWith("index.js")) {
   await run();
