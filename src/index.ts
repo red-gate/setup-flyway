@@ -7,21 +7,77 @@ import { getInputs } from "./inputs";
 import * as metadata from "./metadata";
 import { downloadTool, extractTool, getSemanticVersion } from "./util";
 
+async function verifyEdition(expectedEdition: string): Promise<void> {
+  let versionOutput = "";
+  const exitCode = await exec.exec("flyway", ["--version"], {
+    silent: true,
+    ignoreReturnCode: true,
+    listeners: {
+      stdout: (data: Buffer) => {
+        versionOutput += data.toString();
+      },
+      stderr: (data: Buffer) => {
+        versionOutput += data.toString();
+      },
+    },
+  });
+
+  const match = versionOutput.match(/Flyway\s+(Community|Teams|Enterprise)\s+Edition/);
+
+  if (exitCode !== 0 && !match) {
+    core.info(versionOutput);
+    core.warning(
+      `Could not verify Flyway edition (flyway --version exited with code ${exitCode}). Skipping edition check.`,
+    );
+    return;
+  }
+
+  const installedEdition = match ? match[1].toLowerCase() : "community";
+
+  if (installedEdition !== expectedEdition) {
+    throw new Error(`Edition mismatch: expected '${expectedEdition}' but Flyway reported '${installedEdition}'`);
+  }
+
+  core.info(`Verified Flyway edition: ${installedEdition}`);
+}
+
+async function authenticate(email: string, token: string, agreeToEula: boolean): Promise<void> {
+  core.setSecret(token);
+
+  const args = ["auth", `-email=${email}`, `-token=${token}`];
+  if (agreeToEula) {
+    args.push("-IAgreeToTheEula");
+  }
+  await exec.exec("flyway", args);
+}
+
+async function installOrGetCached(version: string, platform: string, architecture: string): Promise<string> {
+  let cachedPath = tc.find(constants.TOOL_NAME, version, architecture);
+  if (!cachedPath) {
+    const download = await downloadTool(version, platform, architecture);
+    const extension = download.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz";
+    const newPath = await extractTool(download.pathToArchive, extension);
+
+    // Can't use the provided path as-is because the Flyway archive contains
+    // a single folder with the binaries rather than containing the binaries
+    // in the root of the archive.
+    const toolPath = path.join(newPath, `flyway-${version}`);
+    cachedPath = await tc.cacheDir(toolPath, constants.TOOL_NAME, version, architecture);
+  }
+  return cachedPath;
+}
+
 async function run() {
   try {
     const inputs = getInputs();
-    const versionSpec = inputs.versionSpec;
-    const architecture = inputs.architecture;
-    const platform = inputs.platform;
+    const { versionSpec, architecture, platform } = inputs;
 
     core.startGroup(`Installing ${constants.TOOL_NAME}`);
 
-    // Get the supported tool versions
     const versionMetadata = await metadata.getAvailableVersions();
     core.info(`Latest version: ${versionMetadata.latest}`);
     core.debug(`Available versions: ${versionMetadata.availableVersions.join(", ")}`);
 
-    // Resolve the version specification to an available version
     const version = getSemanticVersion(versionSpec, versionMetadata.availableVersions, versionMetadata.latest);
     if (version == null) {
       core.setFailed(`Version specification ${versionSpec} is not available`);
@@ -30,84 +86,22 @@ async function run() {
 
     core.debug(`Resolved ${versionSpec} to version: ${version}`);
 
-    // Does the version already exist?
-    let cachedPath = tc.find(constants.TOOL_NAME, version, architecture);
-    if (!cachedPath) {
-      const download = await downloadTool(version, platform, architecture);
-      const newPath = await extractTool(
-        download.pathToArchive,
-        download.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz",
-      );
+    const cachedPath = await installOrGetCached(version, platform, architecture);
 
-      // Can't use the provided path as-is because the Flyway archive contains
-      // a single folder with the binaries rather than containing the binaries
-      // in the root of the archive.
-      const toolPath = path.join(newPath, `flyway-${version}`);
-      cachedPath = await tc.cacheDir(toolPath, constants.TOOL_NAME, version, architecture);
-    }
-
-    // Update the output
     core.setOutput(constants.OUTPUT_VERSION, version);
     core.setOutput(constants.OUTPUT_PATH, cachedPath);
-
-    // Create an environment variable for the version of the tool
     core.exportVariable(`FLYWAY_HOME_${version}`, cachedPath);
-
-    // Add the tool to the PATH
     core.addPath(cachedPath);
 
     core.endGroup();
 
-    // Verify the installed edition matches the requested edition
     core.startGroup("Verifying Flyway edition");
-
-    let versionOutput = "";
-    const exitCode = await exec.exec("flyway", ["--version"], {
-      silent: true,
-      ignoreReturnCode: true,
-      listeners: {
-        stdout: (data: Buffer) => {
-          versionOutput += data.toString();
-        },
-        stderr: (data: Buffer) => {
-          versionOutput += data.toString();
-        },
-      },
-    });
-
-    const match = versionOutput.match(/Flyway\s+(Community|Teams|Enterprise)\s+Edition/);
-
-    if (exitCode !== 0 && !match) {
-      core.info(versionOutput);
-      core.warning(
-        `Could not verify Flyway edition (flyway --version exited with code ${exitCode}). Skipping edition check.`,
-      );
-    } else {
-      const installedEdition = match ? match[1].toLowerCase() : "community";
-
-      if (installedEdition !== inputs.edition) {
-        core.setFailed(`Edition mismatch: expected '${inputs.edition}' but Flyway reported '${installedEdition}'`);
-        core.endGroup();
-        return;
-      }
-
-      core.info(`Verified Flyway edition: ${installedEdition}`);
-    }
-
+    await verifyEdition(inputs.edition);
     core.endGroup();
 
-    // Authenticate if email and token are provided
     if (inputs.email && inputs.token) {
       core.startGroup("Authenticating Flyway");
-
-      core.setSecret(inputs.token);
-
-      const args = ["auth", `-email=${inputs.email}`, `-token=${inputs.token}`];
-      if (inputs.agreeToEula) {
-        args.push("-IAgreeToTheEula");
-      }
-      await exec.exec("flyway", args);
-
+      await authenticate(inputs.email, inputs.token, inputs.agreeToEula);
       core.endGroup();
     }
   } catch (error) {
