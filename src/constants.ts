@@ -1,5 +1,7 @@
 /** Action input - version spec */
 export const INPUT_PRODUCT_VERSION = "version";
+/** Action input - edition */
+export const INPUT_EDITION = "edition";
 /** Action input - architecture */
 export const INPUT_PRODUCT_ARCH = "architecture";
 /** Action input - platform */

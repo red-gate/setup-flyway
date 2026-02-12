@@ -48,6 +48,8 @@ jobs:
         id: setup-tool
         with:
           version: ${{ matrix.version }}
+          edition: community
+          i-agree-to-the-eula: true
       - name: Verify Install
         run: ./test/verify-version.sh "${{ matrix.version }}" "${{ steps.setup-tool.outputs.path }}"
         shell: bash
@@ -68,6 +70,8 @@ jobs:
         id: setup-tool
         with:
           version: latest
+          edition: community
+          i-agree-to-the-eula: true
       - name: Verify Install
         run: ./test/verify-version.sh "${{ steps.setup-tool.outputs.version }}" "${{ steps.setup-tool.outputs.path }}"
         shell: bash
@@ -93,6 +97,8 @@ jobs:
         id: setup-tool
         with:
           version: 12.0.0
+          edition: community
+          i-agree-to-the-eula: true
           architecture: java
       - name: Verify Install
         run: ./test/verify-version.sh "12.0.0" "${{ steps.setup-tool.outputs.path }}"
@@ -119,6 +125,8 @@ jobs:
         id: setup-tool-native
         with:
           version: latest
+          edition: community
+          i-agree-to-the-eula: true
       - name: Verify Native Install
         run: ./test/verify-version.sh "${{ steps.setup-tool-native.outputs.version }}" "${{ steps.setup-tool-native.outputs.path }}"
         shell: bash
@@ -127,6 +135,8 @@ jobs:
         id: setup-tool-java
         with:
           version: latest
+          edition: community
+          i-agree-to-the-eula: true
           architecture: java
       - name: Verify Java Install
         run: ./test/verify-version.sh "${{ steps.setup-tool-java.outputs.version }}" "${{ steps.setup-tool-java.outputs.path }}"

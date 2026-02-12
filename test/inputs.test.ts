@@ -1,4 +1,12 @@
-import { getInputs, getPlatform, getArch, isAllowedPlatformAndArch, Platform, Architecture } from "../src/inputs";
+import {
+  getInputs,
+  getPlatform,
+  getArch,
+  isAllowedPlatformAndArch,
+  Platform,
+  Architecture,
+  Edition,
+} from "../src/inputs";
 import os from "os";
 
 describe("inputs", () => {
@@ -14,13 +22,17 @@ describe("inputs", () => {
 
   it("returns current platform if not set", async () => {
     process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
     process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
     const inputs = getInputs();
     expect(inputs.platform).toBeTruthy();
   });
 
   it("returns current architecture if not set", async () => {
     process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
     process.env.INPUT_PLATFORM = Platform.MACOSX;
     const inputs = getInputs();
     expect(inputs.architecture).toBeTruthy();
@@ -32,18 +44,58 @@ describe("inputs", () => {
     });
   });
 
-  it("returns undefined email, token and undefined IAgreeToTheEula when not provided", async () => {
+  it("returns an error if the edition is not specified", () => {
     process.env.INPUT_VERSION = "1.2.3";
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
+    process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env.INPUT_PLATFORM = Platform.LINUX;
+    expect(() => getInputs()).toThrow("Input required and not supplied: edition");
+  });
+
+  it("returns the edition when provided", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = "enterprise";
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
+    process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env.INPUT_PLATFORM = Platform.LINUX;
+    const inputs = getInputs();
+    expect(inputs.edition).toBe("enterprise");
+  });
+
+  it("throws for unrecognized edition input", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = "pro";
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
+    process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env.INPUT_PLATFORM = Platform.LINUX;
+    expect(() => getInputs()).toThrow(
+      "Invalid value 'pro' for input 'edition'. Allowed values: community, teams, enterprise",
+    );
+  });
+
+  it("returns an error if i-agree-to-the-eula is not specified", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env.INPUT_PLATFORM = Platform.LINUX;
+    expect(() => getInputs()).toThrow("Input required and not supplied: i-agree-to-the-eula");
+  });
+
+  it("returns false for agreeToEula when not set to true", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "false";
     process.env.INPUT_ARCHITECTURE = Architecture.X64;
     process.env.INPUT_PLATFORM = Platform.LINUX;
     const inputs = getInputs();
     expect(inputs.email).toBeUndefined();
     expect(inputs.token).toBeUndefined();
-    expect(inputs.agreeToEula).toBeUndefined();
+    expect(inputs.agreeToEula).toBe(false);
   });
 
   it("reads email, token, and IAgreeToTheEula when provided", async () => {
     process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.TEAMS;
     process.env.INPUT_ARCHITECTURE = Architecture.X64;
     process.env.INPUT_PLATFORM = Platform.LINUX;
     process.env.INPUT_EMAIL = "user@example.com";
@@ -57,6 +109,8 @@ describe("inputs", () => {
 
   it("throws for unrecognized architecture input", () => {
     process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
     process.env.INPUT_ARCHITECTURE = "mips";
     process.env.INPUT_PLATFORM = Platform.LINUX;
     expect(() => getInputs()).toThrow("Unrecognized input value: mips");
@@ -64,6 +118,8 @@ describe("inputs", () => {
 
   it("throws for unrecognized platform input", () => {
     process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
     process.env.INPUT_ARCHITECTURE = Architecture.X64;
     process.env.INPUT_PLATFORM = "solaris";
     expect(() => getInputs()).toThrow("Unrecognized input value: solaris");
@@ -71,6 +127,8 @@ describe("inputs", () => {
 
   it("throws for unsupported platform and architecture combination", () => {
     process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
     process.env.INPUT_ARCHITECTURE = "arm64";
     process.env.INPUT_PLATFORM = "linux";
     expect(() => getInputs()).toThrow("Unsupported platform: linux-arm64");

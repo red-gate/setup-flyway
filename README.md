@@ -18,11 +18,12 @@ The `setup-flyway` action installs the [Redgate Flyway](https://www.red-gate.com
 ## Usage
 
 - `version` - The version of Flyway CLI to set up. Can specify `latest`, an exact version, or a [semver](#supported-version-syntax) version. **Default:** `latest`.
+- `edition` - **Required.** The Flyway edition to use. Must be one of `community`, `teams`, or `enterprise`.
+- `i-agree-to-the-eula` - **Required.** Set to `true` to confirm you consent to the [Redgate EULA](https://www.red-gate.com/eula).
 - `architecture` - The hardware architecture version of the Flyway CLI. Can specify `x64`, `arm64`, or `java`. The Java version will require Java 17 or higher to be installed, preferably using [`actions/setup-java`](https://github.com/actions/setup-java). **Default:** the architecture of the runner.
 - `platform` - The operating system version of the Flyway CLI. Can specify `linux`, `linux-alpine`, `macos`, or `windows`. This setting is ignored when `java` is selected for the architecture. **Default:** the platform of the runner.
 - `email` - A Redgate email to be used in conjunction with the `token` parameter to configure a personal access token (PAT). Used to authenticate Flyway to use either Teams or Enterprise.
 - `token` - A personal access token (PAT) to be used in conjunction with the `email` parameter. This is used to license Flyway to access Teams or Enterprise features.
-- `i-agree-to-the-eula` - Set to `true` to confirm you consent to the [Redgate EULA](https://www.red-gate.com/eula).
 
 > [!NOTE]
 > The Flyway CLI supports `windows-x64`, `linux-x64`, `macosx-arm64`, `macosx-x64`, and `linux-alpine-x64` platforms. 
@@ -34,6 +35,9 @@ The `setup-flyway` action installs the [Redgate Flyway](https://www.red-gate.com
 
 ```yaml
 - uses: red-gate/setup-flyway@v2
+  with:
+    edition: community
+    i-agree-to-the-eula: true
 ```
 
 #### Java version
@@ -45,6 +49,8 @@ The `setup-flyway` action installs the [Redgate Flyway](https://www.red-gate.com
     java-version: '21'
 - uses: red-gate/setup-flyway@v2
   with:
+    edition: community
+    i-agree-to-the-eula: true
     architecture: 'java'
 ```
 
@@ -53,9 +59,10 @@ The `setup-flyway` action installs the [Redgate Flyway](https://www.red-gate.com
 ```yaml
 - uses: red-gate/setup-flyway@v2
   with:
+    edition: enterprise
+    i-agree-to-the-eula: true
     email: ${{ secrets.FLYWAY_EMAIL }}
     token: ${{ secrets.FLYWAY_TOKEN }}
-    i-agree-to-the-eula: true
 ```
 
 #### Supported version syntax
