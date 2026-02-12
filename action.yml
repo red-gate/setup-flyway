@@ -5,6 +5,9 @@ inputs:
   version:
     description: The version specification
     default: latest
+  edition:
+    description: The Flyway edition to use. Must be one of 'community', 'teams', or 'enterprise'.
+    required: true
   architecture:
     description: The target platform architecture. Defaults to the current platform's architecture.
   platform:
@@ -17,7 +20,7 @@ inputs:
     required: false
   i-agree-to-the-eula:
     description: Confirm you consent to the EULA found at https://www.red-gate.com/eula.
-    required: false
+    required: true
 outputs:
   path:
     description: The path the the tool installation folder

@@ -12,6 +12,15 @@ export enum Architecture {
 }
 
 /**
+ * The allowed editions
+ * */
+export enum Edition {
+  COMMUNITY = "community",
+  TEAMS = "teams",
+  ENTERPRISE = "enterprise",
+}
+
+/**
  * The allowed platforms
  * */
 export enum Platform {
@@ -27,11 +36,12 @@ export enum Platform {
  */
 export interface Inputs {
   versionSpec: string;
+  edition: string;
   architecture: string;
   platform: string;
   email: string | undefined;
   token: string | undefined;
-  agreeToEula: boolean | undefined;
+  agreeToEula: boolean;
 }
 
 /**
@@ -43,6 +53,9 @@ export function getInputs(): Inputs {
   const versionSpec = core.getInput(constants.INPUT_PRODUCT_VERSION, {
     required: true,
   });
+
+  // Get the user-provided input containing the edition (community, teams, enterprise)
+  const edition = getRequiredEnum(constants.INPUT_EDITION, Edition);
 
   // Get the user-provided input containing the architecture (arm64, x64, java)
   const architecture = getInputWithDefault(constants.INPUT_PRODUCT_ARCH, Architecture, getArch);
@@ -61,8 +74,8 @@ export function getInputs(): Inputs {
   const rawToken = core.getInput(constants.INPUT_TOKEN);
   const token = rawToken?.trim() ? rawToken.trim() : undefined;
 
-  const rawEula = core.getInput(constants.INPUT_EULA);
-  const agreeToEula = rawEula?.trim().toLowerCase() === "true" ? true : undefined;
+  const rawEula = core.getInput(constants.INPUT_EULA, { required: true });
+  const agreeToEula = rawEula.trim().toLowerCase() === "true";
 
   if (!isAllowedPlatformAndArch(platform, architecture)) {
     throw Error(`Unsupported platform: ${platform}-${architecture}`);
@@ -70,12 +83,31 @@ export function getInputs(): Inputs {
 
   return {
     versionSpec,
+    edition,
     architecture,
     platform,
     email,
     token,
     agreeToEula,
   };
+}
+
+/**
+ * Reads the named required input and validates it against an enum.
+ * @param input name of the input to read
+ * @param type the enum type of the input
+ * @returns the validated input value
+ */
+function getRequiredEnum<TEnum>(input: string, type: TEnum): string {
+  const raw = core.getInput(input, { required: true });
+
+  const value = type[raw.toUpperCase() as keyof typeof type];
+  if (!value) {
+    const allowed = Object.values(type as Record<string, string>).join(", ");
+    throw Error(`Invalid value '${raw}' for input '${input}'. Allowed values: ${allowed}`);
+  }
+
+  return value as string;
 }
 
 /**
