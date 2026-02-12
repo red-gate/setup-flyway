@@ -54,9 +54,7 @@ async function authenticate(email: string, token: string, agreeToEula: boolean):
 async function run() {
   try {
     const inputs = getInputs();
-    const versionSpec = inputs.versionSpec;
-    const architecture = inputs.architecture;
-    const platform = inputs.platform;
+    const { versionSpec, architecture, platform } = inputs;
 
     core.startGroup(`Installing ${constants.TOOL_NAME}`);
 
@@ -78,10 +76,8 @@ async function run() {
     let cachedPath = tc.find(constants.TOOL_NAME, version, architecture);
     if (!cachedPath) {
       const download = await downloadTool(version, platform, architecture);
-      const newPath = await extractTool(
-        download.pathToArchive,
-        download.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz",
-      );
+      const extension = download.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz";
+      const newPath = await extractTool(download.pathToArchive, extension);
 
       // Can't use the provided path as-is because the Flyway archive contains
       // a single folder with the binaries rather than containing the binaries
