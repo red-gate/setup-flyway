@@ -1,3 +1,2 @@
 # Disable creating a new, blank issue without a template
-
 blank_issues_enabled: false

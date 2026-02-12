@@ -8,7 +8,6 @@
     "rootDirs":[ "src", "test" ],
     "newLine": "lf",
     "types": [ "node", "vite/client", "vitest/globals" ],
-
     "strict": true,
     "isolatedModules": true,
     "esModuleInterop": true,

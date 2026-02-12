@@ -33,17 +33,13 @@ const verifyEdition = async (expectedEdition: string): Promise<void> => {
   }
 
   const installedEdition = match ? match[1].toLowerCase() : "community";
-
   if (installedEdition !== expectedEdition) {
     throw new Error(`Edition mismatch: expected '${expectedEdition}' but Flyway reported '${installedEdition}'`);
   }
-
-  core.info(`Verified Flyway edition: ${installedEdition}`);
 };
 
 const authenticate = async (email: string, token: string, agreeToEula: boolean): Promise<void> => {
   core.setSecret(token);
-
   const args = ["auth", `-email=${email}`, `-token=${token}`];
   if (agreeToEula) {
     args.push("-IAgreeToTheEula");
