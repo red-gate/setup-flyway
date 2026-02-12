@@ -5,7 +5,7 @@ import * as constants from "./constants";
 /**
  * The allowed platforms
  * */
-export enum Architecture {
+enum Architecture {
   X64 = "x64",
   ARM64 = "arm64",
   JAVA = "java",
@@ -14,7 +14,7 @@ export enum Architecture {
 /**
  * The allowed editions
  * */
-export enum Edition {
+enum Edition {
   COMMUNITY = "community",
   TEAMS = "teams",
   ENTERPRISE = "enterprise",
@@ -23,7 +23,7 @@ export enum Edition {
 /**
  * The allowed platforms
  * */
-export enum Platform {
+enum Platform {
   WINDOWS = "windows",
   MACOSX = "macosx",
   LINUX = "linux",
@@ -34,7 +34,7 @@ export enum Platform {
  * Represents the strongly-typed user-provided
  * inputs for the action.
  */
-export interface Inputs {
+interface Inputs {
   versionSpec: string;
   edition: string;
   architecture: string;
@@ -48,7 +48,7 @@ export interface Inputs {
  * Get the user-provided inputs for the action.
  * @returns The user-provided inputs
  */
-export function getInputs(): Inputs {
+const getInputs = (): Inputs => {
   // Get the user-provided input containing the version specification
   const versionSpec = core.getInput(constants.INPUT_PRODUCT_VERSION, {
     required: true,
@@ -90,7 +90,7 @@ export function getInputs(): Inputs {
     token,
     agreeToEula,
   };
-}
+};
 
 /**
  * Reads the named required input and validates it against an enum.
@@ -98,7 +98,7 @@ export function getInputs(): Inputs {
  * @param type the enum type of the input
  * @returns the validated input value
  */
-function getRequiredEnum<TEnum>(input: string, type: TEnum): string {
+const getRequiredEnum = <TEnum>(input: string, type: TEnum): string => {
   const raw = core.getInput(input, { required: true });
 
   const value = type[raw.toUpperCase() as keyof typeof type];
@@ -108,7 +108,7 @@ function getRequiredEnum<TEnum>(input: string, type: TEnum): string {
   }
 
   return value as string;
-}
+};
 
 /**
  * Reads the named input and returns its configured value,
@@ -118,7 +118,7 @@ function getRequiredEnum<TEnum>(input: string, type: TEnum): string {
  * @param resolve function that returns a string if the input is not set
  * @returns the resolved input value
  */
-function getInputWithDefault<TEnum>(input: string, type: TEnum, resolve: () => string): string {
+const getInputWithDefault = <TEnum>(input: string, type: TEnum, resolve: () => string): string => {
   const raw = core.getInput(input);
   if (raw == null || raw.trim().length === 0) {
     return resolve();
@@ -130,13 +130,13 @@ function getInputWithDefault<TEnum>(input: string, type: TEnum, resolve: () => s
   }
 
   return value as string;
-}
+};
 
 /**
  * Gets the current OS platform (Windows, MacOS, Linux)
  * @returns the current OS platform
  */
-export function getPlatform(): string {
+const getPlatform = (): string => {
   const platform = process.platform;
   switch (platform) {
     case "darwin":
@@ -149,13 +149,13 @@ export function getPlatform(): string {
     default:
       throw Error(`Unsupported platform: ${platform}`);
   }
-}
+};
 
 /**
  * Gets the current OS architecture
  * @returns the architecture
  */
-export function getArch(): string {
+const getArch = (): string => {
   const arch = os.arch();
   switch (arch) {
     case "x64":
@@ -167,7 +167,7 @@ export function getArch(): string {
     default:
       throw Error(`Unsupported architecture: ${arch}`);
   }
-}
+};
 
 /**
  * Ensures the platform and architecture combination is supported
@@ -175,10 +175,12 @@ export function getArch(): string {
  * @param arch the OS architecture name
  * @returns true if the platform and architecture are supported
  */
-export function isAllowedPlatformAndArch(platform: string, arch: string): boolean {
+const isAllowedPlatformAndArch = (platform: string, arch: string): boolean => {
   const signature = `${platform}-${arch}`;
   return (
     arch == Architecture.JAVA ||
     ["windows-x64", "linux-x64", "macosx-arm64", "macosx-x64", "linux-alpine-x64"].includes(signature)
   );
-}
+};
+
+export { Architecture, Edition, Platform, type Inputs, getInputs, getPlatform, getArch, isAllowedPlatformAndArch };

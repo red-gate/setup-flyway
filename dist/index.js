@@ -17163,7 +17163,7 @@ function Li(e, r) {
 }
 const rQ = "version", nQ = "edition", sQ = "architecture", iQ = "platform", oQ = "email", aQ = "token", cQ = "i-agree-to-the-eula", lQ = "version", uQ = "path", Ti = "flyway", gQ = "setup-flyway-action", gg = "https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline", hQ = `${gg}/maven-metadata.xml`;
 var io = /* @__PURE__ */ ((e) => (e.X64 = "x64", e.ARM64 = "arm64", e.JAVA = "java", e))(io || {}), hg = /* @__PURE__ */ ((e) => (e.COMMUNITY = "community", e.TEAMS = "teams", e.ENTERPRISE = "enterprise", e))(hg || {}), Eg = /* @__PURE__ */ ((e) => (e.WINDOWS = "windows", e.MACOSX = "macosx", e.LINUX = "linux", e.LINUX_ALPINE = "linux-alpine", e))(Eg || {});
-function EQ() {
+const EQ = () => {
   const e = Oe.getInput(rQ, {
     required: !0
   }), r = QQ(nQ, hg), t = Dl(sQ, io, BQ), n = Dl(iQ, Eg, IQ);
@@ -17180,16 +17180,14 @@ function EQ() {
     token: u,
     agreeToEula: a
   };
-}
-function QQ(e, r) {
+}, QQ = (e, r) => {
   const t = Oe.getInput(e, { required: !0 }), n = r[t.toUpperCase()];
   if (!n) {
     const A = Object.values(r).join(", ");
     throw Error(`Invalid value '${t}' for input '${e}'. Allowed values: ${A}`);
   }
   return n;
-}
-function Dl(e, r, t) {
+}, Dl = (e, r, t) => {
   const n = Oe.getInput(e);
   if (n == null || n.trim().length === 0)
     return t();
@@ -17197,8 +17195,7 @@ function Dl(e, r, t) {
   if (!A)
     throw Error(`Unrecognized input value: ${n}`);
   return A;
-}
-function IQ() {
+}, IQ = () => {
   const e = process.platform;
   switch (e) {
     case "darwin":
@@ -17210,8 +17207,7 @@ function IQ() {
     default:
       throw Error(`Unsupported platform: ${e}`);
   }
-}
-function BQ() {
+}, BQ = () => {
   const e = Yt.arch();
   switch (e) {
     case "x64":
@@ -17223,11 +17219,10 @@ function BQ() {
     default:
       throw Error(`Unsupported architecture: ${e}`);
   }
-}
-function fQ(e, r) {
+}, fQ = (e, r) => {
   const t = `${e}-${r}`;
   return r == "java" || ["windows-x64", "linux-x64", "macosx-arm64", "macosx-x64", "linux-alpine-x64"].includes(t);
-}
+};
 var CQ = Zu();
 const Qg = ":A-Za-z_\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD", dQ = Qg + "\\-.\\d\\u00B7\\u0300-\\u036F\\u203F-\\u2040", pQ = "[" + Qg + "][" + dQ + "]*", wQ = new RegExp("^" + pQ + "$");
 function Ig(e, r) {
@@ -18185,19 +18180,16 @@ class cI {
     return Wt.getMetaDataSymbol();
   }
 }
-async function lI() {
+const lI = async () => {
   const e = await gI();
   return uI(e);
-}
-async function uI(e) {
+}, uI = async (e) => {
   const n = new cI().parse(e).metadata.versioning, A = n.release, i = n.versions.version;
   return { latest: A, availableVersions: i };
-}
-async function gI() {
+}, gI = async () => {
   const e = hQ;
   return Oe.debug(`Using metadata endpoint: ${e}`), await hI(e);
-}
-async function hI(e) {
+}, hI = async (e) => {
   const t = await new CQ.HttpClient(gQ).get(e);
   if (t.message.statusCode !== 200)
     throw new Error(`Failed to fetch versions from URL. Status code: ${t.message.statusCode}`);
@@ -18205,11 +18197,10 @@ async function hI(e) {
   if (!EI(n))
     throw new Error(`Unexpected content type: ${n}`);
   return await t.readBody();
-}
-function EI(e) {
+}, EI = (e) => {
   const r = e?.split(";")[0];
   return r === "application/xml" || r === "text/plain";
-}
+};
 var TA = { exports: {} }, Vs, Ul;
 function nr() {
   if (Ul) return Vs;
@@ -19230,20 +19221,13 @@ function JI() {
   }, bi;
 }
 var OI = JI();
-async function xI(e, r, t) {
+const xI = async (e, r, t) => {
   const n = qI(e, r, t), A = await PE(n);
   return {
     downloadUrl: n,
     pathToArchive: A
   };
-}
-function VI(e) {
-  return e === "windows" ? "zip" : "tar.gz";
-}
-function HI(e, r, t) {
-  return e == "latest" ? t : OI.maxSatisfying(r, e);
-}
-async function PI(e, r) {
+}, VI = (e) => e === "windows" ? "zip" : "tar.gz", HI = (e, r, t) => e == "latest" ? t : OI.maxSatisfying(r, e), PI = async (e, r) => {
   switch (r) {
     case "tar.gz":
     case "tar":
@@ -19253,12 +19237,10 @@ async function PI(e, r) {
     default:
       return await WE(e);
   }
-}
-function qI(e, r, t) {
+}, qI = (e, r, t) => {
   const n = VI(r), A = gg;
   return t == io.JAVA ? `${A}/${e}/flyway-commandline-${e}.${n}` : `${A}/${e}/flyway-commandline-${e}-${r}-${t}.${n}`;
-}
-async function WI(e) {
+}, WI = async (e) => {
   let r = "";
   const t = await Jt("flyway", ["--version"], {
     silent: !0,
@@ -19282,21 +19264,18 @@ async function WI(e) {
   if (A !== e)
     throw new Error(`Edition mismatch: expected '${e}' but Flyway reported '${A}'`);
   Oe.info(`Verified Flyway edition: ${A}`);
-}
-async function _I(e, r, t) {
+}, _I = async (e, r, t) => {
   Oe.setSecret(r);
   const n = ["auth", `-email=${e}`, `-token=${r}`];
   t && n.push("-IAgreeToTheEula"), await Jt("flyway", n);
-}
-async function $I(e, r, t) {
+}, $I = async (e, r, t) => {
   let n = zE(Ti, e, t);
   if (!n) {
     const A = await xI(e, r, t), i = A.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz", o = await PI(A.pathToArchive, i), u = qe.join(o, `flyway-${e}`);
     n = await jE(u, Ti, e, t);
   }
   return n;
-}
-async function ZI() {
+}, ZI = async () => {
   try {
     const e = EQ(), { versionSpec: r, architecture: t, platform: n } = e;
     Oe.startGroup(`Installing ${Ti}`);
@@ -19314,5 +19293,5 @@ async function ZI() {
     const r = e instanceof Error ? e.message : String(e);
     Oe.setFailed(r);
   }
-}
+};
 process.argv[1].endsWith("index.js") && await ZI();

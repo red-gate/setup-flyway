@@ -11,23 +11,23 @@ import { Architecture } from "./inputs";
  * @param architecture the CLI architecture
  * @returns the path and URL details
  */
-export async function downloadTool(version: string, platform: string, architecture: string) {
+const downloadTool = async (version: string, platform: string, architecture: string) => {
   const downloadUrl = getDownloadUrl(version, platform, architecture);
   const pathToDownload = await tc.downloadTool(downloadUrl);
   return {
     downloadUrl,
     pathToArchive: pathToDownload,
   };
-}
+};
 
 /**
  * Gets the archive extension for downloads.
  * @param platform the platform
  * @returns the extension
  */
-function getDownloadArchiveExtension(platform: string) {
+const getDownloadArchiveExtension = (platform: string) => {
   return platform === "windows" ? "zip" : "tar.gz";
-}
+};
 
 /**
  * Resolves the best version from a specification and set of
@@ -37,9 +37,9 @@ function getDownloadArchiveExtension(platform: string) {
  * @param latestVersion the latest version
  * @returns the best version
  */
-export function getSemanticVersion(spec: string, availableVersions: string[], latestVersion: string) {
+const getSemanticVersion = (spec: string, availableVersions: string[], latestVersion: string) => {
   return spec == "latest" ? latestVersion : semver.maxSatisfying(availableVersions, spec);
-}
+};
 
 /**
  * Extracts the downloaded tool archive
@@ -47,7 +47,7 @@ export function getSemanticVersion(spec: string, availableVersions: string[], la
  * @param extension the extension of the archive
  * @returns the destination path
  */
-export async function extractTool(archivePath: string, extension?: string) {
+const extractTool = async (archivePath: string, extension?: string) => {
   if (!extension) {
     extension = archivePath.endsWith(".tar.gz") ? "tar.gz" : path.extname(archivePath);
     if (extension.startsWith(".")) {
@@ -64,7 +64,7 @@ export async function extractTool(archivePath: string, extension?: string) {
     default:
       return await tc.extract7z(archivePath);
   }
-}
+};
 
 /**
  * Gets the download URL for a specific version of the CLI
@@ -73,10 +73,12 @@ export async function extractTool(archivePath: string, extension?: string) {
  * @param arch the architecture
  * @returns A URL for downloading the CLI
  */
-export function getDownloadUrl(version: string, platform: string, arch: string) {
+const getDownloadUrl = (version: string, platform: string, arch: string) => {
   const extension = getDownloadArchiveExtension(platform);
   const baseUrl = constants.BASE_URL;
   return arch == Architecture.JAVA
     ? `${baseUrl}/${version}/flyway-commandline-${version}.${extension}`
     : `${baseUrl}/${version}/flyway-commandline-${version}-${platform}-${arch}.${extension}`;
-}
+};
+
+export { downloadTool, getSemanticVersion, extractTool, getDownloadUrl };

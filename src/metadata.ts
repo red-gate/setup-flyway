@@ -21,7 +21,7 @@ interface MavenMetadataFile {
 /**
  * Extracted metadata record
  */
-export type VersionMetadata = {
+type VersionMetadata = {
   latest: string;
   availableVersions: string[];
 };
@@ -30,34 +30,34 @@ export type VersionMetadata = {
  * Retrieves the available versions of the tool from the metadata file.
  * @returns the available and latest versions of the tool
  */
-export async function getAvailableVersions(): Promise<VersionMetadata> {
+const getAvailableVersions = async (): Promise<VersionMetadata> => {
   const content = await getToolVersionsFile();
   return parseMetadata(content);
-}
+};
 
 /**
  * Parses the Maven metadata content to resolve the available versions.
  * @param content the content of the metadata file
  * @returns the version metadata
  */
-async function parseMetadata(content: string): Promise<VersionMetadata> {
+const parseMetadata = async (content: string): Promise<VersionMetadata> => {
   const parser = new XMLParser();
   const xml = parser.parse(content) as MavenMetadataFile;
   const versioning = xml.metadata.versioning;
   const latest = versioning.release;
   const versions = versioning.versions.version;
   return { latest, availableVersions: versions };
-}
+};
 
 /**
  * Retrieves the metadata contents from the remote server.
  * @returns the contents of the metadata file
  */
-async function getToolVersionsFile() {
+const getToolVersionsFile = async () => {
   const metadataUrl = constants.METADATA_URL;
   core.debug(`Using metadata endpoint: ${metadataUrl}`);
   return await downloadToolMetadata(metadataUrl);
-}
+};
 
 /**
  * Downloads the metadata file from the remote server and returns the content.
@@ -65,7 +65,7 @@ async function getToolVersionsFile() {
  * @returns A promise that resolves to the content of the metadata file
  * @throws An error if a status of 200 is not returned or the content type is unexpected
  */
-async function downloadToolMetadata(metadataUrl: string) {
+const downloadToolMetadata = async (metadataUrl: string) => {
   const client: httpm.HttpClient = new httpm.HttpClient(constants.USER_AGENT);
   const res: httpm.HttpClientResponse = await client.get(metadataUrl);
 
@@ -79,15 +79,15 @@ async function downloadToolMetadata(metadataUrl: string) {
   }
 
   return await res.readBody();
-}
+};
 
-function isAllowedContentType(header: string | undefined) {
+const isAllowedContentType = (header: string | undefined) => {
   const contentType = header?.split(";")[0];
   return contentType === "application/xml" || contentType === "text/plain";
-}
+};
 
 /** Exported values that are only available in a unit test environment */
-export const privateExports =
+const privateExports =
   import.meta.env.MODE !== "test"
     ? {}
     : {
@@ -97,3 +97,5 @@ export const privateExports =
           parseAvailableVersions: parseMetadata,
         },
       };
+
+export { type VersionMetadata, getAvailableVersions, privateExports };
