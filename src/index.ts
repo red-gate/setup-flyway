@@ -41,6 +41,16 @@ async function verifyEdition(expectedEdition: string): Promise<void> {
   core.info(`Verified Flyway edition: ${installedEdition}`);
 }
 
+async function authenticate(email: string, token: string, agreeToEula: boolean): Promise<void> {
+  core.setSecret(token);
+
+  const args = ["auth", `-email=${email}`, `-token=${token}`];
+  if (agreeToEula) {
+    args.push("-IAgreeToTheEula");
+  }
+  await exec.exec("flyway", args);
+}
+
 async function run() {
   try {
     const inputs = getInputs();
@@ -96,18 +106,9 @@ async function run() {
     await verifyEdition(inputs.edition);
     core.endGroup();
 
-    // Authenticate if email and token are provided
     if (inputs.email && inputs.token) {
       core.startGroup("Authenticating Flyway");
-
-      core.setSecret(inputs.token);
-
-      const args = ["auth", `-email=${inputs.email}`, `-token=${inputs.token}`];
-      if (inputs.agreeToEula) {
-        args.push("-IAgreeToTheEula");
-      }
-      await exec.exec("flyway", args);
-
+      await authenticate(inputs.email, inputs.token, inputs.agreeToEula);
       core.endGroup();
     }
   } catch (error) {
