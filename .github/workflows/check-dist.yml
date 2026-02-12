@@ -54,7 +54,7 @@ jobs:
       - name: Compare the expected and actual dist directories
         id: diff
         run: "LINE_DIFF=$(git diff --ignore-space-at-eol --ignore-all-space ./dist | wc -l)\nif [ \"$LINE_DIFF\" -gt \"0\" ]; then\n  echo \"Detected uncommitted changes after the build ($LINE_DIFF). See the status below:\"\n  git diff --ignore-space-at-eol --ignore-all-space \n  exit 1\nfi\n"
-      # If inners of the dist directory were different than expected,
+      # If inners of the dist directory were different from expected,
       # upload the generated code as an artifact for comparison
       - name: Upload artifact
         if: ${{failure() && steps.diff.conclusion == 'failure'}}
@@ -62,3 +62,4 @@ jobs:
         with:
           name: dist
           path: ./dist
+          retention-days: 1
