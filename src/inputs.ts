@@ -96,7 +96,7 @@ const getInputs = (): Inputs => {
 };
 
 /**
- * Reads the named required input and validates it against an enum.
+ * Reads the required input and validates it against an enum.
  * @param input name of the input to read
  * @param type the enum type of the input
  * @returns the validated input value
