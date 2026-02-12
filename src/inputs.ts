@@ -34,7 +34,7 @@ enum Platform {
  * Represents the strongly-typed user-provided
  * inputs for the action.
  */
-interface Inputs {
+type Inputs = {
   versionSpec: string;
   edition: string;
   architecture: string;
@@ -42,7 +42,7 @@ interface Inputs {
   email: string | undefined;
   token: string | undefined;
   agreeToEula: boolean;
-}
+};
 
 /**
  * Get the user-provided inputs for the action.
