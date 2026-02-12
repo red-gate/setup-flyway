@@ -34,7 +34,7 @@ The `setup-flyway` action installs the [Redgate Flyway](https://www.red-gate.com
 #### Typical setup
 
 ```yaml
-- uses: red-gate/setup-flyway@v2
+- uses: red-gate/setup-flyway@v3
   with:
     edition: community
     i-agree-to-the-eula: true
@@ -47,7 +47,7 @@ The `setup-flyway` action installs the [Redgate Flyway](https://www.red-gate.com
   with:
     distribution: 'zulu' # See 'Supported distributions' for available options
     java-version: '21'
-- uses: red-gate/setup-flyway@v2
+- uses: red-gate/setup-flyway@v3
   with:
     edition: community
     i-agree-to-the-eula: true
@@ -57,7 +57,7 @@ The `setup-flyway` action installs the [Redgate Flyway](https://www.red-gate.com
 #### Authentication
 
 ```yaml
-- uses: red-gate/setup-flyway@v2
+- uses: red-gate/setup-flyway@v3
   with:
     edition: enterprise
     i-agree-to-the-eula: true
