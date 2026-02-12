@@ -1,12 +1,20 @@
 name: 'Setup Redgate Flyway'
-description: 'Set up a specific version of Flyway and add the command-line tools to the PATH'
+description: 'Set up Flyway and add the command-line to the PATH'
 author: 'Redgate'
+
+branding:
+  icon: database
+  color: red
+
 inputs:
   version:
     description: The version specification
     default: latest
   edition:
     description: The Flyway edition to use. Must be one of 'community', 'teams', or 'enterprise'.
+    required: true
+  i-agree-to-the-eula:
+    description: Confirm you consent to the EULA found at https://www.red-gate.com/eula.
     required: true
   architecture:
     description: The target platform architecture. Defaults to the current platform's architecture.
@@ -18,12 +26,9 @@ inputs:
   token:
     description: A personal access token (PAT) to be used in conjunction with the email configuration parameter. This is used to license Flyway to access Teams or Enterprise features.
     required: false
-  i-agree-to-the-eula:
-    description: Confirm you consent to the EULA found at https://www.red-gate.com/eula.
-    required: true
 outputs:
   path:
-    description: The path the the tool installation folder
+    description: The path to the tool installation folder
   version:
     description: The specific version installed
 
@@ -31,7 +36,3 @@ runs:
   using: 'node24'
   main: 'dist/index.js'
   post: 'dist/cleanup.js'
-
-branding:
-  icon: database
-  color: red
