@@ -17,7 +17,7 @@ export const OUTPUT_VERSION = "version";
 export const OUTPUT_PATH = "path";
 
 /** The tool name */
-export const TOOLNAME = "flyway";
+export const TOOL_NAME = "flyway";
 /** User agent to use for the HTTP downloads */
 export const USER_AGENT = "setup-flyway-action";
 

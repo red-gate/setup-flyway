@@ -1,11 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
-
 import { Fixture } from "../fixtures";
 
 /**
- * Gets the path to a file in the fixtures directory.
+ * Gets the path to a file in the 'fixtures' directory.
  * @param fixture the name of the fixture file
  * @returns the full path to the fixture file
  */

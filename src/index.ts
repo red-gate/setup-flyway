@@ -7,9 +7,6 @@ import { getInputs } from "./inputs";
 import * as metadata from "./metadata";
 import { downloadTool, extractTool, getSemanticVersion } from "./util";
 
-/**
- * Entry point of the script, called when the Action is executed
- */
 async function run() {
   try {
     const inputs = getInputs();
@@ -17,7 +14,7 @@ async function run() {
     const architecture = inputs.architecture;
     const platform = inputs.platform;
 
-    core.startGroup(`Installing ${constants.TOOLNAME}`);
+    core.startGroup(`Installing ${constants.TOOL_NAME}`);
 
     // Get the supported tool versions
     const versionMetadata = await metadata.getAvailableVersions();
@@ -27,16 +24,15 @@ async function run() {
     // Resolve the version specification to an available version
     const version = getSemanticVersion(versionSpec, versionMetadata.availableVersions, versionMetadata.latest);
     if (version == null) {
-      throw Error(`Version specification ${versionSpec} is not available`);
+      core.setFailed(`Version specification ${versionSpec} is not available`);
+      return;
     }
 
     core.debug(`Resolved ${versionSpec} to version: ${version}`);
 
     // Does the version already exist?
-    let cachedPath = tc.find(constants.TOOLNAME, version, architecture);
-
+    let cachedPath = tc.find(constants.TOOL_NAME, version, architecture);
     if (!cachedPath) {
-      // Download file and extract the archive
       const download = await downloadTool(version, platform, architecture);
       const newPath = await extractTool(
         download.pathToArchive,
@@ -47,8 +43,7 @@ async function run() {
       // a single folder with the binaries rather than containing the binaries
       // in the root of the archive.
       const toolPath = path.join(newPath, `flyway-${version}`);
-
-      cachedPath = await tc.cacheDir(toolPath, constants.TOOLNAME, version, architecture);
+      cachedPath = await tc.cacheDir(toolPath, constants.TOOL_NAME, version, architecture);
     }
 
     // Update the output
@@ -70,11 +65,9 @@ async function run() {
       core.setSecret(inputs.token);
 
       const args = ["auth", `-email=${inputs.email}`, `-token=${inputs.token}`];
-
       if (inputs.agreeToEula) {
         args.push("-IAgreeToTheEula");
       }
-
       await exec.exec("flyway", args);
 
       core.endGroup();
@@ -85,8 +78,6 @@ async function run() {
   }
 }
 
-// Run the script if it's the main script, but allow import if it's
-// used as a module.
 if (process.argv[1].endsWith("index.js")) {
-  run();
+  await run();
 }

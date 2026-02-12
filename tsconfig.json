@@ -1,27 +1,20 @@
 {
-    "$schema": "https://json.schemastore.org/tsconfig",
-    "display": "Node 20",
-    "_version": "20.1.0",
+  "compilerOptions": {
+    "lib": ["es2022"],
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "outDir": "dist",
+    "rootDirs":[ "src", "test" ],
+    "newLine": "lf",
+    "types": [ "node", "vite/client", "vitest/globals" ],
 
-    "compilerOptions": {
-      "lib": ["es2022"],
-      "module": "ESNext",
-      "target": "ES2022",
-      "outDir": "dist",
-      "isolatedModules": true,
-      "rootDirs":[ "src", "test" ],
-      "newLine": "lf",
-      "typeRoots": [ "src/typings", "node_modules/@types" ],
-      "types": [ "vitest/globals" ],
-
-      "strict": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "moduleResolution": "Node",
-
-      "importHelpers": true,
-
-      "allowSyntheticDefaultImports":  true
-    },
-    "exclude": [ "node_modules", "vite.config.ts", "eslint.config.js", "test/**/*" ]
-  }
+    "strict": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "allowSyntheticDefaultImports":  true
+  },
+  "exclude": [ "node_modules", "dist", "vite.config.ts" ]
+}

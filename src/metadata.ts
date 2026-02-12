@@ -93,7 +93,6 @@ export const privateExports =
     : {
         functions: {
           downloadToolMetadata,
-          getAvailableVersions,
           isAllowedContentType,
           parseAvailableVersions: parseMetadata,
         },

@@ -1,5 +1,6 @@
 import {defineConfig} from 'vitest/config';
 import {builtinModules} from 'node:module';
+import checker from 'vite-plugin-checker';
 
 const nodeBuiltins = builtinModules.flatMap(m => [m, `node:${m}`]);
 
@@ -32,10 +33,17 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true
   },
+  plugins: [checker({typescript: {root: '.'}})],
   test: {
     globals: true,
     mockReset: true,
     environment: 'node',
-    include: ['test/**/*.test.ts']
+    include: ['test/**/*.test.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'lcov'],
+      include: ['src/**/*.ts'],
+      exclude: ['src/index.ts', 'src/cleanup.ts'],
+    },
   }
 });

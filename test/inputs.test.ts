@@ -1,6 +1,7 @@
-import { getInputs, isAllowedPlatformAndArch, Platform, Architecture } from "../src/inputs";
+import { getInputs, getPlatform, getArch, isAllowedPlatformAndArch, Platform, Architecture } from "../src/inputs";
+import os from "os";
 
-describe("Inputs", () => {
+describe("inputs", () => {
   const OLD_ENV = process.env;
 
   beforeEach(() => {
@@ -54,6 +55,27 @@ describe("Inputs", () => {
     expect(inputs.agreeToEula).toBe(true);
   });
 
+  it("throws for unrecognized architecture input", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_ARCHITECTURE = "mips";
+    process.env.INPUT_PLATFORM = Platform.LINUX;
+    expect(() => getInputs()).toThrow("Unrecognized input value: mips");
+  });
+
+  it("throws for unrecognized platform input", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env.INPUT_PLATFORM = "solaris";
+    expect(() => getInputs()).toThrow("Unrecognized input value: solaris");
+  });
+
+  it("throws for unsupported platform and architecture combination", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_ARCHITECTURE = "arm64";
+    process.env.INPUT_PLATFORM = "linux";
+    expect(() => getInputs()).toThrow("Unsupported platform: linux-arm64");
+  });
+
   test.each([
     ["windows", "x64", true],
     ["windows", "arm64", false],
@@ -61,8 +83,64 @@ describe("Inputs", () => {
     ["macosx", "arm64", true],
     ["linux", "x64", true],
     ["linux", "arm64", false],
+    ["linux-alpine", "x64", true],
+    ["linux-alpine", "arm64", false],
+    ["linux", "java", true],
+    ["windows", "java", true],
   ])("allows the platform %p-%p: %p", async (platform, arch, expected) => {
     const result = isAllowedPlatformAndArch(platform, arch);
     expect(result).toBe(expected);
+  });
+});
+
+describe("getPlatform", () => {
+  const originalPlatform = Object.getOwnPropertyDescriptor(process, "platform");
+
+  afterEach(() => {
+    if (originalPlatform) {
+      Object.defineProperty(process, "platform", originalPlatform);
+    }
+  });
+
+  it("returns macosx for darwin", () => {
+    Object.defineProperty(process, "platform", { value: "darwin", configurable: true });
+    expect(getPlatform()).toBe("macosx");
+  });
+
+  it("returns windows for win32", () => {
+    Object.defineProperty(process, "platform", { value: "win32", configurable: true });
+    expect(getPlatform()).toBe("windows");
+  });
+
+  it("returns linux for linux", () => {
+    Object.defineProperty(process, "platform", { value: "linux", configurable: true });
+    expect(getPlatform()).toBe("linux");
+  });
+
+  it("throws for unsupported platform", () => {
+    Object.defineProperty(process, "platform", { value: "freebsd", configurable: true });
+    expect(() => getPlatform()).toThrow("Unsupported platform: freebsd");
+  });
+});
+
+describe("getArch", () => {
+  it("returns x64 for x64", () => {
+    vi.spyOn(os, "arch").mockReturnValue("x64");
+    expect(getArch()).toBe("x64");
+  });
+
+  it("returns x64 for ia32", () => {
+    vi.spyOn(os, "arch").mockReturnValue("ia32");
+    expect(getArch()).toBe("x64");
+  });
+
+  it("returns arm64 for arm64", () => {
+    vi.spyOn(os, "arch").mockReturnValue("arm64");
+    expect(getArch()).toBe("arm64");
+  });
+
+  it("throws for unsupported architecture", () => {
+    vi.spyOn(os, "arch").mockReturnValue("s390x");
+    expect(() => getArch()).toThrow("Unsupported architecture: s390x");
   });
 });

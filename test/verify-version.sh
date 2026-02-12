@@ -30,7 +30,3 @@ if [ "${EXPECTED_PATH}" != "${ACTUAL_PATH}" ]; then
   echo "Expected: ${EXPECTED_PATH}"
   exit 1
 fi
-
-#flyway --version | sed -n "s/Flyway \(Community\|Enterprise\) Edition \([[:digit:].]\+\) by Redgate/\2/p"
-
-#flyway --version | grep  "Flyway \(Community\|Enterprise\) Edition \([[:digit:].]\+\)"
