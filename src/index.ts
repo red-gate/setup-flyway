@@ -51,6 +51,22 @@ async function authenticate(email: string, token: string, agreeToEula: boolean):
   await exec.exec("flyway", args);
 }
 
+async function installOrGetCached(version: string, platform: string, architecture: string): Promise<string> {
+  let cachedPath = tc.find(constants.TOOL_NAME, version, architecture);
+  if (!cachedPath) {
+    const download = await downloadTool(version, platform, architecture);
+    const extension = download.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz";
+    const newPath = await extractTool(download.pathToArchive, extension);
+
+    // Can't use the provided path as-is because the Flyway archive contains
+    // a single folder with the binaries rather than containing the binaries
+    // in the root of the archive.
+    const toolPath = path.join(newPath, `flyway-${version}`);
+    cachedPath = await tc.cacheDir(toolPath, constants.TOOL_NAME, version, architecture);
+  }
+  return cachedPath;
+}
+
 async function run() {
   try {
     const inputs = getInputs();
@@ -58,12 +74,10 @@ async function run() {
 
     core.startGroup(`Installing ${constants.TOOL_NAME}`);
 
-    // Get the supported tool versions
     const versionMetadata = await metadata.getAvailableVersions();
     core.info(`Latest version: ${versionMetadata.latest}`);
     core.debug(`Available versions: ${versionMetadata.availableVersions.join(", ")}`);
 
-    // Resolve the version specification to an available version
     const version = getSemanticVersion(versionSpec, versionMetadata.availableVersions, versionMetadata.latest);
     if (version == null) {
       core.setFailed(`Version specification ${versionSpec} is not available`);
@@ -72,28 +86,11 @@ async function run() {
 
     core.debug(`Resolved ${versionSpec} to version: ${version}`);
 
-    // Does the version already exist?
-    let cachedPath = tc.find(constants.TOOL_NAME, version, architecture);
-    if (!cachedPath) {
-      const download = await downloadTool(version, platform, architecture);
-      const extension = download.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz";
-      const newPath = await extractTool(download.pathToArchive, extension);
+    const cachedPath = await installOrGetCached(version, platform, architecture);
 
-      // Can't use the provided path as-is because the Flyway archive contains
-      // a single folder with the binaries rather than containing the binaries
-      // in the root of the archive.
-      const toolPath = path.join(newPath, `flyway-${version}`);
-      cachedPath = await tc.cacheDir(toolPath, constants.TOOL_NAME, version, architecture);
-    }
-
-    // Update the output
     core.setOutput(constants.OUTPUT_VERSION, version);
     core.setOutput(constants.OUTPUT_PATH, cachedPath);
-
-    // Create an environment variable for the version of the tool
     core.exportVariable(`FLYWAY_HOME_${version}`, cachedPath);
-
-    // Add the tool to the PATH
     core.addPath(cachedPath);
 
     core.endGroup();
