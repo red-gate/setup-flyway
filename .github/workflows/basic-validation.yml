@@ -2,7 +2,7 @@
 #
 # Basic validation
 #
-# Validates that the code is well-formatted, builds successfully
+# Validates that the code is well-formatted, builds successfully,
 # passes unit tests, and has no open security vulnerabilities
 ######################################################################
 

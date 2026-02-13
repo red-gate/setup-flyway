@@ -4,7 +4,7 @@
 #
 # Validates the licenses for the dependencies of the project to
 # ensure that they are using an approved license. This relies on the
-# .github/dependency-review-config.yml and the licensed.yml files
+# .github/dependency-review-config.yml and the .licensed.yml files
 # for the configurations.
 #
 ######################################################################
@@ -47,5 +47,4 @@ jobs:
         run: licensed status
       - name: Dependabot license Check
         if: ${{ github.event_name == 'pull_request' }}
-
         uses: actions/dependency-review-action@v4

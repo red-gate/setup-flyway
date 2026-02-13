@@ -5,6 +5,7 @@ import * as constants from "./constants";
 /**
  * The allowed platforms
  * */
+// noinspection JSUnusedGlobalSymbols
 enum Architecture {
   X64 = "x64",
   ARM64 = "arm64",
@@ -14,6 +15,7 @@ enum Architecture {
 /**
  * The allowed editions
  * */
+// noinspection JSUnusedGlobalSymbols
 enum Edition {
   COMMUNITY = "community",
   TEAMS = "teams",
@@ -23,6 +25,7 @@ enum Edition {
 /**
  * The allowed platforms
  * */
+// noinspection JSUnusedGlobalSymbols
 enum Platform {
   WINDOWS = "windows",
   MACOSX = "macosx",
@@ -93,7 +96,7 @@ const getInputs = (): Inputs => {
 };
 
 /**
- * Reads the named required input and validates it against an enum.
+ * Reads the required input and validates it against an enum.
  * @param input name of the input to read
  * @param type the enum type of the input
  * @returns the validated input value

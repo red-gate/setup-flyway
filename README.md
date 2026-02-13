@@ -26,7 +26,7 @@ The `setup-flyway` action installs the [Redgate Flyway](https://www.red-gate.com
 - `token` - A personal access token (PAT) to be used in conjunction with the `email` parameter. This is used to license Flyway to access Teams or Enterprise features.
 
 > [!NOTE]
-> The Flyway CLI supports `windows-x64`, `linux-x64`, `macosx-arm64`, `macosx-x64`, and `linux-alpine-x64` platforms. 
+> The Flyway CLI supports the `windows-x64`, `linux-x64`, `macosx-arm64`, `macosx-x64`, and `linux-alpine-x64` platforms. 
 > For all other platforms, the Java version of the Flyway CLI should be used.
 
 ### Basic Configuration
@@ -68,7 +68,7 @@ The `setup-flyway` action installs the [Redgate Flyway](https://www.red-gate.com
 #### Supported version syntax
 
 The `version` input supports an exact version or a version range using [SemVer](https://semver.org/) notation:
-- major versions: `9`, `10`
+- major versions: `9`, `10`, `11`, `12`
 - more specific versions:  `10.11`, `10.12.0`, `10.13.x`
 - the current version: `latest`
 
