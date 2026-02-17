@@ -13,12 +13,8 @@ const verifyEdition = async (expectedEdition: string): Promise<void> => {
     silent: true,
     ignoreReturnCode: true,
     listeners: {
-      stdout: (data: Buffer) => {
-        versionOutput += data.toString();
-      },
-      stderr: (data: Buffer) => {
-        versionOutput += data.toString();
-      },
+      stdout: (data: Buffer) => (versionOutput += data.toString()),
+      stderr: (data: Buffer) => (versionOutput += data.toString()),
     },
   });
 
@@ -26,9 +22,7 @@ const verifyEdition = async (expectedEdition: string): Promise<void> => {
 
   if (exitCode !== 0 && !match) {
     core.info(versionOutput);
-    core.warning(
-      `Could not verify Flyway edition (flyway --version exited with code ${exitCode}). Skipping edition check.`,
-    );
+    core.warning(`flyway --version exited with code ${exitCode}. Skipping edition check.`);
     return;
   }
 
@@ -79,7 +73,6 @@ const run = async () => {
       core.setFailed(`Version specification ${versionSpec} is not available`);
       return;
     }
-
     core.debug(`Resolved ${versionSpec} to version: ${version}`);
 
     const cachedPath = await installOrGetCached(version, platform, architecture);
