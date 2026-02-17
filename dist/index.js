@@ -17164,9 +17164,7 @@ function Mi(e, r) {
 const nQ = "version", sQ = "edition", iQ = "architecture", oQ = "platform", aQ = "email", cQ = "token", lQ = "i-agree-to-the-eula", uQ = "version", gQ = "path", Ti = "flyway", hQ = "setup-flyway-action", gg = "https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline", EQ = `${gg}/maven-metadata.xml`;
 var io = /* @__PURE__ */ ((e) => (e.X64 = "x64", e.ARM64 = "arm64", e.JAVA = "java", e))(io || {}), hg = /* @__PURE__ */ ((e) => (e.COMMUNITY = "community", e.TEAMS = "teams", e.ENTERPRISE = "enterprise", e))(hg || {}), Eg = /* @__PURE__ */ ((e) => (e.WINDOWS = "windows", e.MACOSX = "macosx", e.LINUX = "linux", e.LINUX_ALPINE = "linux-alpine", e))(Eg || {});
 const QQ = () => {
-  const e = Oe.getInput(nQ, {
-    required: !0
-  }), r = IQ(sQ, hg), t = Dl(iQ, io, fQ), n = Dl(oQ, Eg, BQ);
+  const e = Oe.getInput(nQ, { required: !0 }), r = IQ(sQ, hg), t = Dl(iQ, io, fQ), n = Dl(oQ, Eg, BQ);
   Oe.debug(`Inputs: version: ${e}, architecture: ${t}, platform: ${n}`);
   const A = Oe.getInput(aQ), i = A?.trim() ? A.trim() : void 0, o = Oe.getInput(cQ), u = o?.trim() ? o.trim() : void 0, a = Oe.getInput(lQ, { required: !0 }).trim().toLowerCase() === "true";
   if (!CQ(n, t))
@@ -19262,10 +19260,7 @@ function xI() {
 var OI = xI();
 const VI = async (e, r, t) => {
   const n = WI(e, r, t), A = await qE(n);
-  return {
-    downloadUrl: n,
-    pathToArchive: A
-  };
+  return { downloadUrl: n, pathToArchive: A };
 }, HI = (e) => e === "windows" ? "zip" : "tar.gz", PI = (e, r, t) => e == "latest" ? t : OI.maxSatisfying(r, e), qI = async (e, r) => {
   switch (r) {
     case "tar.gz":
@@ -19285,18 +19280,12 @@ const VI = async (e, r, t) => {
     silent: !0,
     ignoreReturnCode: !0,
     listeners: {
-      stdout: (i) => {
-        r += i.toString();
-      },
-      stderr: (i) => {
-        r += i.toString();
-      }
+      stdout: (i) => r += i.toString(),
+      stderr: (i) => r += i.toString()
     }
   }), n = r.match(/Flyway\s+(Community|Teams|Enterprise)\s+Edition/);
   if (t !== 0 && !n) {
-    Oe.info(r), Oe.warning(
-      `Could not verify Flyway edition (flyway --version exited with code ${t}). Skipping edition check.`
-    );
+    Oe.info(r), Oe.warning(`flyway --version exited with code ${t}. Skipping edition check.`);
     return;
   }
   const A = n ? n[1].toLowerCase() : "community";

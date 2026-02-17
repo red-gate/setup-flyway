@@ -4,42 +4,22 @@ import * as core from "@actions/core";
 
 import * as constants from "./constants";
 
-/**
- * Interface for the parsed XML metadata file
- */
 interface MavenMetadataFile {
   metadata: {
     versioning: {
       release: string;
-      versions: {
-        version: string[];
-      };
+      versions: { version: string[] };
     };
   };
 }
 
-/**
- * Extracted metadata record
- */
-type VersionMetadata = {
-  latest: string;
-  availableVersions: string[];
-};
+type VersionMetadata = { latest: string; availableVersions: string[] };
 
-/**
- * Retrieves the available versions of the tool from the metadata file.
- * @returns the available and latest versions of the tool
- */
 const getAvailableVersions = async (): Promise<VersionMetadata> => {
   const content = await getToolVersionsFile();
   return parseMetadata(content);
 };
 
-/**
- * Parses the Maven metadata content to resolve the available versions.
- * @param content the content of the metadata file
- * @returns the version metadata
- */
 const parseMetadata = async (content: string): Promise<VersionMetadata> => {
   const parser = new XMLParser();
   const xml = parser.parse(content) as MavenMetadataFile;
@@ -49,22 +29,12 @@ const parseMetadata = async (content: string): Promise<VersionMetadata> => {
   return { latest, availableVersions: versions };
 };
 
-/**
- * Retrieves the metadata contents from the remote server.
- * @returns the contents of the metadata file
- */
 const getToolVersionsFile = async () => {
   const metadataUrl = constants.METADATA_URL;
   core.debug(`Using metadata endpoint: ${metadataUrl}`);
   return await downloadToolMetadata(metadataUrl);
 };
 
-/**
- * Downloads the metadata file from the remote server and returns the content.
- * @param metadataUrl the URL of the metadata file
- * @returns A promise that resolves to the content of the metadata file
- * @throws An error if a status of 200 is not returned or the content type is unexpected
- */
 const downloadToolMetadata = async (metadataUrl: string) => {
   const client: httpm.HttpClient = new httpm.HttpClient(constants.USER_AGENT);
   const res: httpm.HttpClientResponse = await client.get(metadataUrl);
