@@ -11,6 +11,7 @@ const OUTPUT_PATH = "path";
 
 const TOOL_NAME = "flyway";
 const USER_AGENT = "setup-flyway-action";
+const CACHE_KEY_PREFIX = "setup-flyway";
 
 const BASE_URL = "https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline";
 const METADATA_URL = `${BASE_URL}/maven-metadata.xml`;
@@ -29,4 +30,5 @@ export {
   USER_AGENT,
   BASE_URL,
   METADATA_URL,
+  CACHE_KEY_PREFIX,
 };
