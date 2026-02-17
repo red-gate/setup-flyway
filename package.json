@@ -28,10 +28,13 @@
   },
   "packageManager": "yarn@4.9.1",
   "dependencies": {
-    "@actions/core": "2.0.3",
+    "@actions/cache": "6.0.0",
+    "@actions/core": "3.0.0",
     "@actions/exec": "3.0.0",
-    "@actions/http-client": "3.0.2",
+    "@actions/http-client": "4.0.0",
     "@actions/tool-cache": "4.0.0",
+    "@protobuf-ts/runtime": "2.11.1",
+    "@protobuf-ts/runtime-rpc": "2.11.1",
     "fast-xml-parser": "5.3.6",
     "semver": "7.7.4"
   },

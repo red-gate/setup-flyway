@@ -2,6 +2,7 @@ import * as core from "@actions/core";
 import * as exec from "@actions/exec";
 import * as tc from "@actions/tool-cache";
 import * as path from "path";
+import { tryRestoreCache, trySaveCache } from "./cache";
 import * as constants from "./constants";
 import { getInputs } from "./inputs";
 import * as metadata from "./metadata";
@@ -44,15 +45,21 @@ const authenticate = async (email: string, token: string, agreeToEula: boolean):
 const installOrGetCached = async (version: string, platform: string, architecture: string): Promise<string> => {
   let cachedPath = tc.find(constants.TOOL_NAME, version, architecture);
   if (!cachedPath) {
+    const restored = await tryRestoreCache(version, platform, architecture);
+    if (restored) {
+      cachedPath = tc.find(constants.TOOL_NAME, version, architecture);
+    }
+  }
+  if (!cachedPath) {
     const download = await downloadTool(version, platform, architecture);
     const extension = download.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz";
     const newPath = await extractTool(download.pathToArchive, extension);
-
     // Can't use the provided path as-is because the Flyway archive contains
     // a single folder with the binaries rather than containing the binaries
     // in the root of the archive.
     const toolPath = path.join(newPath, `flyway-${version}`);
     cachedPath = await tc.cacheDir(toolPath, constants.TOOL_NAME, version, architecture);
+    await trySaveCache(version, platform, architecture);
   }
   return cachedPath;
 };

@@ -33,6 +33,7 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true
   },
+  resolve: { conditions: ['node'] },
   plugins: [checker({typescript: {root: '.'}})],
   test: {
     globals: true,
