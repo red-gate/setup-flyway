@@ -1,0 +1,116 @@
+name: End-to-End Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  setup-flyway-versions:
+    strategy:
+      matrix:
+        os: [macos, windows, ubuntu]
+        version: [12.0.0, 11.20.3, 10.8.1]
+    name: Setup ${{ matrix.version }} - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Flyway
+        id: setup-flyway
+        uses: ./
+        with:
+          version: ${{ matrix.version }}
+          edition: community
+          i-agree-to-the-eula: true
+      - name: Verify install
+        shell: bash
+        run: ./test/verify-version.sh "${{ matrix.version }}" "${{ steps.setup-flyway.outputs.path }}"
+
+  setup-flyway-latest:
+    strategy:
+      matrix:
+        os: [macos, windows, ubuntu]
+    name: Setup latest - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Flyway
+        id: setup-flyway
+        uses: ./
+        with:
+          version: latest
+          edition: community
+          i-agree-to-the-eula: true
+      - name: Verify install
+        shell: bash
+        run: ./test/verify-version.sh "${{ steps.setup-flyway.outputs.version }}" "${{ steps.setup-flyway.outputs.path }}"
+
+  setup-flyway-java:
+    strategy:
+      matrix:
+        os: [macos, windows, ubuntu]
+    name: Setup Java - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+      - name: Setup Flyway
+        id: setup-flyway
+        uses: ./
+        with:
+          version: latest
+          edition: community
+          i-agree-to-the-eula: true
+          architecture: java
+      - name: Verify install
+        shell: bash
+        run: ./test/verify-version.sh "${{ steps.setup-flyway.outputs.version }}" "${{ steps.setup-flyway.outputs.path }}"
+
+  setup-flyway-side-by-side:
+    strategy:
+      matrix:
+        os: [macos, windows, ubuntu]
+    name: Setup side-by-side - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+      - name: Setup Flyway Native
+        id: setup-flyway-native
+        uses: ./
+        with:
+          version: latest
+          edition: community
+          i-agree-to-the-eula: true
+      - name: Verify native install
+        shell: bash
+        run: ./test/verify-version.sh "${{ steps.setup-flyway-native.outputs.version }}" "${{ steps.setup-flyway-native.outputs.path }}"
+      - name: Setup Flyway Java
+        id: setup-flyway-java
+        uses: ./
+        with:
+          version: latest
+          edition: community
+          i-agree-to-the-eula: true
+          architecture: java
+      - name: Verify java install
+        shell: bash
+        run: ./test/verify-version.sh "${{ steps.setup-flyway-java.outputs.version }}" "${{ steps.setup-flyway-java.outputs.path }}"
