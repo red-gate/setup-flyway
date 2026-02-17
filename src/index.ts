@@ -91,15 +91,15 @@ const run = async () => {
 
     core.endGroup();
 
-    core.startGroup("Verifying Flyway edition");
-    await verifyEdition(inputs.edition);
-    core.endGroup();
-
     if (inputs.email && inputs.token) {
       core.startGroup("Authenticating Flyway");
       await authenticate(inputs.email, inputs.token, inputs.agreeToEula);
       core.endGroup();
     }
+
+    core.startGroup("Verifying Flyway edition");
+    await verifyEdition(inputs.edition);
+    core.endGroup();
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     core.setFailed(message);

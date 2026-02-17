@@ -45359,7 +45359,7 @@ const GF = () => {
     }
     ce(`Resolved ${e} to version: ${i}`);
     const o = await ov(i, n, r);
-    Qm(LF, i), Qm(UF, o), HQ(`FLYWAY_HOME_${i}`, o), OQ(o), SA(), RA("Verifying Flyway edition"), await sv(t.edition), SA(), t.email && t.token && (RA("Authenticating Flyway"), await iv(t.email, t.token, t.agreeToEula), SA());
+    Qm(LF, i), Qm(UF, o), HQ(`FLYWAY_HOME_${i}`, o), OQ(o), SA(), t.email && t.token && (RA("Authenticating Flyway"), await iv(t.email, t.token, t.agreeToEula), SA()), RA("Verifying Flyway edition"), await sv(t.edition), SA();
   } catch (t) {
     const e = t instanceof Error ? t.message : String(t);
     Nm(e);
