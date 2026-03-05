@@ -6,10 +6,10 @@
 
 ### Deploy database changes with confidence
 
-[![Basic validation](../../actions/workflows/basic-validation.yml/badge.svg)](../../actions/workflows/basic-validation.yml)
-[![E2E Validation](../../actions/workflows/e2e-validation.yml/badge.svg)](../../actions/workflows/e2e-validation.yml)
-[![License checks](../../actions/workflows/license-checks.yml/badge.svg)](../../actions/workflows/license-checks.yml)
-[![CodeQL Analysis](../../actions/workflows/codeql-analysis.yml/badge.svg)](../../actions/workflows/codeql-analysis.yml)
+[![CI](https://github.com/red-gate/setup-flyway/actions/workflows/ci.yml/badge.svg)](https://github.com/red-gate/setup-flyway/actions/workflows/ci.yml)
+[![End-to-End Tests](https://github.com/red-gate/setup-flyway/actions/workflows/end-to-end-test.yml/badge.svg)](https://github.com/red-gate/setup-flyway/actions/workflows/end-to-end-test.yml)
+[![CodeQL analysis](https://github.com/red-gate/setup-flyway/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/red-gate/setup-flyway/actions/workflows/codeql-analysis.yml)
+[![License checks](https://github.com/red-gate/setup-flyway/actions/workflows/license-check.yml/badge.svg)](https://github.com/red-gate/setup-flyway/actions/workflows/license-check.yml)
 
 ---
 
