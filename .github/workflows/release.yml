@@ -10,12 +10,21 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: The version to release (e.g. 1.2.3)
+        description: The version to release (e.g. v1.2.3)
         required: true
+
+permissions:
+  contents: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: echo version
-        run: echo "${{ inputs.version }}"
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.version }}
+          generate_release_notes: true
+          draft: true
