@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-tags: true
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
