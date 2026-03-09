@@ -15,6 +15,8 @@
 
 The `setup-flyway` action installs the [Redgate Flyway](https://www.red-gate.com/products/flyway/) CLI into your GitHub Actions workflow, enabling automated database migrations, version control for your schema, and seamless CI/CD integration. Supports 50+ databases including PostgreSQL, MySQL, SQL Server, and Oracle.
 
+Use this in conjunction with [flyway-actions](https://github.com/marketplace/actions/redgate-flyway-github-actions) to unlock powerful CLI capabilities for scaling database delivery.
+
 ## Usage
 
 - `version` - The version of Flyway CLI to set up. Can specify `latest`, an exact version, or a [semver](#supported-version-syntax) version. **Default:** `latest`.
