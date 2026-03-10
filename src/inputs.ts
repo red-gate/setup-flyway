@@ -32,6 +32,7 @@ type Inputs = {
   email: string | undefined;
   token: string | undefined;
   agreeToEula: boolean;
+  maxAuthAttempts: number;
 };
 
 const getInputs = (): Inputs => {
@@ -51,6 +52,12 @@ const getInputs = (): Inputs => {
   const rawEula = core.getInput(constants.INPUT_EULA, { required: true });
   const agreeToEula = rawEula.trim().toLowerCase() === "true";
 
+  const rawMaxAuthAttempts = core.getInput(constants.INPUT_MAX_AUTH_ATTEMPTS);
+  const maxAuthAttempts = rawMaxAuthAttempts?.trim() ? parseInt(rawMaxAuthAttempts.trim(), 10) : 2;
+  if (isNaN(maxAuthAttempts) || maxAuthAttempts < 1) {
+    throw Error(`Invalid value '${rawMaxAuthAttempts}' for input 'max-auth-attempts'. Must be a positive integer.`);
+  }
+
   if (!isAllowedPlatformAndArch(platform, architecture)) {
     throw Error(`Unsupported platform: ${platform}-${architecture}`);
   }
@@ -63,6 +70,7 @@ const getInputs = (): Inputs => {
     email,
     token,
     agreeToEula,
+    maxAuthAttempts,
   };
 };
 

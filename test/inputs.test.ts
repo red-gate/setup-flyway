@@ -125,6 +125,57 @@ describe("inputs", () => {
     expect(() => getInputs()).toThrow("Unrecognized input value: solaris");
   });
 
+  it("defaults maxAuthAttempts to 2 when not set", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
+    process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env.INPUT_PLATFORM = Platform.LINUX;
+    const inputs = getInputs();
+    expect(inputs.maxAuthAttempts).toBe(2);
+  });
+
+  it("reads maxAuthAttempts when provided", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
+    process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env.INPUT_PLATFORM = Platform.LINUX;
+    process.env["INPUT_MAX-AUTH-ATTEMPTS"] = "5";
+    const inputs = getInputs();
+    expect(inputs.maxAuthAttempts).toBe(5);
+  });
+
+  it("throws for zero maxAuthAttempts", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
+    process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env.INPUT_PLATFORM = Platform.LINUX;
+    process.env["INPUT_MAX-AUTH-ATTEMPTS"] = "0";
+    expect(() => getInputs()).toThrow("Invalid value '0' for input 'max-auth-attempts'. Must be a positive integer.");
+  });
+
+  it("throws for negative maxAuthAttempts", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
+    process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env.INPUT_PLATFORM = Platform.LINUX;
+    process.env["INPUT_MAX-AUTH-ATTEMPTS"] = "-1";
+    expect(() => getInputs()).toThrow("Invalid value '-1' for input 'max-auth-attempts'. Must be a positive integer.");
+  });
+
+  it("throws for non-numeric maxAuthAttempts", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
+    process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env.INPUT_PLATFORM = Platform.LINUX;
+    process.env["INPUT_MAX-AUTH-ATTEMPTS"] = "abc";
+    expect(() => getInputs()).toThrow("Invalid value 'abc' for input 'max-auth-attempts'. Must be a positive integer.");
+  });
+
   it("throws for unsupported platform and architecture combination", () => {
     process.env.INPUT_VERSION = "1.2.3";
     process.env.INPUT_EDITION = Edition.COMMUNITY;
