@@ -5,6 +5,7 @@ const INPUT_PRODUCT_PLATFORM = "platform";
 const INPUT_EMAIL = "email";
 const INPUT_TOKEN = "token";
 const INPUT_EULA = "i-agree-to-the-eula";
+const INPUT_MAX_AUTH_ATTEMPTS = "max-auth-attempts";
 
 const OUTPUT_VERSION = "version";
 const OUTPUT_PATH = "path";
@@ -24,6 +25,7 @@ export {
   INPUT_EMAIL,
   INPUT_TOKEN,
   INPUT_EULA,
+  INPUT_MAX_AUTH_ATTEMPTS,
   OUTPUT_VERSION,
   OUTPUT_PATH,
   TOOL_NAME,

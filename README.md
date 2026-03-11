@@ -26,6 +26,7 @@ Use this in conjunction with [flyway-actions](https://github.com/marketplace/act
 - `platform` - The operating system version of the Flyway CLI. Can specify `linux`, `linux-alpine`, `macos`, or `windows`. This setting is ignored when `java` is selected for the architecture. **Default:** the platform of the runner.
 - `email` - A Redgate email to be used in conjunction with the `token` parameter to configure a personal access token (PAT). Used to authenticate Flyway to use either Teams or Enterprise.
 - `token` - A personal access token (PAT) to be used in conjunction with the `email` parameter. This is used to license Flyway to access Teams or Enterprise features.
+- `max-auth-attempts` - The maximum number of times to attempt authenticating Flyway. **Default:** `2`.
 
 > [!NOTE]
 > The Flyway CLI supports the `windows-x64`, `linux-x64`, `macosx-arm64`, `macosx-x64`, and `linux-alpine-x64` platforms. 

@@ -26,6 +26,10 @@ inputs:
   token:
     description: A personal access token (PAT) to be used in conjunction with the email configuration parameter. This is used to license Flyway to access Teams or Enterprise features.
     required: false
+  max-auth-attempts:
+    description: The maximum number of times to attempt authenticating Flyway. Defaults to 2.
+    required: false
+    default: '2'
 outputs:
   path:
     description: The path to the tool installation folder

@@ -33,13 +33,25 @@ const verifyEdition = async (expectedEdition: string): Promise<void> => {
   }
 };
 
-const authenticate = async (email: string, token: string, agreeToEula: boolean): Promise<void> => {
+const authenticate = async (email: string, token: string, agreeToEula: boolean, maxAttempts: number): Promise<void> => {
   core.setSecret(token);
   const args = ["auth", `-email=${email}`, `-token=${token}`];
   if (agreeToEula) {
     args.push("-IAgreeToTheEula");
   }
-  await exec.exec("flyway", args);
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      await exec.exec("flyway", args);
+      return;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      if (attempt >= maxAttempts) {
+        throw error;
+      }
+      core.info(`Auth attempt ${attempt} failed: ${message}. Retrying...`);
+    }
+  }
 };
 
 const installOrGetCached = async (version: string, platform: string, architecture: string): Promise<string> => {
@@ -93,7 +105,7 @@ const run = async () => {
 
     if (inputs.email && inputs.token) {
       core.startGroup("Authenticating Flyway");
-      await authenticate(inputs.email, inputs.token, inputs.agreeToEula);
+      await authenticate(inputs.email, inputs.token, inputs.agreeToEula, inputs.maxAuthAttempts);
       core.endGroup();
     }
 
