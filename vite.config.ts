@@ -1,16 +1,8 @@
-import {defineConfig} from 'vitest/config';
-import {builtinModules} from 'node:module';
+import { builtinModules } from 'node:module';
 import checker from 'vite-plugin-checker';
+import { defineConfig } from 'vitest/config';
 
 const nodeBuiltins = builtinModules.flatMap(m => [m, `node:${m}`]);
-
-const cjsShimBanner = `\
-import {createRequire as __cjs_createRequire} from 'node:module';
-import {dirname as __cjs_dirname} from 'node:path';
-import {fileURLToPath as __cjs_fileURLToPath} from 'node:url';
-const require = __cjs_createRequire(import.meta.url);
-const __filename = __cjs_fileURLToPath(import.meta.url);
-const __dirname = __cjs_dirname(__filename);`;
 
 export default defineConfig({
   build: {
@@ -22,14 +14,13 @@ export default defineConfig({
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`
     },
-    rollupOptions: {
+    rolldownOptions: {
+      platform: "node",
       external: nodeBuiltins,
-      output: {
-        banner: cjsShimBanner
-      }
+      checks: { pluginTimings: false },
+      experimental: { attachDebugInfo: "none" },
     },
     target: 'node24',
-    minify: 'esbuild',
     outDir: 'dist',
     emptyOutDir: true
   },
