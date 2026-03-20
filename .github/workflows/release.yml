@@ -1,21 +1,34 @@
-######################################################################
-#
-# This is a work in progress
-#
-######################################################################
-
 name: Release
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: The version to release (e.g. 1.2.3)
+        description: The version to release (e.g. v1.2.3)
         required: true
+
+permissions:
+  contents: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: echo version
-        run: echo "${{ inputs.version }}"
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-tags: true
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.version }}
+          generate_release_notes: true
+      - name: Update major version tag
+        run: |
+          MAJOR_VERSION=$(echo "${{ inputs.version }}" | cut -d. -f1)
+          
+          git tag -d "$MAJOR_VERSION" 2>/dev/null || true
+          git push origin ":refs/tags/$MAJOR_VERSION" 2>/dev/null || true
+          
+          git tag "$MAJOR_VERSION"
+          git push origin "$MAJOR_VERSION"
