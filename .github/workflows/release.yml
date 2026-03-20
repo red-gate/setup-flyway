@@ -1,4 +1,3 @@
-
 name: Release
 
 on:
@@ -24,3 +23,12 @@ jobs:
         with:
           tag_name: ${{ inputs.version }}
           generate_release_notes: true
+      - name: Update major version tag
+        run: |
+          MAJOR_VERSION=$(echo "${{ inputs.version }}" | cut -d. -f1)
+          
+          git tag -d "$MAJOR_VERSION" 2>/dev/null || true
+          git push origin ":refs/tags/$MAJOR_VERSION" 2>/dev/null || true
+          
+          git tag "$MAJOR_VERSION"
+          git push origin "$MAJOR_VERSION"
