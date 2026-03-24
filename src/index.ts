@@ -92,7 +92,7 @@ const run = async () => {
       core.setFailed(`Version specification ${versionSpec} is not available`);
       return;
     }
-    core.debug(`Resolved ${versionSpec} to version: ${version}`);
+    core.info(`Resolved ${versionSpec} to version: ${version}`);
 
     const cachedPath = await installOrGetCached(version, platform, architecture);
 
