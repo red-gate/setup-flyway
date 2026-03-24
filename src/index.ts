@@ -122,7 +122,9 @@ const run = async () => {
     }
     core.info(`Resolved ${versionSpec} to version: ${version}`);
 
-    await cleanOldCachedVersions(version, architecture);
+    if (inputs.cleanOldCachedVersions) {
+      await cleanOldCachedVersions(version, architecture);
+    }
     const cachedPath = await installOrGetCached(version, platform, architecture);
 
     core.setOutput(constants.OUTPUT_VERSION, version);

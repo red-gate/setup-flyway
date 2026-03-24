@@ -35222,35 +35222,36 @@ function yD(e, t, n) {
 		return o;
 	});
 }
-var bD = "version", xD = "edition", SD = "architecture", CD = "platform", wD = "email", TD = "token", ED = "i-agree-to-the-eula", DD = "max-auth-attempts", OD = "version", kD = "path", AD = "flyway", jD = "setup-flyway-action", MD = "setup-flyway", ND = "https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline", PD = `${ND}/maven-metadata.xml`, FD = (e, t, n) => `${MD}-${t}-${n}-${e}`, ID = (e) => {
+var bD = "version", xD = "edition", SD = "architecture", CD = "platform", wD = "email", TD = "token", ED = "i-agree-to-the-eula", DD = "max-auth-attempts", OD = "clean-old-cached-versions", kD = "version", AD = "path", jD = "flyway", MD = "setup-flyway-action", ND = "setup-flyway", PD = "https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline", FD = `${PD}/maven-metadata.xml`, ID = (e, t, n) => `${ND}-${t}-${n}-${e}`, LD = (e) => {
 	let t = process.env.RUNNER_TOOL_CACHE ?? "";
-	return u.join(t, AD, e);
-}, LD = async (e, t, n) => {
-	let r = FD(e, t, n), i = ID(e);
+	return u.join(t, jD, e);
+}, RD = async (e, t, n) => {
+	let r = ID(e, t, n), i = LD(e);
 	try {
 		return await mD([i], r) ? (z(`Restored Flyway ${e} from GitHub Actions cache`), !0) : (z("GitHub Actions cache miss"), !1);
 	} catch (e) {
 		return z(`Failed to restore from cache: ${e instanceof Error ? e.message : String(e)}`), !1;
 	}
-}, RD = async (e, t, n) => {
-	let r = FD(e, t, n), i = ID(e);
+}, zD = async (e, t, n) => {
+	let r = ID(e, t, n), i = LD(e);
 	try {
 		await _D([i], r), z(`Saved Flyway ${e} to GitHub Actions cache`);
 	} catch (e) {
 		e instanceof uD ? z(`Cache entry already exists for key: ${r}`) : z(`Failed to save to cache: ${e instanceof Error ? e.message : String(e)}`);
 	}
-}, zD = /* @__PURE__ */ function(e) {
+}, BD = /* @__PURE__ */ function(e) {
 	return e.X64 = "x64", e.ARM64 = "arm64", e.JAVA = "java", e;
-}(zD || {}), BD = /* @__PURE__ */ function(e) {
-	return e.COMMUNITY = "community", e.TEAMS = "teams", e.ENTERPRISE = "enterprise", e;
 }(BD || {}), VD = /* @__PURE__ */ function(e) {
+	return e.COMMUNITY = "community", e.TEAMS = "teams", e.ENTERPRISE = "enterprise", e;
+}(VD || {}), HD = /* @__PURE__ */ function(e) {
 	return e.WINDOWS = "windows", e.MACOSX = "macosx", e.LINUX = "linux", e.LINUX_ALPINE = "linux-alpine", e;
-}(VD || {}), HD = () => {
-	let e = Dr(bD, { required: !0 }), t = UD(xD, BD), n = WD(SD, zD, KD), r = WD(CD, VD, GD);
+}(HD || {}), UD = () => {
+	let e = Dr(bD, { required: !0 }), t = WD(xD, VD), n = GD(SD, BD, qD), r = GD(CD, HD, KD);
 	z(`Inputs: version: ${e}, architecture: ${n}, platform: ${r}`);
 	let i = Dr(wD), a = i?.trim() ? i.trim() : void 0, o = Dr(TD), s = o?.trim() ? o.trim() : void 0, c = Dr(ED, { required: !0 }).trim().toLowerCase() === "true", l = Dr(DD), u = l?.trim() ? parseInt(l.trim(), 10) : 2;
 	if (isNaN(u) || u < 1) throw Error(`Invalid value '${l}' for input 'max-auth-attempts'. Must be a positive integer.`);
-	if (!qD(r, n)) throw Error(`Unsupported platform: ${r}-${n}`);
+	let d = Dr(OD)?.trim().toLowerCase() !== "false";
+	if (!JD(r, n)) throw Error(`Unsupported platform: ${r}-${n}`);
 	return {
 		versionSpec: e,
 		edition: t,
@@ -35259,22 +35260,23 @@ var bD = "version", xD = "edition", SD = "architecture", CD = "platform", wD = "
 		email: a,
 		token: s,
 		agreeToEula: c,
-		maxAuthAttempts: u
+		maxAuthAttempts: u,
+		cleanOldCachedVersions: d
 	};
-}, UD = (e, t) => {
+}, WD = (e, t) => {
 	let n = Dr(e, { required: !0 }), r = t[n.toUpperCase()];
 	if (!r) {
 		let r = Object.values(t).join(", ");
 		throw Error(`Invalid value '${n}' for input '${e}'. Allowed values: ${r}`);
 	}
 	return r;
-}, WD = (e, t, n) => {
+}, GD = (e, t, n) => {
 	let r = Dr(e);
 	if (r == null || r.trim().length === 0) return n();
 	let i = t[r.toUpperCase()];
 	if (!i) throw Error(`Unrecognized input value: ${r}`);
 	return i;
-}, GD = () => {
+}, KD = () => {
 	let e = process.platform;
 	switch (e) {
 		case "darwin": return "macosx";
@@ -35282,7 +35284,7 @@ var bD = "version", xD = "edition", SD = "architecture", CD = "platform", wD = "
 		case "linux": return "linux";
 		default: throw Error(`Unsupported platform: ${e}`);
 	}
-}, KD = () => {
+}, qD = () => {
 	let e = n.arch();
 	switch (e) {
 		case "x64": return "x64";
@@ -35290,50 +35292,50 @@ var bD = "version", xD = "edition", SD = "architecture", CD = "platform", wD = "
 		case "arm64": return "arm64";
 		default: throw Error(`Unsupported architecture: ${e}`);
 	}
-}, qD = (e, t) => {
+}, JD = (e, t) => {
 	let n = `${e}-${t}`;
-	return t == zD.JAVA || [
+	return t == BD.JAVA || [
 		"windows-x64",
 		"linux-x64",
 		"macosx-arm64",
 		"macosx-x64",
 		"linux-alpine-x64"
 	].includes(n);
-}, JD = async () => YD(await XD()), YD = async (e) => {
+}, YD = async () => XD(await ZD()), XD = async (e) => {
 	let t = new mp().parse(e).metadata.versioning;
 	return {
 		latest: t.release,
 		availableVersions: t.versions.version
 	};
-}, XD = async () => {
-	let e = PD;
-	return z(`Using metadata endpoint: ${e}`), await ZD(e);
-}, ZD = async (e) => {
-	let t = await new Mn(jD).get(e);
+}, ZD = async () => {
+	let e = FD;
+	return z(`Using metadata endpoint: ${e}`), await QD(e);
+}, QD = async (e) => {
+	let t = await new Mn(MD).get(e);
 	if (t.message.statusCode !== 200) throw Error(`Failed to fetch versions from URL. Status code: ${t.message.statusCode}`);
 	let n = t.message.headers["content-type"];
-	if (!QD(n)) throw Error(`Unexpected content type: ${n}`);
+	if (!$D(n)) throw Error(`Unexpected content type: ${n}`);
 	return await t.readBody();
-}, QD = (e) => {
+}, $D = (e) => {
 	let t = e?.split(";")[0];
 	return t === "application/xml" || t === "text/plain";
-}, $D = async (e, t, n) => {
-	let r = rO(e, t, n);
+}, eO = async (e, t, n) => {
+	let r = iO(e, t, n);
 	return {
 		downloadUrl: r,
 		pathToArchive: await Ni(r)
 	};
-}, eO = (e) => e === "windows" ? "zip" : "tar.gz", tO = (e, t, n) => e == "latest" ? n : Ei.maxSatisfying(t, e), nO = async (e, t) => {
+}, tO = (e) => e === "windows" ? "zip" : "tar.gz", nO = (e, t, n) => e == "latest" ? n : Ei.maxSatisfying(t, e), rO = async (e, t) => {
 	switch (t || (t = e.endsWith(".tar.gz") ? "tar.gz" : d.extname(e), t.startsWith(".") && (t = t.substring(1))), t) {
 		case "tar.gz":
 		case "tar": return await Ii(e);
 		case "zip": return await Li(e);
 		default: return await Fi(e);
 	}
-}, rO = (e, t, n) => {
-	let r = eO(t), i = ND;
-	return n == zD.JAVA ? `${i}/${e}/flyway-commandline-${e}.${r}` : `${i}/${e}/flyway-commandline-${e}-${t}-${n}.${r}`;
-}, iO = async (e) => {
+}, iO = (e, t, n) => {
+	let r = tO(t), i = PD;
+	return n == BD.JAVA ? `${i}/${e}/flyway-commandline-${e}.${r}` : `${i}/${e}/flyway-commandline-${e}-${t}-${n}.${r}`;
+}, aO = async (e) => {
 	let t = "", n = await Sr("flyway", ["--version"], {
 		silent: !0,
 		ignoreReturnCode: !0,
@@ -35348,7 +35350,7 @@ var bD = "version", xD = "edition", SD = "architecture", CD = "platform", wD = "
 	}
 	let i = r ? r[1].toLowerCase() : "community";
 	if (i !== e) throw Error(`Edition mismatch: expected '${e}' but Flyway reported '${i}'`);
-}, aO = async (e, t, n, r) => {
+}, oO = async (e, t, n, r) => {
 	Tr(t);
 	let i = [
 		"auth",
@@ -35364,45 +35366,45 @@ var bD = "version", xD = "edition", SD = "architecture", CD = "platform", wD = "
 		if (e >= r) throw t;
 		Nr(`Auth attempt ${e} failed: ${n}. Retrying...`);
 	}
-}, oO = async (e, t) => {
+}, sO = async (e, t) => {
 	if (process.env.RUNNER_ENVIRONMENT === "github-hosted") return;
-	let n = Hi(AD, t).filter((t) => Ei.lt(t, e));
+	let n = Hi(jD, t).filter((t) => Ei.lt(t, e));
 	if (n.length !== 0) {
 		Nr(`Cleaning ${n.length} older Flyway version(s) from tool cache: ${n.join(", ")}`);
 		for (let e of n) {
-			let t = ID(e);
+			let t = LD(e);
 			try {
 				await j.rm(t, {
 					recursive: !0,
 					force: !0
-				}), Nr(`Removed ${AD} ${e} from tool cache`);
+				}), Nr(`Removed ${jD} ${e} from tool cache`);
 			} catch (t) {
-				Mr(`Failed to remove ${AD} ${e}: ${t instanceof Error ? t.message : String(t)}`);
+				Mr(`Failed to remove ${jD} ${e}: ${t instanceof Error ? t.message : String(t)}`);
 			}
 		}
 	}
-}, sO = async (e, t, n) => {
-	let r = Vi(AD, e, n);
-	if (r || await LD(e, t, n) && (r = Vi(AD, e, n)), !r) {
-		let i = await $D(e, t, n), a = i.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz", o = await nO(i.pathToArchive, a);
-		r = await Bi(u.join(o, `flyway-${e}`), AD, e, n), await RD(e, t, n);
+}, cO = async (e, t, n) => {
+	let r = Vi(jD, e, n);
+	if (r || await RD(e, t, n) && (r = Vi(jD, e, n)), !r) {
+		let i = await eO(e, t, n), a = i.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz", o = await rO(i.pathToArchive, a);
+		r = await Bi(u.join(o, `flyway-${e}`), jD, e, n), await zD(e, t, n);
 	}
 	return r;
 };
 process.argv[1].endsWith("index.js") && await (async () => {
 	try {
-		let e = HD(), { versionSpec: t, architecture: n, platform: r } = e;
-		Pr(`Installing ${AD}`);
-		let i = await JD();
+		let e = UD(), { versionSpec: t, architecture: n, platform: r } = e;
+		Pr(`Installing ${jD}`);
+		let i = await YD();
 		Nr(`Latest version: ${i.latest}`), z(`Available versions: ${i.availableVersions.join(", ")}`);
-		let a = tO(t, i.availableVersions, i.latest);
+		let a = nO(t, i.availableVersions, i.latest);
 		if (a == null) {
 			kr(`Version specification ${t} is not available`);
 			return;
 		}
-		Nr(`Resolved ${t} to version: ${a}`), await oO(a, n);
-		let o = await sO(a, r, n);
-		Or(OD, a), Or(kD, o), wr(`FLYWAY_HOME_${a}`, o), Er(o), Fr(), e.email && e.token && (Pr("Authenticating Flyway"), await aO(e.email, e.token, e.agreeToEula, e.maxAuthAttempts), Fr()), Pr("Verifying Flyway edition"), await iO(e.edition), Fr();
+		Nr(`Resolved ${t} to version: ${a}`), e.cleanOldCachedVersions && await sO(a, n);
+		let o = await cO(a, r, n);
+		Or(kD, a), Or(AD, o), wr(`FLYWAY_HOME_${a}`, o), Er(o), Fr(), e.email && e.token && (Pr("Authenticating Flyway"), await oO(e.email, e.token, e.agreeToEula, e.maxAuthAttempts), Fr()), Pr("Verifying Flyway edition"), await aO(e.edition), Fr();
 	} catch (e) {
 		kr(e instanceof Error ? e.message : String(e));
 	}

@@ -176,6 +176,38 @@ describe("inputs", () => {
     expect(() => getInputs()).toThrow("Invalid value 'abc' for input 'max-auth-attempts'. Must be a positive integer.");
   });
 
+  it("defaults cleanOldCachedVersions to true when not set", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
+    process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env.INPUT_PLATFORM = Platform.LINUX;
+    const inputs = getInputs();
+    expect(inputs.cleanOldCachedVersions).toBe(true);
+  });
+
+  it("returns true for cleanOldCachedVersions when set to true", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
+    process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env.INPUT_PLATFORM = Platform.LINUX;
+    process.env["INPUT_CLEAN-OLD-CACHED-VERSIONS"] = "true";
+    const inputs = getInputs();
+    expect(inputs.cleanOldCachedVersions).toBe(true);
+  });
+
+  it("returns false for cleanOldCachedVersions when set to false", () => {
+    process.env.INPUT_VERSION = "1.2.3";
+    process.env.INPUT_EDITION = Edition.COMMUNITY;
+    process.env["INPUT_I-AGREE-TO-THE-EULA"] = "true";
+    process.env.INPUT_ARCHITECTURE = Architecture.X64;
+    process.env.INPUT_PLATFORM = Platform.LINUX;
+    process.env["INPUT_CLEAN-OLD-CACHED-VERSIONS"] = "false";
+    const inputs = getInputs();
+    expect(inputs.cleanOldCachedVersions).toBe(false);
+  });
+
   it("throws for unsupported platform and architecture combination", () => {
     process.env.INPUT_VERSION = "1.2.3";
     process.env.INPUT_EDITION = Edition.COMMUNITY;

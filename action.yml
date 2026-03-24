@@ -30,6 +30,10 @@ inputs:
     description: The maximum number of times to attempt authenticating Flyway. Defaults to 2.
     required: false
     default: '2'
+  clean-old-cached-versions:
+    description: Remove older versions of Flyway from the tool cache on self-hosted runners.
+    required: false
+    default: 'true'
 outputs:
   path:
     description: The path to the tool installation folder
