@@ -16599,8 +16599,8 @@ var Ef = /^[-+]?0x[a-fA-F0-9]+$/, Df = /^([\-\+])?(0*)([0-9]*(\.[0-9]*)?)$/, Of 
 function kf(e, t = {}) {
 	if (t = Object.assign({}, Of, t), !e || typeof e != "string") return e;
 	let n = e.trim();
-	if (t.skipLike !== void 0 && t.skipLike.test(n)) return e;
-	if (e === "0") return 0;
+	if (n.length === 0 || t.skipLike !== void 0 && t.skipLike.test(n)) return e;
+	if (n === "0") return 0;
 	if (t.hex && Ef.test(n)) return Nf(n, 16);
 	if (!isFinite(n)) return Pf(e, Number(n), t);
 	if (n.includes("e") || n.includes("E")) return jf(e, n, t);
