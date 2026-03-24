@@ -6,6 +6,7 @@ const INPUT_EMAIL = "email";
 const INPUT_TOKEN = "token";
 const INPUT_EULA = "i-agree-to-the-eula";
 const INPUT_MAX_AUTH_ATTEMPTS = "max-auth-attempts";
+const INPUT_CLEAN_OLD_CACHED_VERSIONS = "clean-old-cached-versions";
 
 const OUTPUT_VERSION = "version";
 const OUTPUT_PATH = "path";
@@ -26,6 +27,7 @@ export {
   INPUT_TOKEN,
   INPUT_EULA,
   INPUT_MAX_AUTH_ATTEMPTS,
+  INPUT_CLEAN_OLD_CACHED_VERSIONS,
   OUTPUT_VERSION,
   OUTPUT_PATH,
   TOOL_NAME,

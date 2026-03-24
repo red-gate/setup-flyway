@@ -33,6 +33,7 @@ type Inputs = {
   token: string | undefined;
   agreeToEula: boolean;
   maxAuthAttempts: number;
+  cleanOldCachedVersions: boolean;
 };
 
 const getInputs = (): Inputs => {
@@ -58,6 +59,9 @@ const getInputs = (): Inputs => {
     throw Error(`Invalid value '${rawMaxAuthAttempts}' for input 'max-auth-attempts'. Must be a positive integer.`);
   }
 
+  const rawCleanOldCachedVersions = core.getInput(constants.INPUT_CLEAN_OLD_CACHED_VERSIONS);
+  const cleanOldCachedVersions = rawCleanOldCachedVersions?.trim().toLowerCase() !== "false";
+
   if (!isAllowedPlatformAndArch(platform, architecture)) {
     throw Error(`Unsupported platform: ${platform}-${architecture}`);
   }
@@ -71,6 +75,7 @@ const getInputs = (): Inputs => {
     token,
     agreeToEula,
     maxAuthAttempts,
+    cleanOldCachedVersions,
   };
 };
 
