@@ -1,8 +1,10 @@
 import * as core from "@actions/core";
 import * as exec from "@actions/exec";
 import * as tc from "@actions/tool-cache";
+import * as fs from "fs/promises";
 import * as path from "path";
-import { tryRestoreCache, trySaveCache } from "./cache";
+import * as semver from "semver";
+import { getToolCacheVersionPath, tryRestoreCache, trySaveCache } from "./cache";
 import * as constants from "./constants";
 import { getInputs } from "./inputs";
 import * as metadata from "./metadata";
@@ -54,6 +56,32 @@ const authenticate = async (email: string, token: string, agreeToEula: boolean, 
   }
 };
 
+const cleanOldCachedVersions = async (version: string, architecture: string): Promise<void> => {
+  if (process.env.RUNNER_ENVIRONMENT === "github-hosted") {
+    return;
+  }
+
+  const cachedVersions = tc.findAllVersions(constants.TOOL_NAME, architecture);
+  const olderVersions = cachedVersions.filter((v) => semver.lt(v, version));
+
+  if (olderVersions.length === 0) {
+    return;
+  }
+
+  core.info(`Cleaning ${olderVersions.length} older Flyway version(s) from tool cache: ${olderVersions.join(", ")}`);
+
+  for (const oldVersion of olderVersions) {
+    const versionDir = getToolCacheVersionPath(oldVersion);
+    try {
+      await fs.rm(versionDir, { recursive: true, force: true });
+      core.info(`Removed ${constants.TOOL_NAME} ${oldVersion} from tool cache`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      core.warning(`Failed to remove ${constants.TOOL_NAME} ${oldVersion}: ${message}`);
+    }
+  }
+};
+
 const installOrGetCached = async (version: string, platform: string, architecture: string): Promise<string> => {
   let cachedPath = tc.find(constants.TOOL_NAME, version, architecture);
   if (!cachedPath) {
@@ -92,8 +120,9 @@ const run = async () => {
       core.setFailed(`Version specification ${versionSpec} is not available`);
       return;
     }
-    core.debug(`Resolved ${versionSpec} to version: ${version}`);
+    core.info(`Resolved ${versionSpec} to version: ${version}`);
 
+    await cleanOldCachedVersions(version, architecture);
     const cachedPath = await installOrGetCached(version, platform, architecture);
 
     core.setOutput(constants.OUTPUT_VERSION, version);
