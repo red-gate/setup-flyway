@@ -12059,7 +12059,7 @@ var ua = /* @__PURE__ */ I(((e, t) => {
 		}
 		var b = a.pre, y = a.post.length ? v(a.post, !1) : [""], x;
 		if (u) {
-			var S = l(p[0]), C = l(p[1]), w = Math.max(p[0].length, p[1].length), T = p.length == 3 ? Math.abs(l(p[2])) : 1, E = g;
+			var S = l(p[0]), C = l(p[1]), w = Math.max(p[0].length, p[1].length), T = p.length == 3 ? Math.max(Math.abs(l(p[2])), 1) : 1, E = g;
 			C < S && (T *= -1, E = _);
 			var D = p.some(h);
 			x = [];
