@@ -10143,7 +10143,7 @@ var Tn = [
 		let r = e.protocol === "https:";
 		return n = new bn.ProxyAgent(Object.assign({
 			uri: t.href,
-			pipelining: this._keepAlive ? 1 : 0
+			pipelining: +!!this._keepAlive
 		}, (t.username || t.password) && { token: `Basic ${Buffer.from(`${t.username}:${t.password}`).toString("base64")}` })), this._proxyAgentDispatcher = n, r && this._ignoreSslError && (n.options = Object.assign(n.options.requestTls || {}, { rejectUnauthorized: !1 })), n;
 	}
 	_getUserAgentWithOrchestrationId(e) {
@@ -10980,7 +10980,7 @@ var Ir = /* @__PURE__ */ I(((e, t) => {
 			return t.version === this.version ? 0 : this.compareMain(t) || this.comparePre(t);
 		}
 		compareMain(t) {
-			return t instanceof e || (t = new e(t, this.options)), this.major < t.major ? -1 : this.major > t.major ? 1 : this.minor < t.minor ? -1 : this.minor > t.minor ? 1 : this.patch < t.patch ? -1 : this.patch > t.patch ? 1 : 0;
+			return t instanceof e || (t = new e(t, this.options)), this.major < t.major ? -1 : this.major > t.major ? 1 : this.minor < t.minor ? -1 : this.minor > t.minor ? 1 : this.patch < t.patch ? -1 : +(this.patch > t.patch);
 		}
 		comparePre(t) {
 			if (t instanceof e || (t = new e(t, this.options)), this.prerelease.length && !t.prerelease.length) return -1;
@@ -11043,7 +11043,7 @@ var Ir = /* @__PURE__ */ I(((e, t) => {
 					this.prerelease.length === 0 && this.patch++, this.prerelease = [];
 					break;
 				case "pre": {
-					let e = Number(n) ? 1 : 0;
+					let e = +!!Number(n);
 					if (this.prerelease.length === 0) this.prerelease = [e];
 					else {
 						let r = this.prerelease.length;
@@ -11420,6 +11420,7 @@ var Ir = /* @__PURE__ */ I(((e, t) => {
 						break;
 					case "<":
 					case "<=": break;
+					/* istanbul ignore next */
 					default: throw Error(`Unexpected operation: ${e.operator}`);
 				}
 			}), o && (!a || i(a, o)) && (a = o);
@@ -12237,6 +12238,7 @@ var ua = /* @__PURE__ */ I(((e, t) => {
 				continue;
 			}
 			switch (w) {
+				/* istanbul ignore next */
 				case "/": return !1;
 				case "\\":
 					y(), l = !0;
@@ -16372,10 +16374,10 @@ function yf(e) {
 	} : typeof e == "object" && e ? {
 		enabled: e.enabled !== !1,
 		maxEntitySize: Math.max(1, e.maxEntitySize ?? 1e4),
-		maxExpansionDepth: Math.max(1, e.maxExpansionDepth ?? 10),
-		maxTotalExpansions: Math.max(1, e.maxTotalExpansions ?? 1e3),
+		maxExpansionDepth: Math.max(1, e.maxExpansionDepth ?? 1e4),
+		maxTotalExpansions: Math.max(1, e.maxTotalExpansions ?? Infinity),
 		maxExpandedLength: Math.max(1, e.maxExpandedLength ?? 1e5),
-		maxEntityCount: Math.max(1, e.maxEntityCount ?? 100),
+		maxEntityCount: Math.max(1, e.maxEntityCount ?? 1e3),
 		allowedTags: e.allowedTags ?? null,
 		tagFilter: e.tagFilter ?? null
 	} : yf(!0);
@@ -16654,8 +16656,8 @@ function If(e) {
 	} : () => !1;
 }
 var Lf = class {
-	constructor(e, t = {}) {
-		this.pattern = e, this.separator = t.separator || ".", this.segments = this._parse(e), this._hasDeepWildcard = this.segments.some((e) => e.type === "deep-wildcard"), this._hasAttributeCondition = this.segments.some((e) => e.attrName !== void 0), this._hasPositionSelector = this.segments.some((e) => e.position !== void 0);
+	constructor(e, t = {}, n) {
+		this.pattern = e, this.separator = t.separator || ".", this.segments = this._parse(e), this.data = n, this._hasDeepWildcard = this.segments.some((e) => e.type === "deep-wildcard"), this._hasAttributeCondition = this.segments.some((e) => e.attrName !== void 0), this._hasPositionSelector = this.segments.some((e) => e.position !== void 0);
 	}
 	_parse(e) {
 		let t = [], n = 0, r = "";
@@ -16717,10 +16719,10 @@ var Lf = class {
 	"restore"
 ]), zf = class {
 	constructor(e = {}) {
-		this.separator = e.separator || ".", this.path = [], this.siblingStacks = [];
+		this.separator = e.separator || ".", this.path = [], this.siblingStacks = [], this._pathStringCache = null, this._frozenPathCache = null, this._frozenSiblingsCache = null;
 	}
 	push(e, t = null, n = null) {
-		if (this.path.length > 0) {
+		if (this._pathStringCache = null, this._frozenPathCache = null, this._frozenSiblingsCache = null, this.path.length > 0) {
 			let e = this.path[this.path.length - 1];
 			e.values = void 0;
 		}
@@ -16738,13 +16740,14 @@ var Lf = class {
 	}
 	pop() {
 		if (this.path.length === 0) return;
+		this._pathStringCache = null, this._frozenPathCache = null, this._frozenSiblingsCache = null;
 		let e = this.path.pop();
 		return this.siblingStacks.length > this.path.length + 1 && (this.siblingStacks.length = this.path.length + 1), e;
 	}
 	updateCurrent(e) {
 		if (this.path.length > 0) {
 			let t = this.path[this.path.length - 1];
-			e != null && (t.values = e);
+			e != null && (t.values = e, this._frozenPathCache = null);
 		}
 	}
 	getCurrentTag() {
@@ -16775,13 +16778,18 @@ var Lf = class {
 	}
 	toString(e, t = !0) {
 		let n = e || this.separator;
+		if (n === this.separator && t === !0) {
+			if (this._pathStringCache !== null && this._pathStringCache !== void 0) return this._pathStringCache;
+			let e = this.path.map((e) => t && e.namespace ? `${e.namespace}:${e.tag}` : e.tag).join(n);
+			return this._pathStringCache = e, e;
+		}
 		return this.path.map((e) => t && e.namespace ? `${e.namespace}:${e.tag}` : e.tag).join(n);
 	}
 	toArray() {
 		return this.path.map((e) => e.tag);
 	}
 	reset() {
-		this.path = [], this.siblingStacks = [];
+		this._pathStringCache = null, this._frozenPathCache = null, this._frozenSiblingsCache = null, this.path = [], this.siblingStacks = [];
 	}
 	matches(e) {
 		let t = e.segments;
@@ -16834,6 +16842,9 @@ var Lf = class {
 		}
 		return !0;
 	}
+	matchesAny(e) {
+		return e.matchesAny(this);
+	}
 	snapshot() {
 		return {
 			path: this.path.map((e) => ({ ...e })),
@@ -16841,7 +16852,7 @@ var Lf = class {
 		};
 	}
 	restore(e) {
-		this.path = e.path.map((e) => ({ ...e })), this.siblingStacks = e.siblingStacks.map((e) => new Map(e));
+		this._pathStringCache = null, this._frozenPathCache = null, this._frozenSiblingsCache = null, this.path = e.path.map((e) => ({ ...e })), this.siblingStacks = e.siblingStacks.map((e) => new Map(e));
 	}
 	readOnly() {
 		return new Proxy(this, {
@@ -16849,8 +16860,10 @@ var Lf = class {
 				if (Rf.has(t)) return () => {
 					throw TypeError(`Cannot call '${t}' on a read-only Matcher. Obtain a writable instance to mutate state.`);
 				};
+				if (t === "path") return e._frozenPathCache === null && (e._frozenPathCache = Object.freeze(e.path.map((e) => Object.freeze({ ...e })))), e._frozenPathCache;
+				if (t === "siblingStacks") return e._frozenSiblingsCache === null && (e._frozenSiblingsCache = Object.freeze(e.siblingStacks.map((e) => Object.freeze(new Map(e))))), e._frozenSiblingsCache;
 				let r = Reflect.get(e, t, n);
-				return t === "path" || t === "siblingStacks" ? Object.freeze(Array.isArray(r) ? r.map((e) => e instanceof Map ? Object.freeze(new Map(e)) : Object.freeze({ ...e })) : r) : typeof r == "function" ? r.bind(e) : r;
+				return typeof r == "function" ? r.bind(e) : r;
 			},
 			set(e, t) {
 				throw TypeError(`Cannot set property '${String(t)}' on a read-only Matcher.`);
@@ -16980,26 +16993,26 @@ function Gf(e) {
 var Kf = /* @__PURE__ */ RegExp("([^\\s=]+)\\s*(=\\s*(['\"])([\\s\\S]*?)\\3)?", "gm");
 function qf(e, t, n) {
 	if (this.options.ignoreAttributes !== !0 && typeof e == "string") {
-		let r = qd(e, Kf), i = r.length, a = {}, o = {};
+		let r = qd(e, Kf), i = r.length, a = {}, o = Array(i), s = !1, c = {};
 		for (let e = 0; e < i; e++) {
 			let t = this.resolveNameSpace(r[e][1]), i = r[e][4];
 			if (t.length && i !== void 0) {
-				let e = i;
-				this.options.trimValues && (e = e.trim()), e = this.replaceEntitiesValue(e, n, this.readonlyMatcher), o[t] = e;
+				let r = i;
+				this.options.trimValues && (r = r.trim()), r = this.replaceEntitiesValue(r, n, this.readonlyMatcher), o[e] = r, c[t] = r, s = !0;
 			}
 		}
-		Object.keys(o).length > 0 && typeof t == "object" && t.updateCurrent && t.updateCurrent(o);
+		s && typeof t == "object" && t.updateCurrent && t.updateCurrent(c);
+		let l = this.options.jPath ? t.toString() : this.readonlyMatcher, u = !1;
 		for (let e = 0; e < i; e++) {
-			let i = this.resolveNameSpace(r[e][1]), o = this.options.jPath ? t.toString() : this.readonlyMatcher;
-			if (this.ignoreAttributesFn(i, o)) continue;
-			let s = r[e][4], c = this.options.attributeNamePrefix + i;
-			if (i.length) if (this.options.transformAttributeName && (c = this.options.transformAttributeName(c)), c = op(c, this.options), s !== void 0) {
-				this.options.trimValues && (s = s.trim()), s = this.replaceEntitiesValue(s, n, this.readonlyMatcher);
-				let e = this.options.jPath ? t.toString() : this.readonlyMatcher, r = this.options.attributeValueProcessor(i, s, e);
-				r == null ? a[c] = s : typeof r != typeof s || r !== s ? a[c] = r : a[c] = rp(s, this.options.parseAttributeValue, this.options.numberParseOptions);
-			} else this.options.allowBooleanAttributes && (a[c] = !0);
+			let t = this.resolveNameSpace(r[e][1]);
+			if (this.ignoreAttributesFn(t, l)) continue;
+			let n = this.options.attributeNamePrefix + t;
+			if (t.length) if (this.options.transformAttributeName && (n = this.options.transformAttributeName(n)), n = op(n, this.options), r[e][4] !== void 0) {
+				let r = o[e], i = this.options.attributeValueProcessor(t, r, l);
+				i == null ? a[n] = r : typeof i != typeof r || i !== r ? a[n] = i : a[n] = rp(r, this.options.parseAttributeValue, this.options.numberParseOptions), u = !0;
+			} else this.options.allowBooleanAttributes && (a[n] = !0, u = !0);
 		}
-		if (!Object.keys(a).length) return;
+		if (!u) return;
 		if (this.options.attributesGroupName) {
 			let e = {};
 			return e[this.options.attributesGroupName] = a, e;
@@ -17116,6 +17129,7 @@ function Xf(e, t, n) {
 			if (e = e.replace(n.regx, n.val), r.maxExpandedLength && (this.currentExpandedLength += e.length - t, this.currentExpandedLength > r.maxExpandedLength)) throw Error(`Total expanded content size exceeded: ${this.currentExpandedLength} > ${r.maxExpandedLength}`);
 		}
 	}
+	if (e.indexOf("&") === -1) return e;
 	for (let t of Object.keys(this.lastEntities)) {
 		let n = this.lastEntities[t], i = e.match(n.regex);
 		if (i && (this.entityExpansionCount += i.length, r.maxTotalExpansions && this.entityExpansionCount > r.maxTotalExpansions)) throw Error(`Entity expansion limit exceeded: ${this.entityExpansionCount} > ${r.maxTotalExpansions}`);
@@ -33236,7 +33250,7 @@ var oE = class {
 		return tE(e), FT(e, this.buf), this;
 	}
 	bool(e) {
-		return this.buf.push(e ? 1 : 0), this;
+		return this.buf.push(+!!e), this;
 	}
 	bytes(e) {
 		return this.uint32(e.byteLength), this.raw(e);
