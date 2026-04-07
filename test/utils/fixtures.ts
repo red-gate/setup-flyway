@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
-import { Fixture } from "../fixtures";
+import { Fixture } from "../fixtures/index.js";
 
 const getFixturePath = (...fixture: string[]) => {
   const __filename = fileURLToPath(import.meta.url);

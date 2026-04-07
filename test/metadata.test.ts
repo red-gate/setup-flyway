@@ -1,8 +1,8 @@
 import nock from "nock";
 import { URL } from "url";
-import { getAvailableVersions, privateExports } from "../src/metadata";
-import { METADATA_URL } from "../src/constants";
-import { loadFixture } from "./utils/fixtures";
+import { getAvailableVersions, privateExports } from "../src/metadata.js";
+import { METADATA_URL } from "../src/constants.js";
+import { loadFixture } from "./utils/fixtures.js";
 
 describe("metadata", () => {
   const metadataContent = loadFixture("maven.xml");

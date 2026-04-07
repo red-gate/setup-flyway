@@ -1,5 +1,5 @@
 import nock from "nock";
-import { BASE_URL } from "../src/constants";
+import { BASE_URL } from "../src/constants.js";
 
 const downloadTool = vi.fn();
 const extractTar = vi.fn();
@@ -13,7 +13,7 @@ vi.doMock("@actions/tool-cache", () => ({
   extract7z,
 }));
 
-const util = await import("../src/util");
+const util = await import("../src/util.js");
 
 describe("util", () => {
   afterEach(() => {

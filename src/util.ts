@@ -1,8 +1,8 @@
 import path from "path";
 import * as semver from "semver";
 import * as tc from "@actions/tool-cache";
-import * as constants from "./constants";
-import { Architecture } from "./inputs";
+import * as constants from "./constants.js";
+import { Architecture } from "./inputs.js";
 
 const downloadTool = async (version: string, platform: string, architecture: string) => {
   const downloadUrl = getDownloadUrl(version, platform, architecture);

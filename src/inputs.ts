@@ -1,6 +1,6 @@
 import * as core from "@actions/core";
 import os from "os";
-import * as constants from "./constants";
+import * as constants from "./constants.js";
 
 // noinspection JSUnusedGlobalSymbols
 enum Architecture {

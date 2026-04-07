@@ -1,8 +1,7 @@
 import * as httpm from "@actions/http-client";
 import { XMLParser } from "fast-xml-parser";
 import * as core from "@actions/core";
-
-import * as constants from "./constants";
+import * as constants from "./constants.js";
 
 interface MavenMetadataFile {
   metadata: {
