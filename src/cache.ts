@@ -1,7 +1,7 @@
 import * as cache from "@actions/cache";
 import * as core from "@actions/core";
 import * as path from "path";
-import * as constants from "./constants";
+import * as constants from "./constants.js";
 
 const getCacheKey = (version: string, platform: string, architecture: string): string => {
   return `${constants.CACHE_KEY_PREFIX}-${platform}-${architecture}-${version}`;

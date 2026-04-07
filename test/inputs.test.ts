@@ -6,7 +6,7 @@ import {
   Platform,
   Architecture,
   Edition,
-} from "../src/inputs";
+} from "../src/inputs.js";
 import os from "os";
 
 describe("inputs", () => {
@@ -39,7 +39,7 @@ describe("inputs", () => {
   });
 
   it("returns an error if the version is not specified", async () => {
-    import("../src/inputs").catch((error) => {
+    import("../src/inputs.js").catch((error) => {
       expect(error?.message).toBe("Input required and not supplied: version");
     });
   });

@@ -4,11 +4,11 @@ import * as tc from "@actions/tool-cache";
 import * as fs from "fs/promises";
 import * as path from "path";
 import * as semver from "semver";
-import { getToolCacheVersionPath, tryRestoreCache, trySaveCache } from "./cache";
-import * as constants from "./constants";
-import { getInputs } from "./inputs";
-import * as metadata from "./metadata";
-import { downloadTool, extractTool, getSemanticVersion } from "./util";
+import { getToolCacheVersionPath, tryRestoreCache, trySaveCache } from "./cache.js";
+import * as constants from "./constants.js";
+import { getInputs } from "./inputs.js";
+import * as metadata from "./metadata.js";
+import { downloadTool, extractTool, getSemanticVersion } from "./util.js";
 
 const verifyEdition = async (expectedEdition: string): Promise<void> => {
   let versionOutput = "";

@@ -1,4 +1,4 @@
-import { CACHE_KEY_PREFIX, TOOL_NAME } from "../src/constants";
+import { CACHE_KEY_PREFIX, TOOL_NAME } from "../src/constants.js";
 
 class ReserveCacheError extends Error {
   constructor(message: string) {
@@ -21,7 +21,7 @@ vi.doMock("@actions/core", () => ({
   debug,
 }));
 
-const cacheModule = await import("../src/cache");
+const cacheModule = await import("../src/cache.js");
 
 const version = "10.11.0";
 const platform = "linux";
