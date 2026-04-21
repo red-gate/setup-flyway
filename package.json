@@ -35,7 +35,7 @@
     "@actions/tool-cache": "4.0.0",
     "@protobuf-ts/runtime": "2.11.1",
     "@protobuf-ts/runtime-rpc": "2.11.1",
-    "fast-xml-parser": "5.5.12",
+    "fast-xml-parser": "5.7.1",
     "semver": "7.7.4"
   },
   "devDependencies": {
