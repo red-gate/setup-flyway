@@ -30,7 +30,7 @@ import te from "node:https";
 import * as ne from "buffer";
 import { Buffer as F } from "buffer";
 import re from "node:fs";
-var ie = Object.create, ae = Object.defineProperty, oe = Object.getOwnPropertyDescriptor, se = Object.getOwnPropertyNames, ce = Object.getPrototypeOf, le = Object.prototype.hasOwnProperty, ue = (e, t) => () => (e && (t = e(e = 0)), t), I = (e, t) => () => (t || e((t = { exports: {} }).exports, t), t.exports), de = (e, t) => {
+var ie = Object.create, ae = Object.defineProperty, oe = Object.getOwnPropertyDescriptor, se = Object.getOwnPropertyNames, ce = Object.getPrototypeOf, le = Object.prototype.hasOwnProperty, ue = (e, t) => () => (e && (t = e(e = 0)), t), I = (e, t) => () => (t || (e((t = { exports: {} }).exports, t), e = null), t.exports), de = (e, t) => {
 	let n = {};
 	for (var r in e) ae(n, r, {
 		get: e[r],
@@ -2780,11 +2780,12 @@ var Oe = class extends URL {
 })), Ze = /* @__PURE__ */ I(((e, t) => {
 	var { Blob: n, File: r } = L("node:buffer"), { kState: i } = Xe(), { webidl: a } = Je(), o = class e {
 		constructor(e, t, n = {}) {
+			let r = t, a = n.type, o = n.lastModified ?? Date.now();
 			this[i] = {
 				blobLike: e,
-				name: t,
-				type: n.type,
-				lastModified: n.lastModified ?? Date.now()
+				name: r,
+				type: a,
+				lastModified: o
 			};
 		}
 		stream(...t) {
@@ -17591,7 +17592,8 @@ var gp = class {
 		this._pathStringCache = null, this._frozenPathCache = null, this._frozenSiblingsCache = null, this.path = e.path.map((e) => ({ ...e })), this.siblingStacks = e.siblingStacks.map((e) => new Map(e));
 	}
 	readOnly() {
-		return new Proxy(this, {
+		let e = this;
+		return new Proxy(e, {
 			get(e, t, n) {
 				if (vp.has(t)) return () => {
 					throw TypeError(`Cannot call '${t}' on a read-only Matcher. Obtain a writable instance to mutate state.`);
@@ -34193,7 +34195,10 @@ var DE = class {
 		this.info = e;
 	}
 	prepare() {
-		this.fields ||= (this.info.fields ? this.info.fields.concat() : []).sort((e, t) => e.no - t.no);
+		if (!this.fields) {
+			let e = this.info.fields ? this.info.fields.concat() : [];
+			this.fields = e.sort((e, t) => e.no - t.no);
+		}
 	}
 	write(e, t, n) {
 		this.prepare();
