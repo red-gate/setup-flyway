@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 8
+  version: 9
   cacheKey: 10
 
 "@actions/cache@npm:6.0.0":
@@ -22,13 +22,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/core@npm:3.0.0, @actions/core@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@actions/core@npm:3.0.0"
+"@actions/core@npm:3.0.1, @actions/core@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "@actions/core@npm:3.0.1"
   dependencies:
     "@actions/exec": "npm:^3.0.0"
     "@actions/http-client": "npm:^4.0.0"
-  checksum: 10/fddeebfaf6dfd199d9267a33a97d57e2f7afed7605a54e4a3c35a5a1455a5a8f29f1837bf6ac1711b223a457ba15339189f344c57629c52dbf3a216e96c728d6
+  checksum: 10/e1295f6b81299cc5655ea571e7b3eea02889fdc479e71c783ad9ca48432c613f52a1fd01fecc973a64488b053083ea925a0d23ac7af0bcd8462afc4f4371918b
   languageName: node
   linkType: hard
 
@@ -51,13 +51,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/http-client@npm:4.0.0, @actions/http-client@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@actions/http-client@npm:4.0.0"
+"@actions/http-client@npm:4.0.1, @actions/http-client@npm:^4.0.0":
+  version: 4.0.1
+  resolution: "@actions/http-client@npm:4.0.1"
   dependencies:
     tunnel: "npm:^0.0.6"
     undici: "npm:^6.23.0"
-  checksum: 10/05f606174577cae62f563361326cc81ee4c83c468dd75e87ac93f59e8d53369a6479c3fc28a4e8ea1bfbb50c8ed7db941629b5dd9f6e3855fe5f639a2ccdabc5
+  checksum: 10/4fab65bf488e15143db87ce200a9d1f6f81832adfb1cbdadc380bbe2a95c86b1f5daa0d89c029533ccea4cd2b811a84ce984dfd0d6530479b82bc9860e8be704
   languageName: node
   linkType: hard
 
@@ -2045,9 +2045,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-xml-parser@npm:5.7.1, fast-xml-parser@npm:^5.0.7":
-  version: 5.7.1
-  resolution: "fast-xml-parser@npm:5.7.1"
+"fast-xml-parser@npm:5.7.2, fast-xml-parser@npm:^5.0.7":
+  version: 5.7.2
+  resolution: "fast-xml-parser@npm:5.7.2"
   dependencies:
     "@nodable/entities": "npm:^2.1.0"
     fast-xml-builder: "npm:^1.1.5"
@@ -2055,7 +2055,7 @@ __metadata:
     strnum: "npm:^2.2.3"
   bin:
     fxparser: src/cli/cli.js
-  checksum: 10/ce7de013cae7707d12b9da8cb294265da3780bb8bfa36b17f98053654628a0142159d78746747b1ed38bdefca8b6817f051171183e69a527ba18e1df067e9bce
+  checksum: 10/7f32d77127dbd5eb1b4c9f7f6ad81972527049905cebe8926c88d102b84c2a56468180dd7541384c93bfc8dad2cef0b1b82b097a931893d3cab3989bd1cf83e1
   languageName: node
   linkType: hard
 
@@ -3333,13 +3333,13 @@ __metadata:
   linkType: hard
 
 "postcss@npm:^8.5.10":
-  version: 8.5.10
-  resolution: "postcss@npm:8.5.10"
+  version: 8.5.12
+  resolution: "postcss@npm:8.5.12"
   dependencies:
     nanoid: "npm:^3.3.11"
     picocolors: "npm:^1.1.1"
     source-map-js: "npm:^1.2.1"
-  checksum: 10/7eac6169e535b63c8412e94d4f6047fc23efa3e9dde804b541940043c831b25f1cd867d83cd2c4371ad2450c8abcb42c208aa25668c1f0f3650d7f72faf711a8
+  checksum: 10/ec6b79b68c363eca3c8ffceb134a4ab637274aee6ac0857614bf7c18d40ce4ce5f9036edec57b7e0be99895724d2599d0ec7328dbd7f407204e7548697b322f1
   languageName: node
   linkType: hard
 
@@ -3685,9 +3685,9 @@ __metadata:
   resolution: "setup-flyway@workspace:."
   dependencies:
     "@actions/cache": "npm:6.0.0"
-    "@actions/core": "npm:3.0.0"
+    "@actions/core": "npm:3.0.1"
     "@actions/exec": "npm:3.0.0"
-    "@actions/http-client": "npm:4.0.0"
+    "@actions/http-client": "npm:4.0.1"
     "@actions/tool-cache": "npm:4.0.0"
     "@eslint/js": "npm:10.0.1"
     "@protobuf-ts/runtime": "npm:2.11.1"
@@ -3700,7 +3700,7 @@ __metadata:
     "@vitest/eslint-plugin": "npm:1.6.16"
     eslint: "npm:10.2.1"
     eslint-plugin-import: "npm:2.32.0"
-    fast-xml-parser: "npm:5.7.1"
+    fast-xml-parser: "npm:5.7.2"
     nock: "npm:14.0.13"
     prettier: "npm:3.8.3"
     semver: "npm:7.7.4"
