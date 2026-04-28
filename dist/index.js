@@ -18192,14 +18192,17 @@ function mp(e) {
 	}
 }
 var hp = class {
-	constructor(e) {
+	constructor(e, t) {
 		this.options = e, this.currentNode = null, this.tagsNodeStack = [], this.parseXml = bp, this.parseTextData = gp, this.resolveNameSpace = _p, this.buildAttributesMap = yp, this.isItStopNode = wp, this.replaceEntitiesValue = Sp, this.readStopNodeData = kp, this.saveTextToParentTag = Cp, this.addChild = xp, this.ignoreAttributesFn = cp(this.options.ignoreAttributes), this.entityExpansionCount = 0, this.currentExpandedLength = 0;
-		let t = { ...kf };
-		this.options.entityDecoder ? this.entityDecoder = this.options.entityDecoder : (typeof this.options.htmlEntities == "object" ? t = this.options.htmlEntities : this.options.htmlEntities === !0 && (t = {
+		let n = { ...kf };
+		this.options.entityDecoder ? this.entityDecoder = this.options.entityDecoder : (typeof this.options.htmlEntities == "object" ? n = this.options.htmlEntities : this.options.htmlEntities === !0 && (n = {
 			...Af,
 			...Ef
 		}), this.entityDecoder = new Vf({
-			namedEntities: t,
+			namedEntities: {
+				...n,
+				...t
+			},
 			numericAllowed: this.options.htmlEntities,
 			limit: {
 				maxTotalExpansions: this.options.processEntities.maxTotalExpansions,
@@ -18207,10 +18210,10 @@ var hp = class {
 				applyLimitsTo: this.options.processEntities.appliesTo
 			}
 		})), this.matcher = new fp(), this.readonlyMatcher = this.matcher.readOnly(), this.isCurrentNodeStopNode = !1, this.stopNodeExpressionsSet = new up();
-		let n = this.options.stopNodes;
-		if (n && n.length > 0) {
-			for (let e = 0; e < n.length; e++) {
-				let t = n[e];
+		let r = this.options.stopNodes;
+		if (r && r.length > 0) {
+			for (let e = 0; e < r.length; e++) {
+				let t = r[e];
 				typeof t == "string" ? this.stopNodeExpressionsSet.add(new lp(t)) : t instanceof lp && this.stopNodeExpressionsSet.add(t);
 			}
 			this.stopNodeExpressionsSet.seal();
@@ -18257,7 +18260,7 @@ function yp(e, t, n, r = !1) {
 			} else i.allowBooleanAttributes && (o[n] = !0, d = !0);
 		}
 		if (!d) return;
-		if (i.attributesGroupName) {
+		if (i.attributesGroupName && !i.preserveOrder) {
 			let e = {};
 			return e[i.attributesGroupName] = o, e;
 		}
@@ -18382,25 +18385,21 @@ function wp() {
 	return this.stopNodeExpressionsSet.size === 0 ? !1 : this.matcher.matchesAny(this.stopNodeExpressionsSet);
 }
 function Tp(e, t, n = ">") {
-	let r = 0, i = [], a = e.length, o = n.charCodeAt(0), s = n.length > 1 ? n.charCodeAt(1) : -1;
-	for (let n = t; n < a; n++) {
+	let r = 0, i = e.length, a = n.charCodeAt(0), o = n.length > 1 ? n.charCodeAt(1) : -1, s = "", c = t;
+	for (let n = t; n < i; n++) {
 		let t = e.charCodeAt(n);
 		if (r) t === r && (r = 0);
 		else if (t === 34 || t === 39) r = t;
-		else if (t === o) if (s !== -1) {
-			if (e.charCodeAt(n + 1) === s) return {
-				data: String.fromCharCode(...i),
+		else if (t === a) if (o !== -1) {
+			if (e.charCodeAt(n + 1) === o) return s += e.substring(c, n), {
+				data: s,
 				index: n
 			};
-		} else return {
-			data: String.fromCharCode(...i),
+		} else return s += e.substring(c, n), {
+			data: s,
 			index: n
 		};
-		else if (t === 9) {
-			i.push(32);
-			continue;
-		}
-		i.push(t);
+		else t === 9 && !r && (s += e.substring(c, n) + " ", c = n + 1);
 	}
 }
 function Ep(e, t, n, r) {
@@ -18540,9 +18539,7 @@ var Bp = class {
 			let n = $d(e, t);
 			if (n !== !0) throw Error(`${n.err.msg}:${n.err.line}:${n.err.col}`);
 		}
-		let n = new hp(this.options);
-		n.entityDecoder.setExternalEntities(this.externalEntities);
-		let r = n.parseXml(e);
+		let n = new hp(this.options, this.externalEntities), r = n.parseXml(e);
 		return this.options.preserveOrder || r === void 0 ? r : Fp(r, this.options, n.matcher, n.readonlyMatcher);
 	}
 	addEntity(e, t) {
