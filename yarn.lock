@@ -22,7 +22,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/core@npm:3.0.0, @actions/core@npm:^3.0.0":
+"@actions/core@npm:3.0.1":
+  version: 3.0.1
+  resolution: "@actions/core@npm:3.0.1"
+  dependencies:
+    "@actions/exec": "npm:^3.0.0"
+    "@actions/http-client": "npm:^4.0.0"
+  checksum: 10/e1295f6b81299cc5655ea571e7b3eea02889fdc479e71c783ad9ca48432c613f52a1fd01fecc973a64488b053083ea925a0d23ac7af0bcd8462afc4f4371918b
+  languageName: node
+  linkType: hard
+
+"@actions/core@npm:^3.0.0":
   version: 3.0.0
   resolution: "@actions/core@npm:3.0.0"
   dependencies:
@@ -51,7 +61,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/http-client@npm:4.0.0, @actions/http-client@npm:^4.0.0":
+"@actions/http-client@npm:4.0.1":
+  version: 4.0.1
+  resolution: "@actions/http-client@npm:4.0.1"
+  dependencies:
+    tunnel: "npm:^0.0.6"
+    undici: "npm:^6.23.0"
+  checksum: 10/4fab65bf488e15143db87ce200a9d1f6f81832adfb1cbdadc380bbe2a95c86b1f5daa0d89c029533ccea4cd2b811a84ce984dfd0d6530479b82bc9860e8be704
+  languageName: node
+  linkType: hard
+
+"@actions/http-client@npm:^4.0.0":
   version: 4.0.0
   resolution: "@actions/http-client@npm:4.0.0"
   dependencies:
@@ -1820,7 +1840,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-xml-parser@npm:5.7.1, fast-xml-parser@npm:^5.0.7":
+"fast-xml-parser@npm:5.7.2":
+  version: 5.7.2
+  resolution: "fast-xml-parser@npm:5.7.2"
+  dependencies:
+    "@nodable/entities": "npm:^2.1.0"
+    fast-xml-builder: "npm:^1.1.5"
+    path-expression-matcher: "npm:^1.5.0"
+    strnum: "npm:^2.2.3"
+  bin:
+    fxparser: src/cli/cli.js
+  checksum: 10/7f32d77127dbd5eb1b4c9f7f6ad81972527049905cebe8926c88d102b84c2a56468180dd7541384c93bfc8dad2cef0b1b82b097a931893d3cab3989bd1cf83e1
+  languageName: node
+  linkType: hard
+
+"fast-xml-parser@npm:^5.0.7":
   version: 5.7.1
   resolution: "fast-xml-parser@npm:5.7.1"
   dependencies:
@@ -3402,9 +3436,9 @@ __metadata:
   resolution: "setup-flyway@workspace:."
   dependencies:
     "@actions/cache": "npm:6.0.0"
-    "@actions/core": "npm:3.0.0"
+    "@actions/core": "npm:3.0.1"
     "@actions/exec": "npm:3.0.0"
-    "@actions/http-client": "npm:4.0.0"
+    "@actions/http-client": "npm:4.0.1"
     "@actions/tool-cache": "npm:4.0.0"
     "@eslint/js": "npm:10.0.1"
     "@protobuf-ts/runtime": "npm:2.11.1"
@@ -3417,7 +3451,7 @@ __metadata:
     "@vitest/eslint-plugin": "npm:1.6.16"
     eslint: "npm:10.2.1"
     eslint-plugin-import: "npm:2.32.0"
-    fast-xml-parser: "npm:5.7.1"
+    fast-xml-parser: "npm:5.7.2"
     nock: "npm:14.0.13"
     prettier: "npm:3.8.3"
     semver: "npm:7.7.4"
