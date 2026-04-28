@@ -26,7 +26,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
-  "packageManager": "yarn@4.9.1",
+  "packageManager": "yarn@4.14.1",
   "dependencies": {
     "@actions/cache": "6.0.0",
     "@actions/core": "3.0.1",
