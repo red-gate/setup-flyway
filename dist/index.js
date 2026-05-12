@@ -11894,7 +11894,721 @@ function Xi(e, t) {
 	let n = global[e];
 	return n === void 0 ? t : n;
 }
-function Zi(e) {
+var Zi = /* @__PURE__ */ F(((e, t) => {
+	var n = "2.0.0", r = 256;
+	t.exports = {
+		MAX_LENGTH: r,
+		MAX_SAFE_COMPONENT_LENGTH: 16,
+		MAX_SAFE_BUILD_LENGTH: r - 6,
+		MAX_SAFE_INTEGER: 2 ** 53 - 1 || 9007199254740991,
+		RELEASE_TYPES: [
+			"major",
+			"premajor",
+			"minor",
+			"preminor",
+			"patch",
+			"prepatch",
+			"prerelease"
+		],
+		SEMVER_SPEC_VERSION: n,
+		FLAG_INCLUDE_PRERELEASE: 1,
+		FLAG_LOOSE: 2
+	};
+})), Qi = /* @__PURE__ */ F(((e, t) => {
+	t.exports = typeof process == "object" && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG) ? (...e) => console.error("SEMVER", ...e) : () => {};
+})), $i = /* @__PURE__ */ F(((e, t) => {
+	var { MAX_SAFE_COMPONENT_LENGTH: n, MAX_SAFE_BUILD_LENGTH: r, MAX_LENGTH: i } = Zi(), a = Qi();
+	e = t.exports = {};
+	var o = e.re = [], s = e.safeRe = [], c = e.src = [], l = e.safeSrc = [], u = e.t = {}, d = 0, f = "[a-zA-Z0-9-]", p = [
+		["\\s", 1],
+		["\\d", i],
+		[f, r]
+	], m = (e) => {
+		for (let [t, n] of p) e = e.split(`${t}*`).join(`${t}{0,${n}}`).split(`${t}+`).join(`${t}{1,${n}}`);
+		return e;
+	}, h = (e, t, n) => {
+		let r = m(t), i = d++;
+		a(e, i, t), u[e] = i, c[i] = t, l[i] = r, o[i] = new RegExp(t, n ? "g" : void 0), s[i] = new RegExp(r, n ? "g" : void 0);
+	};
+	h("NUMERICIDENTIFIER", "0|[1-9]\\d*"), h("NUMERICIDENTIFIERLOOSE", "\\d+"), h("NONNUMERICIDENTIFIER", `\\d*[a-zA-Z-]${f}*`), h("MAINVERSION", `(${c[u.NUMERICIDENTIFIER]})\\.(${c[u.NUMERICIDENTIFIER]})\\.(${c[u.NUMERICIDENTIFIER]})`), h("MAINVERSIONLOOSE", `(${c[u.NUMERICIDENTIFIERLOOSE]})\\.(${c[u.NUMERICIDENTIFIERLOOSE]})\\.(${c[u.NUMERICIDENTIFIERLOOSE]})`), h("PRERELEASEIDENTIFIER", `(?:${c[u.NONNUMERICIDENTIFIER]}|${c[u.NUMERICIDENTIFIER]})`), h("PRERELEASEIDENTIFIERLOOSE", `(?:${c[u.NONNUMERICIDENTIFIER]}|${c[u.NUMERICIDENTIFIERLOOSE]})`), h("PRERELEASE", `(?:-(${c[u.PRERELEASEIDENTIFIER]}(?:\\.${c[u.PRERELEASEIDENTIFIER]})*))`), h("PRERELEASELOOSE", `(?:-?(${c[u.PRERELEASEIDENTIFIERLOOSE]}(?:\\.${c[u.PRERELEASEIDENTIFIERLOOSE]})*))`), h("BUILDIDENTIFIER", `${f}+`), h("BUILD", `(?:\\+(${c[u.BUILDIDENTIFIER]}(?:\\.${c[u.BUILDIDENTIFIER]})*))`), h("FULLPLAIN", `v?${c[u.MAINVERSION]}${c[u.PRERELEASE]}?${c[u.BUILD]}?`), h("FULL", `^${c[u.FULLPLAIN]}$`), h("LOOSEPLAIN", `[v=\\s]*${c[u.MAINVERSIONLOOSE]}${c[u.PRERELEASELOOSE]}?${c[u.BUILD]}?`), h("LOOSE", `^${c[u.LOOSEPLAIN]}$`), h("GTLT", "((?:<|>)?=?)"), h("XRANGEIDENTIFIERLOOSE", `${c[u.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`), h("XRANGEIDENTIFIER", `${c[u.NUMERICIDENTIFIER]}|x|X|\\*`), h("XRANGEPLAIN", `[v=\\s]*(${c[u.XRANGEIDENTIFIER]})(?:\\.(${c[u.XRANGEIDENTIFIER]})(?:\\.(${c[u.XRANGEIDENTIFIER]})(?:${c[u.PRERELEASE]})?${c[u.BUILD]}?)?)?`), h("XRANGEPLAINLOOSE", `[v=\\s]*(${c[u.XRANGEIDENTIFIERLOOSE]})(?:\\.(${c[u.XRANGEIDENTIFIERLOOSE]})(?:\\.(${c[u.XRANGEIDENTIFIERLOOSE]})(?:${c[u.PRERELEASELOOSE]})?${c[u.BUILD]}?)?)?`), h("XRANGE", `^${c[u.GTLT]}\\s*${c[u.XRANGEPLAIN]}$`), h("XRANGELOOSE", `^${c[u.GTLT]}\\s*${c[u.XRANGEPLAINLOOSE]}$`), h("COERCEPLAIN", `(^|[^\\d])(\\d{1,${n}})(?:\\.(\\d{1,${n}}))?(?:\\.(\\d{1,${n}}))?`), h("COERCE", `${c[u.COERCEPLAIN]}(?:$|[^\\d])`), h("COERCEFULL", c[u.COERCEPLAIN] + `(?:${c[u.PRERELEASE]})?(?:${c[u.BUILD]})?(?:$|[^\\d])`), h("COERCERTL", c[u.COERCE], !0), h("COERCERTLFULL", c[u.COERCEFULL], !0), h("LONETILDE", "(?:~>?)"), h("TILDETRIM", `(\\s*)${c[u.LONETILDE]}\\s+`, !0), e.tildeTrimReplace = "$1~", h("TILDE", `^${c[u.LONETILDE]}${c[u.XRANGEPLAIN]}$`), h("TILDELOOSE", `^${c[u.LONETILDE]}${c[u.XRANGEPLAINLOOSE]}$`), h("LONECARET", "(?:\\^)"), h("CARETTRIM", `(\\s*)${c[u.LONECARET]}\\s+`, !0), e.caretTrimReplace = "$1^", h("CARET", `^${c[u.LONECARET]}${c[u.XRANGEPLAIN]}$`), h("CARETLOOSE", `^${c[u.LONECARET]}${c[u.XRANGEPLAINLOOSE]}$`), h("COMPARATORLOOSE", `^${c[u.GTLT]}\\s*(${c[u.LOOSEPLAIN]})$|^$`), h("COMPARATOR", `^${c[u.GTLT]}\\s*(${c[u.FULLPLAIN]})$|^$`), h("COMPARATORTRIM", `(\\s*)${c[u.GTLT]}\\s*(${c[u.LOOSEPLAIN]}|${c[u.XRANGEPLAIN]})`, !0), e.comparatorTrimReplace = "$1$2$3", h("HYPHENRANGE", `^\\s*(${c[u.XRANGEPLAIN]})\\s+-\\s+(${c[u.XRANGEPLAIN]})\\s*$`), h("HYPHENRANGELOOSE", `^\\s*(${c[u.XRANGEPLAINLOOSE]})\\s+-\\s+(${c[u.XRANGEPLAINLOOSE]})\\s*$`), h("STAR", "(<|>)?=?\\s*\\*"), h("GTE0", "^\\s*>=\\s*0\\.0\\.0\\s*$"), h("GTE0PRE", "^\\s*>=\\s*0\\.0\\.0-0\\s*$");
+})), ea = /* @__PURE__ */ F(((e, t) => {
+	var n = Object.freeze({ loose: !0 }), r = Object.freeze({});
+	t.exports = (e) => e ? typeof e == "object" ? e : n : r;
+})), ta = /* @__PURE__ */ F(((e, t) => {
+	var n = /^[0-9]+$/, r = (e, t) => {
+		if (typeof e == "number" && typeof t == "number") return e === t ? 0 : e < t ? -1 : 1;
+		let r = n.test(e), i = n.test(t);
+		return r && i && (e = +e, t = +t), e === t ? 0 : r && !i ? -1 : i && !r ? 1 : e < t ? -1 : 1;
+	};
+	t.exports = {
+		compareIdentifiers: r,
+		rcompareIdentifiers: (e, t) => r(t, e)
+	};
+})), na = /* @__PURE__ */ F(((e, t) => {
+	var n = Qi(), { MAX_LENGTH: r, MAX_SAFE_INTEGER: i } = Zi(), { safeRe: a, t: o } = $i(), s = ea(), { compareIdentifiers: c } = ta();
+	t.exports = class e {
+		constructor(t, c) {
+			if (c = s(c), t instanceof e) {
+				if (t.loose === !!c.loose && t.includePrerelease === !!c.includePrerelease) return t;
+				t = t.version;
+			} else if (typeof t != "string") throw TypeError(`Invalid version. Must be a string. Got type "${typeof t}".`);
+			if (t.length > r) throw TypeError(`version is longer than ${r} characters`);
+			n("SemVer", t, c), this.options = c, this.loose = !!c.loose, this.includePrerelease = !!c.includePrerelease;
+			let l = t.trim().match(c.loose ? a[o.LOOSE] : a[o.FULL]);
+			if (!l) throw TypeError(`Invalid Version: ${t}`);
+			if (this.raw = t, this.major = +l[1], this.minor = +l[2], this.patch = +l[3], this.major > i || this.major < 0) throw TypeError("Invalid major version");
+			if (this.minor > i || this.minor < 0) throw TypeError("Invalid minor version");
+			if (this.patch > i || this.patch < 0) throw TypeError("Invalid patch version");
+			l[4] ? this.prerelease = l[4].split(".").map((e) => {
+				if (/^[0-9]+$/.test(e)) {
+					let t = +e;
+					if (t >= 0 && t < i) return t;
+				}
+				return e;
+			}) : this.prerelease = [], this.build = l[5] ? l[5].split(".") : [], this.format();
+		}
+		format() {
+			return this.version = `${this.major}.${this.minor}.${this.patch}`, this.prerelease.length && (this.version += `-${this.prerelease.join(".")}`), this.version;
+		}
+		toString() {
+			return this.version;
+		}
+		compare(t) {
+			if (n("SemVer.compare", this.version, this.options, t), !(t instanceof e)) {
+				if (typeof t == "string" && t === this.version) return 0;
+				t = new e(t, this.options);
+			}
+			return t.version === this.version ? 0 : this.compareMain(t) || this.comparePre(t);
+		}
+		compareMain(t) {
+			return t instanceof e || (t = new e(t, this.options)), this.major < t.major ? -1 : this.major > t.major ? 1 : this.minor < t.minor ? -1 : this.minor > t.minor ? 1 : this.patch < t.patch ? -1 : +(this.patch > t.patch);
+		}
+		comparePre(t) {
+			if (t instanceof e || (t = new e(t, this.options)), this.prerelease.length && !t.prerelease.length) return -1;
+			if (!this.prerelease.length && t.prerelease.length) return 1;
+			if (!this.prerelease.length && !t.prerelease.length) return 0;
+			let r = 0;
+			do {
+				let e = this.prerelease[r], i = t.prerelease[r];
+				if (n("prerelease compare", r, e, i), e === void 0 && i === void 0) return 0;
+				if (i === void 0) return 1;
+				if (e === void 0) return -1;
+				if (e === i) continue;
+				return c(e, i);
+			} while (++r);
+		}
+		compareBuild(t) {
+			t instanceof e || (t = new e(t, this.options));
+			let r = 0;
+			do {
+				let e = this.build[r], i = t.build[r];
+				if (n("build compare", r, e, i), e === void 0 && i === void 0) return 0;
+				if (i === void 0) return 1;
+				if (e === void 0) return -1;
+				if (e === i) continue;
+				return c(e, i);
+			} while (++r);
+		}
+		inc(e, t, n) {
+			if (e.startsWith("pre")) {
+				if (!t && n === !1) throw Error("invalid increment argument: identifier is empty");
+				if (t) {
+					let e = `-${t}`.match(this.options.loose ? a[o.PRERELEASELOOSE] : a[o.PRERELEASE]);
+					if (!e || e[1] !== t) throw Error(`invalid identifier: ${t}`);
+				}
+			}
+			switch (e) {
+				case "premajor":
+					this.prerelease.length = 0, this.patch = 0, this.minor = 0, this.major++, this.inc("pre", t, n);
+					break;
+				case "preminor":
+					this.prerelease.length = 0, this.patch = 0, this.minor++, this.inc("pre", t, n);
+					break;
+				case "prepatch":
+					this.prerelease.length = 0, this.inc("patch", t, n), this.inc("pre", t, n);
+					break;
+				case "prerelease":
+					this.prerelease.length === 0 && this.inc("patch", t, n), this.inc("pre", t, n);
+					break;
+				case "release":
+					if (this.prerelease.length === 0) throw Error(`version ${this.raw} is not a prerelease`);
+					this.prerelease.length = 0;
+					break;
+				case "major":
+					(this.minor !== 0 || this.patch !== 0 || this.prerelease.length === 0) && this.major++, this.minor = 0, this.patch = 0, this.prerelease = [];
+					break;
+				case "minor":
+					(this.patch !== 0 || this.prerelease.length === 0) && this.minor++, this.patch = 0, this.prerelease = [];
+					break;
+				case "patch":
+					this.prerelease.length === 0 && this.patch++, this.prerelease = [];
+					break;
+				case "pre": {
+					let e = +!!Number(n);
+					if (this.prerelease.length === 0) this.prerelease = [e];
+					else {
+						let r = this.prerelease.length;
+						for (; --r >= 0;) typeof this.prerelease[r] == "number" && (this.prerelease[r]++, r = -2);
+						if (r === -1) {
+							if (t === this.prerelease.join(".") && n === !1) throw Error("invalid increment argument: identifier already exists");
+							this.prerelease.push(e);
+						}
+					}
+					if (t) {
+						let r = [t, e];
+						n === !1 && (r = [t]), c(this.prerelease[0], t) === 0 ? isNaN(this.prerelease[1]) && (this.prerelease = r) : this.prerelease = r;
+					}
+					break;
+				}
+				default: throw Error(`invalid increment argument: ${e}`);
+			}
+			return this.raw = this.format(), this.build.length && (this.raw += `+${this.build.join(".")}`), this;
+		}
+	};
+})), ra = /* @__PURE__ */ F(((e, t) => {
+	var n = na();
+	t.exports = (e, t, r = !1) => {
+		if (e instanceof n) return e;
+		try {
+			return new n(e, t);
+		} catch (e) {
+			if (!r) return null;
+			throw e;
+		}
+	};
+})), ia = /* @__PURE__ */ F(((e, t) => {
+	var n = ra();
+	t.exports = (e, t) => {
+		let r = n(e, t);
+		return r ? r.version : null;
+	};
+})), aa = /* @__PURE__ */ F(((e, t) => {
+	var n = ra();
+	t.exports = (e, t) => {
+		let r = n(e.trim().replace(/^[=v]+/, ""), t);
+		return r ? r.version : null;
+	};
+})), oa = /* @__PURE__ */ F(((e, t) => {
+	var n = na();
+	t.exports = (e, t, r, i, a) => {
+		typeof r == "string" && (a = i, i = r, r = void 0);
+		try {
+			return new n(e instanceof n ? e.version : e, r).inc(t, i, a).version;
+		} catch {
+			return null;
+		}
+	};
+})), sa = /* @__PURE__ */ F(((e, t) => {
+	var n = ra();
+	t.exports = (e, t) => {
+		let r = n(e, null, !0), i = n(t, null, !0), a = r.compare(i);
+		if (a === 0) return null;
+		let o = a > 0, s = o ? r : i, c = o ? i : r, l = !!s.prerelease.length;
+		if (c.prerelease.length && !l) {
+			if (!c.patch && !c.minor) return "major";
+			if (c.compareMain(s) === 0) return c.minor && !c.patch ? "minor" : "patch";
+		}
+		let u = l ? "pre" : "";
+		return r.major === i.major ? r.minor === i.minor ? r.patch === i.patch ? "prerelease" : u + "patch" : u + "minor" : u + "major";
+	};
+})), ca = /* @__PURE__ */ F(((e, t) => {
+	var n = na();
+	t.exports = (e, t) => new n(e, t).major;
+})), la = /* @__PURE__ */ F(((e, t) => {
+	var n = na();
+	t.exports = (e, t) => new n(e, t).minor;
+})), ua = /* @__PURE__ */ F(((e, t) => {
+	var n = na();
+	t.exports = (e, t) => new n(e, t).patch;
+})), da = /* @__PURE__ */ F(((e, t) => {
+	var n = ra();
+	t.exports = (e, t) => {
+		let r = n(e, t);
+		return r && r.prerelease.length ? r.prerelease : null;
+	};
+})), fa = /* @__PURE__ */ F(((e, t) => {
+	var n = na();
+	t.exports = (e, t, r) => new n(e, r).compare(new n(t, r));
+})), pa = /* @__PURE__ */ F(((e, t) => {
+	var n = fa();
+	t.exports = (e, t, r) => n(t, e, r);
+})), ma = /* @__PURE__ */ F(((e, t) => {
+	var n = fa();
+	t.exports = (e, t) => n(e, t, !0);
+})), ha = /* @__PURE__ */ F(((e, t) => {
+	var n = na();
+	t.exports = (e, t, r) => {
+		let i = new n(e, r), a = new n(t, r);
+		return i.compare(a) || i.compareBuild(a);
+	};
+})), ga = /* @__PURE__ */ F(((e, t) => {
+	var n = ha();
+	t.exports = (e, t) => e.sort((e, r) => n(e, r, t));
+})), _a = /* @__PURE__ */ F(((e, t) => {
+	var n = ha();
+	t.exports = (e, t) => e.sort((e, r) => n(r, e, t));
+})), va = /* @__PURE__ */ F(((e, t) => {
+	var n = fa();
+	t.exports = (e, t, r) => n(e, t, r) > 0;
+})), ya = /* @__PURE__ */ F(((e, t) => {
+	var n = fa();
+	t.exports = (e, t, r) => n(e, t, r) < 0;
+})), ba = /* @__PURE__ */ F(((e, t) => {
+	var n = fa();
+	t.exports = (e, t, r) => n(e, t, r) === 0;
+})), xa = /* @__PURE__ */ F(((e, t) => {
+	var n = fa();
+	t.exports = (e, t, r) => n(e, t, r) !== 0;
+})), Sa = /* @__PURE__ */ F(((e, t) => {
+	var n = fa();
+	t.exports = (e, t, r) => n(e, t, r) >= 0;
+})), Ca = /* @__PURE__ */ F(((e, t) => {
+	var n = fa();
+	t.exports = (e, t, r) => n(e, t, r) <= 0;
+})), wa = /* @__PURE__ */ F(((e, t) => {
+	var n = ba(), r = xa(), i = va(), a = Sa(), o = ya(), s = Ca();
+	t.exports = (e, t, c, l) => {
+		switch (t) {
+			case "===": return typeof e == "object" && (e = e.version), typeof c == "object" && (c = c.version), e === c;
+			case "!==": return typeof e == "object" && (e = e.version), typeof c == "object" && (c = c.version), e !== c;
+			case "":
+			case "=":
+			case "==": return n(e, c, l);
+			case "!=": return r(e, c, l);
+			case ">": return i(e, c, l);
+			case ">=": return a(e, c, l);
+			case "<": return o(e, c, l);
+			case "<=": return s(e, c, l);
+			default: throw TypeError(`Invalid operator: ${t}`);
+		}
+	};
+})), Ta = /* @__PURE__ */ F(((e, t) => {
+	var n = na(), r = ra(), { safeRe: i, t: a } = $i();
+	t.exports = (e, t) => {
+		if (e instanceof n) return e;
+		if (typeof e == "number" && (e = String(e)), typeof e != "string") return null;
+		t ||= {};
+		let o = null;
+		if (!t.rtl) o = e.match(t.includePrerelease ? i[a.COERCEFULL] : i[a.COERCE]);
+		else {
+			let n = t.includePrerelease ? i[a.COERCERTLFULL] : i[a.COERCERTL], r;
+			for (; (r = n.exec(e)) && (!o || o.index + o[0].length !== e.length);) (!o || r.index + r[0].length !== o.index + o[0].length) && (o = r), n.lastIndex = r.index + r[1].length + r[2].length;
+			n.lastIndex = -1;
+		}
+		if (o === null) return null;
+		let s = o[2];
+		return r(`${s}.${o[3] || "0"}.${o[4] || "0"}${t.includePrerelease && o[5] ? `-${o[5]}` : ""}${t.includePrerelease && o[6] ? `+${o[6]}` : ""}`, t);
+	};
+})), Ea = /* @__PURE__ */ F(((e, t) => {
+	var n = ra(), r = Zi(), i = na(), a = (e, t, n) => {
+		if (!r.RELEASE_TYPES.includes(t)) return null;
+		let i = o(e, n);
+		return i && s(i, t);
+	}, o = (e, t) => n(e instanceof i ? e.version : e, t), s = (e, t) => {
+		if (c(t)) return e.version;
+		switch (e.prerelease = [], t) {
+			case "major":
+				e.minor = 0, e.patch = 0;
+				break;
+			case "minor":
+				e.patch = 0;
+				break;
+		}
+		return e.format();
+	}, c = (e) => e.startsWith("pre");
+	t.exports = a;
+})), Da = /* @__PURE__ */ F(((e, t) => {
+	t.exports = class {
+		constructor() {
+			this.max = 1e3, this.map = /* @__PURE__ */ new Map();
+		}
+		get(e) {
+			let t = this.map.get(e);
+			if (t !== void 0) return this.map.delete(e), this.map.set(e, t), t;
+		}
+		delete(e) {
+			return this.map.delete(e);
+		}
+		set(e, t) {
+			if (!this.delete(e) && t !== void 0) {
+				if (this.map.size >= this.max) {
+					let e = this.map.keys().next().value;
+					this.delete(e);
+				}
+				this.map.set(e, t);
+			}
+			return this;
+		}
+	};
+})), Oa = /* @__PURE__ */ F(((e, t) => {
+	var n = /\s+/g;
+	t.exports = class e {
+		constructor(t, r) {
+			if (r = i(r), t instanceof e) return t.loose === !!r.loose && t.includePrerelease === !!r.includePrerelease ? t : new e(t.raw, r);
+			if (t instanceof a) return this.raw = t.value, this.set = [[t]], this.formatted = void 0, this;
+			if (this.options = r, this.loose = !!r.loose, this.includePrerelease = !!r.includePrerelease, this.raw = t.trim().replace(n, " "), this.set = this.raw.split("||").map((e) => this.parseRange(e.trim())).filter((e) => e.length), !this.set.length) throw TypeError(`Invalid SemVer Range: ${this.raw}`);
+			if (this.set.length > 1) {
+				let e = this.set[0];
+				if (this.set = this.set.filter((e) => !h(e[0])), this.set.length === 0) this.set = [e];
+				else if (this.set.length > 1) {
+					for (let e of this.set) if (e.length === 1 && g(e[0])) {
+						this.set = [e];
+						break;
+					}
+				}
+			}
+			this.formatted = void 0;
+		}
+		get range() {
+			if (this.formatted === void 0) {
+				this.formatted = "";
+				for (let e = 0; e < this.set.length; e++) {
+					e > 0 && (this.formatted += "||");
+					let t = this.set[e];
+					for (let e = 0; e < t.length; e++) e > 0 && (this.formatted += " "), this.formatted += t[e].toString().trim();
+				}
+			}
+			return this.formatted;
+		}
+		format() {
+			return this.range;
+		}
+		toString() {
+			return this.range;
+		}
+		parseRange(e) {
+			let t = ((this.options.includePrerelease && p) | (this.options.loose && m)) + ":" + e, n = r.get(t);
+			if (n) return n;
+			let i = this.options.loose, s = i ? c[l.HYPHENRANGELOOSE] : c[l.HYPHENRANGE];
+			e = e.replace(s, O(this.options.includePrerelease)), o("hyphen replace", e), e = e.replace(c[l.COMPARATORTRIM], u), o("comparator trim", e), e = e.replace(c[l.TILDETRIM], d), o("tilde trim", e), e = e.replace(c[l.CARETTRIM], f), o("caret trim", e);
+			let g = e.split(" ").map((e) => v(e, this.options)).join(" ").split(/\s+/).map((e) => D(e, this.options));
+			i && (g = g.filter((e) => (o("loose invalid filter", e, this.options), !!e.match(c[l.COMPARATORLOOSE])))), o("range list", g);
+			let _ = /* @__PURE__ */ new Map(), y = g.map((e) => new a(e, this.options));
+			for (let e of y) {
+				if (h(e)) return [e];
+				_.set(e.value, e);
+			}
+			_.size > 1 && _.has("") && _.delete("");
+			let b = [..._.values()];
+			return r.set(t, b), b;
+		}
+		intersects(t, n) {
+			if (!(t instanceof e)) throw TypeError("a Range is required");
+			return this.set.some((e) => _(e, n) && t.set.some((t) => _(t, n) && e.every((e) => t.every((t) => e.intersects(t, n)))));
+		}
+		test(e) {
+			if (!e) return !1;
+			if (typeof e == "string") try {
+				e = new s(e, this.options);
+			} catch {
+				return !1;
+			}
+			for (let t = 0; t < this.set.length; t++) if (k(this.set[t], e, this.options)) return !0;
+			return !1;
+		}
+	};
+	var r = new (Da())(), i = ea(), a = ka(), o = Qi(), s = na(), { safeRe: c, t: l, comparatorTrimReplace: u, tildeTrimReplace: d, caretTrimReplace: f } = $i(), { FLAG_INCLUDE_PRERELEASE: p, FLAG_LOOSE: m } = Zi(), h = (e) => e.value === "<0.0.0-0", g = (e) => e.value === "", _ = (e, t) => {
+		let n = !0, r = e.slice(), i = r.pop();
+		for (; n && r.length;) n = r.every((e) => i.intersects(e, t)), i = r.pop();
+		return n;
+	}, v = (e, t) => (e = e.replace(c[l.BUILD], ""), o("comp", e, t), e = S(e, t), o("caret", e), e = b(e, t), o("tildes", e), e = w(e, t), o("xrange", e), e = E(e, t), o("stars", e), e), y = (e) => !e || e.toLowerCase() === "x" || e === "*", b = (e, t) => e.trim().split(/\s+/).map((e) => x(e, t)).join(" "), x = (e, t) => {
+		let n = t.loose ? c[l.TILDELOOSE] : c[l.TILDE];
+		return e.replace(n, (t, n, r, i, a) => {
+			o("tilde", e, t, n, r, i, a);
+			let s;
+			return y(n) ? s = "" : y(r) ? s = `>=${n}.0.0 <${+n + 1}.0.0-0` : y(i) ? s = `>=${n}.${r}.0 <${n}.${+r + 1}.0-0` : a ? (o("replaceTilde pr", a), s = `>=${n}.${r}.${i}-${a} <${n}.${+r + 1}.0-0`) : s = `>=${n}.${r}.${i} <${n}.${+r + 1}.0-0`, o("tilde return", s), s;
+		});
+	}, S = (e, t) => e.trim().split(/\s+/).map((e) => C(e, t)).join(" "), C = (e, t) => {
+		o("caret", e, t);
+		let n = t.loose ? c[l.CARETLOOSE] : c[l.CARET], r = t.includePrerelease ? "-0" : "";
+		return e.replace(n, (t, n, i, a, s) => {
+			o("caret", e, t, n, i, a, s);
+			let c;
+			return y(n) ? c = "" : y(i) ? c = `>=${n}.0.0${r} <${+n + 1}.0.0-0` : y(a) ? c = n === "0" ? `>=${n}.${i}.0${r} <${n}.${+i + 1}.0-0` : `>=${n}.${i}.0${r} <${+n + 1}.0.0-0` : s ? (o("replaceCaret pr", s), c = n === "0" ? i === "0" ? `>=${n}.${i}.${a}-${s} <${n}.${i}.${+a + 1}-0` : `>=${n}.${i}.${a}-${s} <${n}.${+i + 1}.0-0` : `>=${n}.${i}.${a}-${s} <${+n + 1}.0.0-0`) : (o("no pr"), c = n === "0" ? i === "0" ? `>=${n}.${i}.${a}${r} <${n}.${i}.${+a + 1}-0` : `>=${n}.${i}.${a}${r} <${n}.${+i + 1}.0-0` : `>=${n}.${i}.${a} <${+n + 1}.0.0-0`), o("caret return", c), c;
+		});
+	}, w = (e, t) => (o("replaceXRanges", e, t), e.split(/\s+/).map((e) => T(e, t)).join(" ")), T = (e, t) => {
+		e = e.trim();
+		let n = t.loose ? c[l.XRANGELOOSE] : c[l.XRANGE];
+		return e.replace(n, (n, r, i, a, s, c) => {
+			o("xRange", e, n, r, i, a, s, c);
+			let l = y(i), u = l || y(a), d = u || y(s), f = d;
+			return r === "=" && f && (r = ""), c = t.includePrerelease ? "-0" : "", l ? n = r === ">" || r === "<" ? "<0.0.0-0" : "*" : r && f ? (u && (a = 0), s = 0, r === ">" ? (r = ">=", u ? (i = +i + 1, a = 0, s = 0) : (a = +a + 1, s = 0)) : r === "<=" && (r = "<", u ? i = +i + 1 : a = +a + 1), r === "<" && (c = "-0"), n = `${r + i}.${a}.${s}${c}`) : u ? n = `>=${i}.0.0${c} <${+i + 1}.0.0-0` : d && (n = `>=${i}.${a}.0${c} <${i}.${+a + 1}.0-0`), o("xRange return", n), n;
+		});
+	}, E = (e, t) => (o("replaceStars", e, t), e.trim().replace(c[l.STAR], "")), D = (e, t) => (o("replaceGTE0", e, t), e.trim().replace(c[t.includePrerelease ? l.GTE0PRE : l.GTE0], "")), O = (e) => (t, n, r, i, a, o, s, c, l, u, d, f) => (n = y(r) ? "" : y(i) ? `>=${r}.0.0${e ? "-0" : ""}` : y(a) ? `>=${r}.${i}.0${e ? "-0" : ""}` : o ? `>=${n}` : `>=${n}${e ? "-0" : ""}`, c = y(l) ? "" : y(u) ? `<${+l + 1}.0.0-0` : y(d) ? `<${l}.${+u + 1}.0-0` : f ? `<=${l}.${u}.${d}-${f}` : e ? `<${l}.${u}.${+d + 1}-0` : `<=${c}`, `${n} ${c}`.trim()), k = (e, t, n) => {
+		for (let n = 0; n < e.length; n++) if (!e[n].test(t)) return !1;
+		if (t.prerelease.length && !n.includePrerelease) {
+			for (let n = 0; n < e.length; n++) if (o(e[n].semver), e[n].semver !== a.ANY && e[n].semver.prerelease.length > 0) {
+				let r = e[n].semver;
+				if (r.major === t.major && r.minor === t.minor && r.patch === t.patch) return !0;
+			}
+			return !1;
+		}
+		return !0;
+	};
+})), ka = /* @__PURE__ */ F(((e, t) => {
+	var n = Symbol("SemVer ANY");
+	t.exports = class e {
+		static get ANY() {
+			return n;
+		}
+		constructor(t, i) {
+			if (i = r(i), t instanceof e) {
+				if (t.loose === !!i.loose) return t;
+				t = t.value;
+			}
+			t = t.trim().split(/\s+/).join(" "), s("comparator", t, i), this.options = i, this.loose = !!i.loose, this.parse(t), this.semver === n ? this.value = "" : this.value = this.operator + this.semver.version, s("comp", this);
+		}
+		parse(e) {
+			let t = this.options.loose ? i[a.COMPARATORLOOSE] : i[a.COMPARATOR], r = e.match(t);
+			if (!r) throw TypeError(`Invalid comparator: ${e}`);
+			this.operator = r[1] === void 0 ? "" : r[1], this.operator === "=" && (this.operator = ""), r[2] ? this.semver = new c(r[2], this.options.loose) : this.semver = n;
+		}
+		toString() {
+			return this.value;
+		}
+		test(e) {
+			if (s("Comparator.test", e, this.options.loose), this.semver === n || e === n) return !0;
+			if (typeof e == "string") try {
+				e = new c(e, this.options);
+			} catch {
+				return !1;
+			}
+			return o(e, this.operator, this.semver, this.options);
+		}
+		intersects(t, n) {
+			if (!(t instanceof e)) throw TypeError("a Comparator is required");
+			return this.operator === "" ? this.value === "" ? !0 : new l(t.value, n).test(this.value) : t.operator === "" ? t.value === "" ? !0 : new l(this.value, n).test(t.semver) : (n = r(n), n.includePrerelease && (this.value === "<0.0.0-0" || t.value === "<0.0.0-0") || !n.includePrerelease && (this.value.startsWith("<0.0.0") || t.value.startsWith("<0.0.0")) ? !1 : !!(this.operator.startsWith(">") && t.operator.startsWith(">") || this.operator.startsWith("<") && t.operator.startsWith("<") || this.semver.version === t.semver.version && this.operator.includes("=") && t.operator.includes("=") || o(this.semver, "<", t.semver, n) && this.operator.startsWith(">") && t.operator.startsWith("<") || o(this.semver, ">", t.semver, n) && this.operator.startsWith("<") && t.operator.startsWith(">")));
+		}
+	};
+	var r = ea(), { safeRe: i, t: a } = $i(), o = wa(), s = Qi(), c = na(), l = Oa();
+})), Aa = /* @__PURE__ */ F(((e, t) => {
+	var n = Oa();
+	t.exports = (e, t, r) => {
+		try {
+			t = new n(t, r);
+		} catch {
+			return !1;
+		}
+		return t.test(e);
+	};
+})), ja = /* @__PURE__ */ F(((e, t) => {
+	var n = Oa();
+	t.exports = (e, t) => new n(e, t).set.map((e) => e.map((e) => e.value).join(" ").trim().split(" "));
+})), Ma = /* @__PURE__ */ F(((e, t) => {
+	var n = na(), r = Oa();
+	t.exports = (e, t, i) => {
+		let a = null, o = null, s = null;
+		try {
+			s = new r(t, i);
+		} catch {
+			return null;
+		}
+		return e.forEach((e) => {
+			s.test(e) && (!a || o.compare(e) === -1) && (a = e, o = new n(a, i));
+		}), a;
+	};
+})), Na = /* @__PURE__ */ F(((e, t) => {
+	var n = na(), r = Oa();
+	t.exports = (e, t, i) => {
+		let a = null, o = null, s = null;
+		try {
+			s = new r(t, i);
+		} catch {
+			return null;
+		}
+		return e.forEach((e) => {
+			s.test(e) && (!a || o.compare(e) === 1) && (a = e, o = new n(a, i));
+		}), a;
+	};
+})), Pa = /* @__PURE__ */ F(((e, t) => {
+	var n = na(), r = Oa(), i = va();
+	t.exports = (e, t) => {
+		e = new r(e, t);
+		let a = new n("0.0.0");
+		if (e.test(a) || (a = new n("0.0.0-0"), e.test(a))) return a;
+		a = null;
+		for (let t = 0; t < e.set.length; ++t) {
+			let r = e.set[t], o = null;
+			r.forEach((e) => {
+				let t = new n(e.semver.version);
+				switch (e.operator) {
+					case ">": t.prerelease.length === 0 ? t.patch++ : t.prerelease.push(0), t.raw = t.format();
+					case "":
+					case ">=":
+						(!o || i(t, o)) && (o = t);
+						break;
+					case "<":
+					case "<=": break;
+					/* istanbul ignore next */
+					default: throw Error(`Unexpected operation: ${e.operator}`);
+				}
+			}), o && (!a || i(a, o)) && (a = o);
+		}
+		return a && e.test(a) ? a : null;
+	};
+})), Fa = /* @__PURE__ */ F(((e, t) => {
+	var n = Oa();
+	t.exports = (e, t) => {
+		try {
+			return new n(e, t).range || "*";
+		} catch {
+			return null;
+		}
+	};
+})), Ia = /* @__PURE__ */ F(((e, t) => {
+	var n = na(), r = ka(), { ANY: i } = r, a = Oa(), o = Aa(), s = va(), c = ya(), l = Ca(), u = Sa();
+	t.exports = (e, t, d, f) => {
+		e = new n(e, f), t = new a(t, f);
+		let p, m, h, g, _;
+		switch (d) {
+			case ">":
+				p = s, m = l, h = c, g = ">", _ = ">=";
+				break;
+			case "<":
+				p = c, m = u, h = s, g = "<", _ = "<=";
+				break;
+			default: throw TypeError("Must provide a hilo val of \"<\" or \">\"");
+		}
+		if (o(e, t, f)) return !1;
+		for (let n = 0; n < t.set.length; ++n) {
+			let a = t.set[n], o = null, s = null;
+			if (a.forEach((e) => {
+				e.semver === i && (e = new r(">=0.0.0")), o ||= e, s ||= e, p(e.semver, o.semver, f) ? o = e : h(e.semver, s.semver, f) && (s = e);
+			}), o.operator === g || o.operator === _ || (!s.operator || s.operator === g) && m(e, s.semver) || s.operator === _ && h(e, s.semver)) return !1;
+		}
+		return !0;
+	};
+})), La = /* @__PURE__ */ F(((e, t) => {
+	var n = Ia();
+	t.exports = (e, t, r) => n(e, t, ">", r);
+})), Ra = /* @__PURE__ */ F(((e, t) => {
+	var n = Ia();
+	t.exports = (e, t, r) => n(e, t, "<", r);
+})), za = /* @__PURE__ */ F(((e, t) => {
+	var n = Oa();
+	t.exports = (e, t, r) => (e = new n(e, r), t = new n(t, r), e.intersects(t, r));
+})), Ba = /* @__PURE__ */ F(((e, t) => {
+	var n = Aa(), r = fa();
+	t.exports = (e, t, i) => {
+		let a = [], o = null, s = null, c = e.sort((e, t) => r(e, t, i));
+		for (let e of c) n(e, t, i) ? (s = e, o ||= e) : (s && a.push([o, s]), s = null, o = null);
+		o && a.push([o, null]);
+		let l = [];
+		for (let [e, t] of a) e === t ? l.push(e) : !t && e === c[0] ? l.push("*") : t ? e === c[0] ? l.push(`<=${t}`) : l.push(`${e} - ${t}`) : l.push(`>=${e}`);
+		let u = l.join(" || "), d = typeof t.raw == "string" ? t.raw : String(t);
+		return u.length < d.length ? u : t;
+	};
+})), Va = /* @__PURE__ */ F(((e, t) => {
+	var n = Oa(), r = ka(), { ANY: i } = r, a = Aa(), o = fa(), s = (e, t, r = {}) => {
+		if (e === t) return !0;
+		e = new n(e, r), t = new n(t, r);
+		let i = !1;
+		OUTER: for (let n of e.set) {
+			for (let e of t.set) {
+				let t = u(n, e, r);
+				if (i ||= t !== null, t) continue OUTER;
+			}
+			if (i) return !1;
+		}
+		return !0;
+	}, c = [new r(">=0.0.0-0")], l = [new r(">=0.0.0")], u = (e, t, n) => {
+		if (e === t) return !0;
+		if (e.length === 1 && e[0].semver === i) {
+			if (t.length === 1 && t[0].semver === i) return !0;
+			e = n.includePrerelease ? c : l;
+		}
+		if (t.length === 1 && t[0].semver === i) {
+			if (n.includePrerelease) return !0;
+			t = l;
+		}
+		let r = /* @__PURE__ */ new Set(), s, u;
+		for (let t of e) t.operator === ">" || t.operator === ">=" ? s = d(s, t, n) : t.operator === "<" || t.operator === "<=" ? u = f(u, t, n) : r.add(t.semver);
+		if (r.size > 1) return null;
+		let p;
+		if (s && u && (p = o(s.semver, u.semver, n), p > 0 || p === 0 && (s.operator !== ">=" || u.operator !== "<="))) return null;
+		for (let e of r) {
+			if (s && !a(e, String(s), n) || u && !a(e, String(u), n)) return null;
+			for (let r of t) if (!a(e, String(r), n)) return !1;
+			return !0;
+		}
+		let m, h, g, _, v = u && !n.includePrerelease && u.semver.prerelease.length ? u.semver : !1, y = s && !n.includePrerelease && s.semver.prerelease.length ? s.semver : !1;
+		v && v.prerelease.length === 1 && u.operator === "<" && v.prerelease[0] === 0 && (v = !1);
+		for (let e of t) {
+			if (_ = _ || e.operator === ">" || e.operator === ">=", g = g || e.operator === "<" || e.operator === "<=", s) {
+				if (y && e.semver.prerelease && e.semver.prerelease.length && e.semver.major === y.major && e.semver.minor === y.minor && e.semver.patch === y.patch && (y = !1), e.operator === ">" || e.operator === ">=") {
+					if (m = d(s, e, n), m === e && m !== s) return !1;
+				} else if (s.operator === ">=" && !a(s.semver, String(e), n)) return !1;
+			}
+			if (u) {
+				if (v && e.semver.prerelease && e.semver.prerelease.length && e.semver.major === v.major && e.semver.minor === v.minor && e.semver.patch === v.patch && (v = !1), e.operator === "<" || e.operator === "<=") {
+					if (h = f(u, e, n), h === e && h !== u) return !1;
+				} else if (u.operator === "<=" && !a(u.semver, String(e), n)) return !1;
+			}
+			if (!e.operator && (u || s) && p !== 0) return !1;
+		}
+		return !(s && g && !u && p !== 0 || u && _ && !s && p !== 0 || y || v);
+	}, d = (e, t, n) => {
+		if (!e) return t;
+		let r = o(e.semver, t.semver, n);
+		return r > 0 ? e : r < 0 || t.operator === ">" && e.operator === ">=" ? t : e;
+	}, f = (e, t, n) => {
+		if (!e) return t;
+		let r = o(e.semver, t.semver, n);
+		return r < 0 ? e : r > 0 || t.operator === "<" && e.operator === "<=" ? t : e;
+	};
+	t.exports = s;
+})), Ha = /* @__PURE__ */ I((/* @__PURE__ */ F(((e, t) => {
+	var n = $i(), r = Zi(), i = na(), a = ta();
+	t.exports = {
+		parse: ra(),
+		valid: ia(),
+		clean: aa(),
+		inc: oa(),
+		diff: sa(),
+		major: ca(),
+		minor: la(),
+		patch: ua(),
+		prerelease: da(),
+		compare: fa(),
+		rcompare: pa(),
+		compareLoose: ma(),
+		compareBuild: ha(),
+		sort: ga(),
+		rsort: _a(),
+		gt: va(),
+		lt: ya(),
+		eq: ba(),
+		neq: xa(),
+		gte: Sa(),
+		lte: Ca(),
+		cmp: wa(),
+		coerce: Ta(),
+		truncate: Ea(),
+		Comparator: ka(),
+		Range: Oa(),
+		satisfies: Aa(),
+		toComparators: ja(),
+		maxSatisfying: Ma(),
+		minSatisfying: Na(),
+		minVersion: Pa(),
+		validRange: Fa(),
+		outside: Ia(),
+		gtr: La(),
+		ltr: Ra(),
+		intersects: za(),
+		simplifyRange: Ba(),
+		subset: Va(),
+		SemVer: i,
+		re: n.re,
+		src: n.src,
+		tokens: n.t,
+		SEMVER_SPEC_VERSION: r.SEMVER_SPEC_VERSION,
+		RELEASE_TYPES: r.RELEASE_TYPES,
+		compareIdentifiers: a.compareIdentifiers,
+		rcompareIdentifiers: a.rcompareIdentifiers
+	};
+})))(), 1);
+function Ua(e) {
 	let t = {
 		followSymbolicLinks: !0,
 		implicitDescendants: !0,
@@ -11904,74 +12618,74 @@ function Zi(e) {
 	};
 	return e && (typeof e.followSymbolicLinks == "boolean" && (t.followSymbolicLinks = e.followSymbolicLinks, z(`followSymbolicLinks '${t.followSymbolicLinks}'`)), typeof e.implicitDescendants == "boolean" && (t.implicitDescendants = e.implicitDescendants, z(`implicitDescendants '${t.implicitDescendants}'`)), typeof e.matchDirectories == "boolean" && (t.matchDirectories = e.matchDirectories, z(`matchDirectories '${t.matchDirectories}'`)), typeof e.omitBrokenSymbolicLinks == "boolean" && (t.omitBrokenSymbolicLinks = e.omitBrokenSymbolicLinks, z(`omitBrokenSymbolicLinks '${t.omitBrokenSymbolicLinks}'`)), typeof e.excludeHiddenFiles == "boolean" && (t.excludeHiddenFiles = e.excludeHiddenFiles, z(`excludeHiddenFiles '${t.excludeHiddenFiles}'`))), t;
 }
-var Qi = process.platform === "win32";
-function $i(e) {
-	if (e = ia(e), Qi && /^\\\\[^\\]+(\\[^\\]+)?$/.test(e)) return e;
+var Wa = process.platform === "win32";
+function Ga(e) {
+	if (e = Xa(e), Wa && /^\\\\[^\\]+(\\[^\\]+)?$/.test(e)) return e;
 	let t = u.dirname(e);
-	return Qi && /^\\\\[^\\]+\\[^\\]+\\$/.test(t) && (t = ia(t)), t;
+	return Wa && /^\\\\[^\\]+\\[^\\]+\\$/.test(t) && (t = Xa(t)), t;
 }
-function ea(e, t) {
-	if (g(e, "ensureAbsoluteRoot parameter 'root' must not be empty"), g(t, "ensureAbsoluteRoot parameter 'itemPath' must not be empty"), ta(t)) return t;
-	if (Qi) {
+function Ka(e, t) {
+	if (g(e, "ensureAbsoluteRoot parameter 'root' must not be empty"), g(t, "ensureAbsoluteRoot parameter 'itemPath' must not be empty"), qa(t)) return t;
+	if (Wa) {
 		if (t.match(/^[A-Z]:[^\\/]|^[A-Z]:$/i)) {
 			let e = process.cwd();
 			return g(e.match(/^[A-Z]:\\/i), `Expected current directory to start with an absolute drive root. Actual '${e}'`), t[0].toUpperCase() === e[0].toUpperCase() ? t.length === 2 ? `${t[0]}:\\${e.substr(3)}` : (e.endsWith("\\") || (e += "\\"), `${t[0]}:\\${e.substr(3)}${t.substr(2)}`) : `${t[0]}:\\${t.substr(2)}`;
-		} else if (ra(t).match(/^\\$|^\\[^\\]/)) {
+		} else if (Ya(t).match(/^\\$|^\\[^\\]/)) {
 			let e = process.cwd();
 			return g(e.match(/^[A-Z]:\\/i), `Expected current directory to start with an absolute drive root. Actual '${e}'`), `${e[0]}:\\${t.substr(1)}`;
 		}
 	}
-	return g(ta(e), "ensureAbsoluteRoot parameter 'root' must have an absolute root"), e.endsWith("/") || Qi && e.endsWith("\\") || (e += u.sep), e + t;
+	return g(qa(e), "ensureAbsoluteRoot parameter 'root' must have an absolute root"), e.endsWith("/") || Wa && e.endsWith("\\") || (e += u.sep), e + t;
 }
-function ta(e) {
-	return g(e, "hasAbsoluteRoot parameter 'itemPath' must not be empty"), e = ra(e), Qi ? e.startsWith("\\\\") || /^[A-Z]:\\/i.test(e) : e.startsWith("/");
+function qa(e) {
+	return g(e, "hasAbsoluteRoot parameter 'itemPath' must not be empty"), e = Ya(e), Wa ? e.startsWith("\\\\") || /^[A-Z]:\\/i.test(e) : e.startsWith("/");
 }
-function na(e) {
-	return g(e, "isRooted parameter 'itemPath' must not be empty"), e = ra(e), Qi ? e.startsWith("\\") || /^[A-Z]:/i.test(e) : e.startsWith("/");
+function Ja(e) {
+	return g(e, "isRooted parameter 'itemPath' must not be empty"), e = Ya(e), Wa ? e.startsWith("\\") || /^[A-Z]:/i.test(e) : e.startsWith("/");
 }
-function ra(e) {
-	return e ||= "", Qi ? (e = e.replace(/\//g, "\\"), (/^\\\\+[^\\]/.test(e) ? "\\" : "") + e.replace(/\\\\+/g, "\\")) : e.replace(/\/\/+/g, "/");
+function Ya(e) {
+	return e ||= "", Wa ? (e = e.replace(/\//g, "\\"), (/^\\\\+[^\\]/.test(e) ? "\\" : "") + e.replace(/\\\\+/g, "\\")) : e.replace(/\/\/+/g, "/");
 }
-function ia(e) {
-	return e ? (e = ra(e), !e.endsWith(u.sep) || e === u.sep || Qi && /^[A-Z]:\\$/i.test(e) ? e : e.substr(0, e.length - 1)) : "";
+function Xa(e) {
+	return e ? (e = Ya(e), !e.endsWith(u.sep) || e === u.sep || Wa && /^[A-Z]:\\$/i.test(e) ? e : e.substr(0, e.length - 1)) : "";
 }
-var aa;
+var Za;
 (function(e) {
 	e[e.None = 0] = "None", e[e.Directory = 1] = "Directory", e[e.File = 2] = "File", e[e.All = 3] = "All";
-})(aa ||= {});
-var oa = process.platform === "win32";
-function sa(e) {
+})(Za ||= {});
+var Qa = process.platform === "win32";
+function $a(e) {
 	e = e.filter((e) => !e.negate);
 	let t = {};
 	for (let n of e) {
-		let e = oa ? n.searchPath.toUpperCase() : n.searchPath;
+		let e = Qa ? n.searchPath.toUpperCase() : n.searchPath;
 		t[e] = "candidate";
 	}
 	let n = [];
 	for (let r of e) {
-		let e = oa ? r.searchPath.toUpperCase() : r.searchPath;
+		let e = Qa ? r.searchPath.toUpperCase() : r.searchPath;
 		if (t[e] === "included") continue;
-		let i = !1, a = e, o = $i(a);
+		let i = !1, a = e, o = Ga(a);
 		for (; o !== a;) {
 			if (t[o]) {
 				i = !0;
 				break;
 			}
-			a = o, o = $i(a);
+			a = o, o = Ga(a);
 		}
 		i || (n.push(r.searchPath), t[e] = "included");
 	}
 	return n;
 }
-function ca(e, t) {
-	let n = aa.None;
+function eo(e, t) {
+	let n = Za.None;
 	for (let r of e) r.negate ? n &= ~r.match(t) : n |= r.match(t);
 	return n;
 }
-function la(e, t) {
+function to(e, t) {
 	return e.some((e) => !e.negate && e.partialMatch(t));
 }
-var ua = /* @__PURE__ */ F(((e, t) => {
+var no = /* @__PURE__ */ F(((e, t) => {
 	t.exports = function(e, t) {
 		for (var r = [], i = 0; i < e.length; i++) {
 			var a = t(e[i], i);
@@ -11982,7 +12696,7 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 	var n = Array.isArray || function(e) {
 		return Object.prototype.toString.call(e) === "[object Array]";
 	};
-})), da = /* @__PURE__ */ F(((e, t) => {
+})), ro = /* @__PURE__ */ F(((e, t) => {
 	t.exports = n;
 	function n(e, t, n) {
 		e instanceof RegExp && (e = r(e, n)), t instanceof RegExp && (t = r(t, n));
@@ -12009,8 +12723,8 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 		}
 		return s;
 	}
-})), fa = /* @__PURE__ */ F(((e, t) => {
-	var n = ua(), r = da();
+})), io = /* @__PURE__ */ F(((e, t) => {
+	var n = no(), r = ro();
 	t.exports = p;
 	var i = "\0SLASH" + Math.random() + "\0", a = "\0OPEN" + Math.random() + "\0", o = "\0CLOSE" + Math.random() + "\0", s = "\0COMMA" + Math.random() + "\0", c = "\0PERIOD" + Math.random() + "\0";
 	function l(e) {
@@ -12086,7 +12800,7 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 		}
 		return i;
 	}
-})), pa = /* @__PURE__ */ I((/* @__PURE__ */ F(((e, t) => {
+})), ao = /* @__PURE__ */ I((/* @__PURE__ */ F(((e, t) => {
 	t.exports = h, h.Minimatch = g;
 	var n = function() {
 		try {
@@ -12094,7 +12808,7 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 		} catch {}
 	}() || { sep: "/" };
 	h.sep = n.sep;
-	var r = h.GLOBSTAR = g.GLOBSTAR = {}, i = fa(), a = {
+	var r = h.GLOBSTAR = g.GLOBSTAR = {}, i = io(), a = {
 		"!": {
 			open: "(?:(?!(?:",
 			close: "))[^/]*?)"
@@ -12474,14 +13188,14 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 	function E(e) {
 		return e.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 	}
-})))(), 1), ma = process.platform === "win32", ha = class {
+})))(), 1), oo = process.platform === "win32", so = class {
 	constructor(e) {
-		if (this.segments = [], typeof e == "string") if (g(e, "Parameter 'itemPath' must not be empty"), e = ia(e), !na(e)) this.segments = e.split(u.sep);
+		if (this.segments = [], typeof e == "string") if (g(e, "Parameter 'itemPath' must not be empty"), e = Xa(e), !Ja(e)) this.segments = e.split(u.sep);
 		else {
-			let t = e, n = $i(t);
+			let t = e, n = Ga(t);
 			for (; n !== t;) {
 				let e = u.basename(t);
-				this.segments.unshift(e), t = n, n = $i(t);
+				this.segments.unshift(e), t = n, n = Ga(t);
 			}
 			this.segments.unshift(t);
 		}
@@ -12489,16 +13203,16 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 			g(e.length > 0, "Parameter 'itemPath' must not be an empty array");
 			for (let t = 0; t < e.length; t++) {
 				let n = e[t];
-				g(n, "Parameter 'itemPath' must not contain any empty segments"), n = ra(e[t]), t === 0 && na(n) ? (n = ia(n), g(n === $i(n), "Parameter 'itemPath' root segment contains information for multiple segments"), this.segments.push(n)) : (g(!n.includes(u.sep), "Parameter 'itemPath' contains unexpected path separators"), this.segments.push(n));
+				g(n, "Parameter 'itemPath' must not contain any empty segments"), n = Ya(e[t]), t === 0 && Ja(n) ? (n = Xa(n), g(n === Ga(n), "Parameter 'itemPath' root segment contains information for multiple segments"), this.segments.push(n)) : (g(!n.includes(u.sep), "Parameter 'itemPath' contains unexpected path separators"), this.segments.push(n));
 			}
 		}
 	}
 	toString() {
-		let e = this.segments[0], t = e.endsWith(u.sep) || ma && /^[A-Z]:$/i.test(e);
+		let e = this.segments[0], t = e.endsWith(u.sep) || oo && /^[A-Z]:$/i.test(e);
 		for (let n = 1; n < this.segments.length; n++) t ? t = !1 : e += u.sep, e += this.segments[n];
 		return e;
 	}
-}, { Minimatch: ga } = pa.default, _a = process.platform === "win32", va = class e {
+}, { Minimatch: co } = ao.default, lo = process.platform === "win32", uo = class e {
 	constructor(t, n = !1, r, i) {
 		this.negate = !1;
 		let a;
@@ -12506,50 +13220,50 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 		else {
 			r ||= [], g(r.length, "Parameter 'segments' must not empty");
 			let n = e.getLiteral(r[0]);
-			g(n && ta(n), "Parameter 'segments' first element must be a root path"), a = new ha(r).toString().trim(), t && (a = `!${a}`);
+			g(n && qa(n), "Parameter 'segments' first element must be a root path"), a = new so(r).toString().trim(), t && (a = `!${a}`);
 		}
 		for (; a.startsWith("!");) this.negate = !this.negate, a = a.substr(1).trim();
-		a = e.fixupPattern(a, i), this.segments = new ha(a).segments, this.trailingSeparator = ra(a).endsWith(u.sep), a = ia(a);
+		a = e.fixupPattern(a, i), this.segments = new so(a).segments, this.trailingSeparator = Ya(a).endsWith(u.sep), a = Xa(a);
 		let o = !1, s = this.segments.map((t) => e.getLiteral(t)).filter((e) => !o && !(o = e === ""));
-		this.searchPath = new ha(s).toString(), this.rootRegExp = new RegExp(e.regExpEscape(s[0]), _a ? "i" : ""), this.isImplicitPattern = n;
+		this.searchPath = new so(s).toString(), this.rootRegExp = new RegExp(e.regExpEscape(s[0]), lo ? "i" : ""), this.isImplicitPattern = n;
 		let c = {
 			dot: !0,
 			nobrace: !0,
-			nocase: _a,
+			nocase: lo,
 			nocomment: !0,
 			noext: !0,
 			nonegate: !0
 		};
-		a = _a ? a.replace(/\\/g, "/") : a, this.minimatch = new ga(a, c);
+		a = lo ? a.replace(/\\/g, "/") : a, this.minimatch = new co(a, c);
 	}
 	match(e) {
-		return this.segments[this.segments.length - 1] === "**" ? (e = ra(e), !e.endsWith(u.sep) && this.isImplicitPattern === !1 && (e = `${e}${u.sep}`)) : e = ia(e), this.minimatch.match(e) ? this.trailingSeparator ? aa.Directory : aa.All : aa.None;
+		return this.segments[this.segments.length - 1] === "**" ? (e = Ya(e), !e.endsWith(u.sep) && this.isImplicitPattern === !1 && (e = `${e}${u.sep}`)) : e = Xa(e), this.minimatch.match(e) ? this.trailingSeparator ? Za.Directory : Za.All : Za.None;
 	}
 	partialMatch(e) {
-		return e = ia(e), $i(e) === e ? this.rootRegExp.test(e) : this.minimatch.matchOne(e.split(_a ? /\\+/ : /\/+/), this.minimatch.set[0], !0);
+		return e = Xa(e), Ga(e) === e ? this.rootRegExp.test(e) : this.minimatch.matchOne(e.split(lo ? /\\+/ : /\/+/), this.minimatch.set[0], !0);
 	}
 	static globEscape(e) {
-		return (_a ? e : e.replace(/\\/g, "\\\\")).replace(/(\[)(?=[^/]+\])/g, "[[]").replace(/\?/g, "[?]").replace(/\*/g, "[*]");
+		return (lo ? e : e.replace(/\\/g, "\\\\")).replace(/(\[)(?=[^/]+\])/g, "[[]").replace(/\?/g, "[?]").replace(/\*/g, "[*]");
 	}
 	static fixupPattern(n, r) {
 		g(n, "pattern cannot be empty");
-		let i = new ha(n).segments.map((t) => e.getLiteral(t));
-		if (g(i.every((e, t) => (e !== "." || t === 0) && e !== ".."), `Invalid pattern '${n}'. Relative pathing '.' and '..' is not allowed.`), g(!na(n) || i[0], `Invalid pattern '${n}'. Root segment must not contain globs.`), n = ra(n), n === "." || n.startsWith(`.${u.sep}`)) n = e.globEscape(process.cwd()) + n.substr(1);
-		else if (n === "~" || n.startsWith(`~${u.sep}`)) r ||= t.homedir(), g(r, "Unable to determine HOME directory"), g(ta(r), `Expected HOME directory to be a rooted path. Actual '${r}'`), n = e.globEscape(r) + n.substr(1);
-		else if (_a && (n.match(/^[A-Z]:$/i) || n.match(/^[A-Z]:[^\\]/i))) {
-			let t = ea("C:\\dummy-root", n.substr(0, 2));
+		let i = new so(n).segments.map((t) => e.getLiteral(t));
+		if (g(i.every((e, t) => (e !== "." || t === 0) && e !== ".."), `Invalid pattern '${n}'. Relative pathing '.' and '..' is not allowed.`), g(!Ja(n) || i[0], `Invalid pattern '${n}'. Root segment must not contain globs.`), n = Ya(n), n === "." || n.startsWith(`.${u.sep}`)) n = e.globEscape(process.cwd()) + n.substr(1);
+		else if (n === "~" || n.startsWith(`~${u.sep}`)) r ||= t.homedir(), g(r, "Unable to determine HOME directory"), g(qa(r), `Expected HOME directory to be a rooted path. Actual '${r}'`), n = e.globEscape(r) + n.substr(1);
+		else if (lo && (n.match(/^[A-Z]:$/i) || n.match(/^[A-Z]:[^\\]/i))) {
+			let t = Ka("C:\\dummy-root", n.substr(0, 2));
 			n.length > 2 && !t.endsWith("\\") && (t += "\\"), n = e.globEscape(t) + n.substr(2);
-		} else if (_a && (n === "\\" || n.match(/^\\[^\\]/))) {
-			let t = ea("C:\\dummy-root", "\\");
+		} else if (lo && (n === "\\" || n.match(/^\\[^\\]/))) {
+			let t = Ka("C:\\dummy-root", "\\");
 			t.endsWith("\\") || (t += "\\"), n = e.globEscape(t) + n.substr(1);
-		} else n = ea(e.globEscape(process.cwd()), n);
-		return ra(n);
+		} else n = Ka(e.globEscape(process.cwd()), n);
+		return Ya(n);
 	}
 	static getLiteral(e) {
 		let t = "";
 		for (let n = 0; n < e.length; n++) {
 			let r = e[n];
-			if (r === "\\" && !_a && n + 1 < e.length) {
+			if (r === "\\" && !lo && n + 1 < e.length) {
 				t += e[++n];
 				continue;
 			} else if (r === "*" || r === "?") return "";
@@ -12557,7 +13271,7 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 				let r = "", i = -1;
 				for (let t = n + 1; t < e.length; t++) {
 					let n = e[t];
-					if (n === "\\" && !_a && t + 1 < e.length) {
+					if (n === "\\" && !lo && t + 1 < e.length) {
 						r += e[++t];
 						continue;
 					} else if (n === "]") {
@@ -12580,11 +13294,11 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 	static regExpEscape(e) {
 		return e.replace(/[[\\^$.|?*+()]/g, "\\$&");
 	}
-}, ya = class {
+}, fo = class {
 	constructor(e, t) {
 		this.path = e, this.level = t;
 	}
-}, ba = function(e, t, n, r) {
+}, po = function(e, t, n, r) {
 	function i(e) {
 		return e instanceof n ? e : new n(function(t) {
 			t(e);
@@ -12610,7 +13324,7 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 		}
 		c((r = r.apply(e, t || [])).next());
 	});
-}, xa = function(e) {
+}, mo = function(e) {
 	if (!Symbol.asyncIterator) throw TypeError("Symbol.asyncIterator is not defined.");
 	var t = e[Symbol.asyncIterator], n;
 	return t ? t.call(e) : (e = typeof __values == "function" ? __values(e) : e[Symbol.iterator](), n = {}, r("next"), r("throw"), r("return"), n[Symbol.asyncIterator] = function() {
@@ -12631,9 +13345,9 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 			});
 		}, t);
 	}
-}, Sa = function(e) {
-	return this instanceof Sa ? (this.v = e, this) : new Sa(e);
-}, Ca = function(e, t, n) {
+}, ho = function(e) {
+	return this instanceof ho ? (this.v = e, this) : new ho(e);
+}, go = function(e, t, n) {
 	if (!Symbol.asyncIterator) throw TypeError("Symbol.asyncIterator is not defined.");
 	var r = n.apply(e, t || []), i, a = [];
 	return i = Object.create((typeof AsyncIterator == "function" ? AsyncIterator : Object).prototype), s("next"), s("throw"), s("return", o), i[Symbol.asyncIterator] = function() {
@@ -12664,7 +13378,7 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 		}
 	}
 	function l(e) {
-		e.value instanceof Sa ? Promise.resolve(e.value.v).then(u, d) : f(a[0][2], e);
+		e.value instanceof ho ? Promise.resolve(e.value.v).then(u, d) : f(a[0][2], e);
 	}
 	function u(e) {
 		c("next", e);
@@ -12675,19 +13389,19 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 	function f(e, t) {
 		e(t), a.shift(), a.length && c(a[0][0], a[0][1]);
 	}
-}, wa = process.platform === "win32", Ta = class e {
+}, _o = process.platform === "win32", vo = class e {
 	constructor(e) {
-		this.patterns = [], this.searchPaths = [], this.options = Zi(e);
+		this.patterns = [], this.searchPaths = [], this.options = Ua(e);
 	}
 	getSearchPaths() {
 		return this.searchPaths.slice();
 	}
 	glob() {
-		return ba(this, void 0, void 0, function* () {
+		return po(this, void 0, void 0, function* () {
 			var e, t, n, r;
 			let i = [];
 			try {
-				for (var a = !0, o = xa(this.globGenerator()), s; s = yield o.next(), e = s.done, !e; a = !0) {
+				for (var a = !0, o = mo(this.globGenerator()), s; s = yield o.next(), e = s.done, !e; a = !0) {
 					r = s.value, a = !1;
 					let e = r;
 					i.push(e);
@@ -12705,46 +13419,46 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 		});
 	}
 	globGenerator() {
-		return Ca(this, arguments, function* () {
-			let t = Zi(this.options), n = [];
-			for (let e of this.patterns) n.push(e), t.implicitDescendants && (e.trailingSeparator || e.segments[e.segments.length - 1] !== "**") && n.push(new va(e.negate, !0, e.segments.concat("**")));
+		return go(this, arguments, function* () {
+			let t = Ua(this.options), n = [];
+			for (let e of this.patterns) n.push(e), t.implicitDescendants && (e.trailingSeparator || e.segments[e.segments.length - 1] !== "**") && n.push(new uo(e.negate, !0, e.segments.concat("**")));
 			let r = [];
-			for (let e of sa(n)) {
+			for (let e of $a(n)) {
 				z(`Search path '${e}'`);
 				try {
-					yield Sa(a.promises.lstat(e));
+					yield ho(a.promises.lstat(e));
 				} catch (e) {
 					if (e.code === "ENOENT") continue;
 					throw e;
 				}
-				r.unshift(new ya(e, 1));
+				r.unshift(new fo(e, 1));
 			}
 			let i = [];
 			for (; r.length;) {
-				let o = r.pop(), s = ca(n, o.path), c = !!s || la(n, o.path);
+				let o = r.pop(), s = eo(n, o.path), c = !!s || to(n, o.path);
 				if (!s && !c) continue;
-				let l = yield Sa(e.stat(o, t, i));
+				let l = yield ho(e.stat(o, t, i));
 				if (l && !(t.excludeHiddenFiles && u.basename(o.path).match(/^\./))) if (l.isDirectory()) {
-					if (s & aa.Directory && t.matchDirectories) yield yield Sa(o.path);
+					if (s & Za.Directory && t.matchDirectories) yield yield ho(o.path);
 					else if (!c) continue;
-					let e = o.level + 1, n = (yield Sa(a.promises.readdir(o.path))).map((t) => new ya(u.join(o.path, t), e));
+					let e = o.level + 1, n = (yield ho(a.promises.readdir(o.path))).map((t) => new fo(u.join(o.path, t), e));
 					r.push(...n.reverse());
-				} else s & aa.File && (yield yield Sa(o.path));
+				} else s & Za.File && (yield yield ho(o.path));
 			}
 		});
 	}
 	static create(t, n) {
-		return ba(this, void 0, void 0, function* () {
+		return po(this, void 0, void 0, function* () {
 			let r = new e(n);
-			wa && (t = t.replace(/\r\n/g, "\n"), t = t.replace(/\r/g, "\n"));
+			_o && (t = t.replace(/\r\n/g, "\n"), t = t.replace(/\r/g, "\n"));
 			let i = t.split("\n").map((e) => e.trim());
 			for (let e of i) if (!e || e.startsWith("#")) continue;
-			else r.patterns.push(new va(e));
-			return r.searchPaths.push(...sa(r.patterns)), r;
+			else r.patterns.push(new uo(e));
+			return r.searchPaths.push(...$a(r.patterns)), r;
 		});
 	}
 	static stat(e, t, n) {
-		return ba(this, void 0, void 0, function* () {
+		return po(this, void 0, void 0, function* () {
 			let r;
 			if (t.followSymbolicLinks) try {
 				r = yield a.promises.stat(e.path);
@@ -12771,7 +13485,7 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 			return r;
 		});
 	}
-}, Ea = function(e, t, n, r) {
+}, yo = function(e, t, n, r) {
 	function i(e) {
 		return e instanceof n ? e : new n(function(t) {
 			t(e);
@@ -12798,24 +13512,24 @@ var ua = /* @__PURE__ */ F(((e, t) => {
 		c((r = r.apply(e, t || [])).next());
 	});
 };
-function Da(e, t) {
-	return Ea(this, void 0, void 0, function* () {
-		return yield Ta.create(e, t);
+function bo(e, t) {
+	return yo(this, void 0, void 0, function* () {
+		return yield vo.create(e, t);
 	});
 }
-var Oa;
+var xo;
 (function(e) {
 	e.Gzip = "cache.tgz", e.Zstd = "cache.tzst";
-})(Oa ||= {});
-var ka;
+})(xo ||= {});
+var So;
 (function(e) {
 	e.Gzip = "gzip", e.ZstdWithoutLong = "zstd-without-long", e.Zstd = "zstd";
-})(ka ||= {});
-var Aa;
+})(So ||= {});
+var Co;
 (function(e) {
 	e.GNU = "gnu", e.BSD = "bsd";
-})(Aa ||= {});
-var ja = 5e3, Ma = 5e3, Na = `${process.env.PROGRAMFILES}\\Git\\usr\\bin\\tar.exe`, Pa = `${process.env.SYSTEMDRIVE}\\Windows\\System32\\tar.exe`, Fa = "cache.tar", Ia = "manifest.txt", La = function(e, t, n, r) {
+})(Co ||= {});
+var wo = 5e3, To = 5e3, Eo = `${process.env.PROGRAMFILES}\\Git\\usr\\bin\\tar.exe`, Do = `${process.env.SYSTEMDRIVE}\\Windows\\System32\\tar.exe`, Oo = "cache.tar", ko = "manifest.txt", Ao = function(e, t, n, r) {
 	function i(e) {
 		return e instanceof n ? e : new n(function(t) {
 			t(e);
@@ -12841,7 +13555,7 @@ var ja = 5e3, Ma = 5e3, Na = `${process.env.PROGRAMFILES}\\Git\\usr\\bin\\tar.ex
 		}
 		c((r = r.apply(e, t || [])).next());
 	});
-}, Ra = function(e) {
+}, jo = function(e) {
 	if (!Symbol.asyncIterator) throw TypeError("Symbol.asyncIterator is not defined.");
 	var t = e[Symbol.asyncIterator], n;
 	return t ? t.call(e) : (e = typeof __values == "function" ? __values(e) : e[Symbol.iterator](), n = {}, r("next"), r("throw"), r("return"), n[Symbol.asyncIterator] = function() {
@@ -12862,9 +13576,9 @@ var ja = 5e3, Ma = 5e3, Na = `${process.env.PROGRAMFILES}\\Git\\usr\\bin\\tar.ex
 			});
 		}, t);
 	}
-}, za = "1.0";
-function Ba() {
-	return La(this, void 0, void 0, function* () {
+}, Mo = "1.0";
+function No() {
+	return Ao(this, void 0, void 0, function* () {
 		let e = process.platform === "win32", t = process.env.RUNNER_TEMP || "";
 		if (!t) {
 			let n;
@@ -12874,15 +13588,15 @@ function Ba() {
 		return yield ur(n), n;
 	});
 }
-function Va(e) {
+function Po(e) {
 	return a.statSync(e).size;
 }
-function Ha(e) {
-	return La(this, void 0, void 0, function* () {
+function Fo(e) {
+	return Ao(this, void 0, void 0, function* () {
 		var t, n, r, i;
-		let a = [], o = process.env.GITHUB_WORKSPACE ?? process.cwd(), s = yield Da(e.join("\n"), { implicitDescendants: !1 });
+		let a = [], o = process.env.GITHUB_WORKSPACE ?? process.cwd(), s = yield bo(e.join("\n"), { implicitDescendants: !1 });
 		try {
-			for (var c = !0, l = Ra(s.globGenerator()), d; d = yield l.next(), t = d.done, !t; c = !0) {
+			for (var c = !0, l = jo(s.globGenerator()), d; d = yield l.next(), t = d.done, !t; c = !0) {
 				i = d.value, c = !1;
 				let e = i, t = u.relative(o, e).replace(RegExp(`\\${u.sep}`, "g"), "/");
 				z(`Matched: ${t}`), t === "" ? a.push(".") : a.push(`${t}`);
@@ -12899,13 +13613,13 @@ function Ha(e) {
 		return a;
 	});
 }
-function Ua(e) {
-	return La(this, void 0, void 0, function* () {
+function Io(e) {
+	return Ao(this, void 0, void 0, function* () {
 		return v.promisify(a.unlink)(e);
 	});
 }
-function Wa(e) {
-	return La(this, arguments, void 0, function* (e, t = []) {
+function Lo(e) {
+	return Ao(this, arguments, void 0, function* (e, t = []) {
 		let n = "";
 		t.push("--version"), z(`Checking ${e} ${t.join(" ")}`);
 		try {
@@ -12923,62 +13637,62 @@ function Wa(e) {
 		return n = n.trim(), z(n), n;
 	});
 }
-function Ga() {
-	return La(this, void 0, void 0, function* () {
-		let e = yield Wa("zstd", ["--quiet"]);
-		return z(`zstd version: ${Ei.clean(e)}`), e === "" ? ka.Gzip : ka.ZstdWithoutLong;
+function Ro() {
+	return Ao(this, void 0, void 0, function* () {
+		let e = yield Lo("zstd", ["--quiet"]);
+		return z(`zstd version: ${Ha.clean(e)}`), e === "" ? So.Gzip : So.ZstdWithoutLong;
 	});
 }
-function Ka(e) {
-	return e === ka.Gzip ? Oa.Gzip : Oa.Zstd;
+function zo(e) {
+	return e === So.Gzip ? xo.Gzip : xo.Zstd;
 }
-function qa() {
-	return La(this, void 0, void 0, function* () {
-		return a.existsSync(Na) ? Na : (yield Wa("tar")).toLowerCase().includes("gnu tar") ? dr("tar") : "";
+function Bo() {
+	return Ao(this, void 0, void 0, function* () {
+		return a.existsSync(Eo) ? Eo : (yield Lo("tar")).toLowerCase().includes("gnu tar") ? dr("tar") : "";
 	});
 }
-function Ja(e, t) {
+function Vo(e, t) {
 	if (t === void 0) throw Error(`Expected ${e} but value was undefiend`);
 	return t;
 }
-function Ya(e, t, n = !1) {
+function Ho(e, t, n = !1) {
 	let r = e.slice();
-	return t && r.push(t), process.platform === "win32" && !n && r.push("windows-only"), r.push(za), i.createHash("sha256").update(r.join("|")).digest("hex");
+	return t && r.push(t), process.platform === "win32" && !n && r.push("windows-only"), r.push(Mo), i.createHash("sha256").update(r.join("|")).digest("hex");
 }
-function Xa() {
+function Uo() {
 	let e = process.env.ACTIONS_RUNTIME_TOKEN;
 	if (!e) throw Error("Unable to get the ACTIONS_RUNTIME_TOKEN env variable");
 	return e;
 }
-var Za = class extends Error {
+var Wo = class extends Error {
 	constructor(e) {
 		super(e), this.name = "AbortError";
 	}
 };
-function Qa(e, ...t) {
+function Go(e, ...t) {
 	ee.stderr.write(`${C.format(e, ...t)}${P}`);
 }
-var $a = typeof process < "u" && process.env && process.env.DEBUG || void 0, eo, to = [], no = [], ro = [];
-$a && ao($a);
-var io = Object.assign((e) => lo(e), {
-	enable: ao,
-	enabled: oo,
-	disable: co,
-	log: Qa
+var Ko = typeof process < "u" && process.env && process.env.DEBUG || void 0, qo, Jo = [], Yo = [], Xo = [];
+Ko && Qo(Ko);
+var Zo = Object.assign((e) => ns(e), {
+	enable: Qo,
+	enabled: $o,
+	disable: ts,
+	log: Go
 });
-function ao(e) {
-	eo = e, to = [], no = [];
+function Qo(e) {
+	qo = e, Jo = [], Yo = [];
 	let t = e.split(",").map((e) => e.trim());
-	for (let e of t) e.startsWith("-") ? no.push(e.substring(1)) : to.push(e);
-	for (let e of ro) e.enabled = oo(e.namespace);
+	for (let e of t) e.startsWith("-") ? Yo.push(e.substring(1)) : Jo.push(e);
+	for (let e of Xo) e.enabled = $o(e.namespace);
 }
-function oo(e) {
+function $o(e) {
 	if (e.endsWith("*")) return !0;
-	for (let t of no) if (so(e, t)) return !1;
-	for (let t of to) if (so(e, t)) return !0;
+	for (let t of Yo) if (es(e, t)) return !1;
+	for (let t of Jo) if (es(e, t)) return !0;
 	return !1;
 }
-function so(e, t) {
+function es(e, t) {
 	if (t.indexOf("*") === -1) return e === t;
 	let n = t;
 	if (t.indexOf("**") !== -1) {
@@ -13003,71 +13717,71 @@ function so(e, t) {
 	let l = r === e.length, u = i === n.length, d = i === n.length - 1 && n[i] === "*";
 	return l && (u || d);
 }
-function co() {
-	let e = eo || "";
-	return ao(""), e;
+function ts() {
+	let e = qo || "";
+	return Qo(""), e;
 }
-function lo(e) {
+function ns(e) {
 	let t = Object.assign(n, {
-		enabled: oo(e),
-		destroy: uo,
-		log: io.log,
+		enabled: $o(e),
+		destroy: rs,
+		log: Zo.log,
 		namespace: e,
-		extend: fo
+		extend: is
 	});
 	function n(...n) {
 		t.enabled && (n.length > 0 && (n[0] = `${e} ${n[0]}`), t.log(...n));
 	}
-	return ro.push(t), t;
+	return Xo.push(t), t;
 }
-function uo() {
-	let e = ro.indexOf(this);
-	return e >= 0 ? (ro.splice(e, 1), !0) : !1;
+function rs() {
+	let e = Xo.indexOf(this);
+	return e >= 0 ? (Xo.splice(e, 1), !0) : !1;
 }
-function fo(e) {
-	let t = lo(`${this.namespace}:${e}`);
+function is(e) {
+	let t = ns(`${this.namespace}:${e}`);
 	return t.log = this.log, t;
 }
-var po = [
+var as = [
 	"verbose",
 	"info",
 	"warning",
 	"error"
-], mo = {
+], os = {
 	verbose: 400,
 	info: 300,
 	warning: 200,
 	error: 100
 };
-function ho(e, t) {
+function ss(e, t) {
 	t.log = (...t) => {
 		e.log(...t);
 	};
 }
-function go(e) {
-	return po.includes(e);
+function cs(e) {
+	return as.includes(e);
 }
-function _o(e) {
-	let t = /* @__PURE__ */ new Set(), n = typeof process < "u" && process.env && process.env[e.logLevelEnvVarName] || void 0, r, i = io(e.namespace);
+function ls(e) {
+	let t = /* @__PURE__ */ new Set(), n = typeof process < "u" && process.env && process.env[e.logLevelEnvVarName] || void 0, r, i = Zo(e.namespace);
 	i.log = (...e) => {
-		io.log(...e);
+		Zo.log(...e);
 	};
 	function a(e) {
-		if (e && !go(e)) throw Error(`Unknown log level '${e}'. Acceptable values: ${po.join(",")}`);
+		if (e && !cs(e)) throw Error(`Unknown log level '${e}'. Acceptable values: ${as.join(",")}`);
 		r = e;
 		let n = [];
 		for (let e of t) o(e) && n.push(e.namespace);
-		io.enable(n.join(","));
+		Zo.enable(n.join(","));
 	}
-	n && (go(n) ? a(n) : console.error(`${e.logLevelEnvVarName} set to unknown log level '${n}'; logging is not enabled. Acceptable values: ${po.join(", ")}.`));
+	n && (cs(n) ? a(n) : console.error(`${e.logLevelEnvVarName} set to unknown log level '${n}'; logging is not enabled. Acceptable values: ${as.join(", ")}.`));
 	function o(e) {
-		return !!(r && mo[e.level] <= mo[r]);
+		return !!(r && os[e.level] <= os[r]);
 	}
 	function s(e, n) {
 		let r = Object.assign(e.extend(n), { level: n });
-		if (ho(e, r), o(r)) {
-			let e = io.disable();
-			io.enable(e + "," + r.namespace);
+		if (ss(e, r), o(r)) {
+			let e = Zo.disable();
+			Zo.enable(e + "," + r.namespace);
 		}
 		return t.add(r), r;
 	}
@@ -13076,7 +13790,7 @@ function _o(e) {
 	}
 	function l(e) {
 		let t = i.extend(e);
-		return ho(i, t), {
+		return ss(i, t), {
 			error: s(t, "error"),
 			warning: s(t, "warning"),
 			info: s(t, "info"),
@@ -13090,39 +13804,39 @@ function _o(e) {
 		logger: i
 	};
 }
-var vo = _o({
+var us = ls({
 	logLevelEnvVarName: "TYPESPEC_RUNTIME_LOG_LEVEL",
 	namespace: "typeSpecRuntime"
 });
-vo.logger;
-function yo(e) {
-	return vo.createClientLogger(e);
+us.logger;
+function ds(e) {
+	return us.createClientLogger(e);
 }
-function bo(e) {
+function fs(e) {
 	return e.toLowerCase();
 }
-function* xo(e) {
+function* ps(e) {
 	for (let t of e.values()) yield [t.name, t.value];
 }
-var So = class {
+var ms = class {
 	_headersMap;
 	constructor(e) {
 		if (this._headersMap = /* @__PURE__ */ new Map(), e) for (let t of Object.keys(e)) this.set(t, e[t]);
 	}
 	set(e, t) {
-		this._headersMap.set(bo(e), {
+		this._headersMap.set(fs(e), {
 			name: e,
 			value: String(t).trim()
 		});
 	}
 	get(e) {
-		return this._headersMap.get(bo(e))?.value;
+		return this._headersMap.get(fs(e))?.value;
 	}
 	has(e) {
-		return this._headersMap.has(bo(e));
+		return this._headersMap.has(fs(e));
 	}
 	delete(e) {
-		this._headersMap.delete(bo(e));
+		this._headersMap.delete(fs(e));
 	}
 	toJSON(e = {}) {
 		let t = {};
@@ -13134,16 +13848,16 @@ var So = class {
 		return JSON.stringify(this.toJSON({ preserveCase: !0 }));
 	}
 	[Symbol.iterator]() {
-		return xo(this._headersMap);
+		return ps(this._headersMap);
 	}
 };
-function Co(e) {
-	return new So(e);
+function hs(e) {
+	return new ms(e);
 }
-function wo() {
+function gs() {
 	return crypto.randomUUID();
 }
-var To = class {
+var _s = class {
 	url;
 	method;
 	headers;
@@ -13164,18 +13878,18 @@ var To = class {
 	requestOverrides;
 	authSchemes;
 	constructor(e) {
-		this.url = e.url, this.body = e.body, this.headers = e.headers ?? Co(), this.method = e.method ?? "GET", this.timeout = e.timeout ?? 0, this.multipartBody = e.multipartBody, this.formData = e.formData, this.disableKeepAlive = e.disableKeepAlive ?? !1, this.proxySettings = e.proxySettings, this.streamResponseStatusCodes = e.streamResponseStatusCodes, this.withCredentials = e.withCredentials ?? !1, this.abortSignal = e.abortSignal, this.onUploadProgress = e.onUploadProgress, this.onDownloadProgress = e.onDownloadProgress, this.requestId = e.requestId || wo(), this.allowInsecureConnection = e.allowInsecureConnection ?? !1, this.enableBrowserStreams = e.enableBrowserStreams ?? !1, this.requestOverrides = e.requestOverrides, this.authSchemes = e.authSchemes;
+		this.url = e.url, this.body = e.body, this.headers = e.headers ?? hs(), this.method = e.method ?? "GET", this.timeout = e.timeout ?? 0, this.multipartBody = e.multipartBody, this.formData = e.formData, this.disableKeepAlive = e.disableKeepAlive ?? !1, this.proxySettings = e.proxySettings, this.streamResponseStatusCodes = e.streamResponseStatusCodes, this.withCredentials = e.withCredentials ?? !1, this.abortSignal = e.abortSignal, this.onUploadProgress = e.onUploadProgress, this.onDownloadProgress = e.onDownloadProgress, this.requestId = e.requestId || gs(), this.allowInsecureConnection = e.allowInsecureConnection ?? !1, this.enableBrowserStreams = e.enableBrowserStreams ?? !1, this.requestOverrides = e.requestOverrides, this.authSchemes = e.authSchemes;
 	}
 };
-function Eo(e) {
-	return new To(e);
+function vs(e) {
+	return new _s(e);
 }
-var Do = new Set([
+var ys = new Set([
 	"Deserialize",
 	"Serialize",
 	"Retry",
 	"Sign"
-]), Oo = class e {
+]), bs = class e {
 	_policies = [];
 	_orderedPolicies;
 	constructor(e) {
@@ -13183,8 +13897,8 @@ var Do = new Set([
 	}
 	addPolicy(e, t = {}) {
 		if (t.phase && t.afterPhase) throw Error("Policies inside a phase cannot specify afterPhase.");
-		if (t.phase && !Do.has(t.phase)) throw Error(`Invalid phase name: ${t.phase}`);
-		if (t.afterPhase && !Do.has(t.afterPhase)) throw Error(`Invalid afterPhase name: ${t.afterPhase}`);
+		if (t.phase && !ys.has(t.phase)) throw Error(`Invalid phase name: ${t.phase}`);
+		if (t.afterPhase && !ys.has(t.afterPhase)) throw Error(`Invalid afterPhase name: ${t.afterPhase}`);
 		this._policies.push({
 			policy: e,
 			options: t
@@ -13274,24 +13988,24 @@ var Do = new Set([
 		return e;
 	}
 };
-function ko() {
-	return Oo.create();
+function xs() {
+	return bs.create();
 }
-function Ao(e) {
+function Ss(e) {
 	return typeof e == "object" && !!e && !Array.isArray(e) && !(e instanceof RegExp) && !(e instanceof Date);
 }
-function jo(e) {
-	if (Ao(e)) {
+function Cs(e) {
+	if (Ss(e)) {
 		let t = typeof e.name == "string", n = typeof e.message == "string";
 		return t && n;
 	}
 	return !1;
 }
-var Mo = w.custom, No = "REDACTED", Po = /* @__PURE__ */ "x-ms-client-request-id.x-ms-return-client-request-id.x-ms-useragent.x-ms-correlation-request-id.x-ms-request-id.client-request-id.ms-cv.return-client-request-id.traceparent.Access-Control-Allow-Credentials.Access-Control-Allow-Headers.Access-Control-Allow-Methods.Access-Control-Allow-Origin.Access-Control-Expose-Headers.Access-Control-Max-Age.Access-Control-Request-Headers.Access-Control-Request-Method.Origin.Accept.Accept-Encoding.Cache-Control.Connection.Content-Length.Content-Type.Date.ETag.Expires.If-Match.If-Modified-Since.If-None-Match.If-Unmodified-Since.Last-Modified.Pragma.Request-Id.Retry-After.Server.Transfer-Encoding.User-Agent.WWW-Authenticate".split("."), Fo = ["api-version"], Io = class {
+var ws = w.custom, Ts = "REDACTED", Es = /* @__PURE__ */ "x-ms-client-request-id.x-ms-return-client-request-id.x-ms-useragent.x-ms-correlation-request-id.x-ms-request-id.client-request-id.ms-cv.return-client-request-id.traceparent.Access-Control-Allow-Credentials.Access-Control-Allow-Headers.Access-Control-Allow-Methods.Access-Control-Allow-Origin.Access-Control-Expose-Headers.Access-Control-Max-Age.Access-Control-Request-Headers.Access-Control-Request-Method.Origin.Accept.Accept-Encoding.Cache-Control.Connection.Content-Length.Content-Type.Date.ETag.Expires.If-Match.If-Modified-Since.If-None-Match.If-Unmodified-Since.Last-Modified.Pragma.Request-Id.Retry-After.Server.Transfer-Encoding.User-Agent.WWW-Authenticate".split("."), Ds = ["api-version"], Os = class {
 	allowedHeaderNames;
 	allowedQueryParameters;
 	constructor({ additionalAllowedHeaderNames: e = [], additionalAllowedQueryParameters: t = [] } = {}) {
-		e = Po.concat(e), t = Fo.concat(t), this.allowedHeaderNames = new Set(e.map((e) => e.toLowerCase())), this.allowedQueryParameters = new Set(t.map((e) => e.toLowerCase()));
+		e = Es.concat(e), t = Ds.concat(t), this.allowedHeaderNames = new Set(e.map((e) => e.toLowerCase())), this.allowedQueryParameters = new Set(t.map((e) => e.toLowerCase()));
 	}
 	sanitize(e) {
 		let t = /* @__PURE__ */ new Set();
@@ -13305,7 +14019,7 @@ var Mo = w.custom, No = "REDACTED", Po = /* @__PURE__ */ "x-ms-client-request-id
 			if (e === "url") return this.sanitizeUrl(n);
 			if (e === "query") return this.sanitizeQuery(n);
 			if (e !== "body" && e !== "response" && e !== "operationSpec") {
-				if (Array.isArray(n) || Ao(n)) {
+				if (Array.isArray(n) || Ss(n)) {
 					if (t.has(n)) return "[Circular]";
 					t.add(n);
 				}
@@ -13317,21 +14031,21 @@ var Mo = w.custom, No = "REDACTED", Po = /* @__PURE__ */ "x-ms-client-request-id
 		if (typeof e != "string" || e === null || e === "") return e;
 		let t = new URL(e);
 		if (!t.search) return e;
-		for (let [e] of t.searchParams) this.allowedQueryParameters.has(e.toLowerCase()) || t.searchParams.set(e, No);
+		for (let [e] of t.searchParams) this.allowedQueryParameters.has(e.toLowerCase()) || t.searchParams.set(e, Ts);
 		return t.toString();
 	}
 	sanitizeHeaders(e) {
 		let t = {};
-		for (let n of Object.keys(e)) this.allowedHeaderNames.has(n.toLowerCase()) ? t[n] = e[n] : t[n] = No;
+		for (let n of Object.keys(e)) this.allowedHeaderNames.has(n.toLowerCase()) ? t[n] = e[n] : t[n] = Ts;
 		return t;
 	}
 	sanitizeQuery(e) {
 		if (typeof e != "object" || !e) return e;
 		let t = {};
-		for (let n of Object.keys(e)) this.allowedQueryParameters.has(n.toLowerCase()) ? t[n] = e[n] : t[n] = No;
+		for (let n of Object.keys(e)) this.allowedQueryParameters.has(n.toLowerCase()) ? t[n] = e[n] : t[n] = Ts;
 		return t;
 	}
-}, Lo = new Io(), Ro = class e extends Error {
+}, ks = new Os(), As = class e extends Error {
 	static REQUEST_SEND_ERROR = "REQUEST_SEND_ERROR";
 	static PARSE_ERROR = "PARSE_ERROR";
 	code;
@@ -13351,8 +14065,8 @@ var Mo = w.custom, No = "REDACTED", Po = /* @__PURE__ */ "x-ms-client-request-id
 			maxFreeSockets: this.request.agent.maxFreeSockets,
 			maxSockets: this.request.agent.maxSockets
 		} : void 0;
-		Object.defineProperty(this, Mo, {
-			value: () => `RestError: ${this.message} \n ${Lo.sanitize({
+		Object.defineProperty(this, ws, {
+			value: () => `RestError: ${this.message} \n ${ks.sanitize({
 				...this,
 				request: {
 					...this.request,
@@ -13364,17 +14078,17 @@ var Mo = w.custom, No = "REDACTED", Po = /* @__PURE__ */ "x-ms-client-request-id
 		}), Object.setPrototypeOf(this, e.prototype);
 	}
 };
-function zo(e) {
-	return e instanceof Ro ? !0 : jo(e) && e.name === "RestError";
+function js(e) {
+	return e instanceof As ? !0 : Cs(e) && e.name === "RestError";
 }
-function Bo(e, t) {
+function Ms(e, t) {
 	return Buffer.from(e, t);
 }
-var Vo = yo("ts-http-runtime"), Ho = {};
-function Uo(e) {
+var Ns = ds("ts-http-runtime"), Ps = {};
+function Fs(e) {
 	return e && typeof e.pipe == "function";
 }
-function Wo(e) {
+function Is(e) {
 	return e.readable === !1 ? Promise.resolve() : new Promise((t) => {
 		let n = () => {
 			t(), e.removeListener("close", n), e.removeListener("end", n), e.removeListener("error", n);
@@ -13382,10 +14096,10 @@ function Wo(e) {
 		e.on("close", n), e.on("end", n), e.on("error", n);
 	});
 }
-function Go(e) {
+function Ls(e) {
 	return e && typeof e.byteLength == "number";
 }
-var Ko = class extends x {
+var Rs = class extends x {
 	loadedBytes = 0;
 	progressCallback;
 	_transform(e, t, n) {
@@ -13399,61 +14113,61 @@ var Ko = class extends x {
 	constructor(e) {
 		super(), this.progressCallback = e;
 	}
-}, qo = class {
+}, zs = class {
 	cachedHttpAgent;
 	cachedHttpsAgents = /* @__PURE__ */ new WeakMap();
 	async sendRequest(e) {
 		let t = new AbortController(), n;
 		if (e.abortSignal) {
-			if (e.abortSignal.aborted) throw new Za("The operation was aborted. Request has already been canceled.");
+			if (e.abortSignal.aborted) throw new Wo("The operation was aborted. Request has already been canceled.");
 			n = (e) => {
 				e.type === "abort" && t.abort();
 			}, e.abortSignal.addEventListener("abort", n);
 		}
 		let r;
 		e.timeout > 0 && (r = setTimeout(() => {
-			let n = new Io();
-			Vo.info(`request to '${n.sanitizeUrl(e.url)}' timed out. canceling...`), t.abort();
+			let n = new Os();
+			Ns.info(`request to '${n.sanitizeUrl(e.url)}' timed out. canceling...`), t.abort();
 		}, e.timeout));
 		let i = e.headers.get("Accept-Encoding"), a = i?.includes("gzip") || i?.includes("deflate"), o = typeof e.body == "function" ? e.body() : e.body;
 		if (o && !e.headers.has("Content-Length")) {
-			let t = Zo(o);
+			let t = Us(o);
 			t !== null && e.headers.set("Content-Length", t);
 		}
 		let s;
 		try {
 			if (o && e.onUploadProgress) {
-				let t = e.onUploadProgress, n = new Ko(t);
+				let t = e.onUploadProgress, n = new Rs(t);
 				n.on("error", (e) => {
-					Vo.error("Error in upload progress", e);
-				}), Uo(o) ? o.pipe(n) : n.end(o), o = n;
+					Ns.error("Error in upload progress", e);
+				}), Fs(o) ? o.pipe(n) : n.end(o), o = n;
 			}
 			let n = await this.makeRequest(e, t, o);
 			r !== void 0 && clearTimeout(r);
-			let i = Jo(n), c = {
+			let i = Bs(n), c = {
 				status: n.statusCode ?? 0,
 				headers: i,
 				request: e
 			};
 			if (e.method === "HEAD") return n.resume(), c;
-			s = a ? Yo(n, i) : n;
+			s = a ? Vs(n, i) : n;
 			let l = e.onDownloadProgress;
 			if (l) {
-				let e = new Ko(l);
+				let e = new Rs(l);
 				e.on("error", (e) => {
-					Vo.error("Error in download progress", e);
+					Ns.error("Error in download progress", e);
 				}), s.pipe(e), s = e;
 			}
-			return e.streamResponseStatusCodes?.has(Infinity) || e.streamResponseStatusCodes?.has(c.status) ? c.readableStreamBody = s : c.bodyAsText = await Xo(s), c;
+			return e.streamResponseStatusCodes?.has(Infinity) || e.streamResponseStatusCodes?.has(c.status) ? c.readableStreamBody = s : c.bodyAsText = await Hs(s), c;
 		} finally {
 			if (e.abortSignal && n) {
 				let t = Promise.resolve();
-				Uo(o) && (t = Wo(o));
+				Fs(o) && (t = Is(o));
 				let r = Promise.resolve();
-				Uo(s) && (r = Wo(s)), Promise.all([t, r]).then(() => {
+				Fs(s) && (r = Is(s)), Promise.all([t, r]).then(() => {
 					n && e.abortSignal?.removeEventListener("abort", n);
 				}).catch((e) => {
-					Vo.warning("Error when cleaning up abortListener on httpRequest", e);
+					Ns.warning("Error when cleaning up abortListener on httpRequest", e);
 				});
 			}
 		}
@@ -13473,14 +14187,14 @@ var Ko = class extends x {
 		return new Promise((r, o) => {
 			let s = i ? y.request(a, r) : te.request(a, r);
 			s.once("error", (t) => {
-				o(new Ro(t.message, {
-					code: t.code ?? Ro.REQUEST_SEND_ERROR,
+				o(new As(t.message, {
+					code: t.code ?? As.REQUEST_SEND_ERROR,
 					request: e
 				}));
 			}), t.signal.addEventListener("abort", () => {
-				let e = new Za("The operation was aborted. Rejecting from abort signal callback while making request.");
+				let e = new Wo("The operation was aborted. Rejecting from abort signal callback while making request.");
 				s.destroy(e), o(e);
-			}), n && Uo(n) ? n.pipe(s) : n ? typeof n == "string" || Buffer.isBuffer(n) ? s.end(n) : Go(n) ? s.end(ArrayBuffer.isView(n) ? Buffer.from(n.buffer) : Buffer.from(n)) : (Vo.error("Unrecognized body type", n), o(new Ro("Unrecognized body type"))) : s.end();
+			}), n && Fs(n) ? n.pipe(s) : n ? typeof n == "string" || Buffer.isBuffer(n) ? s.end(n) : Ls(n) ? s.end(ArrayBuffer.isView(n) ? Buffer.from(n.buffer) : Buffer.from(n)) : (Ns.error("Unrecognized body type", n), o(new As("Unrecognized body type"))) : s.end();
 		});
 	}
 	getOrCreateAgent(e, t) {
@@ -13488,23 +14202,23 @@ var Ko = class extends x {
 		if (t) return n ? y.globalAgent : (this.cachedHttpAgent ||= new y.Agent({ keepAlive: !0 }), this.cachedHttpAgent);
 		{
 			if (n && !e.tlsSettings) return te.globalAgent;
-			let t = e.tlsSettings ?? Ho, r = this.cachedHttpsAgents.get(t);
-			return r && r.options.keepAlive === !n ? r : (Vo.info("No cached TLS Agent exist, creating a new Agent"), r = new te.Agent({
+			let t = e.tlsSettings ?? Ps, r = this.cachedHttpsAgents.get(t);
+			return r && r.options.keepAlive === !n ? r : (Ns.info("No cached TLS Agent exist, creating a new Agent"), r = new te.Agent({
 				keepAlive: !n,
 				...t
 			}), this.cachedHttpsAgents.set(t, r), r);
 		}
 	}
 };
-function Jo(e) {
-	let t = Co();
+function Bs(e) {
+	let t = hs();
 	for (let n of Object.keys(e.headers)) {
 		let r = e.headers[n];
 		Array.isArray(r) ? r.length > 0 && t.set(n, r[0]) : r && t.set(n, r);
 	}
 	return t;
 }
-function Yo(e, t) {
+function Vs(e, t) {
 	let n = t.get("Content-Encoding");
 	if (n === "gzip") {
 		let t = T.createGunzip();
@@ -13515,7 +14229,7 @@ function Yo(e, t) {
 	}
 	return e;
 }
-function Xo(e) {
+function Hs(e) {
 	return new Promise((t, n) => {
 		let r = [];
 		e.on("data", (e) => {
@@ -13523,27 +14237,27 @@ function Xo(e) {
 		}), e.on("end", () => {
 			t(Buffer.concat(r).toString("utf8"));
 		}), e.on("error", (e) => {
-			e && e?.name === "AbortError" ? n(e) : n(new Ro(`Error reading response as text: ${e.message}`, { code: Ro.PARSE_ERROR }));
+			e && e?.name === "AbortError" ? n(e) : n(new As(`Error reading response as text: ${e.message}`, { code: As.PARSE_ERROR }));
 		});
 	});
 }
-function Zo(e) {
-	return e ? Buffer.isBuffer(e) ? e.length : Uo(e) ? null : Go(e) ? e.byteLength : typeof e == "string" ? Buffer.from(e).length : null : 0;
+function Us(e) {
+	return e ? Buffer.isBuffer(e) ? e.length : Fs(e) ? null : Ls(e) ? e.byteLength : typeof e == "string" ? Buffer.from(e).length : null : 0;
 }
-function Qo() {
-	return new qo();
+function Ws() {
+	return new zs();
 }
-function $o() {
-	return Qo();
+function Gs() {
+	return Ws();
 }
-var es = "logPolicy";
-function ts(e = {}) {
-	let t = e.logger ?? Vo.info, n = new Io({
+var Ks = "logPolicy";
+function qs(e = {}) {
+	let t = e.logger ?? Ns.info, n = new Os({
 		additionalAllowedHeaderNames: e.additionalAllowedHeaderNames,
 		additionalAllowedQueryParameters: e.additionalAllowedQueryParameters
 	});
 	return {
-		name: es,
+		name: Ks,
 		async sendRequest(e, r) {
 			if (!t.enabled) return r(e);
 			t(`Request: ${n.sanitize(e)}`);
@@ -13552,40 +14266,40 @@ function ts(e = {}) {
 		}
 	};
 }
-var ns = "redirectPolicy", rs = ["GET", "HEAD"];
-function is(e = {}) {
+var Js = "redirectPolicy", Ys = ["GET", "HEAD"];
+function Xs(e = {}) {
 	let { maxRetries: t = 20 } = e;
 	return {
-		name: ns,
+		name: Js,
 		async sendRequest(e, n) {
-			return as(n, await n(e), t);
+			return Zs(n, await n(e), t);
 		}
 	};
 }
-async function as(e, t, n, r = 0) {
+async function Zs(e, t, n, r = 0) {
 	let { request: i, status: a, headers: o } = t, s = o.get("location");
-	return s && (a === 300 || a === 301 && rs.includes(i.method) || a === 302 && rs.includes(i.method) || a === 303 && i.method === "POST" || a === 307) && r < n ? (i.url = new URL(s, i.url).toString(), a === 303 && (i.method = "GET", i.headers.delete("Content-Length"), delete i.body), i.headers.delete("Authorization"), as(e, await e(i), n, r + 1)) : t;
+	return s && (a === 300 || a === 301 && Ys.includes(i.method) || a === 302 && Ys.includes(i.method) || a === 303 && i.method === "POST" || a === 307) && r < n ? (i.url = new URL(s, i.url).toString(), a === 303 && (i.method = "GET", i.headers.delete("Content-Length"), delete i.body), i.headers.delete("Authorization"), Zs(e, await e(i), n, r + 1)) : t;
 }
-var os = "decompressResponsePolicy";
-function ss() {
+var Qs = "decompressResponsePolicy";
+function $s() {
 	return {
-		name: os,
+		name: Qs,
 		async sendRequest(e, t) {
 			return e.method !== "HEAD" && e.headers.set("Accept-Encoding", "gzip,deflate"), t(e);
 		}
 	};
 }
-function cs(e, t) {
+function ec(e, t) {
 	return e = Math.ceil(e), t = Math.floor(t), Math.floor(Math.random() * (t - e + 1)) + e;
 }
-function ls(e, t) {
+function tc(e, t) {
 	let n = t.retryDelayInMs * 2 ** e, r = Math.min(t.maxRetryDelayInMs, n);
-	return { retryAfterInMs: r / 2 + cs(0, r / 2) };
+	return { retryAfterInMs: r / 2 + ec(0, r / 2) };
 }
-var us = "The operation was aborted.";
-function ds(e, t, n) {
+var nc = "The operation was aborted.";
+function rc(e, t, n) {
 	return new Promise((r, i) => {
-		let a, o, s = () => i(new Za(n?.abortErrorMsg ? n?.abortErrorMsg : us)), c = () => {
+		let a, o, s = () => i(new Wo(n?.abortErrorMsg ? n?.abortErrorMsg : nc)), c = () => {
 			n?.abortSignal && o && n.abortSignal.removeEventListener("abort", o);
 		};
 		if (o = () => (a && clearTimeout(a), c(), s()), n?.abortSignal && n.abortSignal.aborted) return s();
@@ -13594,24 +14308,24 @@ function ds(e, t, n) {
 		}, e), n?.abortSignal && n.abortSignal.addEventListener("abort", o);
 	});
 }
-function fs(e, t) {
+function ic(e, t) {
 	let n = e.headers.get(t);
 	if (!n) return;
 	let r = Number(n);
 	if (!Number.isNaN(r)) return r;
 }
-var ps = "Retry-After", ms = [
+var ac = "Retry-After", oc = [
 	"retry-after-ms",
 	"x-ms-retry-after-ms",
-	ps
+	ac
 ];
-function hs(e) {
+function sc(e) {
 	if (e && [429, 503].includes(e.status)) try {
-		for (let t of ms) {
-			let n = fs(e, t);
-			if (n === 0 || n) return n * (t === ps ? 1e3 : 1);
+		for (let t of oc) {
+			let n = ic(e, t);
+			if (n === 0 || n) return n * (t === ac ? 1e3 : 1);
 		}
-		let t = e.headers.get(ps);
+		let t = e.headers.get(ac);
 		if (!t) return;
 		let n = Date.parse(t) - Date.now();
 		return Number.isFinite(n) ? Math.max(0, n) : void 0;
@@ -13619,43 +14333,43 @@ function hs(e) {
 		return;
 	}
 }
-function gs(e) {
-	return Number.isFinite(hs(e));
+function cc(e) {
+	return Number.isFinite(sc(e));
 }
-function _s() {
+function lc() {
 	return {
 		name: "throttlingRetryStrategy",
 		retry({ response: e }) {
-			let t = hs(e);
+			let t = sc(e);
 			return Number.isFinite(t) ? { retryAfterInMs: t } : { skipStrategy: !0 };
 		}
 	};
 }
-var vs = 1e3, ys = 1e3 * 64;
-function bs(e = {}) {
-	let t = e.retryDelayInMs ?? vs, n = e.maxRetryDelayInMs ?? ys;
+var uc = 1e3, dc = 1e3 * 64;
+function fc(e = {}) {
+	let t = e.retryDelayInMs ?? uc, n = e.maxRetryDelayInMs ?? dc;
 	return {
 		name: "exponentialRetryStrategy",
 		retry({ retryCount: r, response: i, responseError: a }) {
-			let o = Ss(a), s = o && e.ignoreSystemErrors, c = xs(i), l = c && e.ignoreHttpStatusCodes;
-			return i && (gs(i) || !c) || l || s ? { skipStrategy: !0 } : a && !o && !c ? { errorToThrow: a } : ls(r, {
+			let o = mc(a), s = o && e.ignoreSystemErrors, c = pc(i), l = c && e.ignoreHttpStatusCodes;
+			return i && (cc(i) || !c) || l || s ? { skipStrategy: !0 } : a && !o && !c ? { errorToThrow: a } : tc(r, {
 				retryDelayInMs: t,
 				maxRetryDelayInMs: n
 			});
 		}
 	};
 }
-function xs(e) {
+function pc(e) {
 	return !!(e && e.status !== void 0 && (e.status >= 500 || e.status === 408) && e.status !== 501 && e.status !== 505);
 }
-function Ss(e) {
+function mc(e) {
 	return e ? e.code === "ETIMEDOUT" || e.code === "ESOCKETTIMEDOUT" || e.code === "ECONNREFUSED" || e.code === "ECONNRESET" || e.code === "ENOENT" || e.code === "ENOTFOUND" : !1;
 }
-var Cs = yo("ts-http-runtime retryPolicy"), ws = "retryPolicy";
-function Ts(e, t = { maxRetries: 3 }) {
-	let n = t.logger || Cs;
+var hc = ds("ts-http-runtime retryPolicy"), gc = "retryPolicy";
+function _c(e, t = { maxRetries: 3 }) {
+	let n = t.logger || hc;
 	return {
-		name: ws,
+		name: gc,
 		async sendRequest(r, i) {
 			let a, o, s = -1;
 			retryRequest: for (;;) {
@@ -13666,7 +14380,7 @@ function Ts(e, t = { maxRetries: 3 }) {
 					if (n.error(`Retry ${s}: Received an error from request`, r.requestId), o = e, !e || o.name !== "RestError") throw e;
 					a = o.response;
 				}
-				if (r.abortSignal?.aborted) throw n.error(`Retry ${s}: Request aborted.`), new Za();
+				if (r.abortSignal?.aborted) throw n.error(`Retry ${s}: Request aborted.`), new Wo();
 				if (s >= (t.maxRetries ?? 3)) {
 					if (n.info(`Retry ${s}: Maximum retries reached. Returning the last received response, or throwing the last received error.`), o) throw o;
 					if (a) return a;
@@ -13688,7 +14402,7 @@ function Ts(e, t = { maxRetries: 3 }) {
 					let { errorToThrow: c, retryAfterInMs: l, redirectTo: u } = i;
 					if (c) throw e.error(`Retry ${s}: Retry strategy ${t.name} throws error:`, c), c;
 					if (l || l === 0) {
-						e.info(`Retry ${s}: Retry strategy ${t.name} retries after ${l}`), await ds(l, void 0, { abortSignal: r.abortSignal });
+						e.info(`Retry ${s}: Retry strategy ${t.name} retries after ${l}`), await rc(l, void 0, { abortSignal: r.abortSignal });
 						continue retryRequest;
 					}
 					if (u) {
@@ -13702,52 +14416,52 @@ function Ts(e, t = { maxRetries: 3 }) {
 		}
 	};
 }
-var Es = "defaultRetryPolicy";
-function Ds(e = {}) {
+var vc = "defaultRetryPolicy";
+function yc(e = {}) {
 	return {
-		name: Es,
-		sendRequest: Ts([_s(), bs(e)], { maxRetries: e.maxRetries ?? 3 }).sendRequest
+		name: vc,
+		sendRequest: _c([lc(), fc(e)], { maxRetries: e.maxRetries ?? 3 }).sendRequest
 	};
 }
 typeof window < "u" && window.document, typeof self == "object" && typeof self?.importScripts == "function" && (self.constructor?.name === "DedicatedWorkerGlobalScope" || self.constructor?.name === "ServiceWorkerGlobalScope" || self.constructor?.name), typeof Deno < "u" && Deno.version !== void 0 && Deno.version.deno, typeof Bun < "u" && Bun.version;
-var Os = globalThis.process !== void 0 && !!globalThis.process.version && !!globalThis.process.versions?.node;
+var bc = globalThis.process !== void 0 && !!globalThis.process.version && !!globalThis.process.versions?.node;
 typeof navigator < "u" && navigator?.product;
-var ks = "formDataPolicy";
-function As(e) {
+var xc = "formDataPolicy";
+function Sc(e) {
 	let t = {};
 	for (let [n, r] of e.entries()) t[n] ??= [], t[n].push(r);
 	return t;
 }
-function js() {
+function Cc() {
 	return {
-		name: ks,
+		name: xc,
 		async sendRequest(e, t) {
-			if (Os && typeof FormData < "u" && e.body instanceof FormData && (e.formData = As(e.body), e.body = void 0), e.formData) {
+			if (bc && typeof FormData < "u" && e.body instanceof FormData && (e.formData = Sc(e.body), e.body = void 0), e.formData) {
 				let t = e.headers.get("Content-Type");
-				t && t.indexOf("application/x-www-form-urlencoded") !== -1 ? e.body = Ms(e.formData) : await Ns(e.formData, e), e.formData = void 0;
+				t && t.indexOf("application/x-www-form-urlencoded") !== -1 ? e.body = wc(e.formData) : await Tc(e.formData, e), e.formData = void 0;
 			}
 			return t(e);
 		}
 	};
 }
-function Ms(e) {
+function wc(e) {
 	let t = new URLSearchParams();
 	for (let [n, r] of Object.entries(e)) if (Array.isArray(r)) for (let e of r) t.append(n, e.toString());
 	else t.append(n, r.toString());
 	return t.toString();
 }
-async function Ns(e, t) {
+async function Tc(e, t) {
 	let n = t.headers.get("Content-Type");
 	if (n && !n.startsWith("multipart/form-data")) return;
 	t.headers.set("Content-Type", n ?? "multipart/form-data");
 	let r = [];
 	for (let [t, n] of Object.entries(e)) for (let e of Array.isArray(n) ? n : [n]) if (typeof e == "string") r.push({
-		headers: Co({ "Content-Disposition": `form-data; name="${t}"` }),
-		body: Bo(e, "utf-8")
+		headers: hs({ "Content-Disposition": `form-data; name="${t}"` }),
+		body: Ms(e, "utf-8")
 	});
 	else if (typeof e != "object" || !e) throw Error(`Unexpected value for key ${t}: ${e}. Value should be serialized to string first.`);
 	else {
-		let n = e.name || "blob", i = Co();
+		let n = e.name || "blob", i = hs();
 		i.set("Content-Disposition", `form-data; name="${t}"; filename="${n}"`), i.set("Content-Type", e.type || "application/octet-stream"), r.push({
 			headers: i,
 			body: e
@@ -13755,7 +14469,7 @@ async function Ns(e, t) {
 	}
 	t.multipartBody = { parts: r };
 }
-var Ps = /* @__PURE__ */ F(((e, t) => {
+var Ec = /* @__PURE__ */ F(((e, t) => {
 	var n = 1e3, r = n * 60, i = r * 60, a = i * 24, o = a * 7, s = a * 365.25;
 	t.exports = function(e, t) {
 		t ||= {};
@@ -13818,9 +14532,9 @@ var Ps = /* @__PURE__ */ F(((e, t) => {
 		var i = t >= n * 1.5;
 		return Math.round(e / n) + " " + r + (i ? "s" : "");
 	}
-})), Fs = /* @__PURE__ */ F(((e, t) => {
+})), Dc = /* @__PURE__ */ F(((e, t) => {
 	function n(e) {
-		n.debug = n, n.default = n, n.coerce = c, n.disable = o, n.enable = i, n.enabled = s, n.humanize = Ps(), n.destroy = l, Object.keys(e).forEach((t) => {
+		n.debug = n, n.default = n, n.coerce = c, n.disable = o, n.enable = i, n.enabled = s, n.humanize = Ec(), n.destroy = l, Object.keys(e).forEach((t) => {
 			n[t] = e[t];
 		}), n.names = [], n.skips = [], n.formatters = {};
 		function t(e) {
@@ -13891,7 +14605,7 @@ var Ps = /* @__PURE__ */ F(((e, t) => {
 		return n.enable(n.load()), n;
 	}
 	t.exports = n;
-})), Is = /* @__PURE__ */ F(((e, t) => {
+})), Oc = /* @__PURE__ */ F(((e, t) => {
 	e.formatArgs = r, e.save = i, e.load = a, e.useColors = n, e.storage = o(), e.destroy = (() => {
 		let e = !1;
 		return () => {
@@ -13931,7 +14645,7 @@ var Ps = /* @__PURE__ */ F(((e, t) => {
 			return localStorage;
 		} catch {}
 	}
-	t.exports = Fs()(e);
+	t.exports = Dc()(e);
 	var { formatters: s } = t.exports;
 	s.j = function(e) {
 		try {
@@ -13940,7 +14654,7 @@ var Ps = /* @__PURE__ */ F(((e, t) => {
 			return "[UnexpectedJSONParseError]: " + e.message;
 		}
 	};
-})), Ls = /* @__PURE__ */ F(((e) => {
+})), kc = /* @__PURE__ */ F(((e) => {
 	var t = e && e.__createBinding || (Object.create ? (function(e, t, n, r) {
 		r === void 0 && (r = n);
 		var i = Object.getOwnPropertyDescriptor(t, n);
@@ -13990,7 +14704,7 @@ var Ps = /* @__PURE__ */ F(((e, t) => {
 		return n.then = r.then.bind(r), n;
 	}
 	e.req = c;
-})), Rs = /* @__PURE__ */ F(((e) => {
+})), Ac = /* @__PURE__ */ F(((e) => {
 	var t = e && e.__createBinding || (Object.create ? (function(e, t, n, r) {
 		r === void 0 && (r = n);
 		var i = Object.getOwnPropertyDescriptor(t, n);
@@ -14019,7 +14733,7 @@ var Ps = /* @__PURE__ */ F(((e, t) => {
 	};
 	Object.defineProperty(e, "__esModule", { value: !0 }), e.Agent = void 0;
 	var a = r(L("net")), o = r(L("http")), s = L("https");
-	i(Ls(), e);
+	i(kc(), e);
 	var c = Symbol("AgentBaseInternalState");
 	e.Agent = class extends o.Agent {
 		constructor(e) {
@@ -14081,12 +14795,12 @@ var Ps = /* @__PURE__ */ F(((e, t) => {
 			this[c] && (this[c].protocol = e);
 		}
 	};
-})), zs = /* @__PURE__ */ F(((e) => {
+})), jc = /* @__PURE__ */ F(((e) => {
 	var t = e && e.__importDefault || function(e) {
 		return e && e.__esModule ? e : { default: e };
 	};
 	Object.defineProperty(e, "__esModule", { value: !0 }), e.parseProxyResponse = void 0;
-	var n = (0, t(Is()).default)("https-proxy-agent:parse-proxy-response");
+	var n = (0, t(Oc()).default)("https-proxy-agent:parse-proxy-response");
 	function r(e) {
 		return new Promise((t, r) => {
 			let i = 0, a = [];
@@ -14133,7 +14847,7 @@ var Ps = /* @__PURE__ */ F(((e, t) => {
 		});
 	}
 	e.parseProxyResponse = r;
-})), Bs = /* @__PURE__ */ F(((e) => {
+})), Mc = /* @__PURE__ */ F(((e) => {
 	var t = e && e.__createBinding || (Object.create ? (function(e, t, n, r) {
 		r === void 0 && (r = n);
 		var i = Object.getOwnPropertyDescriptor(t, n);
@@ -14161,7 +14875,7 @@ var Ps = /* @__PURE__ */ F(((e, t) => {
 		return e && e.__esModule ? e : { default: e };
 	};
 	Object.defineProperty(e, "__esModule", { value: !0 }), e.HttpsProxyAgent = void 0;
-	var a = r(L("net")), o = r(L("tls")), s = i(L("assert")), c = i(Is()), l = Rs(), u = L("url"), d = zs(), f = (0, c.default)("https-proxy-agent"), p = (e) => e.servername === void 0 && e.host && !a.isIP(e.host) ? {
+	var a = r(L("net")), o = r(L("tls")), s = i(L("assert")), c = i(Oc()), l = Ac(), u = L("url"), d = jc(), f = (0, c.default)("https-proxy-agent"), p = (e) => e.servername === void 0 && e.host && !a.isIP(e.host) ? {
 		...e,
 		servername: e.host
 	} : e, m = class extends l.Agent {
@@ -14210,7 +14924,7 @@ var Ps = /* @__PURE__ */ F(((e, t) => {
 		for (r in e) t.includes(r) || (n[r] = e[r]);
 		return n;
 	}
-})), Vs = /* @__PURE__ */ F(((e) => {
+})), Nc = /* @__PURE__ */ F(((e) => {
 	var t = e && e.__createBinding || (Object.create ? (function(e, t, n, r) {
 		r === void 0 && (r = n);
 		var i = Object.getOwnPropertyDescriptor(t, n);
@@ -14238,7 +14952,7 @@ var Ps = /* @__PURE__ */ F(((e, t) => {
 		return e && e.__esModule ? e : { default: e };
 	};
 	Object.defineProperty(e, "__esModule", { value: !0 }), e.HttpProxyAgent = void 0;
-	var a = r(L("net")), o = r(L("tls")), s = i(Is()), c = L("events"), l = Rs(), u = L("url"), d = (0, s.default)("http-proxy-agent"), f = class extends l.Agent {
+	var a = r(L("net")), o = r(L("tls")), s = i(Oc()), c = L("events"), l = Ac(), u = L("url"), d = (0, s.default)("http-proxy-agent"), f = class extends l.Agent {
 		constructor(e, t) {
 			super(t), this.proxy = typeof e == "string" ? new u.URL(e) : e, this.proxyHeaders = t?.headers ?? {}, d("Creating new HttpProxyAgent instance: %o", this.proxy.href);
 			let n = (this.proxy.hostname || this.proxy.host).replace(/^\[|\]$/g, ""), r = this.proxy.port ? parseInt(this.proxy.port, 10) : this.proxy.protocol === "https:" ? 443 : 80;
@@ -14279,17 +14993,17 @@ var Ps = /* @__PURE__ */ F(((e, t) => {
 		for (r in e) t.includes(r) || (n[r] = e[r]);
 		return n;
 	}
-})), Hs = Bs(), Us = Vs(), Ws = "HTTPS_PROXY", Gs = "HTTP_PROXY", Ks = "ALL_PROXY", qs = "NO_PROXY", Js = "proxyPolicy", Ys = [], Xs = !1, Zs = /* @__PURE__ */ new Map();
-function Qs(e) {
+})), Pc = Mc(), Fc = Nc(), Ic = "HTTPS_PROXY", Lc = "HTTP_PROXY", Rc = "ALL_PROXY", zc = "NO_PROXY", Bc = "proxyPolicy", Vc = [], Hc = !1, Uc = /* @__PURE__ */ new Map();
+function Wc(e) {
 	if (process.env[e]) return process.env[e];
 	if (process.env[e.toLowerCase()]) return process.env[e.toLowerCase()];
 }
-function $s() {
+function Gc() {
 	if (!process) return;
-	let e = Qs(Ws), t = Qs(Ks), n = Qs(Gs);
+	let e = Wc(Ic), t = Wc(Rc), n = Wc(Lc);
 	return e || t || n;
 }
-function ec(e, t, n) {
+function Kc(e, t, n) {
 	if (t.length === 0) return !1;
 	let r = new URL(e).hostname;
 	if (n?.has(r)) return n.get(r);
@@ -14297,12 +15011,12 @@ function ec(e, t, n) {
 	for (let e of t) e[0] === "." ? (r.endsWith(e) || r.length === e.length - 1 && r === e.slice(1)) && (i = !0) : r === e && (i = !0);
 	return n?.set(r, i), i;
 }
-function tc() {
-	let e = Qs(qs);
-	return Xs = !0, e ? e.split(",").map((e) => e.trim()).filter((e) => e.length) : [];
+function qc() {
+	let e = Wc(zc);
+	return Hc = !0, e ? e.split(",").map((e) => e.trim()).filter((e) => e.length) : [];
 }
-function nc(e) {
-	if (!e && (e = $s(), !e)) return;
+function Jc(e) {
+	if (!e && (e = Gc(), !e)) return;
 	let t = new URL(e);
 	return {
 		host: (t.protocol ? t.protocol + "//" : "") + t.hostname,
@@ -14311,11 +15025,11 @@ function nc(e) {
 		password: t.password
 	};
 }
-function rc() {
-	let e = $s();
+function Yc() {
+	let e = Gc();
 	return e ? new URL(e) : void 0;
 }
-function ic(e) {
+function Xc(e) {
 	let t;
 	try {
 		t = new URL(e.host);
@@ -14324,41 +15038,41 @@ function ic(e) {
 	}
 	return t.port = String(e.port), e.username && (t.username = e.username), e.password && (t.password = e.password), t;
 }
-function ac(e, t, n) {
+function Zc(e, t, n) {
 	if (e.agent) return;
 	let r = new URL(e.url).protocol !== "https:";
-	e.tlsSettings && Vo.warning("TLS settings are not supported in combination with custom Proxy, certificates provided to the client will be ignored.");
+	e.tlsSettings && Ns.warning("TLS settings are not supported in combination with custom Proxy, certificates provided to the client will be ignored.");
 	let i = e.headers.toJSON();
-	r ? (t.httpProxyAgent ||= new Us.HttpProxyAgent(n, { headers: i }), e.agent = t.httpProxyAgent) : (t.httpsProxyAgent ||= new Hs.HttpsProxyAgent(n, { headers: i }), e.agent = t.httpsProxyAgent);
+	r ? (t.httpProxyAgent ||= new Fc.HttpProxyAgent(n, { headers: i }), e.agent = t.httpProxyAgent) : (t.httpsProxyAgent ||= new Pc.HttpsProxyAgent(n, { headers: i }), e.agent = t.httpsProxyAgent);
 }
-function oc(e, t) {
-	Xs || Ys.push(...tc());
-	let n = e ? ic(e) : rc(), r = {};
+function Qc(e, t) {
+	Hc || Vc.push(...qc());
+	let n = e ? Xc(e) : Yc(), r = {};
 	return {
-		name: Js,
+		name: Bc,
 		async sendRequest(e, i) {
-			return !e.proxySettings && n && !ec(e.url, t?.customNoProxyList ?? Ys, t?.customNoProxyList ? void 0 : Zs) ? ac(e, r, n) : e.proxySettings && ac(e, r, ic(e.proxySettings)), i(e);
+			return !e.proxySettings && n && !Kc(e.url, t?.customNoProxyList ?? Vc, t?.customNoProxyList ? void 0 : Uc) ? Zc(e, r, n) : e.proxySettings && Zc(e, r, Xc(e.proxySettings)), i(e);
 		}
 	};
 }
-var sc = "agentPolicy";
-function cc(e) {
+var $c = "agentPolicy";
+function el(e) {
 	return {
-		name: sc,
+		name: $c,
 		sendRequest: async (t, n) => (t.agent ||= e, n(t))
 	};
 }
-var lc = "tlsPolicy";
-function uc(e) {
+var tl = "tlsPolicy";
+function nl(e) {
 	return {
-		name: lc,
+		name: tl,
 		sendRequest: async (t, n) => (t.tlsSettings ||= e, n(t))
 	};
 }
-function dc(e) {
+function rl(e) {
 	return typeof e.stream == "function";
 }
-async function* fc() {
+async function* il() {
 	let e = this.getReader();
 	try {
 		for (;;) {
@@ -14370,66 +15084,66 @@ async function* fc() {
 		e.releaseLock();
 	}
 }
-function pc(e) {
-	e[Symbol.asyncIterator] || (e[Symbol.asyncIterator] = fc.bind(e)), e.values ||= fc.bind(e);
+function al(e) {
+	e[Symbol.asyncIterator] || (e[Symbol.asyncIterator] = il.bind(e)), e.values ||= il.bind(e);
 }
-function mc(e) {
-	return e instanceof ReadableStream ? (pc(e), A.fromWeb(e)) : e;
+function ol(e) {
+	return e instanceof ReadableStream ? (al(e), A.fromWeb(e)) : e;
 }
-function hc(e) {
-	return e instanceof Uint8Array ? A.from(Buffer.from(e)) : dc(e) ? mc(e.stream()) : mc(e);
+function sl(e) {
+	return e instanceof Uint8Array ? A.from(Buffer.from(e)) : rl(e) ? ol(e.stream()) : ol(e);
 }
-async function gc(e) {
+async function cl(e) {
 	return function() {
-		let t = e.map((e) => typeof e == "function" ? e() : e).map(hc);
+		let t = e.map((e) => typeof e == "function" ? e() : e).map(sl);
 		return A.from((async function* () {
 			for (let e of t) for await (let t of e) yield t;
 		})());
 	};
 }
-function _c() {
-	return `----AzSDKFormBoundary${wo()}`;
+function ll() {
+	return `----AzSDKFormBoundary${gs()}`;
 }
-function vc(e) {
+function ul(e) {
 	let t = "";
 	for (let [n, r] of e) t += `${n}: ${r}\r\n`;
 	return t;
 }
-function yc(e) {
+function dl(e) {
 	if (e instanceof Uint8Array) return e.byteLength;
-	if (dc(e)) return e.size === -1 ? void 0 : e.size;
+	if (rl(e)) return e.size === -1 ? void 0 : e.size;
 }
-function bc(e) {
+function fl(e) {
 	let t = 0;
 	for (let n of e) {
-		let e = yc(n);
+		let e = dl(n);
 		if (e === void 0) return;
 		t += e;
 	}
 	return t;
 }
-async function xc(e, t, n) {
+async function pl(e, t, n) {
 	let r = [
-		Bo(`--${n}`, "utf-8"),
+		Ms(`--${n}`, "utf-8"),
 		...t.flatMap((e) => [
-			Bo("\r\n", "utf-8"),
-			Bo(vc(e.headers), "utf-8"),
-			Bo("\r\n", "utf-8"),
+			Ms("\r\n", "utf-8"),
+			Ms(ul(e.headers), "utf-8"),
+			Ms("\r\n", "utf-8"),
 			e.body,
-			Bo(`\r\n--${n}`, "utf-8")
+			Ms(`\r\n--${n}`, "utf-8")
 		]),
-		Bo("--\r\n\r\n", "utf-8")
-	], i = bc(r);
-	i && e.headers.set("Content-Length", i), e.body = await gc(r);
+		Ms("--\r\n\r\n", "utf-8")
+	], i = fl(r);
+	i && e.headers.set("Content-Length", i), e.body = await cl(r);
 }
-var Sc = "multipartPolicy", Cc = 70, wc = /* @__PURE__ */ new Set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'()+,-./:=?");
-function Tc(e) {
-	if (e.length > Cc) throw Error(`Multipart boundary "${e}" exceeds maximum length of 70 characters`);
-	if (Array.from(e).some((e) => !wc.has(e))) throw Error(`Multipart boundary "${e}" contains invalid characters`);
+var ml = "multipartPolicy", hl = 70, gl = /* @__PURE__ */ new Set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'()+,-./:=?");
+function _l(e) {
+	if (e.length > hl) throw Error(`Multipart boundary "${e}" exceeds maximum length of 70 characters`);
+	if (Array.from(e).some((e) => !gl.has(e))) throw Error(`Multipart boundary "${e}" contains invalid characters`);
 }
-function Ec() {
+function vl() {
 	return {
-		name: Sc,
+		name: ml,
 		async sendRequest(e, t) {
 			if (!e.multipartBody) return t(e);
 			if (e.body) throw Error("multipartBody and regular body cannot be set at the same time");
@@ -14437,43 +15151,43 @@ function Ec() {
 			if (!i) throw Error(`Got multipart request body, but content-type header was not multipart: ${r}`);
 			let [, a, o] = i;
 			if (o && n && o !== n) throw Error(`Multipart boundary was specified as ${o} in the header, but got ${n} in the request body`);
-			return n ??= o, n ? Tc(n) : n = _c(), e.headers.set("Content-Type", `${a}; boundary=${n}`), await xc(e, e.multipartBody.parts, n), e.multipartBody = void 0, t(e);
+			return n ??= o, n ? _l(n) : n = ll(), e.headers.set("Content-Type", `${a}; boundary=${n}`), await pl(e, e.multipartBody.parts, n), e.multipartBody = void 0, t(e);
 		}
 	};
 }
-function Dc() {
-	return ko();
+function yl() {
+	return xs();
 }
-var Oc = _o({
+var bl = ls({
 	logLevelEnvVarName: "AZURE_LOG_LEVEL",
 	namespace: "azure"
 });
-Oc.logger;
-function kc(e) {
-	return Oc.createClientLogger(e);
+bl.logger;
+function xl(e) {
+	return bl.createClientLogger(e);
 }
-var Ac = kc("core-rest-pipeline");
-function jc(e = {}) {
-	return ts({
-		logger: Ac.info,
+var Sl = xl("core-rest-pipeline");
+function Cl(e = {}) {
+	return qs({
+		logger: Sl.info,
 		...e
 	});
 }
-var Mc = ns;
-function Nc(e = {}) {
-	return is(e);
+var wl = Js;
+function Tl(e = {}) {
+	return Xs(e);
 }
-function Pc() {
+function El() {
 	return "User-Agent";
 }
-async function Fc(e) {
+async function Dl(e) {
 	if (ee && ee.versions) {
 		let t = `${N.type()} ${N.release()}; ${N.arch()}`, n = ee.versions;
 		n.bun ? e.set("Bun", `${n.bun} (${t})`) : n.deno ? e.set("Deno", `${n.deno} (${t})`) : n.node && e.set("Node", `${n.node} (${t})`);
 	}
 }
-var Ic = "1.22.2";
-function Lc(e) {
+var Ol = "1.22.2";
+function kl(e) {
 	let t = [];
 	for (let [n, r] of e) {
 		let e = r ? `${n}/${r}` : n;
@@ -14481,35 +15195,35 @@ function Lc(e) {
 	}
 	return t.join(" ");
 }
-function Rc() {
-	return Pc();
+function Al() {
+	return El();
 }
-async function zc(e) {
+async function jl(e) {
 	let t = /* @__PURE__ */ new Map();
-	t.set("core-rest-pipeline", Ic), await Fc(t);
-	let n = Lc(t);
+	t.set("core-rest-pipeline", Ol), await Dl(t);
+	let n = kl(t);
 	return e ? `${e} ${n}` : n;
 }
-var Bc = Rc(), Vc = "userAgentPolicy";
-function Hc(e = {}) {
-	let t = zc(e.userAgentPrefix);
+var Ml = Al(), Nl = "userAgentPolicy";
+function Pl(e = {}) {
+	let t = jl(e.userAgentPrefix);
 	return {
-		name: Vc,
+		name: Nl,
 		async sendRequest(e, n) {
-			return e.headers.has(Bc) || e.headers.set(Bc, await t), n(e);
+			return e.headers.has(Ml) || e.headers.set(Ml, await t), n(e);
 		}
 	};
 }
-var Uc = class extends Error {
+var Fl = class extends Error {
 	constructor(e) {
 		super(e), this.name = "AbortError";
 	}
 };
-function Wc(e, t) {
+function Il(e, t) {
 	let { cleanupBeforeAbort: n, abortSignal: r, abortErrorMsg: i } = t ?? {};
 	return new Promise((t, a) => {
 		function o() {
-			a(new Uc(i ?? "The operation was aborted."));
+			a(new Fl(i ?? "The operation was aborted."));
 		}
 		function s() {
 			r?.removeEventListener("abort", c);
@@ -14530,19 +15244,19 @@ function Wc(e, t) {
 		r?.addEventListener("abort", c);
 	});
 }
-var Gc = "The delay was aborted.";
-function Kc(e, t) {
+var Ll = "The delay was aborted.";
+function Rl(e, t) {
 	let n, { abortSignal: r, abortErrorMsg: i } = t ?? {};
-	return Wc((t) => {
+	return Il((t) => {
 		n = setTimeout(t, e);
 	}, {
 		cleanupBeforeAbort: () => clearTimeout(n),
 		abortSignal: r,
-		abortErrorMsg: i ?? Gc
+		abortErrorMsg: i ?? Ll
 	});
 }
-function qc(e) {
-	if (jo(e)) return e.message;
+function zl(e) {
+	if (Cs(e)) return e.message;
 	{
 		let t;
 		try {
@@ -14553,70 +15267,70 @@ function qc(e) {
 		return `Unknown error ${t}`;
 	}
 }
-function Jc(e) {
-	return jo(e);
+function Bl(e) {
+	return Cs(e);
 }
-function Yc() {
-	return wo();
+function Vl() {
+	return gs();
 }
-var Xc = Os, Zc = Symbol("rawContent");
-function Qc(e) {
-	return typeof e[Zc] == "function";
+var Hl = bc, Ul = Symbol("rawContent");
+function Wl(e) {
+	return typeof e[Ul] == "function";
 }
-function $c(e) {
-	return Qc(e) ? e[Zc]() : e;
+function Gl(e) {
+	return Wl(e) ? e[Ul]() : e;
 }
-var el = Sc;
-function tl() {
-	let e = Ec();
+var Kl = ml;
+function ql() {
+	let e = vl();
 	return {
-		name: el,
+		name: Kl,
 		sendRequest: async (t, n) => {
-			if (t.multipartBody) for (let e of t.multipartBody.parts) Qc(e.body) && (e.body = $c(e.body));
+			if (t.multipartBody) for (let e of t.multipartBody.parts) Wl(e.body) && (e.body = Gl(e.body));
 			return e.sendRequest(t, n);
 		}
 	};
 }
-var nl = os;
-function rl() {
-	return ss();
+var Jl = Qs;
+function Yl() {
+	return $s();
 }
-function il(e = {}) {
-	return Ds(e);
+function Xl(e = {}) {
+	return yc(e);
 }
-function al() {
-	return js();
+function Zl() {
+	return Cc();
 }
-function ol(e) {
-	return nc(e);
+function Ql(e) {
+	return Jc(e);
 }
-function sl(e, t) {
-	return oc(e, t);
+function $l(e, t) {
+	return Qc(e, t);
 }
-var cl = "setClientRequestIdPolicy";
-function ll(e = "x-ms-client-request-id") {
+var eu = "setClientRequestIdPolicy";
+function tu(e = "x-ms-client-request-id") {
 	return {
-		name: cl,
+		name: eu,
 		async sendRequest(t, n) {
 			return t.headers.has(e) || t.headers.set(e, t.requestId), n(t);
 		}
 	};
 }
-function ul(e) {
-	return cc(e);
+function nu(e) {
+	return el(e);
 }
-function dl(e) {
-	return uc(e);
+function ru(e) {
+	return nl(e);
 }
-var fl = {
+var iu = {
 	span: Symbol.for("@azure/core-tracing span"),
 	namespace: Symbol.for("@azure/core-tracing namespace")
 };
-function pl(e = {}) {
-	let t = new ml(e.parentContext);
-	return e.span && (t = t.setValue(fl.span, e.span)), e.namespace && (t = t.setValue(fl.namespace, e.namespace)), t;
+function au(e = {}) {
+	let t = new ou(e.parentContext);
+	return e.span && (t = t.setValue(iu.span, e.span)), e.namespace && (t = t.setValue(iu.namespace, e.namespace)), t;
 }
-var ml = class e {
+var ou = class e {
 	_contextMap;
 	constructor(t) {
 		this._contextMap = t instanceof e ? new Map(t._contextMap) : /* @__PURE__ */ new Map();
@@ -14632,10 +15346,10 @@ var ml = class e {
 		let n = new e(this);
 		return n._contextMap.delete(t), n;
 	}
-}, hl = (/* @__PURE__ */ F(((e) => {
+}, su = (/* @__PURE__ */ F(((e) => {
 	Object.defineProperty(e, "__esModule", { value: !0 }), e.state = void 0, e.state = { instrumenterImplementation: void 0 };
 })))().state;
-function gl() {
+function cu() {
 	return {
 		end: () => {},
 		isRecording: () => !1,
@@ -14645,32 +15359,32 @@ function gl() {
 		addEvent: () => {}
 	};
 }
-function _l() {
+function lu() {
 	return {
 		createRequestHeaders: () => ({}),
 		parseTraceparentHeader: () => {},
 		startSpan: (e, t) => ({
-			span: gl(),
-			tracingContext: pl({ parentContext: t.tracingContext })
+			span: cu(),
+			tracingContext: au({ parentContext: t.tracingContext })
 		}),
 		withContext(e, t, ...n) {
 			return t(...n);
 		}
 	};
 }
-function vl() {
-	return hl.instrumenterImplementation ||= _l(), hl.instrumenterImplementation;
+function uu() {
+	return su.instrumenterImplementation ||= lu(), su.instrumenterImplementation;
 }
-function yl(e) {
+function du(e) {
 	let { namespace: t, packageName: n, packageVersion: r } = e;
 	function i(e, i, a) {
-		let o = vl().startSpan(e, {
+		let o = uu().startSpan(e, {
 			...a,
 			packageName: n,
 			packageVersion: r,
 			tracingContext: i?.tracingOptions?.tracingContext
 		}), s = o.tracingContext, c = o.span;
-		return s.getValue(fl.namespace) || (s = s.setValue(fl.namespace, t)), c.setAttribute("az.namespace", s.getValue(fl.namespace)), {
+		return s.getValue(iu.namespace) || (s = s.setValue(iu.namespace, t)), c.setAttribute("az.namespace", s.getValue(iu.namespace)), {
 			span: c,
 			updatedOptions: Object.assign({}, i, { tracingOptions: {
 				...i?.tracingOptions,
@@ -14693,13 +15407,13 @@ function yl(e) {
 		}
 	}
 	function o(e, t, ...n) {
-		return vl().withContext(e, t, ...n);
+		return uu().withContext(e, t, ...n);
 	}
 	function s(e) {
-		return vl().parseTraceparentHeader(e);
+		return uu().parseTraceparentHeader(e);
 	}
 	function c(e) {
-		return vl().createRequestHeaders(e);
+		return uu().createRequestHeaders(e);
 	}
 	return {
 		startSpan: i,
@@ -14709,15 +15423,15 @@ function yl(e) {
 		createRequestHeaders: c
 	};
 }
-var bl = Ro;
-function xl(e) {
-	return zo(e);
+var fu = As;
+function pu(e) {
+	return js(e);
 }
-var Sl = "tracingPolicy";
-function Cl(e = {}) {
-	let t = zc(e.userAgentPrefix), n = new Io({ additionalAllowedQueryParameters: e.additionalAllowedQueryParameters }), r = wl();
+var mu = "tracingPolicy";
+function hu(e = {}) {
+	let t = jl(e.userAgentPrefix), n = new Os({ additionalAllowedQueryParameters: e.additionalAllowedQueryParameters }), r = gu();
 	return {
-		name: Sl,
+		name: mu,
 		async sendRequest(e, i) {
 			if (!r) return i(e);
 			let a = await t, o = {
@@ -14727,30 +15441,30 @@ function Cl(e = {}) {
 				requestId: e.requestId
 			};
 			a && (o["http.user_agent"] = a);
-			let { span: s, tracingContext: c } = Tl(r, e, o) ?? {};
+			let { span: s, tracingContext: c } = _u(r, e, o) ?? {};
 			if (!s || !c) return i(e);
 			try {
 				let t = await r.withContext(c, i, e);
-				return Dl(s, t), t;
+				return yu(s, t), t;
 			} catch (e) {
-				throw El(s, e), e;
+				throw vu(s, e), e;
 			}
 		}
 	};
 }
-function wl() {
+function gu() {
 	try {
-		return yl({
+		return du({
 			namespace: "",
 			packageName: "@azure/core-rest-pipeline",
-			packageVersion: Ic
+			packageVersion: Ol
 		});
 	} catch (e) {
-		Ac.warning(`Error when creating the TracingClient: ${qc(e)}`);
+		Sl.warning(`Error when creating the TracingClient: ${zl(e)}`);
 		return;
 	}
 }
-function Tl(e, t, n) {
+function _u(e, t, n) {
 	try {
 		let { span: r, updatedOptions: i } = e.startSpan(`HTTP ${t.method}`, { tracingOptions: t.tracingOptions }, {
 			spanKind: "client",
@@ -14767,30 +15481,30 @@ function Tl(e, t, n) {
 			tracingContext: i.tracingOptions.tracingContext
 		};
 	} catch (e) {
-		Ac.warning(`Skipping creating a tracing span due to an error: ${qc(e)}`);
+		Sl.warning(`Skipping creating a tracing span due to an error: ${zl(e)}`);
 		return;
 	}
 }
-function El(e, t) {
+function vu(e, t) {
 	try {
 		e.setStatus({
 			status: "error",
-			error: Jc(t) ? t : void 0
-		}), xl(t) && t.statusCode && e.setAttribute("http.status_code", t.statusCode), e.end();
+			error: Bl(t) ? t : void 0
+		}), pu(t) && t.statusCode && e.setAttribute("http.status_code", t.statusCode), e.end();
 	} catch (e) {
-		Ac.warning(`Skipping tracing span processing due to an error: ${qc(e)}`);
+		Sl.warning(`Skipping tracing span processing due to an error: ${zl(e)}`);
 	}
 }
-function Dl(e, t) {
+function yu(e, t) {
 	try {
 		e.setAttribute("http.status_code", t.status);
 		let n = t.headers.get("x-ms-request-id");
 		n && e.setAttribute("serviceRequestId", n), t.status >= 400 && e.setStatus({ status: "error" }), e.end();
 	} catch (e) {
-		Ac.warning(`Skipping tracing span processing due to an error: ${qc(e)}`);
+		Sl.warning(`Skipping tracing span processing due to an error: ${zl(e)}`);
 	}
 }
-function Ol(e) {
+function bu(e) {
 	if (e instanceof AbortSignal) return { abortSignal: e };
 	if (e.aborted) return { abortSignal: AbortSignal.abort(e.reason) };
 	let t = new AbortController(), n = !0;
@@ -14805,13 +15519,13 @@ function Ol(e) {
 		cleanup: r
 	};
 }
-var kl = "wrapAbortSignalLikePolicy";
-function Al() {
+var xu = "wrapAbortSignalLikePolicy";
+function Su() {
 	return {
-		name: kl,
+		name: xu,
 		sendRequest: async (e, t) => {
 			if (!e.abortSignal) return t(e);
-			let { abortSignal: n, cleanup: r } = Ol(e.abortSignal);
+			let { abortSignal: n, cleanup: r } = bu(e.abortSignal);
 			e.abortSignal = n;
 			try {
 				return await t(e);
@@ -14821,17 +15535,17 @@ function Al() {
 		}
 	};
 }
-function jl(e) {
-	let t = Dc();
-	return Xc && (e.agent && t.addPolicy(ul(e.agent)), e.tlsOptions && t.addPolicy(dl(e.tlsOptions)), t.addPolicy(sl(e.proxyOptions)), t.addPolicy(rl())), t.addPolicy(Al()), t.addPolicy(al(), { beforePolicies: [el] }), t.addPolicy(Hc(e.userAgentOptions)), t.addPolicy(ll(e.telemetryOptions?.clientRequestIdHeaderName)), t.addPolicy(tl(), { afterPhase: "Deserialize" }), t.addPolicy(il(e.retryOptions), { phase: "Retry" }), t.addPolicy(Cl({
+function Cu(e) {
+	let t = yl();
+	return Hl && (e.agent && t.addPolicy(nu(e.agent)), e.tlsOptions && t.addPolicy(ru(e.tlsOptions)), t.addPolicy($l(e.proxyOptions)), t.addPolicy(Yl())), t.addPolicy(Su()), t.addPolicy(Zl(), { beforePolicies: [Kl] }), t.addPolicy(Pl(e.userAgentOptions)), t.addPolicy(tu(e.telemetryOptions?.clientRequestIdHeaderName)), t.addPolicy(ql(), { afterPhase: "Deserialize" }), t.addPolicy(Xl(e.retryOptions), { phase: "Retry" }), t.addPolicy(hu({
 		...e.userAgentOptions,
 		...e.loggingOptions
-	}), { afterPhase: "Retry" }), Xc && t.addPolicy(Nc(e.redirectOptions), { afterPhase: "Retry" }), t.addPolicy(jc(e.loggingOptions), { afterPhase: "Sign" }), t;
+	}), { afterPhase: "Retry" }), Hl && t.addPolicy(Tl(e.redirectOptions), { afterPhase: "Retry" }), t.addPolicy(Cl(e.loggingOptions), { afterPhase: "Sign" }), t;
 }
-function Ml() {
-	let e = $o();
+function wu() {
+	let e = Gs();
 	return { async sendRequest(t) {
-		let { abortSignal: n, cleanup: r } = t.abortSignal ? Ol(t.abortSignal) : {};
+		let { abortSignal: n, cleanup: r } = t.abortSignal ? bu(t.abortSignal) : {};
 		try {
 			return t.abortSignal = n, await e.sendRequest(t);
 		} finally {
@@ -14839,18 +15553,18 @@ function Ml() {
 		}
 	} };
 }
-function Nl(e) {
-	return Co(e);
+function Tu(e) {
+	return hs(e);
 }
-function Pl(e) {
-	return Eo(e);
+function Eu(e) {
+	return vs(e);
 }
-var Fl = {
+var Du = {
 	forcedRefreshWindowInMs: 1e3,
 	retryIntervalInMs: 3e3,
 	refreshWindowInMs: 1e3 * 60 * 2
 };
-async function Il(e, t, n) {
+async function Ou(e, t, n) {
 	async function r() {
 		if (Date.now() < n) try {
 			return await e();
@@ -14864,12 +15578,12 @@ async function Il(e, t, n) {
 		}
 	}
 	let i = await r();
-	for (; i === null;) await Kc(t), i = await r();
+	for (; i === null;) await Rl(t), i = await r();
 	return i;
 }
-function Ll(e, t) {
+function ku(e, t) {
 	let n = null, r = null, i, a = {
-		...Fl,
+		...Du,
 		...t
 	}, o = {
 		get isRefreshing() {
@@ -14883,7 +15597,7 @@ function Ll(e, t) {
 		}
 	};
 	function s(t, s) {
-		return o.isRefreshing || (n = Il(() => e.getToken(t, s), a.retryIntervalInMs, r?.expiresOnTimestamp ?? Date.now()).then((e) => (n = null, r = e, i = s.tenantId, r)).catch((e) => {
+		return o.isRefreshing || (n = Ou(() => e.getToken(t, s), a.retryIntervalInMs, r?.expiresOnTimestamp ?? Date.now()).then((e) => (n = null, r = e, i = s.tenantId, r)).catch((e) => {
 			throw n = null, r = null, i = void 0, e;
 		})), n;
 	}
@@ -14892,16 +15606,16 @@ function Ll(e, t) {
 		return n && (r = null), a || n || o.mustRefresh ? s(e, t) : (o.shouldRefresh && s(e, t), r);
 	};
 }
-var Rl = "bearerTokenAuthenticationPolicy";
-async function zl(e, t) {
+var Au = "bearerTokenAuthenticationPolicy";
+async function ju(e, t) {
 	try {
 		return [await t(e), void 0];
 	} catch (e) {
-		if (xl(e) && e.response) return [e.response, e];
+		if (pu(e) && e.response) return [e.response, e];
 		throw e;
 	}
 }
-async function Bl(e) {
+async function Mu(e) {
 	let { scopes: t, getAccessToken: n, request: r } = e, i = await n(t, {
 		abortSignal: r.abortSignal,
 		tracingOptions: r.tracingOptions,
@@ -14909,23 +15623,23 @@ async function Bl(e) {
 	});
 	i && e.request.headers.set("Authorization", `Bearer ${i.token}`);
 }
-function Vl(e) {
+function Nu(e) {
 	return e.status === 401 && e.headers.has("WWW-Authenticate");
 }
-async function Hl(e, t) {
+async function Pu(e, t) {
 	let { scopes: n } = e, r = await e.getAccessToken(n, {
 		enableCae: !0,
 		claims: t
 	});
 	return r ? (e.request.headers.set("Authorization", `${r.tokenType ?? "Bearer"} ${r.token}`), !0) : !1;
 }
-function Ul(e) {
-	let { credential: t, scopes: n, challengeCallbacks: r } = e, i = e.logger || Ac, a = {
-		authorizeRequest: r?.authorizeRequest?.bind(r) ?? Bl,
+function Fu(e) {
+	let { credential: t, scopes: n, challengeCallbacks: r } = e, i = e.logger || Sl, a = {
+		authorizeRequest: r?.authorizeRequest?.bind(r) ?? Mu,
 		authorizeRequestOnChallenge: r?.authorizeRequestOnChallenge?.bind(r)
-	}, o = t ? Ll(t) : () => Promise.resolve(null);
+	}, o = t ? ku(t) : () => Promise.resolve(null);
 	return {
-		name: Rl,
+		name: Au,
 		async sendRequest(e, t) {
 			if (!e.url.toLowerCase().startsWith("https://")) throw Error("Bearer token authentication is not permitted for non-TLS protected (non-https) URLs.");
 			await a.authorizeRequest({
@@ -14935,8 +15649,8 @@ function Ul(e) {
 				logger: i
 			});
 			let r, s, c;
-			if ([r, s] = await zl(e, t), Vl(r)) {
-				let l = Gl(r.headers.get("WWW-Authenticate"));
+			if ([r, s] = await ju(e, t), Nu(r)) {
+				let l = Lu(r.headers.get("WWW-Authenticate"));
 				if (l) {
 					let a;
 					try {
@@ -14944,33 +15658,33 @@ function Ul(e) {
 					} catch {
 						return i.warning(`The WWW-Authenticate header contains "claims" that cannot be parsed. Unable to perform the Continuous Access Evaluation authentication flow. Unparsable claims: ${l}`), r;
 					}
-					c = await Hl({
+					c = await Pu({
 						scopes: Array.isArray(n) ? n : [n],
 						response: r,
 						request: e,
 						getAccessToken: o,
 						logger: i
-					}, a), c && ([r, s] = await zl(e, t));
+					}, a), c && ([r, s] = await ju(e, t));
 				} else if (a.authorizeRequestOnChallenge && (c = await a.authorizeRequestOnChallenge({
 					scopes: Array.isArray(n) ? n : [n],
 					request: e,
 					response: r,
 					getAccessToken: o,
 					logger: i
-				}), c && ([r, s] = await zl(e, t)), Vl(r) && (l = Gl(r.headers.get("WWW-Authenticate")), l))) {
+				}), c && ([r, s] = await ju(e, t)), Nu(r) && (l = Lu(r.headers.get("WWW-Authenticate")), l))) {
 					let a;
 					try {
 						a = atob(l);
 					} catch {
 						return i.warning(`The WWW-Authenticate header contains "claims" that cannot be parsed. Unable to perform the Continuous Access Evaluation authentication flow. Unparsable claims: ${l}`), r;
 					}
-					c = await Hl({
+					c = await Pu({
 						scopes: Array.isArray(n) ? n : [n],
 						response: r,
 						request: e,
 						getAccessToken: o,
 						logger: i
-					}, a), c && ([r, s] = await zl(e, t));
+					}, a), c && ([r, s] = await ju(e, t));
 				}
 			}
 			if (s) throw s;
@@ -14978,7 +15692,7 @@ function Ul(e) {
 		}
 	};
 }
-function Wl(e) {
+function Iu(e) {
 	let t = /(\w+)\s+((?:\w+=(?:"[^"]*"|[^,]*),?\s*)+)/g, n = /(\w+)="([^"]*)"/g, r = [], i;
 	for (; (i = t.exec(e)) !== null;) {
 		let e = i[1], t = i[2], a = {}, o;
@@ -14990,43 +15704,43 @@ function Wl(e) {
 	}
 	return r;
 }
-function Gl(e) {
-	if (e) return Wl(e).find((e) => e.scheme === "Bearer" && e.params.claims && e.params.error === "insufficient_claims")?.params.claims;
+function Lu(e) {
+	if (e) return Iu(e).find((e) => e.scheme === "Bearer" && e.params.claims && e.params.error === "insufficient_claims")?.params.claims;
 }
-function Kl(e) {
+function Ru(e) {
 	let t = e;
 	return t && typeof t.getToken == "function" && (t.signRequest === void 0 || t.getToken.length > 0);
 }
-var ql = "DisableKeepAlivePolicy";
-function Jl() {
+var zu = "DisableKeepAlivePolicy";
+function Bu() {
 	return {
-		name: ql,
+		name: zu,
 		async sendRequest(e, t) {
 			return e.disableKeepAlive = !0, t(e);
 		}
 	};
 }
-function Yl(e) {
-	return e.getOrderedPolicies().some((e) => e.name === ql);
+function Vu(e) {
+	return e.getOrderedPolicies().some((e) => e.name === zu);
 }
-function Xl(e) {
+function Hu(e) {
 	return (e instanceof Buffer ? e : Buffer.from(e.buffer)).toString("base64");
 }
-function Zl(e) {
+function Uu(e) {
 	return Buffer.from(e, "base64");
 }
-function Ql(e, t) {
+function Wu(e, t) {
 	return t !== "Composite" && t !== "Dictionary" && (typeof e == "string" || typeof e == "number" || typeof e == "boolean" || t?.match(/^(Date|DateTime|DateTimeRfc1123|UnixTime|ByteArray|Base64Url)$/i) !== null || e == null);
 }
-var $l = /^(-|\+)?P(?:([-+]?[0-9,.]*)Y)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)W)?(?:([-+]?[0-9,.]*)D)?(?:T(?:([-+]?[0-9,.]*)H)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)S)?)?$/;
-function eu(e) {
-	return $l.test(e);
+var Gu = /^(-|\+)?P(?:([-+]?[0-9,.]*)Y)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)W)?(?:([-+]?[0-9,.]*)D)?(?:T(?:([-+]?[0-9,.]*)H)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)S)?)?$/;
+function Ku(e) {
+	return Gu.test(e);
 }
-var tu = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/i;
-function nu(e) {
-	return tu.test(e);
+var qu = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/i;
+function Ju(e) {
+	return qu.test(e);
 }
-function ru(e) {
+function Yu(e) {
 	let t = {
 		...e.headers,
 		...e.body
@@ -15036,7 +15750,7 @@ function ru(e) {
 		body: e.body
 	} : t;
 }
-function iu(e, t) {
+function Xu(e, t) {
 	let n = e.parsedHeaders;
 	if (e.request.method === "HEAD") return {
 		...n,
@@ -15055,14 +15769,14 @@ function iu(e, t) {
 		if (n) for (let e of Object.keys(n)) t[e] = n[e];
 		return i && !e.parsedBody && !n && Object.getOwnPropertyNames(o).length === 0 ? null : t;
 	}
-	return ru({
+	return Yu({
 		body: e.parsedBody,
 		headers: n,
 		hasNullableType: i,
-		shouldWrapBody: Ql(e.parsedBody, a)
+		shouldWrapBody: Wu(e.parsedBody, a)
 	});
 }
-var au = class {
+var Zu = class {
 	modelMappers;
 	isXML;
 	constructor(e = {}, t = !1) {
@@ -15092,7 +15806,7 @@ var au = class {
 		if (s && c && t === void 0) throw Error(`${n} cannot be undefined.`);
 		if (s && !c && t == null) throw Error(`${n} cannot be null or undefined.`);
 		if (!s && c === !1 && t === null) throw Error(`${n} cannot be null.`);
-		return t == null ? a = t : o.match(/^any$/i) === null ? o.match(/^(Number|String|Boolean|Object|Stream|Uuid)$/i) === null ? o.match(/^Enum$/i) === null ? o.match(/^(Date|DateTime|TimeSpan|DateTimeRfc1123|UnixTime)$/i) === null ? o.match(/^ByteArray$/i) === null ? o.match(/^Base64Url$/i) === null ? o.match(/^Sequence$/i) === null ? o.match(/^Dictionary$/i) === null ? o.match(/^Composite$/i) !== null && (a = Cu(this, e, t, n, !!this.isXML, i)) : a = yu(this, e, t, n, !!this.isXML, i) : a = vu(this, e, t, n, !!this.isXML, i) : a = gu(n, t) : a = hu(n, t) : a = _u(o, t, n) : a = mu(n, e.type.allowedValues, t) : a = pu(o, n, t) : a = t, a;
+		return t == null ? a = t : o.match(/^any$/i) === null ? o.match(/^(Number|String|Boolean|Object|Stream|Uuid)$/i) === null ? o.match(/^Enum$/i) === null ? o.match(/^(Date|DateTime|TimeSpan|DateTimeRfc1123|UnixTime)$/i) === null ? o.match(/^ByteArray$/i) === null ? o.match(/^Base64Url$/i) === null ? o.match(/^Sequence$/i) === null ? o.match(/^Dictionary$/i) === null ? o.match(/^Composite$/i) !== null && (a = hd(this, e, t, n, !!this.isXML, i)) : a = dd(this, e, t, n, !!this.isXML, i) : a = ud(this, e, t, n, !!this.isXML, i) : a = cd(n, t) : a = sd(n, t) : a = ld(o, t, n) : a = od(n, e.type.allowedValues, t) : a = ad(o, n, t) : a = t, a;
 	}
 	deserialize(e, t, n, r = { xml: {} }) {
 		let i = {
@@ -15105,38 +15819,38 @@ var au = class {
 		};
 		if (t == null) return this.isXML && e.type.name === "Sequence" && !e.xmlIsWrapped && (t = []), e.defaultValue !== void 0 && (t = e.defaultValue), t;
 		let a, o = e.type.name;
-		if (n ||= e.serializedName, o.match(/^Composite$/i) !== null) a = Eu(this, e, t, n, i);
+		if (n ||= e.serializedName, o.match(/^Composite$/i) !== null) a = vd(this, e, t, n, i);
 		else {
 			if (this.isXML) {
 				let e = i.xml.xmlCharKey;
 				t.$ !== void 0 && t[e] !== void 0 && (t = t[e]);
 			}
-			o.match(/^Number$/i) === null ? o.match(/^Boolean$/i) === null ? o.match(/^(String|Enum|Object|Stream|Uuid|TimeSpan|any)$/i) === null ? o.match(/^(Date|DateTime|DateTimeRfc1123)$/i) === null ? o.match(/^UnixTime$/i) === null ? o.match(/^ByteArray$/i) === null ? o.match(/^Base64Url$/i) === null ? o.match(/^Sequence$/i) === null ? o.match(/^Dictionary$/i) !== null && (a = Du(this, e, t, n, i)) : a = Ou(this, e, t, n, i) : a = lu(t) : a = Zl(t) : a = fu(t) : a = new Date(t) : a = t : a = t === "true" ? !0 : t === "false" ? !1 : t : (a = parseFloat(t), isNaN(a) && (a = t));
+			o.match(/^Number$/i) === null ? o.match(/^Boolean$/i) === null ? o.match(/^(String|Enum|Object|Stream|Uuid|TimeSpan|any)$/i) === null ? o.match(/^(Date|DateTime|DateTimeRfc1123)$/i) === null ? o.match(/^UnixTime$/i) === null ? o.match(/^ByteArray$/i) === null ? o.match(/^Base64Url$/i) === null ? o.match(/^Sequence$/i) === null ? o.match(/^Dictionary$/i) !== null && (a = yd(this, e, t, n, i)) : a = bd(this, e, t, n, i) : a = td(t) : a = Uu(t) : a = id(t) : a = new Date(t) : a = t : a = t === "true" ? !0 : t === "false" ? !1 : t : (a = parseFloat(t), isNaN(a) && (a = t));
 		}
 		return e.isConstant && (a = e.defaultValue), a;
 	}
 };
-function ou(e = {}, t = !1) {
-	return new au(e, t);
+function Qu(e = {}, t = !1) {
+	return new Zu(e, t);
 }
-function su(e, t) {
+function $u(e, t) {
 	let n = e.length;
 	for (; n - 1 >= 0 && e[n - 1] === t;) --n;
 	return e.substr(0, n);
 }
-function cu(e) {
+function ed(e) {
 	if (e) {
 		if (!(e instanceof Uint8Array)) throw Error("Please provide an input of type Uint8Array for converting to Base64Url.");
-		return su(Xl(e), "=").replace(/\+/g, "-").replace(/\//g, "_");
+		return $u(Hu(e), "=").replace(/\+/g, "-").replace(/\//g, "_");
 	}
 }
-function lu(e) {
+function td(e) {
 	if (e) {
 		if (e && typeof e.valueOf() != "string") throw Error("Please provide an input of type string for converting to Uint8Array");
-		return e = e.replace(/-/g, "+").replace(/_/g, "/"), Zl(e);
+		return e = e.replace(/-/g, "+").replace(/_/g, "/"), Uu(e);
 	}
 }
-function uu(e) {
+function nd(e) {
 	let t = [], n = "";
 	if (e) {
 		let r = e.split(".");
@@ -15144,20 +15858,20 @@ function uu(e) {
 	}
 	return t;
 }
-function du(e) {
+function rd(e) {
 	if (e) return typeof e.valueOf() == "string" && (e = new Date(e)), Math.floor(e.getTime() / 1e3);
 }
-function fu(e) {
+function id(e) {
 	if (e) return /* @__PURE__ */ new Date(e * 1e3);
 }
-function pu(e, t, n) {
+function ad(e, t, n) {
 	if (n != null) {
 		if (e.match(/^Number$/i) !== null) {
 			if (typeof n != "number") throw Error(`${t} with value ${n} must be of type number.`);
 		} else if (e.match(/^String$/i) !== null) {
 			if (typeof n.valueOf() != "string") throw Error(`${t} with value "${n}" must be of type string.`);
 		} else if (e.match(/^Uuid$/i) !== null) {
-			if (!(typeof n.valueOf() == "string" && nu(n))) throw Error(`${t} with value "${n}" must be of type string and a valid uuid.`);
+			if (!(typeof n.valueOf() == "string" && Ju(n))) throw Error(`${t} with value "${n}" must be of type string and a valid uuid.`);
 		} else if (e.match(/^Boolean$/i) !== null) {
 			if (typeof n != "boolean") throw Error(`${t} with value ${n} must be of type boolean.`);
 		} else if (e.match(/^Stream$/i) !== null) {
@@ -15167,26 +15881,26 @@ function pu(e, t, n) {
 	}
 	return n;
 }
-function mu(e, t, n) {
+function od(e, t, n) {
 	if (!t) throw Error(`Please provide a set of allowedValues to validate ${e} as an Enum Type.`);
 	if (!t.some((e) => typeof e.valueOf() == "string" ? e.toLowerCase() === n.toLowerCase() : e === n)) throw Error(`${n} is not a valid value for ${e}. The valid values are: ${JSON.stringify(t)}.`);
 	return n;
 }
-function hu(e, t) {
+function sd(e, t) {
 	if (t != null) {
 		if (!(t instanceof Uint8Array)) throw Error(`${e} must be of type Uint8Array.`);
-		t = Xl(t);
+		t = Hu(t);
 	}
 	return t;
 }
-function gu(e, t) {
+function cd(e, t) {
 	if (t != null) {
 		if (!(t instanceof Uint8Array)) throw Error(`${e} must be of type Uint8Array.`);
-		t = cu(t);
+		t = ed(t);
 	}
 	return t;
 }
-function _u(e, t, n) {
+function ld(e, t, n) {
 	if (t != null) {
 		if (e.match(/^Date$/i) !== null) {
 			if (!(t instanceof Date || typeof t.valueOf() == "string" && !isNaN(Date.parse(t)))) throw Error(`${n} must be an instanceof Date or a string in ISO8601 format.`);
@@ -15199,12 +15913,12 @@ function _u(e, t, n) {
 			t = t instanceof Date ? t.toUTCString() : new Date(t).toUTCString();
 		} else if (e.match(/^UnixTime$/i) !== null) {
 			if (!(t instanceof Date || typeof t.valueOf() == "string" && !isNaN(Date.parse(t)))) throw Error(`${n} must be an instanceof Date or a string in RFC-1123/ISO8601 format for it to be serialized in UnixTime/Epoch format.`);
-			t = du(t);
-		} else if (e.match(/^TimeSpan$/i) !== null && !eu(t)) throw Error(`${n} must be a string in ISO 8601 format. Instead was "${t}".`);
+			t = rd(t);
+		} else if (e.match(/^TimeSpan$/i) !== null && !Ku(t)) throw Error(`${n} must be a string in ISO 8601 format. Instead was "${t}".`);
 	}
 	return t;
 }
-function vu(e, t, n, r, i, a) {
+function ud(e, t, n, r, i, a) {
 	if (!Array.isArray(n)) throw Error(`${r} must be of type Array.`);
 	let o = t.type.element;
 	if (!o || typeof o != "object") throw Error(`element" metadata for an Array must be defined in the mapper and it must of type "object" in ${r}.`);
@@ -15219,46 +15933,46 @@ function vu(e, t, n, r, i, a) {
 	}
 	return s;
 }
-function yu(e, t, n, r, i, a) {
+function dd(e, t, n, r, i, a) {
 	if (typeof n != "object") throw Error(`${r} must be of type object.`);
 	let o = t.type.value;
 	if (!o || typeof o != "object") throw Error(`"value" metadata for a Dictionary must be defined in the mapper and it must of type "object" in ${r}.`);
 	let s = {};
-	for (let t of Object.keys(n)) s[t] = wu(o, e.serialize(o, n[t], r, a), i, a);
+	for (let t of Object.keys(n)) s[t] = gd(o, e.serialize(o, n[t], r, a), i, a);
 	if (i && t.xmlNamespace) {
 		let e = t.xmlNamespacePrefix ? `xmlns:${t.xmlNamespacePrefix}` : "xmlns", n = s;
 		return n.$ = { [e]: t.xmlNamespace }, n;
 	}
 	return s;
 }
-function bu(e, t, n) {
+function fd(e, t, n) {
 	let r = t.type.additionalProperties;
-	return !r && t.type.className ? xu(e, t, n)?.type.additionalProperties : r;
+	return !r && t.type.className ? pd(e, t, n)?.type.additionalProperties : r;
 }
-function xu(e, t, n) {
+function pd(e, t, n) {
 	let r = t.type.className;
 	if (!r) throw Error(`Class name for model "${n}" is not provided in the mapper "${JSON.stringify(t, void 0, 2)}".`);
 	return e.modelMappers[r];
 }
-function Su(e, t, n) {
+function md(e, t, n) {
 	let r = t.type.modelProperties;
 	if (!r) {
-		let i = xu(e, t, n);
+		let i = pd(e, t, n);
 		if (!i) throw Error(`mapper() cannot be null or undefined for model "${t.type.className}".`);
 		if (r = i?.type.modelProperties, !r) throw Error(`modelProperties cannot be null or undefined in the mapper "${JSON.stringify(i)}" of type "${t.type.className}" for object "${n}".`);
 	}
 	return r;
 }
-function Cu(e, t, n, r, i, a) {
-	if (ju(e, t) && (t = Au(e, t, n, "clientName")), n != null) {
-		let o = {}, s = Su(e, t, r);
+function hd(e, t, n, r, i, a) {
+	if (Cd(e, t) && (t = Sd(e, t, n, "clientName")), n != null) {
+		let o = {}, s = md(e, t, r);
 		for (let c of Object.keys(s)) {
 			let l = s[c];
 			if (l.readOnly) continue;
 			let u, d = o;
 			if (e.isXML) u = l.xmlIsWrapped ? l.xmlName : l.xmlElementName || l.xmlName;
 			else {
-				let e = uu(l.serializedName);
+				let e = nd(l.serializedName);
 				u = e.pop();
 				for (let t of e) d[t] == null && (n[c] !== void 0 && n[c] !== null || l.defaultValue !== void 0) && (d[t] = {}), d = d[t];
 			}
@@ -15270,16 +15984,16 @@ function Cu(e, t, n, r, i, a) {
 						[e]: t.xmlNamespace
 					};
 				}
-				let o = l.serializedName === "" ? r : r + "." + l.serializedName, s = n[c], f = ju(e, t);
+				let o = l.serializedName === "" ? r : r + "." + l.serializedName, s = n[c], f = Cd(e, t);
 				f && f.clientName === c && s == null && (s = t.serializedName);
 				let p = e.serialize(l, s, o, a);
 				if (p !== void 0 && u != null) {
-					let e = wu(l, p, i, a);
+					let e = gd(l, p, i, a);
 					i && l.xmlIsAttribute ? (d.$ = d.$ || {}, d.$[u] = p) : i && l.xmlIsWrapped ? d[u] = { [l.xmlElementName]: e } : d[u] = e;
 				}
 			}
 		}
-		let c = bu(e, t, r);
+		let c = fd(e, t, r);
 		if (c) {
 			let t = Object.keys(s);
 			for (let i in n) t.every((e) => e !== i) && (o[i] = e.serialize(c, n[i], r + "[\"" + i + "\"]", a));
@@ -15288,7 +16002,7 @@ function Cu(e, t, n, r, i, a) {
 	}
 	return n;
 }
-function wu(e, t, n, r) {
+function gd(e, t, n, r) {
 	if (!n || !e.xmlNamespace) return t;
 	let i = { [e.xmlNamespacePrefix ? `xmlns:${e.xmlNamespacePrefix}` : "xmlns"]: e.xmlNamespace };
 	if (["Composite"].includes(e.type.name)) {
@@ -15301,15 +16015,15 @@ function wu(e, t, n, r) {
 	let a = {};
 	return a[r.xml.xmlCharKey] = t, a.$ = i, a;
 }
-function Tu(e, t) {
+function _d(e, t) {
 	return ["$", t.xml.xmlCharKey].includes(e);
 }
-function Eu(e, t, n, r, i) {
+function vd(e, t, n, r, i) {
 	let a = i.xml.xmlCharKey ?? "_";
-	ju(e, t) && (t = Au(e, t, n, "serializedName"));
-	let o = Su(e, t, r), s = {}, c = [];
+	Cd(e, t) && (t = Sd(e, t, n, "serializedName"));
+	let o = md(e, t, r), s = {}, c = [];
 	for (let l of Object.keys(o)) {
-		let u = o[l], d = uu(o[l].serializedName);
+		let u = o[l], d = nd(o[l].serializedName);
 		c.push(d[0]);
 		let { serializedName: f, xmlName: p, xmlElementName: m } = u, h = r;
 		f !== "" && f !== void 0 && (h = r + "." + f);
@@ -15351,14 +16065,14 @@ function Eu(e, t, n, r, i) {
 	let l = t.type.additionalProperties;
 	if (l) {
 		let t = (e) => {
-			for (let t in o) if (uu(o[t].serializedName)[0] === e) return !1;
+			for (let t in o) if (nd(o[t].serializedName)[0] === e) return !1;
 			return !0;
 		};
 		for (let a in n) t(a) && (s[a] = e.deserialize(l, n[a], r + "[\"" + a + "\"]", i));
-	} else if (n && !i.ignoreUnknownProperties) for (let e of Object.keys(n)) s[e] === void 0 && !c.includes(e) && !Tu(e, i) && (s[e] = n[e]);
+	} else if (n && !i.ignoreUnknownProperties) for (let e of Object.keys(n)) s[e] === void 0 && !c.includes(e) && !_d(e, i) && (s[e] = n[e]);
 	return s;
 }
-function Du(e, t, n, r, i) {
+function yd(e, t, n, r, i) {
 	let a = t.type.value;
 	if (!a || typeof a != "object") throw Error(`"value" metadata for a Dictionary must be defined in the mapper and it must of type "object" in ${r}`);
 	if (n) {
@@ -15368,7 +16082,7 @@ function Du(e, t, n, r, i) {
 	}
 	return n;
 }
-function Ou(e, t, n, r, i) {
+function bd(e, t, n, r, i) {
 	let a = t.type.element;
 	if (!a || typeof a != "object") throw Error(`element" metadata for an Array must be defined in the mapper and it must of type "object" in ${r}`);
 	if (n) {
@@ -15379,7 +16093,7 @@ function Ou(e, t, n, r, i) {
 	}
 	return n;
 }
-function ku(e, t, n) {
+function xd(e, t, n) {
 	let r = [n];
 	for (; r.length;) {
 		let n = r.shift(), i = t === n ? t : n + "." + t;
@@ -15387,28 +16101,28 @@ function ku(e, t, n) {
 		for (let [t, i] of Object.entries(e)) t.startsWith(n + ".") && i.type.uberParent === n && i.type.className && r.push(i.type.className);
 	}
 }
-function Au(e, t, n, r) {
-	let i = ju(e, t);
+function Sd(e, t, n, r) {
+	let i = Cd(e, t);
 	if (i) {
 		let a = i[r];
 		if (a) {
 			r === "serializedName" && (a = a.replace(/\\/gi, ""));
 			let i = n[a], o = t.type.uberParent ?? t.type.className;
 			if (typeof i == "string" && o) {
-				let n = ku(e.modelMappers.discriminators, i, o);
+				let n = xd(e.modelMappers.discriminators, i, o);
 				n && (t = n);
 			}
 		}
 	}
 	return t;
 }
-function ju(e, t) {
-	return t.type.polymorphicDiscriminator || Mu(e, t.type.uberParent) || Mu(e, t.type.className);
+function Cd(e, t) {
+	return t.type.polymorphicDiscriminator || wd(e, t.type.uberParent) || wd(e, t.type.className);
 }
-function Mu(e, t) {
+function wd(e, t) {
 	return t && e.modelMappers[t] && e.modelMappers[t].type.polymorphicDiscriminator;
 }
-var Nu = {
+var Td = {
 	Base64Url: "Base64Url",
 	Boolean: "Boolean",
 	ByteArray: "ByteArray",
@@ -15425,23 +16139,23 @@ var Nu = {
 	Stream: "Stream",
 	TimeSpan: "TimeSpan",
 	UnixTime: "UnixTime"
-}, Pu = (/* @__PURE__ */ F(((e) => {
+}, Ed = (/* @__PURE__ */ F(((e) => {
 	Object.defineProperty(e, "__esModule", { value: !0 }), e.state = void 0, e.state = { operationRequestMap: /* @__PURE__ */ new WeakMap() };
 })))().state;
-function Fu(e, t, n) {
+function Dd(e, t, n) {
 	let r = t.parameterPath, i = t.mapper, a;
 	if (typeof r == "string" && (r = [r]), Array.isArray(r)) {
 		if (r.length > 0) if (i.isConstant) a = i.defaultValue;
 		else {
-			let t = Iu(e, r);
-			!t.propertyFound && n && (t = Iu(n, r));
+			let t = Od(e, r);
+			!t.propertyFound && n && (t = Od(n, r));
 			let o = !1;
 			t.propertyFound || (o = i.required || r[0] === "options" && r.length === 2), a = o ? i.defaultValue : t.propertyValue;
 		}
 	} else {
 		i.required && (a = {});
 		for (let t in r) {
-			let o = i.type.modelProperties[t], s = r[t], c = Fu(e, {
+			let o = i.type.modelProperties[t], s = r[t], c = Dd(e, {
 				parameterPath: s,
 				mapper: o
 			}, n);
@@ -15450,7 +16164,7 @@ function Fu(e, t, n) {
 	}
 	return a;
 }
-function Iu(e, t) {
+function Od(e, t) {
 	let n = { propertyFound: !1 }, r = 0;
 	for (; r < t.length; ++r) {
 		let n = t[r];
@@ -15459,53 +16173,53 @@ function Iu(e, t) {
 	}
 	return r === t.length && (n.propertyValue = e, n.propertyFound = !0), n;
 }
-var Lu = Symbol.for("@azure/core-client original request");
-function Ru(e) {
-	return Lu in e;
+var kd = Symbol.for("@azure/core-client original request");
+function Ad(e) {
+	return kd in e;
 }
-function zu(e) {
-	if (Ru(e)) return zu(e[Lu]);
-	let t = Pu.operationRequestMap.get(e);
-	return t || (t = {}, Pu.operationRequestMap.set(e, t)), t;
+function jd(e) {
+	if (Ad(e)) return jd(e[kd]);
+	let t = Ed.operationRequestMap.get(e);
+	return t || (t = {}, Ed.operationRequestMap.set(e, t)), t;
 }
-var Bu = ["application/json", "text/json"], Vu = ["application/xml", "application/atom+xml"], Hu = "deserializationPolicy";
-function Uu(e = {}) {
-	let t = e.expectedContentTypes?.json ?? Bu, n = e.expectedContentTypes?.xml ?? Vu, r = e.parseXML, i = e.serializerOptions, a = { xml: {
+var Md = ["application/json", "text/json"], Nd = ["application/xml", "application/atom+xml"], Pd = "deserializationPolicy";
+function Fd(e = {}) {
+	let t = e.expectedContentTypes?.json ?? Md, n = e.expectedContentTypes?.xml ?? Nd, r = e.parseXML, i = e.serializerOptions, a = { xml: {
 		rootName: i?.xml.rootName ?? "",
 		includeRoot: i?.xml.includeRoot ?? !1,
 		xmlCharKey: i?.xml.xmlCharKey ?? "_"
 	} };
 	return {
-		name: Hu,
+		name: Pd,
 		async sendRequest(e, i) {
-			return Ku(t, n, await i(e), a, r);
+			return Rd(t, n, await i(e), a, r);
 		}
 	};
 }
-function Wu(e) {
-	let t, n = e.request, r = zu(n), i = r?.operationSpec;
+function Id(e) {
+	let t, n = e.request, r = jd(n), i = r?.operationSpec;
 	return i && (t = r?.operationResponseGetter ? r?.operationResponseGetter(i, e) : i.responses[e.status]), t;
 }
-function Gu(e) {
-	let t = e.request, n = zu(t)?.shouldDeserialize, r;
+function Ld(e) {
+	let t = e.request, n = jd(t)?.shouldDeserialize, r;
 	return r = n === void 0 ? !0 : typeof n == "boolean" ? n : n(e), r;
 }
-async function Ku(e, t, n, r, i) {
-	let a = await Yu(e, t, n, r, i);
-	if (!Gu(a)) return a;
-	let o = zu(a.request)?.operationSpec;
+async function Rd(e, t, n, r, i) {
+	let a = await Vd(e, t, n, r, i);
+	if (!Ld(a)) return a;
+	let o = jd(a.request)?.operationSpec;
 	if (!o || !o.responses) return a;
-	let s = Wu(a), { error: c, shouldReturnResponse: l } = Ju(a, o, s, r);
+	let s = Id(a), { error: c, shouldReturnResponse: l } = Bd(a, o, s, r);
 	if (c) throw c;
 	if (l) return a;
 	if (s) {
 		if (s.bodyMapper) {
 			let e = a.parsedBody;
-			o.isXML && s.bodyMapper.type.name === Nu.Sequence && (e = typeof e == "object" ? e[s.bodyMapper.xmlElementName] : []);
+			o.isXML && s.bodyMapper.type.name === Td.Sequence && (e = typeof e == "object" ? e[s.bodyMapper.xmlElementName] : []);
 			try {
 				a.parsedBody = o.serializer.deserialize(s.bodyMapper, e, "operationRes.parsedBody", r);
 			} catch (e) {
-				throw new bl(`Error ${e} occurred in deserializing the responseBody - ${a.bodyAsText}`, {
+				throw new fu(`Error ${e} occurred in deserializing the responseBody - ${a.bodyAsText}`, {
 					statusCode: a.status,
 					request: a.request,
 					response: a
@@ -15519,13 +16233,13 @@ async function Ku(e, t, n, r, i) {
 	}
 	return a;
 }
-function qu(e) {
+function zd(e) {
 	let t = Object.keys(e.responses);
 	return t.length === 0 || t.length === 1 && t[0] === "default";
 }
-function Ju(e, t, n, r) {
+function Bd(e, t, n, r) {
 	let i = 200 <= e.status && e.status < 300;
-	if (qu(t) ? i : n) if (n) {
+	if (zd(t) ? i : n) if (n) {
 		if (!n.isError) return {
 			error: null,
 			shouldReturnResponse: !1
@@ -15534,7 +16248,7 @@ function Ju(e, t, n, r) {
 		error: null,
 		shouldReturnResponse: !1
 	};
-	let a = n ?? t.responses.default, o = new bl(e.request.streamResponseStatusCodes?.has(e.status) ? `Unexpected status code: ${e.status}` : e.bodyAsText, {
+	let a = n ?? t.responses.default, o = new fu(e.request.streamResponseStatusCodes?.has(e.status) ? `Unexpected status code: ${e.status}` : e.bodyAsText, {
 		statusCode: e.status,
 		request: e.request,
 		response: e
@@ -15546,7 +16260,7 @@ function Ju(e, t, n, r) {
 			let n = e.parsedBody, i;
 			if (s) {
 				let e = n;
-				if (t.isXML && s.type.name === Nu.Sequence) {
+				if (t.isXML && s.type.name === Td.Sequence) {
 					e = [];
 					let t = s.xmlElementName;
 					typeof n == "object" && t && (e = n[t]);
@@ -15565,7 +16279,7 @@ function Ju(e, t, n, r) {
 		shouldReturnResponse: !1
 	};
 }
-async function Yu(e, t, n, r, i) {
+async function Vd(e, t, n, r, i) {
 	if (!n.request.streamResponseStatusCodes?.has(n.status) && n.bodyAsText) {
 		let a = n.bodyAsText, o = n.headers.get("Content-Type") || "", s = o ? o.split(";").map((e) => e.toLowerCase()) : [];
 		try {
@@ -15575,8 +16289,8 @@ async function Yu(e, t, n, r, i) {
 				return n.parsedBody = await i(a, r.xml), n;
 			}
 		} catch (e) {
-			throw new bl(`Error "${e}" occurred while parsing the response body - ${n.bodyAsText}.`, {
-				code: e.code || bl.PARSE_ERROR,
+			throw new fu(`Error "${e}" occurred while parsing the response body - ${n.bodyAsText}.`, {
+				code: e.code || fu.PARSE_ERROR,
 				statusCode: n.status,
 				request: n.request,
 				response: n
@@ -15585,43 +16299,43 @@ async function Yu(e, t, n, r, i) {
 	}
 	return n;
 }
-function Xu(e) {
+function Hd(e) {
 	let t = /* @__PURE__ */ new Set();
 	for (let n in e.responses) {
 		let r = e.responses[n];
-		r.bodyMapper && r.bodyMapper.type.name === Nu.Stream && t.add(Number(n));
+		r.bodyMapper && r.bodyMapper.type.name === Td.Stream && t.add(Number(n));
 	}
 	return t;
 }
-function Zu(e) {
+function Ud(e) {
 	let { parameterPath: t, mapper: n } = e, r;
 	return r = typeof t == "string" ? t : Array.isArray(t) ? t.join(".") : n.serializedName, r;
 }
-var Qu = "serializationPolicy";
-function $u(e = {}) {
+var Wd = "serializationPolicy";
+function Gd(e = {}) {
 	let t = e.stringifyXML;
 	return {
-		name: Qu,
+		name: Wd,
 		async sendRequest(e, n) {
-			let r = zu(e), i = r?.operationSpec, a = r?.operationArguments;
-			return i && a && (ed(e, a, i), td(e, a, i, t)), n(e);
+			let r = jd(e), i = r?.operationSpec, a = r?.operationArguments;
+			return i && a && (Kd(e, a, i), qd(e, a, i, t)), n(e);
 		}
 	};
 }
-function ed(e, t, n) {
+function Kd(e, t, n) {
 	if (n.headerParameters) for (let r of n.headerParameters) {
-		let i = Fu(t, r);
+		let i = Dd(t, r);
 		if (i != null || r.mapper.required) {
-			i = n.serializer.serialize(r.mapper, i, Zu(r));
+			i = n.serializer.serialize(r.mapper, i, Ud(r));
 			let t = r.mapper.headerCollectionPrefix;
 			if (t) for (let n of Object.keys(i)) e.headers.set(t + n, i[n]);
-			else e.headers.set(r.mapper.serializedName || Zu(r), i);
+			else e.headers.set(r.mapper.serializedName || Ud(r), i);
 		}
 	}
 	let r = t.options?.requestOptions?.customHeaders;
 	if (r) for (let t of Object.keys(r)) e.headers.set(t, r[t]);
 }
-function td(e, t, n, r = function() {
+function qd(e, t, n, r = function() {
 	throw Error("XML serialization unsupported!");
 }) {
 	let i = t.options?.serializerOptions, a = { xml: {
@@ -15630,23 +16344,23 @@ function td(e, t, n, r = function() {
 		xmlCharKey: i?.xml.xmlCharKey ?? "_"
 	} }, o = a.xml.xmlCharKey;
 	if (n.requestBody && n.requestBody.mapper) {
-		e.body = Fu(t, n.requestBody);
+		e.body = Dd(t, n.requestBody);
 		let i = n.requestBody.mapper, { required: s, serializedName: c, xmlName: l, xmlElementName: u, xmlNamespace: d, xmlNamespacePrefix: f, nullable: p } = i, m = i.type.name;
 		try {
 			if (e.body !== void 0 && e.body !== null || p && e.body === null || s) {
-				let t = Zu(n.requestBody);
+				let t = Ud(n.requestBody);
 				e.body = n.serializer.serialize(i, e.body, t, a);
-				let s = m === Nu.Stream;
+				let s = m === Td.Stream;
 				if (n.isXML) {
-					let t = f ? `xmlns:${f}` : "xmlns", n = nd(d, t, m, e.body, a);
-					m === Nu.Sequence ? e.body = r(rd(n, u || l || c, t, d), {
+					let t = f ? `xmlns:${f}` : "xmlns", n = Jd(d, t, m, e.body, a);
+					m === Td.Sequence ? e.body = r(Yd(n, u || l || c, t, d), {
 						rootName: l || c,
 						xmlCharKey: o
 					}) : s || (e.body = r(n, {
 						rootName: l || c,
 						xmlCharKey: o
 					}));
-				} else if (m === Nu.String && (n.contentType?.match("text/plain") || n.mediaType === "text")) return;
+				} else if (m === Td.String && (n.contentType?.match("text/plain") || n.mediaType === "text")) return;
 				else s || (e.body = JSON.stringify(e.body));
 			}
 		} catch (e) {
@@ -15655,15 +16369,15 @@ function td(e, t, n, r = function() {
 	} else if (n.formDataParameters && n.formDataParameters.length > 0) {
 		e.formData = {};
 		for (let r of n.formDataParameters) {
-			let i = Fu(t, r);
+			let i = Dd(t, r);
 			if (i != null) {
-				let t = r.mapper.serializedName || Zu(r);
-				e.formData[t] = n.serializer.serialize(r.mapper, i, Zu(r), a);
+				let t = r.mapper.serializedName || Ud(r);
+				e.formData[t] = n.serializer.serialize(r.mapper, i, Ud(r), a);
 			}
 		}
 	}
 }
-function nd(e, t, n, r, i) {
+function Jd(e, t, n, r, i) {
 	if (e && ![
 		"Composite",
 		"Sequence",
@@ -15674,55 +16388,55 @@ function nd(e, t, n, r, i) {
 	}
 	return r;
 }
-function rd(e, t, n, r) {
+function Yd(e, t, n, r) {
 	if (Array.isArray(e) || (e = [e]), !n || !r) return { [t]: e };
 	let i = { [t]: e };
 	return i.$ = { [n]: r }, i;
 }
-function id(e = {}) {
-	let t = jl(e ?? {});
-	return e.credentialOptions && t.addPolicy(Ul({
+function Xd(e = {}) {
+	let t = Cu(e ?? {});
+	return e.credentialOptions && t.addPolicy(Fu({
 		credential: e.credentialOptions.credential,
 		scopes: e.credentialOptions.credentialScopes
-	})), t.addPolicy($u(e.serializationOptions), { phase: "Serialize" }), t.addPolicy(Uu(e.deserializationOptions), { phase: "Deserialize" }), t;
+	})), t.addPolicy(Gd(e.serializationOptions), { phase: "Serialize" }), t.addPolicy(Fd(e.deserializationOptions), { phase: "Deserialize" }), t;
 }
-var ad;
-function od() {
-	return ad ||= Ml(), ad;
+var Zd;
+function Qd() {
+	return Zd ||= wu(), Zd;
 }
-var sd = {
+var $d = {
 	CSV: ",",
 	SSV: " ",
 	Multi: "Multi",
 	TSV: "	",
 	Pipes: "|"
 };
-function cd(e, t, n, r) {
-	let i = ud(t, n, r), a = !1, o = ld(e, i);
+function ef(e, t, n, r) {
+	let i = nf(t, n, r), a = !1, o = tf(e, i);
 	if (t.path) {
-		let e = ld(t.path, i);
-		t.path === "/{nextLink}" && e.startsWith("/") && (e = e.substring(1)), dd(e) ? (o = e, a = !0) : o = fd(o, e);
+		let e = tf(t.path, i);
+		t.path === "/{nextLink}" && e.startsWith("/") && (e = e.substring(1)), rf(e) ? (o = e, a = !0) : o = af(o, e);
 	}
-	let { queryParams: s, sequenceParams: c } = pd(t, n, r);
-	return o = hd(o, s, c, a), o;
+	let { queryParams: s, sequenceParams: c } = of(t, n, r);
+	return o = cf(o, s, c, a), o;
 }
-function ld(e, t) {
+function tf(e, t) {
 	let n = e;
 	for (let [e, r] of t) n = n.split(e).join(r);
 	return n;
 }
-function ud(e, t, n) {
+function nf(e, t, n) {
 	let r = /* @__PURE__ */ new Map();
 	if (e.urlParameters?.length) for (let i of e.urlParameters) {
-		let a = Fu(t, i, n), o = Zu(i);
+		let a = Dd(t, i, n), o = Ud(i);
 		a = e.serializer.serialize(i.mapper, a, o), i.skipEncoding || (a = encodeURIComponent(a)), r.set(`{${i.mapper.serializedName || o}}`, a);
 	}
 	return r;
 }
-function dd(e) {
+function rf(e) {
 	return e.includes("://");
 }
-function fd(e, t) {
+function af(e, t) {
 	if (!t) return e;
 	let n = new URL(e), r = n.pathname;
 	r.endsWith("/") || (r = `${r}/`), t.startsWith("/") && (t = t.substring(1));
@@ -15733,16 +16447,16 @@ function fd(e, t) {
 	} else r += t;
 	return n.pathname = r, n.toString();
 }
-function pd(e, t, n) {
+function of(e, t, n) {
 	let r = /* @__PURE__ */ new Map(), i = /* @__PURE__ */ new Set();
 	if (e.queryParameters?.length) for (let a of e.queryParameters) {
 		a.mapper.type.name === "Sequence" && a.mapper.serializedName && i.add(a.mapper.serializedName);
-		let o = Fu(t, a, n);
+		let o = Dd(t, a, n);
 		if (o != null || a.mapper.required) {
-			o = e.serializer.serialize(a.mapper, o, Zu(a));
-			let t = a.collectionFormat ? sd[a.collectionFormat] : "";
+			o = e.serializer.serialize(a.mapper, o, Ud(a));
+			let t = a.collectionFormat ? $d[a.collectionFormat] : "";
 			if (Array.isArray(o) && (o = o.map((e) => e ?? "")), a.collectionFormat === "Multi" && o.length === 0) continue;
-			Array.isArray(o) && (a.collectionFormat === "SSV" || a.collectionFormat === "TSV") && (o = o.join(t)), a.skipEncoding || (o = Array.isArray(o) ? o.map((e) => encodeURIComponent(e)) : encodeURIComponent(o)), Array.isArray(o) && (a.collectionFormat === "CSV" || a.collectionFormat === "Pipes") && (o = o.join(t)), r.set(a.mapper.serializedName || Zu(a), o);
+			Array.isArray(o) && (a.collectionFormat === "SSV" || a.collectionFormat === "TSV") && (o = o.join(t)), a.skipEncoding || (o = Array.isArray(o) ? o.map((e) => encodeURIComponent(e)) : encodeURIComponent(o)), Array.isArray(o) && (a.collectionFormat === "CSV" || a.collectionFormat === "Pipes") && (o = o.join(t)), r.set(a.mapper.serializedName || Ud(a), o);
 		}
 	}
 	return {
@@ -15750,7 +16464,7 @@ function pd(e, t, n) {
 		sequenceParams: i
 	};
 }
-function md(e) {
+function sf(e) {
 	let t = /* @__PURE__ */ new Map();
 	if (!e || e[0] !== "?") return t;
 	e = e.slice(1);
@@ -15761,9 +16475,9 @@ function md(e) {
 	}
 	return t;
 }
-function hd(e, t, n, r = !1) {
+function cf(e, t, n, r = !1) {
 	if (t.size === 0) return e;
-	let i = new URL(e), a = md(i.search);
+	let i = new URL(e), a = sf(i.search);
 	for (let [e, i] of t) {
 		let t = a.get(e);
 		if (Array.isArray(t)) if (Array.isArray(i)) {
@@ -15779,14 +16493,14 @@ function hd(e, t, n, r = !1) {
 	else o.push(`${e}=${t}`);
 	return i.search = o.length ? `?${o.join("&")}` : "", i.toString();
 }
-var gd = kc("core-client"), _d = class {
+var lf = xl("core-client"), uf = class {
 	_endpoint;
 	_requestContentType;
 	_allowInsecureConnection;
 	_httpClient;
 	pipeline;
 	constructor(e = {}) {
-		if (this._requestContentType = e.requestContentType, this._endpoint = e.endpoint ?? e.baseUri, e.baseUri && gd.warning("The baseUri option for SDK Clients has been deprecated, please use endpoint instead."), this._allowInsecureConnection = e.allowInsecureConnection, this._httpClient = e.httpClient || od(), this.pipeline = e.pipeline || vd(e), e.additionalPolicies?.length) for (let { policy: t, position: n } of e.additionalPolicies) {
+		if (this._requestContentType = e.requestContentType, this._endpoint = e.endpoint ?? e.baseUri, e.baseUri && lf.warning("The baseUri option for SDK Clients has been deprecated, please use endpoint instead."), this._allowInsecureConnection = e.allowInsecureConnection, this._httpClient = e.httpClient || Qd(), this.pipeline = e.pipeline || df(e), e.additionalPolicies?.length) for (let { policy: t, position: n } of e.additionalPolicies) {
 			let e = n === "perRetry" ? "Sign" : void 0;
 			this.pipeline.addPolicy(t, { afterPhase: e });
 		}
@@ -15797,9 +16511,9 @@ var gd = kc("core-client"), _d = class {
 	async sendOperationRequest(e, t) {
 		let n = t.baseUrl || this._endpoint;
 		if (!n) throw Error("If operationSpec.baseUrl is not specified, then the ServiceClient must have a endpoint string property that contains the base URL to use.");
-		let r = Pl({ url: cd(n, t, e, this) });
+		let r = Eu({ url: ef(n, t, e, this) });
 		r.method = t.httpMethod;
-		let i = zu(r);
+		let i = jd(r);
 		i.operationSpec = t, i.operationArguments = e;
 		let a = t.contentType || this._requestContentType;
 		a && t.requestBody && r.headers.set("Content-Type", a);
@@ -15808,89 +16522,89 @@ var gd = kc("core-client"), _d = class {
 			let e = o.requestOptions;
 			e && (e.timeout && (r.timeout = e.timeout), e.onUploadProgress && (r.onUploadProgress = e.onUploadProgress), e.onDownloadProgress && (r.onDownloadProgress = e.onDownloadProgress), e.shouldDeserialize !== void 0 && (i.shouldDeserialize = e.shouldDeserialize), e.allowInsecureConnection && (r.allowInsecureConnection = !0)), o.abortSignal && (r.abortSignal = o.abortSignal), o.tracingOptions && (r.tracingOptions = o.tracingOptions);
 		}
-		this._allowInsecureConnection && (r.allowInsecureConnection = !0), r.streamResponseStatusCodes === void 0 && (r.streamResponseStatusCodes = Xu(t));
+		this._allowInsecureConnection && (r.allowInsecureConnection = !0), r.streamResponseStatusCodes === void 0 && (r.streamResponseStatusCodes = Hd(t));
 		try {
-			let e = await this.sendRequest(r), n = iu(e, t.responses[e.status]);
+			let e = await this.sendRequest(r), n = Xu(e, t.responses[e.status]);
 			return o?.onResponse && o.onResponse(e, n), n;
 		} catch (e) {
 			if (typeof e == "object" && e?.response) {
-				let n = e.response, r = iu(n, t.responses[e.statusCode] || t.responses.default);
+				let n = e.response, r = Xu(n, t.responses[e.statusCode] || t.responses.default);
 				e.details = r, o?.onResponse && o.onResponse(n, r, e);
 			}
 			throw e;
 		}
 	}
 };
-function vd(e) {
-	let t = yd(e), n = e.credential && t ? {
+function df(e) {
+	let t = ff(e), n = e.credential && t ? {
 		credentialScopes: t,
 		credential: e.credential
 	} : void 0;
-	return id({
+	return Xd({
 		...e,
 		credentialOptions: n
 	});
 }
-function yd(e) {
+function ff(e) {
 	if (e.credentialScopes) return e.credentialScopes;
 	if (e.endpoint) return `${e.endpoint}/.default`;
 	if (e.baseUri) return `${e.baseUri}/.default`;
 	if (e.credential && !e.credentialScopes) throw Error("When using credentials, the ServiceClientOptions must contain either a endpoint or a credentialScopes. Unable to create a bearerTokenAuthenticationPolicy");
 }
-var bd = {
+var pf = {
 	DefaultScope: "/.default",
 	HeaderConstants: { AUTHORIZATION: "authorization" }
 };
-function xd(e) {
+function mf(e) {
 	return /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/.test(e);
 }
-var Sd = async (e) => {
-	let t = Dd(e.request), n = Td(e.response);
+var hf = async (e) => {
+	let t = bf(e.request), n = vf(e.response);
 	if (n) {
-		let r = Ed(n), i = wd(e, r), a = Cd(r);
+		let r = yf(n), i = _f(e, r), a = gf(r);
 		if (!a) return !1;
 		let o = await e.getAccessToken(i, {
 			...t,
 			tenantId: a
 		});
-		return o ? (e.request.headers.set(bd.HeaderConstants.AUTHORIZATION, `${o.tokenType ?? "Bearer"} ${o.token}`), !0) : !1;
+		return o ? (e.request.headers.set(pf.HeaderConstants.AUTHORIZATION, `${o.tokenType ?? "Bearer"} ${o.token}`), !0) : !1;
 	}
 	return !1;
 };
-function Cd(e) {
+function gf(e) {
 	let t = new URL(e.authorization_uri).pathname.split("/")[1];
-	if (t && xd(t)) return t;
+	if (t && mf(t)) return t;
 }
-function wd(e, t) {
+function _f(e, t) {
 	if (!t.resource_id) return e.scopes;
 	let n = new URL(t.resource_id);
-	n.pathname = bd.DefaultScope;
+	n.pathname = pf.DefaultScope;
 	let r = n.toString();
 	return r === "https://disk.azure.com/.default" && (r = "https://disk.azure.com//.default"), [r];
 }
-function Td(e) {
+function vf(e) {
 	let t = e.headers.get("WWW-Authenticate");
 	if (e.status === 401 && t) return t;
 }
-function Ed(e) {
+function yf(e) {
 	return `${e.slice(7).trim()} `.split(" ").filter((e) => e).map((e) => (([e, t]) => ({ [e]: t }))(e.trim().split("="))).reduce((e, t) => ({
 		...e,
 		...t
 	}), {});
 }
-function Dd(e) {
+function bf(e) {
 	return {
 		abortSignal: e.abortSignal,
 		requestOptions: { timeout: e.timeout },
 		tracingOptions: e.tracingOptions
 	};
 }
-var Od = Symbol("Original PipelineRequest"), kd = Symbol.for("@azure/core-client original request");
-function Ad(e, t = {}) {
-	let n = e[Od], r = Nl(e.headers.toJson({ preserveCase: !0 }));
+var xf = Symbol("Original PipelineRequest"), Sf = Symbol.for("@azure/core-client original request");
+function Cf(e, t = {}) {
+	let n = e[xf], r = Tu(e.headers.toJson({ preserveCase: !0 }));
 	if (n) return n.headers = r, n;
 	{
-		let n = Pl({
+		let n = Eu({
 			url: e.url,
 			method: e.method,
 			headers: r,
@@ -15908,14 +16622,14 @@ function Ad(e, t = {}) {
 			agent: e.agent,
 			requestOverrides: e.requestOverrides
 		});
-		return t.originalRequest && (n[kd] = t.originalRequest), n;
+		return t.originalRequest && (n[Sf] = t.originalRequest), n;
 	}
 }
-function jd(e, t) {
+function wf(e, t) {
 	let n = t?.originalRequest ?? e, r = {
 		url: e.url,
 		method: e.method,
-		headers: Md(e.headers),
+		headers: Tf(e.headers),
 		withCredentials: e.withCredentials,
 		timeout: e.timeout,
 		requestId: e.headers.get("x-ms-client-request-id") || e.requestId,
@@ -15939,7 +16653,7 @@ function jd(e, t) {
 	};
 	return t?.createProxy ? new Proxy(r, {
 		get(t, i, a) {
-			return i === Od ? e : i === "clone" ? () => jd(Ad(r, { originalRequest: n }), {
+			return i === xf ? e : i === "clone" ? () => wf(Cf(r, { originalRequest: n }), {
 				createProxy: !0,
 				originalRequest: n
 			}) : Reflect.get(t, i, a);
@@ -15964,33 +16678,33 @@ function jd(e, t) {
 		}
 	}) : r;
 }
-function Md(e) {
-	return new Pd(e.toJSON({ preserveCase: !0 }));
+function Tf(e) {
+	return new Df(e.toJSON({ preserveCase: !0 }));
 }
-function Nd(e) {
+function Ef(e) {
 	return e.toLowerCase();
 }
-var Pd = class e {
+var Df = class e {
 	_headersMap;
 	constructor(e) {
 		if (this._headersMap = {}, e) for (let t in e) this.set(t, e[t]);
 	}
 	set(e, t) {
-		this._headersMap[Nd(e)] = {
+		this._headersMap[Ef(e)] = {
 			name: e,
 			value: t.toString()
 		};
 	}
 	get(e) {
-		let t = this._headersMap[Nd(e)];
+		let t = this._headersMap[Ef(e)];
 		return t ? t.value : void 0;
 	}
 	contains(e) {
-		return !!this._headersMap[Nd(e)];
+		return !!this._headersMap[Ef(e)];
 	}
 	remove(e) {
 		let t = this.contains(e);
-		return delete this._headersMap[Nd(e)], t;
+		return delete this._headersMap[Ef(e)], t;
 	}
 	rawHeaders() {
 		return this.toJson({ preserveCase: !0 });
@@ -16018,7 +16732,7 @@ var Pd = class e {
 		}
 		else for (let e in this._headersMap) {
 			let n = this._headersMap[e];
-			t[Nd(n.name)] = n.value;
+			t[Ef(n.name)] = n.value;
 		}
 		return t;
 	}
@@ -16033,12 +16747,12 @@ var Pd = class e {
 		}
 		return new e(t);
 	}
-}, Fd = Symbol("Original FullOperationResponse");
-function Id(e, t) {
-	let n = jd(e.request), r = Md(e.headers);
+}, Of = Symbol("Original FullOperationResponse");
+function kf(e, t) {
+	let n = wf(e.request), r = Tf(e.headers);
 	return t?.createProxy ? new Proxy(e, {
 		get(t, i, a) {
-			return i === "headers" ? r : i === "request" ? n : i === Fd ? e : Reflect.get(t, i, a);
+			return i === "headers" ? r : i === "request" ? n : i === Of ? e : Reflect.get(t, i, a);
 		},
 		set(e, t, i, a) {
 			return t === "headers" ? r = i : t === "request" && (n = i), Reflect.set(e, t, i, a);
@@ -16049,17 +16763,17 @@ function Id(e, t) {
 		headers: r
 	};
 }
-function Ld(e) {
-	let t = e[Fd], n = Nl(e.headers.toJson({ preserveCase: !0 }));
+function Af(e) {
+	let t = e[Of], n = Tu(e.headers.toJson({ preserveCase: !0 }));
 	return t ? (t.headers = n, t) : {
 		...e,
 		headers: n,
-		request: Ad(e.request)
+		request: Cf(e.request)
 	};
 }
-var Rd = class extends _d {
+var jf = class extends uf {
 	constructor(e) {
-		super(e), e.keepAliveOptions?.enable === !1 && !Yl(this.pipeline) && this.pipeline.addPolicy(Jl()), e.redirectOptions?.handleRedirects === !1 && this.pipeline.removePolicy({ name: Mc });
+		super(e), e.keepAliveOptions?.enable === !1 && !Vu(this.pipeline) && this.pipeline.addPolicy(Bu()), e.redirectOptions?.handleRedirects === !1 && this.pipeline.removePolicy({ name: wl });
 	}
 	async sendOperationRequest(e, t) {
 		let n = e?.options?.onResponse, r;
@@ -16071,39 +16785,39 @@ var Rd = class extends _d {
 			onResponse: i
 		};
 		let a = await super.sendOperationRequest(e, t);
-		return r && Object.defineProperty(a, "_response", { value: Id(r) }), a;
+		return r && Object.defineProperty(a, "_response", { value: kf(r) }), a;
 	}
-}, zd;
+}, Mf;
 (function(e) {
 	e[e.ERROR = 1] = "ERROR", e[e.INFO = 3] = "INFO", e[e.OFF = 0] = "OFF", e[e.WARNING = 2] = "WARNING";
-})(zd ||= {});
-var Bd = {
+})(Mf ||= {});
+var Nf = {
 	log(e, t) {},
 	shouldLog(e) {
 		return !1;
 	}
-}, Vd = "RequestPolicyFactoryPolicy";
-function Hd(e) {
+}, Pf = "RequestPolicyFactoryPolicy";
+function Ff(e) {
 	let t = e.slice().reverse();
 	return {
-		name: Vd,
+		name: Pf,
 		async sendRequest(e, n) {
 			let r = { async sendRequest(e) {
-				return Id(await n(Ad(e)), { createProxy: !0 });
+				return kf(await n(Cf(e)), { createProxy: !0 });
 			} };
-			for (let e of t) r = e.create(r, Bd);
-			let i = jd(e, { createProxy: !0 });
-			return Ld(await r.sendRequest(i));
+			for (let e of t) r = e.create(r, Nf);
+			let i = wf(e, { createProxy: !0 });
+			return Af(await r.sendRequest(i));
 		}
 	};
 }
-function Ud(e) {
-	return { sendRequest: async (t) => Ld(await e.sendRequest(jd(t, { createProxy: !0 }))) };
+function If(e) {
+	return { sendRequest: async (t) => Af(await e.sendRequest(wf(t, { createProxy: !0 }))) };
 }
-var Wd = ":A-Za-z_\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD";
-Wd + "";
-var Gd = "[" + Wd + "][:A-Za-z_\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.\\d\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*", Kd = RegExp("^" + Gd + "$");
-function qd(e, t) {
+var Lf = ":A-Za-z_\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD";
+Lf + "";
+var Rf = "[" + Lf + "][:A-Za-z_\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.\\d\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*", zf = RegExp("^" + Rf + "$");
+function Bf(e, t) {
 	let n = [], r = t.exec(e);
 	for (; r;) {
 		let i = [];
@@ -16114,13 +16828,13 @@ function qd(e, t) {
 	}
 	return n;
 }
-var Jd = function(e) {
-	return Kd.exec(e) != null;
+var Vf = function(e) {
+	return zf.exec(e) != null;
 };
-function Yd(e) {
+function Hf(e) {
 	return e !== void 0;
 }
-var Xd = [
+var Uf = [
 	"hasOwnProperty",
 	"toString",
 	"valueOf",
@@ -16128,94 +16842,94 @@ var Xd = [
 	"__defineSetter__",
 	"__lookupGetter__",
 	"__lookupSetter__"
-], Zd = [
+], Wf = [
 	"__proto__",
 	"constructor",
 	"prototype"
-], Qd = {
+], Gf = {
 	allowBooleanAttributes: !1,
 	unpairedTags: []
 };
-function $d(e, t) {
-	t = Object.assign({}, Qd, t);
+function Kf(e, t) {
+	t = Object.assign({}, Gf, t);
 	let n = [], r = !1, i = !1;
 	e[0] === "﻿" && (e = e.substr(1));
 	for (let a = 0; a < e.length; a++) if (e[a] === "<" && e[a + 1] === "?") {
-		if (a += 2, a = tf(e, a), a.err) return a;
+		if (a += 2, a = Jf(e, a), a.err) return a;
 	} else if (e[a] === "<") {
 		let o = a;
 		if (a++, e[a] === "!") {
-			a = nf(e, a);
+			a = Yf(e, a);
 			continue;
 		} else {
 			let s = !1;
 			e[a] === "/" && (s = !0, a++);
 			let c = "";
 			for (; a < e.length && e[a] !== ">" && e[a] !== " " && e[a] !== "	" && e[a] !== "\n" && e[a] !== "\r"; a++) c += e[a];
-			if (c = c.trim(), c[c.length - 1] === "/" && (c = c.substring(0, c.length - 1), a--), !pf(c)) {
+			if (c = c.trim(), c[c.length - 1] === "/" && (c = c.substring(0, c.length - 1), a--), !ap(c)) {
 				let t;
-				return t = c.trim().length === 0 ? "Invalid space after '<'." : "Tag '" + c + "' is an invalid name.", df("InvalidTag", t, mf(e, a));
+				return t = c.trim().length === 0 ? "Invalid space after '<'." : "Tag '" + c + "' is an invalid name.", rp("InvalidTag", t, op(e, a));
 			}
-			let l = of(e, a);
-			if (l === !1) return df("InvalidAttr", "Attributes for '" + c + "' have open quote.", mf(e, a));
+			let l = Qf(e, a);
+			if (l === !1) return rp("InvalidAttr", "Attributes for '" + c + "' have open quote.", op(e, a));
 			let u = l.value;
 			if (a = l.index, u[u.length - 1] === "/") {
 				let n = a - u.length;
 				u = u.substring(0, u.length - 1);
-				let i = cf(u, t);
+				let i = ep(u, t);
 				if (i === !0) r = !0;
-				else return df(i.err.code, i.err.msg, mf(e, n + i.err.line));
+				else return rp(i.err.code, i.err.msg, op(e, n + i.err.line));
 			} else if (s) {
-				if (!l.tagClosed) return df("InvalidTag", "Closing tag '" + c + "' doesn't have proper closing.", mf(e, a));
-				if (u.trim().length > 0) return df("InvalidTag", "Closing tag '" + c + "' can't have attributes or invalid starting.", mf(e, o));
-				if (n.length === 0) return df("InvalidTag", "Closing tag '" + c + "' has not been opened.", mf(e, o));
+				if (!l.tagClosed) return rp("InvalidTag", "Closing tag '" + c + "' doesn't have proper closing.", op(e, a));
+				if (u.trim().length > 0) return rp("InvalidTag", "Closing tag '" + c + "' can't have attributes or invalid starting.", op(e, o));
+				if (n.length === 0) return rp("InvalidTag", "Closing tag '" + c + "' has not been opened.", op(e, o));
 				{
 					let t = n.pop();
 					if (c !== t.tagName) {
-						let n = mf(e, t.tagStartPos);
-						return df("InvalidTag", "Expected closing tag '" + t.tagName + "' (opened in line " + n.line + ", col " + n.col + ") instead of closing tag '" + c + "'.", mf(e, o));
+						let n = op(e, t.tagStartPos);
+						return rp("InvalidTag", "Expected closing tag '" + t.tagName + "' (opened in line " + n.line + ", col " + n.col + ") instead of closing tag '" + c + "'.", op(e, o));
 					}
 					n.length == 0 && (i = !0);
 				}
 			} else {
-				let s = cf(u, t);
-				if (s !== !0) return df(s.err.code, s.err.msg, mf(e, a - u.length + s.err.line));
-				if (i === !0) return df("InvalidXml", "Multiple possible root nodes found.", mf(e, a));
+				let s = ep(u, t);
+				if (s !== !0) return rp(s.err.code, s.err.msg, op(e, a - u.length + s.err.line));
+				if (i === !0) return rp("InvalidXml", "Multiple possible root nodes found.", op(e, a));
 				t.unpairedTags.indexOf(c) !== -1 || n.push({
 					tagName: c,
 					tagStartPos: o
 				}), r = !0;
 			}
 			for (a++; a < e.length; a++) if (e[a] === "<") if (e[a + 1] === "!") {
-				a++, a = nf(e, a);
+				a++, a = Yf(e, a);
 				continue;
 			} else if (e[a + 1] === "?") {
-				if (a = tf(e, ++a), a.err) return a;
+				if (a = Jf(e, ++a), a.err) return a;
 			} else break;
 			else if (e[a] === "&") {
-				let t = uf(e, a);
-				if (t == -1) return df("InvalidChar", "char '&' is not expected.", mf(e, a));
+				let t = np(e, a);
+				if (t == -1) return rp("InvalidChar", "char '&' is not expected.", op(e, a));
 				a = t;
-			} else if (i === !0 && !ef(e[a])) return df("InvalidXml", "Extra text at the end", mf(e, a));
+			} else if (i === !0 && !qf(e[a])) return rp("InvalidXml", "Extra text at the end", op(e, a));
 			e[a] === "<" && a--;
 		}
 	} else {
-		if (ef(e[a])) continue;
-		return df("InvalidChar", "char '" + e[a] + "' is not expected.", mf(e, a));
+		if (qf(e[a])) continue;
+		return rp("InvalidChar", "char '" + e[a] + "' is not expected.", op(e, a));
 	}
-	return r ? n.length == 1 ? df("InvalidTag", "Unclosed tag '" + n[0].tagName + "'.", mf(e, n[0].tagStartPos)) : n.length > 0 ? df("InvalidXml", "Invalid '" + JSON.stringify(n.map((e) => e.tagName), null, 4).replace(/\r?\n/g, "") + "' found.", {
+	return r ? n.length == 1 ? rp("InvalidTag", "Unclosed tag '" + n[0].tagName + "'.", op(e, n[0].tagStartPos)) : n.length > 0 ? rp("InvalidXml", "Invalid '" + JSON.stringify(n.map((e) => e.tagName), null, 4).replace(/\r?\n/g, "") + "' found.", {
 		line: 1,
 		col: 1
-	}) : !0 : df("InvalidXml", "Start tag expected.", 1);
+	}) : !0 : rp("InvalidXml", "Start tag expected.", 1);
 }
-function ef(e) {
+function qf(e) {
 	return e === " " || e === "	" || e === "\n" || e === "\r";
 }
-function tf(e, t) {
+function Jf(e, t) {
 	let n = t;
 	for (; t < e.length; t++) if (e[t] == "?" || e[t] == " ") {
 		let r = e.substr(n, t - n);
-		if (t > 5 && r === "xml") return df("InvalidXml", "XML declaration allowed only at the start of the document.", mf(e, t));
+		if (t > 5 && r === "xml") return rp("InvalidXml", "XML declaration allowed only at the start of the document.", op(e, t));
 		if (e[t] == "?" && e[t + 1] == ">") {
 			t++;
 			break;
@@ -16223,7 +16937,7 @@ function tf(e, t) {
 	}
 	return t;
 }
-function nf(e, t) {
+function Yf(e, t) {
 	if (e.length > t + 5 && e[t + 1] === "-" && e[t + 2] === "-") {
 		for (t += 3; t < e.length; t++) if (e[t] === "-" && e[t + 1] === "-" && e[t + 2] === ">") {
 			t += 2;
@@ -16241,11 +16955,11 @@ function nf(e, t) {
 	}
 	return t;
 }
-var rf = "\"", af = "'";
-function of(e, t) {
+var Xf = "\"", Zf = "'";
+function Qf(e, t) {
 	let n = "", r = "", i = !1;
 	for (; t < e.length; t++) {
-		if (e[t] === rf || e[t] === af) r === "" ? r = e[t] : r !== e[t] || (r = "");
+		if (e[t] === Xf || e[t] === Zf) r === "" ? r = e[t] : r !== e[t] || (r = "");
 		else if (e[t] === ">" && r === "") {
 			i = !0;
 			break;
@@ -16258,21 +16972,21 @@ function of(e, t) {
 		tagClosed: i
 	} : !1;
 }
-var sf = /* @__PURE__ */ RegExp("(\\s*)([^\\s=]+)(\\s*=)?(\\s*(['\"])(([\\s\\S])*?)\\5)?", "g");
-function cf(e, t) {
-	let n = qd(e, sf), r = {};
+var $f = /* @__PURE__ */ RegExp("(\\s*)([^\\s=]+)(\\s*=)?(\\s*(['\"])(([\\s\\S])*?)\\5)?", "g");
+function ep(e, t) {
+	let n = Bf(e, $f), r = {};
 	for (let e = 0; e < n.length; e++) {
-		if (n[e][1].length === 0) return df("InvalidAttr", "Attribute '" + n[e][2] + "' has no space in starting.", hf(n[e]));
-		if (n[e][3] !== void 0 && n[e][4] === void 0) return df("InvalidAttr", "Attribute '" + n[e][2] + "' is without value.", hf(n[e]));
-		if (n[e][3] === void 0 && !t.allowBooleanAttributes) return df("InvalidAttr", "boolean attribute '" + n[e][2] + "' is not allowed.", hf(n[e]));
+		if (n[e][1].length === 0) return rp("InvalidAttr", "Attribute '" + n[e][2] + "' has no space in starting.", sp(n[e]));
+		if (n[e][3] !== void 0 && n[e][4] === void 0) return rp("InvalidAttr", "Attribute '" + n[e][2] + "' is without value.", sp(n[e]));
+		if (n[e][3] === void 0 && !t.allowBooleanAttributes) return rp("InvalidAttr", "boolean attribute '" + n[e][2] + "' is not allowed.", sp(n[e]));
 		let i = n[e][2];
-		if (!ff(i)) return df("InvalidAttr", "Attribute '" + i + "' is an invalid name.", hf(n[e]));
+		if (!ip(i)) return rp("InvalidAttr", "Attribute '" + i + "' is an invalid name.", sp(n[e]));
 		if (!Object.prototype.hasOwnProperty.call(r, i)) r[i] = 1;
-		else return df("InvalidAttr", "Attribute '" + i + "' is repeated.", hf(n[e]));
+		else return rp("InvalidAttr", "Attribute '" + i + "' is repeated.", sp(n[e]));
 	}
 	return !0;
 }
-function lf(e, t) {
+function tp(e, t) {
 	let n = /\d/;
 	for (e[t] === "x" && (t++, n = /[\da-fA-F]/); t < e.length; t++) {
 		if (e[t] === ";") return t;
@@ -16280,9 +16994,9 @@ function lf(e, t) {
 	}
 	return -1;
 }
-function uf(e, t) {
+function np(e, t) {
 	if (t++, e[t] === ";") return -1;
-	if (e[t] === "#") return t++, lf(e, t);
+	if (e[t] === "#") return t++, tp(e, t);
 	let n = 0;
 	for (; t < e.length; t++, n++) if (!(e[t].match(/\w/) && n < 20)) {
 		if (e[t] === ";") break;
@@ -16290,7 +17004,7 @@ function uf(e, t) {
 	}
 	return t;
 }
-function df(e, t, n) {
+function rp(e, t, n) {
 	return { err: {
 		code: e,
 		msg: t,
@@ -16298,23 +17012,23 @@ function df(e, t, n) {
 		col: n.col
 	} };
 }
-function ff(e) {
-	return Jd(e);
+function ip(e) {
+	return Vf(e);
 }
-function pf(e) {
-	return Jd(e);
+function ap(e) {
+	return Vf(e);
 }
-function mf(e, t) {
+function op(e, t) {
 	let n = e.substring(0, t).split(/\r?\n/);
 	return {
 		line: n.length,
 		col: n[n.length - 1].length + 1
 	};
 }
-function hf(e) {
+function sp(e) {
 	return e.startIndex + e[1].length;
 }
-var gf = {
+var cp = {
 	amp: "&",
 	AMP: "&",
 	lt: "<",
@@ -16393,7 +17107,7 @@ var gf = {
 	times: "×",
 	div: "÷",
 	divide: "÷"
-}, _f = {
+}, lp = {
 	Agrave: "À",
 	agrave: "à",
 	Aacute: "Á",
@@ -16457,7 +17171,7 @@ var gf = {
 	szlig: "ß",
 	yuml: "ÿ",
 	Yuml: "Ÿ"
-}, vf = {
+}, up = {
 	Amacr: "Ā",
 	amacr: "ā",
 	Abreve: "Ă",
@@ -16575,7 +17289,7 @@ var gf = {
 	zdot: "ż",
 	Zcaron: "Ž",
 	zcaron: "ž"
-}, yf = {
+}, dp = {
 	Alpha: "Α",
 	alpha: "α",
 	Beta: "Β",
@@ -16646,7 +17360,7 @@ var gf = {
 	Gammad: "Ϝ",
 	gammad: "ϝ",
 	digamma: "ϝ"
-}, bf = {
+}, fp = {
 	Afr: "𝔄",
 	afr: "𝔞",
 	Acy: "А",
@@ -16741,7 +17455,7 @@ var gf = {
 	ubrcy: "ў",
 	DZcy: "Џ",
 	dzcy: "џ"
-}, xf = {
+}, pp = {
 	plus: "+",
 	minus: "−",
 	mnplus: "∓",
@@ -16830,7 +17544,7 @@ var gf = {
 	lesseqqgtr: "⪋",
 	greater: ">",
 	less: "<"
-}, Sf = {
+}, mp = {
 	alefsym: "ℵ",
 	aleph: "ℵ",
 	beth: "ℶ",
@@ -16952,7 +17666,7 @@ var gf = {
 	npr: "⊀",
 	nsucc: "⊁",
 	nsc: "⊁"
-}, Cf = {
+}, hp = {
 	larr: "←",
 	leftarrow: "←",
 	LeftArrow: "←",
@@ -17109,7 +17823,7 @@ var gf = {
 	LeftArrowBar: "⇤",
 	rarrb: "⇥",
 	RightArrowBar: "⇥"
-}, wf = {
+}, gp = {
 	square: "□",
 	Square: "□",
 	squ: "□",
@@ -17202,7 +17916,7 @@ var gf = {
 	boxvH: "╪",
 	boxVh: "╫",
 	boxVH: "╬"
-}, Tf = {
+}, _p = {
 	excl: "!",
 	iexcl: "¡",
 	brvbar: "¦",
@@ -17254,7 +17968,7 @@ var gf = {
 	DiacriticalDoubleAcute: "˝",
 	grave: "`",
 	acute: "´"
-}, Ef = {
+}, vp = {
 	cent: "¢",
 	pound: "£",
 	curren: "¤",
@@ -17271,7 +17985,7 @@ var gf = {
 	won: "₩",
 	yuan: "¥",
 	cedil: "¸"
-}, Df = {
+}, yp = {
 	frac12: "½",
 	half: "½",
 	frac13: "⅓",
@@ -17289,7 +18003,7 @@ var gf = {
 	frac58: "⅝",
 	frac78: "⅞",
 	frasl: "⁄"
-}, Of = {
+}, bp = {
 	trade: "™",
 	TRADE: "™",
 	telrec: "⌕",
@@ -17357,27 +18071,27 @@ var gf = {
 	nVDash: "⊯"
 };
 ({
-	...gf,
-	..._f,
-	...vf,
-	...yf,
-	...bf,
-	...xf,
-	...Sf,
-	...Cf,
-	...wf,
-	...Tf,
-	...Ef,
-	...Df,
-	...Of
+	...cp,
+	...lp,
+	...up,
+	...dp,
+	...fp,
+	...pp,
+	...mp,
+	...hp,
+	...gp,
+	..._p,
+	...vp,
+	...yp,
+	...bp
 });
-var kf = {
+var xp = {
 	amp: "&",
 	apos: "'",
 	gt: ">",
 	lt: "<",
 	quot: "\""
-}, Af = {
+}, Sp = {
 	nbsp: "\xA0",
 	copy: "©",
 	reg: "®",
@@ -17398,13 +18112,13 @@ var kf = {
 	frac12: "½",
 	frac14: "¼",
 	frac34: "¾"
-}, jf = /* @__PURE__ */ new Set("!?\\\\/[]$%{}^&*()<>|+");
-function Mf(e) {
+}, Cp = /* @__PURE__ */ new Set("!?\\\\/[]$%{}^&*()<>|+");
+function wp(e) {
 	if (e[0] === "#") throw Error(`[EntityReplacer] Invalid character '#' in entity name: "${e}"`);
-	for (let t of e) if (jf.has(t)) throw Error(`[EntityReplacer] Invalid character '${t}' in entity name: "${e}"`);
+	for (let t of e) if (Cp.has(t)) throw Error(`[EntityReplacer] Invalid character '${t}' in entity name: "${e}"`);
 	return e;
 }
-function Nf(...e) {
+function Tp(...e) {
 	let t = Object.create(null);
 	for (let n of e) if (n) for (let e of Object.keys(n)) {
 		let r = n[e];
@@ -17416,48 +18130,48 @@ function Nf(...e) {
 	}
 	return t;
 }
-var Pf = "external", Ff = "base", If = "all";
-function Lf(e) {
-	return !e || e === Pf ? new Set([Pf]) : e === If ? new Set([If]) : e === Ff ? new Set([Ff]) : Array.isArray(e) ? new Set(e) : new Set([Pf]);
+var Ep = "external", Dp = "base", Op = "all";
+function kp(e) {
+	return !e || e === Ep ? new Set([Ep]) : e === Op ? new Set([Op]) : e === Dp ? new Set([Dp]) : Array.isArray(e) ? new Set(e) : new Set([Ep]);
 }
-var Rf = Object.freeze({
+var Ap = Object.freeze({
 	allow: 0,
 	leave: 1,
 	remove: 2,
 	throw: 3
-}), zf = new Set([
+}), jp = new Set([
 	9,
 	10,
 	13
 ]);
-function Bf(e) {
+function Mp(e) {
 	if (!e) return {
 		xmlVersion: 1,
-		onLevel: Rf.allow,
-		nullLevel: Rf.remove
+		onLevel: Ap.allow,
+		nullLevel: Ap.remove
 	};
-	let t = e.xmlVersion === 1.1 ? 1.1 : 1, n = Rf[e.onNCR] ?? Rf.allow, r = Rf[e.nullNCR] ?? Rf.remove;
+	let t = e.xmlVersion === 1.1 ? 1.1 : 1, n = Ap[e.onNCR] ?? Ap.allow, r = Ap[e.nullNCR] ?? Ap.remove;
 	return {
 		xmlVersion: t,
 		onLevel: n,
-		nullLevel: Math.max(r, Rf.remove)
+		nullLevel: Math.max(r, Ap.remove)
 	};
 }
-var Vf = class {
+var Np = class {
 	constructor(e = {}) {
-		this._limit = e.limit || {}, this._maxTotalExpansions = this._limit.maxTotalExpansions || 0, this._maxExpandedLength = this._limit.maxExpandedLength || 0, this._postCheck = typeof e.postCheck == "function" ? e.postCheck : (e) => e, this._limitTiers = Lf(this._limit.applyLimitsTo ?? Pf), this._numericAllowed = e.numericAllowed ?? !0, this._baseMap = Nf(kf, e.namedEntities || null), this._externalMap = Object.create(null), this._inputMap = Object.create(null), this._totalExpansions = 0, this._expandedLength = 0, this._removeSet = new Set(e.remove && Array.isArray(e.remove) ? e.remove : []), this._leaveSet = new Set(e.leave && Array.isArray(e.leave) ? e.leave : []);
-		let t = Bf(e.ncr);
+		this._limit = e.limit || {}, this._maxTotalExpansions = this._limit.maxTotalExpansions || 0, this._maxExpandedLength = this._limit.maxExpandedLength || 0, this._postCheck = typeof e.postCheck == "function" ? e.postCheck : (e) => e, this._limitTiers = kp(this._limit.applyLimitsTo ?? Ep), this._numericAllowed = e.numericAllowed ?? !0, this._baseMap = Tp(xp, e.namedEntities || null), this._externalMap = Object.create(null), this._inputMap = Object.create(null), this._totalExpansions = 0, this._expandedLength = 0, this._removeSet = new Set(e.remove && Array.isArray(e.remove) ? e.remove : []), this._leaveSet = new Set(e.leave && Array.isArray(e.leave) ? e.leave : []);
+		let t = Mp(e.ncr);
 		this._ncrXmlVersion = t.xmlVersion, this._ncrOnLevel = t.onLevel, this._ncrNullLevel = t.nullLevel;
 	}
 	setExternalEntities(e) {
-		if (e) for (let t of Object.keys(e)) Mf(t);
-		this._externalMap = Nf(e);
+		if (e) for (let t of Object.keys(e)) wp(t);
+		this._externalMap = Tp(e);
 	}
 	addExternalEntity(e, t) {
-		Mf(e), typeof t == "string" && t.indexOf("&") === -1 && (this._externalMap[e] = t);
+		wp(e), typeof t == "string" && t.indexOf("&") === -1 && (this._externalMap[e] = t);
 	}
 	addInputEntities(e) {
-		this._totalExpansions = 0, this._expandedLength = 0, this._inputMap = Nf(e);
+		this._totalExpansions = 0, this._expandedLength = 0, this._inputMap = Tp(e);
 	}
 	reset() {
 		return this._inputMap = Object.create(null), this._totalExpansions = 0, this._expandedLength = 0, this;
@@ -17485,7 +18199,7 @@ var Vf = class {
 				continue;
 			}
 			let u, d;
-			if (this._removeSet.has(l)) u = "", d === void 0 && (d = Pf);
+			if (this._removeSet.has(l)) u = "", d === void 0 && (d = Ep);
 			else if (this._leaveSet.has(l)) {
 				a++;
 				continue;
@@ -17495,7 +18209,7 @@ var Vf = class {
 					a++;
 					continue;
 				}
-				u = e, d = Ff;
+				u = e, d = Dp;
 			} else {
 				let e = this._resolveName(l);
 				u = e?.value, d = e?.tier;
@@ -17517,31 +18231,31 @@ var Vf = class {
 		return this._postCheck(l, t);
 	}
 	_tierCounts(e) {
-		return this._limitTiers.has(If) ? !0 : this._limitTiers.has(e);
+		return this._limitTiers.has(Op) ? !0 : this._limitTiers.has(e);
 	}
 	_resolveName(e) {
 		if (e in this._inputMap) return {
 			value: this._inputMap[e],
-			tier: Pf
+			tier: Ep
 		};
 		if (e in this._externalMap) return {
 			value: this._externalMap[e],
-			tier: Pf
+			tier: Ep
 		};
 		if (e in this._baseMap) return {
 			value: this._baseMap[e],
-			tier: Ff
+			tier: Dp
 		};
 	}
 	_classifyNCR(e) {
-		return e === 0 ? this._ncrNullLevel : e >= 55296 && e <= 57343 || this._ncrXmlVersion === 1 && e >= 1 && e <= 31 && !zf.has(e) ? Rf.remove : -1;
+		return e === 0 ? this._ncrNullLevel : e >= 55296 && e <= 57343 || this._ncrXmlVersion === 1 && e >= 1 && e <= 31 && !jp.has(e) ? Ap.remove : -1;
 	}
 	_applyNCRAction(e, t, n) {
 		switch (e) {
-			case Rf.allow: return String.fromCodePoint(n);
-			case Rf.remove: return "";
-			case Rf.leave: return;
-			case Rf.throw: throw Error(`[EntityDecoder] Prohibited numeric character reference &${t}; (U+${n.toString(16).toUpperCase().padStart(4, "0")})`);
+			case Ap.allow: return String.fromCodePoint(n);
+			case Ap.remove: return "";
+			case Ap.leave: return;
+			case Ap.throw: throw Error(`[EntityDecoder] Prohibited numeric character reference &${t}; (U+${n.toString(16).toUpperCase().padStart(4, "0")})`);
 			default: return String.fromCodePoint(n);
 		}
 	}
@@ -17549,11 +18263,11 @@ var Vf = class {
 		let t = e.charCodeAt(1), n;
 		if (n = t === 120 || t === 88 ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10), Number.isNaN(n) || n < 0 || n > 1114111) return;
 		let r = this._classifyNCR(n);
-		if (!this._numericAllowed && r < Rf.remove) return;
+		if (!this._numericAllowed && r < Ap.remove) return;
 		let i = r === -1 ? this._ncrOnLevel : Math.max(this._ncrOnLevel, r);
 		return this._applyNCRAction(i, e, n);
 	}
-}, Hf = (e) => Xd.includes(e) ? "__" + e : e, Uf = {
+}, Pp = (e) => Uf.includes(e) ? "__" + e : e, Fp = {
 	preserveOrder: !1,
 	attributeNamePrefix: "@_",
 	attributesGroupName: !1,
@@ -17595,14 +18309,14 @@ var Vf = class {
 	maxNestedTags: 100,
 	strictReservedNames: !0,
 	jPath: !0,
-	onDangerousProperty: Hf
+	onDangerousProperty: Pp
 };
-function Wf(e, t) {
+function Ip(e, t) {
 	if (typeof e != "string") return;
 	let n = e.toLowerCase();
-	if (Xd.some((e) => n === e.toLowerCase()) || Zd.some((e) => n === e.toLowerCase())) throw Error(`[SECURITY] Invalid ${t}: "${e}" is a reserved JavaScript keyword that could cause prototype pollution`);
+	if (Uf.some((e) => n === e.toLowerCase()) || Wf.some((e) => n === e.toLowerCase())) throw Error(`[SECURITY] Invalid ${t}: "${e}" is a reserved JavaScript keyword that could cause prototype pollution`);
 }
-function Gf(e, t) {
+function Lp(e, t) {
 	return typeof e == "boolean" ? {
 		enabled: e,
 		maxEntitySize: 1e4,
@@ -17623,10 +18337,10 @@ function Gf(e, t) {
 		allowedTags: e.allowedTags ?? null,
 		tagFilter: e.tagFilter ?? null,
 		appliesTo: e.appliesTo ?? "all"
-	} : Gf(!0);
+	} : Lp(!0);
 }
-var Kf = function(e) {
-	let t = Object.assign({}, Uf, e), n = [
+var Rp = function(e) {
+	let t = Object.assign({}, Fp, e), n = [
 		{
 			value: t.attributeNamePrefix,
 			name: "attributeNamePrefix"
@@ -17648,9 +18362,9 @@ var Kf = function(e) {
 			name: "commentPropName"
 		}
 	];
-	for (let { value: e, name: t } of n) e && Wf(e, t);
-	return t.onDangerousProperty === null && (t.onDangerousProperty = Hf), t.processEntities = Gf(t.processEntities, t.htmlEntities), t.unpairedTagsSet = new Set(t.unpairedTags), t.stopNodes && Array.isArray(t.stopNodes) && (t.stopNodes = t.stopNodes.map((e) => typeof e == "string" && e.startsWith("*.") ? ".." + e.substring(2) : e)), t;
-}, qf = typeof Symbol == "function" ? Symbol("XML Node Metadata") : "@@xmlMetadata", Jf = class {
+	for (let { value: e, name: t } of n) e && Ip(e, t);
+	return t.onDangerousProperty === null && (t.onDangerousProperty = Pp), t.processEntities = Lp(t.processEntities, t.htmlEntities), t.unpairedTagsSet = new Set(t.unpairedTags), t.stopNodes && Array.isArray(t.stopNodes) && (t.stopNodes = t.stopNodes.map((e) => typeof e == "string" && e.startsWith("*.") ? ".." + e.substring(2) : e)), t;
+}, zp = typeof Symbol == "function" ? Symbol("XML Node Metadata") : "@@xmlMetadata", Bp = class {
 	constructor(e) {
 		this.tagname = e, this.child = [], this[":@"] = Object.create(null);
 	}
@@ -17661,14 +18375,26 @@ var Kf = function(e) {
 		e.tagname === "__proto__" && (e.tagname = "#__proto__"), e[":@"] && Object.keys(e[":@"]).length > 0 ? this.child.push({
 			[e.tagname]: e.child,
 			":@": e[":@"]
-		}) : this.child.push({ [e.tagname]: e.child }), t !== void 0 && (this.child[this.child.length - 1][qf] = { startIndex: t });
+		}) : this.child.push({ [e.tagname]: e.child }), t !== void 0 && (this.child[this.child.length - 1][zp] = { startIndex: t });
 	}
 	static getMetaDataSymbol() {
-		return qf;
+		return zp;
 	}
-}, Yf = class {
-	constructor(e) {
-		this.suppressValidationErr = !e, this.options = e;
+}, Vp = ":A-Za-z_À-ÖØ-öø-˿Ͱ-ͽͿ-҆҈-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�", Hp = Vp + "\\-\\.\\d·̀-ͯ‿-⁀", Up = ":A-Za-z_À-˿Ͱ-ͽͿ-҆҈-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿", Wp = Up + "\\-\\.\\d·̀-ͯ҇‿-⁀", Gp = (e, t, n = "") => {
+	let r = `[${e.replace(":", "")}][${t.replace(":", "")}]*`;
+	return {
+		name: RegExp(`^[${e}][${t}]*$`, n),
+		ncName: RegExp(`^${r}$`, n),
+		qName: RegExp(`^${r}(?::${r})?$`, n),
+		nmToken: RegExp(`^[${t}]+$`, n),
+		nmTokens: RegExp(`^[${t}]+(?:\\s+[${t}]+)*$`, n)
+	};
+}, Kp = Gp(Vp, Hp), qp = Gp(Up, Wp, "u"), Jp = (e = "1.0") => e === "1.1" ? qp : Kp, Yp = (e, { xmlVersion: t = "1.0" } = {}) => Jp(t).qName.test(e), Xp = class {
+	constructor(e, t) {
+		this.suppressValidationErr = !e, this.options = e, this.xmlVersion = t || 1;
+	}
+	setXmlVersion(e = 1) {
+		this.xmlVersion = e;
 	}
 	readDocType(e, t) {
 		let n = Object.create(null), r = 0;
@@ -17676,23 +18402,23 @@ var Kf = function(e) {
 			t += 9;
 			let i = 1, a = !1, o = !1, s = "";
 			for (; t < e.length; t++) if (e[t] === "<" && !o) {
-				if (a && Zf(e, "!ENTITY", t)) {
+				if (a && Qp(e, "!ENTITY", t)) {
 					t += 7;
 					let i, a;
 					if ([i, a, t] = this.readEntityExp(e, t + 1, this.suppressValidationErr), a.indexOf("&") === -1) {
 						if (this.options.enabled !== !1 && this.options.maxEntityCount != null && r >= this.options.maxEntityCount) throw Error(`Entity count (${r + 1}) exceeds maximum allowed (${this.options.maxEntityCount})`);
 						n[i] = a, r++;
 					}
-				} else if (a && Zf(e, "!ELEMENT", t)) {
+				} else if (a && Qp(e, "!ELEMENT", t)) {
 					t += 8;
 					let { index: n } = this.readElementExp(e, t + 1);
 					t = n;
-				} else if (a && Zf(e, "!ATTLIST", t)) t += 8;
-				else if (a && Zf(e, "!NOTATION", t)) {
+				} else if (a && Qp(e, "!ATTLIST", t)) t += 8;
+				else if (a && Qp(e, "!NOTATION", t)) {
 					t += 9;
 					let { index: n } = this.readNotationExp(e, t + 1, this.suppressValidationErr);
 					t = n;
-				} else if (Zf(e, "!--", t)) o = !0;
+				} else if (Qp(e, "!--", t)) o = !0;
 				else throw Error("Invalid DOCTYPE");
 				i++, s = "";
 			} else if (e[t] === ">") {
@@ -17706,11 +18432,11 @@ var Kf = function(e) {
 		};
 	}
 	readEntityExp(e, t) {
-		t = Xf(e, t);
+		t = Zp(e, t);
 		let n = t;
 		for (; t < e.length && !/\s/.test(e[t]) && e[t] !== "\"" && e[t] !== "'";) t++;
 		let r = e.substring(n, t);
-		if (Qf(r), t = Xf(e, t), !this.suppressValidationErr) {
+		if ($p(r, { xmlVersion: this.xmlVersion }), t = Zp(e, t), !this.suppressValidationErr) {
 			if (e.substring(t, t + 6).toUpperCase() === "SYSTEM") throw Error("External entities are not supported");
 			if (e[t] === "%") throw Error("Parameter entities are not supported");
 		}
@@ -17723,16 +18449,16 @@ var Kf = function(e) {
 		];
 	}
 	readNotationExp(e, t) {
-		t = Xf(e, t);
+		t = Zp(e, t);
 		let n = t;
 		for (; t < e.length && !/\s/.test(e[t]);) t++;
 		let r = e.substring(n, t);
-		!this.suppressValidationErr && Qf(r), t = Xf(e, t);
+		!this.suppressValidationErr && $p(r, { xmlVersion: this.xmlVersion }), t = Zp(e, t);
 		let i = e.substring(t, t + 6).toUpperCase();
 		if (!this.suppressValidationErr && i !== "SYSTEM" && i !== "PUBLIC") throw Error(`Expected SYSTEM or PUBLIC, found "${i}"`);
-		t += i.length, t = Xf(e, t);
+		t += i.length, t = Zp(e, t);
 		let a = null, o = null;
-		if (i === "PUBLIC") [t, a] = this.readIdentifierVal(e, t, "publicIdentifier"), t = Xf(e, t), (e[t] === "\"" || e[t] === "'") && ([t, o] = this.readIdentifierVal(e, t, "systemIdentifier"));
+		if (i === "PUBLIC") [t, a] = this.readIdentifierVal(e, t, "publicIdentifier"), t = Zp(e, t), (e[t] === "\"" || e[t] === "'") && ([t, o] = this.readIdentifierVal(e, t, "systemIdentifier"));
 		else if (i === "SYSTEM" && ([t, o] = this.readIdentifierVal(e, t, "systemIdentifier"), !this.suppressValidationErr && !o)) throw Error("Missing mandatory system identifier for SYSTEM notation");
 		return {
 			notationName: r,
@@ -17751,15 +18477,15 @@ var Kf = function(e) {
 		return t++, [t, r];
 	}
 	readElementExp(e, t) {
-		t = Xf(e, t);
+		t = Zp(e, t);
 		let n = t;
 		for (; t < e.length && !/\s/.test(e[t]);) t++;
 		let r = e.substring(n, t);
-		if (!this.suppressValidationErr && !Jd(r)) throw Error(`Invalid element name: "${r}"`);
-		t = Xf(e, t);
+		if (!this.suppressValidationErr && !Yp(r, { xmlVersion: this.xmlVersion })) throw Error(`Invalid element name: "${r}"`);
+		t = Zp(e, t);
 		let i = "";
-		if (e[t] === "E" && Zf(e, "MPTY", t)) t += 4;
-		else if (e[t] === "A" && Zf(e, "NY", t)) t += 2;
+		if (e[t] === "E" && Qp(e, "MPTY", t)) t += 4;
+		else if (e[t] === "A" && Qp(e, "NY", t)) t += 2;
 		else if (e[t] === "(") {
 			t++;
 			let n = t;
@@ -17773,25 +18499,25 @@ var Kf = function(e) {
 		};
 	}
 	readAttlistExp(e, t) {
-		t = Xf(e, t);
+		t = Zp(e, t);
 		let n = t;
 		for (; t < e.length && !/\s/.test(e[t]);) t++;
 		let r = e.substring(n, t);
-		for (Qf(r), t = Xf(e, t), n = t; t < e.length && !/\s/.test(e[t]);) t++;
+		for ($p(r, { xmlVersion: this.xmlVersion }), t = Zp(e, t), n = t; t < e.length && !/\s/.test(e[t]);) t++;
 		let i = e.substring(n, t);
-		if (!Qf(i)) throw Error(`Invalid attribute name: "${i}"`);
-		t = Xf(e, t);
+		if (!$p(i, { xmlVersion: this.xmlVersion })) throw Error(`Invalid attribute name: "${i}"`);
+		t = Zp(e, t);
 		let a = "";
 		if (e.substring(t, t + 8).toUpperCase() === "NOTATION") {
-			if (a = "NOTATION", t += 8, t = Xf(e, t), e[t] !== "(") throw Error(`Expected '(', found "${e[t]}"`);
+			if (a = "NOTATION", t += 8, t = Zp(e, t), e[t] !== "(") throw Error(`Expected '(', found "${e[t]}"`);
 			t++;
 			let n = [];
 			for (; t < e.length && e[t] !== ")";) {
 				let r = t;
 				for (; t < e.length && e[t] !== "|" && e[t] !== ")";) t++;
 				let i = e.substring(r, t);
-				if (i = i.trim(), !Qf(i)) throw Error(`Invalid notation name: "${i}"`);
-				n.push(i), e[t] === "|" && (t++, t = Xf(e, t));
+				if (i = i.trim(), !$p(i, { xmlVersion: this.xmlVersion })) throw Error(`Invalid notation name: "${i}"`);
+				n.push(i), e[t] === "|" && (t++, t = Zp(e, t));
 			}
 			if (e[t] !== ")") throw Error("Unterminated list of notations");
 			t++, a += " (" + n.join("|") + ")";
@@ -17809,7 +18535,7 @@ var Kf = function(e) {
 				"NMTOKENS"
 			].includes(a.toUpperCase())) throw Error(`Invalid attribute type: "${a}"`);
 		}
-		t = Xf(e, t);
+		t = Zp(e, t);
 		let o = "";
 		return e.substring(t, t + 8).toUpperCase() === "#REQUIRED" ? (o = "#REQUIRED", t += 8) : e.substring(t, t + 7).toUpperCase() === "#IMPLIED" ? (o = "#IMPLIED", t += 7) : [t, o] = this.readIdentifierVal(e, t, "ATTLIST"), {
 			elementName: r,
@@ -17819,37 +18545,41 @@ var Kf = function(e) {
 			index: t
 		};
 	}
-}, Xf = (e, t) => {
+}, Zp = (e, t) => {
 	for (; t < e.length && /\s/.test(e[t]);) t++;
 	return t;
 };
-function Zf(e, t, n) {
+function Qp(e, t, n) {
 	for (let r = 0; r < t.length; r++) if (t[r] !== e[n + r + 1]) return !1;
 	return !0;
 }
-function Qf(e) {
-	if (Jd(e)) return e;
+function $p(e, t) {
+	if (Yp(e, { xmlVersion: t })) return e;
 	throw Error(`Invalid entity name ${e}`);
 }
-var $f = /^[-+]?0x[a-fA-F0-9]+$/, ep = /^([\-\+])?(0*)([0-9]*(\.[0-9]*)?)$/, tp = {
+var em = /^[-+]?0x[a-fA-F0-9]+$/, tm = /^0b[01]+$/, nm = /^0o[0-7]+$/, rm = /^([\-\+])?(0*)([0-9]*(\.[0-9]*)?)$/, im = {
 	hex: !0,
+	binary: !1,
+	octal: !1,
 	leadingZeros: !0,
 	decimalPoint: ".",
 	eNotation: !0,
 	infinity: "original"
 };
-function np(e, t = {}) {
-	if (t = Object.assign({}, tp, t), !e || typeof e != "string") return e;
+function am(e, t = {}) {
+	if (t = Object.assign({}, im, t), !e || typeof e != "string") return e;
 	let n = e.trim();
 	if (n.length === 0 || t.skipLike !== void 0 && t.skipLike.test(n)) return e;
 	if (n === "0") return 0;
-	if (t.hex && $f.test(n)) return op(n, 16);
-	if (!isFinite(n)) return sp(e, Number(n), t);
-	if (n.includes("e") || n.includes("E")) return ip(e, n, t);
+	if (t.hex && em.test(n)) return lm(n, 16);
+	if (t.binary && tm.test(n)) return lm(n, 2);
+	if (t.octal && nm.test(n)) return lm(n, 8);
+	if (!isFinite(n)) return um(e, Number(n), t);
+	if (n.includes("e") || n.includes("E")) return sm(e, n, t);
 	{
-		let r = ep.exec(n);
+		let r = rm.exec(n);
 		if (r) {
-			let i = r[1] || "", a = r[2], o = ap(r[3]), s = i ? e[a.length + 1] === "." : e[a.length] === ".";
+			let i = r[1] || "", a = r[2], o = cm(r[3]), s = i ? e[a.length + 1] === "." : e[a.length] === ".";
 			if (!t.leadingZeros && (a.length > 1 || a.length === 1 && !s)) return e;
 			{
 				let r = Number(n), s = String(r);
@@ -17862,25 +18592,26 @@ function np(e, t = {}) {
 		} else return e;
 	}
 }
-var rp = /^([-+])?(0*)(\d*(\.\d*)?[eE][-\+]?\d+)$/;
-function ip(e, t, n) {
+var om = /^([-+])?(0*)(\d*(\.\d*)?[eE][-\+]?\d+)$/;
+function sm(e, t, n) {
 	if (!n.eNotation) return e;
-	let r = t.match(rp);
+	let r = t.match(om);
 	if (r) {
 		let i = r[1] || "", a = r[3].indexOf("e") === -1 ? "E" : "e", o = r[2], s = i ? e[o.length + 1] === a : e[o.length] === a;
 		return o.length > 1 && s ? e : o.length === 1 && (r[3].startsWith(`.${a}`) || r[3][0] === a) ? Number(t) : o.length > 0 ? n.leadingZeros && !s ? (t = (r[1] || "") + r[3], Number(t)) : e : Number(t);
 	} else return e;
 }
-function ap(e) {
+function cm(e) {
 	return e && e.indexOf(".") !== -1 ? (e = e.replace(/0+$/, ""), e === "." ? e = "0" : e[0] === "." ? e = "0" + e : e[e.length - 1] === "." && (e = e.substring(0, e.length - 1)), e) : e;
 }
-function op(e, t) {
-	if (parseInt) return parseInt(e, t);
+function lm(e, t) {
+	let n = e.trim();
+	if ((t === 2 || t === 8) && (e = n.substring(2)), parseInt) return parseInt(e, t);
 	if (Number.parseInt) return Number.parseInt(e, t);
 	if (window && window.parseInt) return window.parseInt(e, t);
 	throw Error("parseInt, Number.parseInt, window.parseInt are not supported");
 }
-function sp(e, t, n) {
+function um(e, t, n) {
 	let r = t === Infinity;
 	switch (n.infinity.toLowerCase()) {
 		case "null": return null;
@@ -17889,12 +18620,12 @@ function sp(e, t, n) {
 		default: return e;
 	}
 }
-function cp(e) {
+function dm(e) {
 	return typeof e == "function" ? e : Array.isArray(e) ? (t) => {
 		for (let n of e) if (typeof n == "string" && t === n || n instanceof RegExp && n.test(t)) return !0;
 	} : () => !1;
 }
-var lp = class {
+var fm = class {
 	constructor(e, t = {}, n) {
 		this.pattern = e, this.separator = t.separator || ".", this.segments = this._parse(e), this.data = n, this._hasDeepWildcard = this.segments.some((e) => e.type === "deep-wildcard"), this._hasAttributeCondition = this.segments.some((e) => e.attrName !== void 0), this._hasPositionSelector = this.segments.some((e) => e.position !== void 0);
 	}
@@ -17950,7 +18681,7 @@ var lp = class {
 	toString() {
 		return this.pattern;
 	}
-}, up = class {
+}, pm = class {
 	constructor() {
 		this._byDepthAndTag = /* @__PURE__ */ new Map(), this._wildcardByDepth = /* @__PURE__ */ new Map(), this._deepWildcards = [], this._patterns = /* @__PURE__ */ new Set(), this._sealed = !1;
 	}
@@ -17997,7 +18728,7 @@ var lp = class {
 		for (let t = 0; t < this._deepWildcards.length; t++) if (e.matches(this._deepWildcards[t])) return this._deepWildcards[t];
 		return null;
 	}
-}, dp = class {
+}, mm = class {
 	constructor(e) {
 		this._matcher = e;
 	}
@@ -18048,9 +18779,9 @@ var lp = class {
 	matchesAny(e) {
 		return e.matchesAny(this._matcher);
 	}
-}, fp = class {
+}, hm = class {
 	constructor(e = {}) {
-		this.separator = e.separator || ".", this.path = [], this.siblingStacks = [], this._pathStringCache = null, this._view = new dp(this);
+		this.separator = e.separator || ".", this.path = [], this.siblingStacks = [], this._pathStringCache = null, this._view = new mm(this);
 	}
 	push(e, t = null, n = null) {
 		this._pathStringCache = null, this.path.length > 0 && (this.path[this.path.length - 1].values = void 0);
@@ -18172,7 +18903,7 @@ var lp = class {
 		return this._view;
 	}
 };
-function pp(e, t) {
+function gm(e, t) {
 	if (!e) return {};
 	let n = t.attributesGroupName ? e[t.attributesGroupName] : e;
 	if (!n) return {};
@@ -18183,7 +18914,7 @@ function pp(e, t) {
 	} else r[e] = n[e];
 	return r;
 }
-function mp(e) {
+function _m(e) {
 	if (!e || typeof e != "string") return;
 	let t = e.indexOf(":");
 	if (t !== -1 && t > 0) {
@@ -18191,14 +18922,14 @@ function mp(e) {
 		if (n !== "xmlns") return n;
 	}
 }
-var hp = class {
+var vm = class {
 	constructor(e, t) {
-		this.options = e, this.currentNode = null, this.tagsNodeStack = [], this.parseXml = bp, this.parseTextData = gp, this.resolveNameSpace = _p, this.buildAttributesMap = yp, this.isItStopNode = wp, this.replaceEntitiesValue = Sp, this.readStopNodeData = kp, this.saveTextToParentTag = Cp, this.addChild = xp, this.ignoreAttributesFn = cp(this.options.ignoreAttributes), this.entityExpansionCount = 0, this.currentExpandedLength = 0;
-		let n = { ...kf };
+		this.options = e, this.currentNode = null, this.tagsNodeStack = [], this.parseXml = Cm, this.parseTextData = ym, this.resolveNameSpace = bm, this.buildAttributesMap = Sm, this.isItStopNode = Dm, this.replaceEntitiesValue = Tm, this.readStopNodeData = Mm, this.saveTextToParentTag = Em, this.addChild = wm, this.ignoreAttributesFn = dm(this.options.ignoreAttributes), this.entityExpansionCount = 0, this.currentExpandedLength = 0;
+		let n = { ...xp };
 		this.options.entityDecoder ? this.entityDecoder = this.options.entityDecoder : (typeof this.options.htmlEntities == "object" ? n = this.options.htmlEntities : this.options.htmlEntities === !0 && (n = {
-			...Af,
-			...Ef
-		}), this.entityDecoder = new Vf({
+			...Sp,
+			...vp
+		}), this.entityDecoder = new Np({
 			namedEntities: {
 				...n,
 				...t
@@ -18209,26 +18940,26 @@ var hp = class {
 				maxExpandedLength: this.options.processEntities.maxExpandedLength,
 				applyLimitsTo: this.options.processEntities.appliesTo
 			}
-		})), this.matcher = new fp(), this.readonlyMatcher = this.matcher.readOnly(), this.isCurrentNodeStopNode = !1, this.stopNodeExpressionsSet = new up();
+		})), this.matcher = new hm(), this.readonlyMatcher = this.matcher.readOnly(), this.isCurrentNodeStopNode = !1, this.stopNodeExpressionsSet = new pm();
 		let r = this.options.stopNodes;
 		if (r && r.length > 0) {
 			for (let e = 0; e < r.length; e++) {
 				let t = r[e];
-				typeof t == "string" ? this.stopNodeExpressionsSet.add(new lp(t)) : t instanceof lp && this.stopNodeExpressionsSet.add(t);
+				typeof t == "string" ? this.stopNodeExpressionsSet.add(new fm(t)) : t instanceof fm && this.stopNodeExpressionsSet.add(t);
 			}
 			this.stopNodeExpressionsSet.seal();
 		}
 	}
 };
-function gp(e, t, n, r, i, a, o) {
+function ym(e, t, n, r, i, a, o) {
 	let s = this.options;
 	if (e !== void 0 && (s.trimValues && !r && (e = e.trim()), e.length > 0)) {
 		o || (e = this.replaceEntitiesValue(e, t, n));
 		let r = s.jPath ? n.toString() : n, c = s.tagValueProcessor(t, e, r, i, a);
-		return c == null ? e : typeof c != typeof e || c !== e ? c : s.trimValues || e.trim() === e ? Ap(e, s.parseTagValue, s.numberParseOptions) : e;
+		return c == null ? e : typeof c != typeof e || c !== e ? c : s.trimValues || e.trim() === e ? Nm(e, s.parseTagValue, s.numberParseOptions) : e;
 	}
 }
-function _p(e) {
+function bm(e) {
 	if (this.options.removeNSPrefix) {
 		let t = e.split(":"), n = e.charAt(0) === "/" ? "/" : "";
 		if (t[0] === "xmlns") return "";
@@ -18236,11 +18967,11 @@ function _p(e) {
 	}
 	return e;
 }
-var vp = /* @__PURE__ */ RegExp("([^\\s=]+)\\s*(=\\s*(['\"])([\\s\\S]*?)\\3)?", "gm");
-function yp(e, t, n, r = !1) {
+var xm = /* @__PURE__ */ RegExp("([^\\s=]+)\\s*(=\\s*(['\"])([\\s\\S]*?)\\3)?", "gm");
+function Sm(e, t, n, r = !1) {
 	let i = this.options;
 	if (r === !0 || i.ignoreAttributes !== !0 && typeof e == "string") {
-		let r = qd(e, vp), a = r.length, o = {}, s = Array(a), c = !1, l = {};
+		let r = Bf(e, xm), a = r.length, o = {}, s = Array(a), c = !1, l = {};
 		for (let e = 0; e < a; e++) {
 			let t = this.resolveNameSpace(r[e][1]), a = r[e][4];
 			if (t.length && a !== void 0) {
@@ -18254,9 +18985,9 @@ function yp(e, t, n, r = !1) {
 			let t = this.resolveNameSpace(r[e][1]);
 			if (this.ignoreAttributesFn(t, u)) continue;
 			let n = i.attributeNamePrefix + t;
-			if (t.length) if (i.transformAttributeName && (n = i.transformAttributeName(n)), n = Mp(n, i), r[e][4] !== void 0) {
+			if (t.length) if (i.transformAttributeName && (n = i.transformAttributeName(n)), n = Fm(n, i), r[e][4] !== void 0) {
 				let r = s[e], a = i.attributeValueProcessor(t, r, u);
-				a == null ? o[n] = r : typeof a != typeof r || a !== r ? o[n] = a : o[n] = Ap(r, i.parseAttributeValue, i.numberParseOptions), d = !0;
+				a == null ? o[n] = r : typeof a != typeof r || a !== r ? o[n] = a : o[n] = Nm(r, i.parseAttributeValue, i.numberParseOptions), d = !0;
 			} else i.allowBooleanAttributes && (o[n] = !0, d = !0);
 		}
 		if (!d) return;
@@ -18267,39 +18998,39 @@ function yp(e, t, n, r = !1) {
 		return o;
 	}
 }
-var bp = function(e) {
+var Cm = function(e) {
 	e = e.replace(/\r\n?/g, "\n");
-	let t = new Jf("!xml"), n = t, r = "";
+	let t = new Bp("!xml"), n = t, r = "";
 	this.matcher.reset(), this.entityDecoder.reset(), this.entityExpansionCount = 0, this.currentExpandedLength = 0;
-	let i = this.options, a = new Yf(i.processEntities), o = e.length;
+	let i = this.options, a = new Xp(i.processEntities), o = e.length;
 	for (let s = 0; s < o; s++) if (e[s] === "<") {
 		let c = e.charCodeAt(s + 1);
 		if (c === 47) {
-			let t = Ep(e, ">", s, "Closing Tag is not closed."), a = e.substring(s + 2, t).trim();
+			let t = km(e, ">", s, "Closing Tag is not closed."), a = e.substring(s + 2, t).trim();
 			if (i.removeNSPrefix) {
 				let e = a.indexOf(":");
 				e !== -1 && (a = a.substr(e + 1));
 			}
-			a = jp(i.transformTagName, a, "", i).tagName, n && (r = this.saveTextToParentTag(r, n, this.readonlyMatcher));
+			a = Pm(i.transformTagName, a, "", i).tagName, n && (r = this.saveTextToParentTag(r, n, this.readonlyMatcher));
 			let o = this.matcher.getCurrentTag();
 			if (a && i.unpairedTagsSet.has(a)) throw Error(`Unpaired tag can not be used as closing tag: </${a}>`);
 			o && i.unpairedTagsSet.has(o) && (this.matcher.pop(), this.tagsNodeStack.pop()), this.matcher.pop(), this.isCurrentNodeStopNode = !1, n = this.tagsNodeStack.pop(), r = "", s = t;
 		} else if (c === 63) {
-			let t = Op(e, s, !1, "?>");
+			let t = jm(e, s, !1, "?>");
 			if (!t) throw Error("Pi Tag is not closed.");
 			r = this.saveTextToParentTag(r, n, this.readonlyMatcher);
-			let a = this.buildAttributesMap(t.tagExp, this.matcher, t.tagName, !0);
-			if (a) {
-				let e = a[this.options.attributeNamePrefix + "version"];
-				this.entityDecoder.setXmlVersion(Number(e) || 1);
+			let o = this.buildAttributesMap(t.tagExp, this.matcher, t.tagName, !0);
+			if (o) {
+				let e = o[this.options.attributeNamePrefix + "version"];
+				this.entityDecoder.setXmlVersion(Number(e) || 1), a.setXmlVersion(Number(e) || 1);
 			}
 			if (!(i.ignoreDeclaration && t.tagName === "?xml" || i.ignorePiTags)) {
-				let e = new Jf(t.tagName);
-				e.add(i.textNodeName, ""), t.tagName !== t.tagExp && t.attrExpPresent && i.ignoreAttributes !== !0 && (e[":@"] = a), this.addChild(n, e, this.readonlyMatcher, s);
+				let e = new Bp(t.tagName);
+				e.add(i.textNodeName, ""), t.tagName !== t.tagExp && t.attrExpPresent && i.ignoreAttributes !== !0 && (e[":@"] = o), this.addChild(n, e, this.readonlyMatcher, s);
 			}
 			s = t.closeIndex + 1;
 		} else if (c === 33 && e.charCodeAt(s + 2) === 45 && e.charCodeAt(s + 3) === 45) {
-			let t = Ep(e, "-->", s + 4, "Comment is not closed.");
+			let t = km(e, "-->", s + 4, "Comment is not closed.");
 			if (i.commentPropName) {
 				let a = e.substring(s + 4, t - 2);
 				r = this.saveTextToParentTag(r, n, this.readonlyMatcher), n.add(i.commentPropName, [{ [i.textNodeName]: a }]);
@@ -18309,25 +19040,25 @@ var bp = function(e) {
 			let t = a.readDocType(e, s);
 			this.entityDecoder.addInputEntities(t.entities), s = t.i;
 		} else if (c === 33 && e.charCodeAt(s + 2) === 91) {
-			let t = Ep(e, "]]>", s, "CDATA is not closed.") - 2, a = e.substring(s + 9, t);
+			let t = km(e, "]]>", s, "CDATA is not closed.") - 2, a = e.substring(s + 9, t);
 			r = this.saveTextToParentTag(r, n, this.readonlyMatcher);
 			let o = this.parseTextData(a, n.tagname, this.readonlyMatcher, !0, !1, !0, !0);
 			o ??= "", i.cdataPropName ? n.add(i.cdataPropName, [{ [i.textNodeName]: a }]) : n.add(i.textNodeName, o), s = t + 2;
 		} else {
-			let a = Op(e, s, i.removeNSPrefix);
+			let a = jm(e, s, i.removeNSPrefix);
 			if (!a) {
 				let t = e.substring(Math.max(0, s - 50), Math.min(o, s + 50));
 				throw Error(`readTagExp returned undefined at position ${s}. Context: "${t}"`);
 			}
 			let c = a.tagName, l = a.rawTagName, u = a.tagExp, d = a.attrExpPresent, f = a.closeIndex;
-			if ({tagName: c, tagExp: u} = jp(i.transformTagName, c, u, i), i.strictReservedNames && (c === i.commentPropName || c === i.cdataPropName || c === i.textNodeName || c === i.attributesGroupName)) throw Error(`Invalid tag name: ${c}`);
+			if ({tagName: c, tagExp: u} = Pm(i.transformTagName, c, u, i), i.strictReservedNames && (c === i.commentPropName || c === i.cdataPropName || c === i.textNodeName || c === i.attributesGroupName)) throw Error(`Invalid tag name: ${c}`);
 			n && r && n.tagname !== "!xml" && (r = this.saveTextToParentTag(r, n, this.readonlyMatcher, !1));
 			let p = n;
 			p && i.unpairedTagsSet.has(p.tagname) && (n = this.tagsNodeStack.pop(), this.matcher.pop());
 			let m = !1;
 			u.length > 0 && u.lastIndexOf("/") === u.length - 1 && (m = !0, c[c.length - 1] === "/" ? (c = c.substr(0, c.length - 1), u = c) : u = u.substr(0, u.length - 1), d = c !== u);
 			let h = null, g;
-			g = mp(l), c !== t.tagname && this.matcher.push(c, {}, g), c !== u && d && (h = this.buildAttributesMap(u, this.matcher, c), h && pp(h, i)), c !== t.tagname && (this.isCurrentNodeStopNode = this.isItStopNode());
+			g = _m(l), c !== t.tagname && this.matcher.push(c, {}, g), c !== u && d && (h = this.buildAttributesMap(u, this.matcher, c), h && gm(h, i)), c !== t.tagname && (this.isCurrentNodeStopNode = this.isItStopNode());
 			let _ = s;
 			if (this.isCurrentNodeStopNode) {
 				let t = "";
@@ -18338,19 +19069,19 @@ var bp = function(e) {
 					if (!n) throw Error(`Unexpected end of ${l}`);
 					s = n.i, t = n.tagContent;
 				}
-				let r = new Jf(c);
+				let r = new Bp(c);
 				h && (r[":@"] = h), r.add(i.textNodeName, t), this.matcher.pop(), this.isCurrentNodeStopNode = !1, this.addChild(n, r, this.readonlyMatcher, _);
 			} else {
 				if (m) {
-					({tagName: c, tagExp: u} = jp(i.transformTagName, c, u, i));
-					let e = new Jf(c);
+					({tagName: c, tagExp: u} = Pm(i.transformTagName, c, u, i));
+					let e = new Bp(c);
 					h && (e[":@"] = h), this.addChild(n, e, this.readonlyMatcher, _), this.matcher.pop(), this.isCurrentNodeStopNode = !1;
 				} else if (i.unpairedTagsSet.has(c)) {
-					let e = new Jf(c);
+					let e = new Bp(c);
 					h && (e[":@"] = h), this.addChild(n, e, this.readonlyMatcher, _), this.matcher.pop(), this.isCurrentNodeStopNode = !1, s = a.closeIndex;
 					continue;
 				} else {
-					let e = new Jf(c);
+					let e = new Bp(c);
 					if (this.tagsNodeStack.length > i.maxNestedTags) throw Error("Maximum nested tags exceeded");
 					this.tagsNodeStack.push(n), h && (e[":@"] = h), this.addChild(n, e, this.readonlyMatcher, _), n = e;
 				}
@@ -18360,12 +19091,12 @@ var bp = function(e) {
 	} else r += e[s];
 	return t.child;
 };
-function xp(e, t, n, r) {
+function wm(e, t, n, r) {
 	this.options.captureMetaData || (r = void 0);
 	let i = this.options.jPath ? n.toString() : n, a = this.options.updateTag(t.tagname, i, t[":@"]);
 	a === !1 || (typeof a == "string" && (t.tagname = a), e.addChild(t, r));
 }
-function Sp(e, t, n) {
+function Tm(e, t, n) {
 	let r = this.options.processEntities;
 	if (!r || !r.enabled) return e;
 	if (r.allowedTags) {
@@ -18378,13 +19109,13 @@ function Sp(e, t, n) {
 	}
 	return this.entityDecoder.decode(e);
 }
-function Cp(e, t, n, r) {
+function Em(e, t, n, r) {
 	return e &&= (r === void 0 && (r = t.child.length === 0), e = this.parseTextData(e, t.tagname, n, !1, t[":@"] ? Object.keys(t[":@"]).length !== 0 : !1, r), e !== void 0 && e !== "" && t.add(this.options.textNodeName, e), ""), e;
 }
-function wp() {
+function Dm() {
 	return this.stopNodeExpressionsSet.size === 0 ? !1 : this.matcher.matchesAny(this.stopNodeExpressionsSet);
 }
-function Tp(e, t, n = ">") {
+function Om(e, t, n = ">") {
 	let r = 0, i = e.length, a = n.charCodeAt(0), o = n.length > 1 ? n.charCodeAt(1) : -1, s = "", c = t;
 	for (let n = t; n < i; n++) {
 		let t = e.charCodeAt(n);
@@ -18402,18 +19133,18 @@ function Tp(e, t, n = ">") {
 		else t === 9 && !r && (s += e.substring(c, n) + " ", c = n + 1);
 	}
 }
-function Ep(e, t, n, r) {
+function km(e, t, n, r) {
 	let i = e.indexOf(t, n);
 	if (i === -1) throw Error(r);
 	return i + t.length - 1;
 }
-function Dp(e, t, n, r) {
+function Am(e, t, n, r) {
 	let i = e.indexOf(t, n);
 	if (i === -1) throw Error(r);
 	return i;
 }
-function Op(e, t, n, r = ">") {
-	let i = Tp(e, t + 1, r);
+function jm(e, t, n, r = ">") {
+	let i = Om(e, t + 1, r);
 	if (!i) return;
 	let a = i.data, o = i.index, s = a.search(/\s/), c = a, l = !0;
 	s !== -1 && (c = a.substring(0, s), a = a.substring(s + 1).trimStart());
@@ -18430,49 +19161,49 @@ function Op(e, t, n, r = ">") {
 		rawTagName: u
 	};
 }
-function kp(e, t, n) {
+function Mm(e, t, n) {
 	let r = n, i = 1, a = e.length;
 	for (; n < a; n++) if (e[n] === "<") {
 		let a = e.charCodeAt(n + 1);
 		if (a === 47) {
-			let a = Dp(e, ">", n, `${t} is not closed`);
+			let a = Am(e, ">", n, `${t} is not closed`);
 			if (e.substring(n + 2, a).trim() === t && (i--, i === 0)) return {
 				tagContent: e.substring(r, n),
 				i: a
 			};
 			n = a;
-		} else if (a === 63) n = Ep(e, "?>", n + 1, "StopNode is not closed.");
-		else if (a === 33 && e.charCodeAt(n + 2) === 45 && e.charCodeAt(n + 3) === 45) n = Ep(e, "-->", n + 3, "StopNode is not closed.");
-		else if (a === 33 && e.charCodeAt(n + 2) === 91) n = Ep(e, "]]>", n, "StopNode is not closed.") - 2;
+		} else if (a === 63) n = km(e, "?>", n + 1, "StopNode is not closed.");
+		else if (a === 33 && e.charCodeAt(n + 2) === 45 && e.charCodeAt(n + 3) === 45) n = km(e, "-->", n + 3, "StopNode is not closed.");
+		else if (a === 33 && e.charCodeAt(n + 2) === 91) n = km(e, "]]>", n, "StopNode is not closed.") - 2;
 		else {
-			let r = Op(e, n, !1);
+			let r = jm(e, n, !1);
 			r && ((r && r.tagName) === t && r.tagExp[r.tagExp.length - 1] !== "/" && i++, n = r.closeIndex);
 		}
 	}
 }
-function Ap(e, t, n) {
+function Nm(e, t, n) {
 	if (t && typeof e == "string") {
 		let t = e.trim();
-		return t === "true" ? !0 : t === "false" ? !1 : np(e, n);
-	} else if (Yd(e)) return e;
+		return t === "true" ? !0 : t === "false" ? !1 : am(e, n);
+	} else if (Hf(e)) return e;
 	else return "";
 }
-function jp(e, t, n, r) {
+function Pm(e, t, n, r) {
 	if (e) {
 		let r = e(t);
 		n === t && (n = r), t = r;
 	}
-	return t = Mp(t, r), {
+	return t = Fm(t, r), {
 		tagName: t,
 		tagExp: n
 	};
 }
-function Mp(e, t) {
-	if (Zd.includes(e)) throw Error(`[SECURITY] Invalid name: "${e}" is a reserved JavaScript keyword that could cause prototype pollution`);
-	return Xd.includes(e) ? t.onDangerousProperty(e) : e;
+function Fm(e, t) {
+	if (Wf.includes(e)) throw Error(`[SECURITY] Invalid name: "${e}" is a reserved JavaScript keyword that could cause prototype pollution`);
+	return Uf.includes(e) ? t.onDangerousProperty(e) : e;
 }
-var Np = Jf.getMetaDataSymbol();
-function Pp(e, t) {
+var Im = Bp.getMetaDataSymbol();
+function Lm(e, t) {
 	if (!e || typeof e != "object") return {};
 	if (!t) return e;
 	let n = {};
@@ -18482,22 +19213,22 @@ function Pp(e, t) {
 	} else n[r] = e[r];
 	return n;
 }
-function Fp(e, t, n, r) {
-	return Ip(e, t, n, r);
+function Rm(e, t, n, r) {
+	return zm(e, t, n, r);
 }
-function Ip(e, t, n, r) {
+function zm(e, t, n, r) {
 	let i, a = {};
 	for (let o = 0; o < e.length; o++) {
-		let s = e[o], c = Lp(s);
+		let s = e[o], c = Bm(s);
 		if (c !== void 0 && c !== t.textNodeName) {
-			let e = Pp(s[":@"] || {}, t.attributeNamePrefix);
+			let e = Lm(s[":@"] || {}, t.attributeNamePrefix);
 			n.push(c, e);
 		}
 		if (c === t.textNodeName) i === void 0 ? i = s[c] : i += "" + s[c];
 		else if (c === void 0) continue;
 		else if (s[c]) {
-			let e = Ip(s[c], t, n, r), i = zp(e, t);
-			if (Object.keys(e).length === 0 && t.alwaysCreateTextNode && (e[t.textNodeName] = ""), s[":@"] ? Rp(e, s[":@"], r, t) : Object.keys(e).length === 1 && e[t.textNodeName] !== void 0 && !t.alwaysCreateTextNode ? e = e[t.textNodeName] : Object.keys(e).length === 0 && (t.alwaysCreateTextNode ? e[t.textNodeName] = "" : e = ""), s[Np] !== void 0 && typeof e == "object" && e && (e[Np] = s[Np]), a[c] !== void 0 && Object.prototype.hasOwnProperty.call(a, c)) Array.isArray(a[c]) || (a[c] = [a[c]]), a[c].push(e);
+			let e = zm(s[c], t, n, r), i = Hm(e, t);
+			if (Object.keys(e).length === 0 && t.alwaysCreateTextNode && (e[t.textNodeName] = ""), s[":@"] ? Vm(e, s[":@"], r, t) : Object.keys(e).length === 1 && e[t.textNodeName] !== void 0 && !t.alwaysCreateTextNode ? e = e[t.textNodeName] : Object.keys(e).length === 0 && (t.alwaysCreateTextNode ? e[t.textNodeName] = "" : e = ""), s[Im] !== void 0 && typeof e == "object" && e && (e[Im] = s[Im]), a[c] !== void 0 && Object.prototype.hasOwnProperty.call(a, c)) Array.isArray(a[c]) || (a[c] = [a[c]]), a[c].push(e);
 			else {
 				let n = t.jPath ? r.toString() : r;
 				t.isArray(c, n, i) ? a[c] = [e] : a[c] = e;
@@ -18507,14 +19238,14 @@ function Ip(e, t, n, r) {
 	}
 	return typeof i == "string" ? i.length > 0 && (a[t.textNodeName] = i) : i !== void 0 && (a[t.textNodeName] = i), a;
 }
-function Lp(e) {
+function Bm(e) {
 	let t = Object.keys(e);
 	for (let e = 0; e < t.length; e++) {
 		let n = t[e];
 		if (n !== ":@") return n;
 	}
 }
-function Rp(e, t, n, r) {
+function Vm(e, t, n, r) {
 	if (t) {
 		let i = Object.keys(t), a = i.length;
 		for (let o = 0; o < a; o++) {
@@ -18523,24 +19254,24 @@ function Rp(e, t, n, r) {
 		}
 	}
 }
-function zp(e, t) {
+function Hm(e, t) {
 	let { textNodeName: n } = t, r = Object.keys(e).length;
 	return !!(r === 0 || r === 1 && (e[n] || typeof e[n] == "boolean" || e[n] === 0));
 }
-var Bp = class {
+var Um = class {
 	constructor(e) {
-		this.externalEntities = {}, this.options = Kf(e);
+		this.externalEntities = {}, this.options = Rp(e);
 	}
 	parse(e, t) {
 		if (typeof e != "string" && e.toString) e = e.toString();
 		else if (typeof e != "string") throw Error("XML data is accepted in String or Bytes[] form.");
 		if (t) {
 			t === !0 && (t = {});
-			let n = $d(e, t);
+			let n = Kf(e, t);
 			if (n !== !0) throw Error(`${n.err.msg}:${n.err.line}:${n.err.col}`);
 		}
-		let n = new hp(this.options, this.externalEntities), r = n.parseXml(e);
-		return this.options.preserveOrder || r === void 0 ? r : Fp(r, this.options, n.matcher, n.readonlyMatcher);
+		let n = new vm(this.options, this.externalEntities), r = n.parseXml(e);
+		return this.options.preserveOrder || r === void 0 ? r : Rm(r, this.options, n.matcher, n.readonlyMatcher);
 	}
 	addEntity(e, t) {
 		if (t.indexOf("&") !== -1) throw Error("Entity value can't have '&'");
@@ -18549,140 +19280,158 @@ var Bp = class {
 		this.externalEntities[e] = t;
 	}
 	static getMetaDataSymbol() {
-		return Jf.getMetaDataSymbol();
+		return Bp.getMetaDataSymbol();
 	}
 };
-function Vp(e) {
+function Wm(e) {
 	return String(e).replace(/--/g, "- -").replace(/--/g, "- -").replace(/-$/, "- ");
 }
-function Hp(e) {
+function Gm(e) {
 	return String(e).replace(/\]\]>/g, "]]]]><![CDATA[>");
 }
-function Up(e) {
+function Km(e) {
 	return String(e).replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 }
-var Wp = "\n";
-function Gp(e, t) {
+var qm = "\n";
+function Jm(e, t) {
+	if (!Array.isArray(e) || e.length === 0) return "1.0";
+	let n = e[0];
+	if (th(n) === "?xml") {
+		let e = n[":@"];
+		if (e) {
+			let n = t.attributeNamePrefix + "version";
+			if (e[n]) return e[n];
+		}
+	}
+	return "1.0";
+}
+function Ym(e, t, n, r, i) {
+	return !n.sanitizeName || Yp(e, { xmlVersion: i }) ? e : n.sanitizeName(e, {
+		isAttribute: t,
+		matcher: r.readOnly()
+	});
+}
+function Xm(e, t) {
 	let n = "";
-	t.format && t.indentBy.length > 0 && (n = Wp);
+	t.format && (n = qm);
 	let r = [];
 	if (t.stopNodes && Array.isArray(t.stopNodes)) for (let e = 0; e < t.stopNodes.length; e++) {
 		let n = t.stopNodes[e];
-		typeof n == "string" ? r.push(new lp(n)) : n instanceof lp && r.push(n);
+		typeof n == "string" ? r.push(new fm(n)) : n instanceof fm && r.push(n);
 	}
-	let i = new fp();
-	return Kp(e, t, n, i, r);
+	let i = Jm(e, t), a = new hm();
+	return Zm(e, t, n, a, r, i);
 }
-function Kp(e, t, n, r, i) {
-	let a = "", o = !1;
+function Zm(e, t, n, r, i, a) {
+	let o = "", s = !1;
 	if (t.maxNestedTags && r.getDepth() > t.maxNestedTags) throw Error("Maximum nested tags exceeded");
 	if (!Array.isArray(e)) {
 		if (e != null) {
 			let n = e.toString();
-			return n = $p(n, t), n;
+			return n = ih(n, t), n;
 		}
 		return "";
 	}
-	for (let s = 0; s < e.length; s++) {
-		let c = e[s], l = Xp(c);
-		if (l === void 0) continue;
-		let u = qp(c[":@"], t);
-		r.push(l, u);
-		let d = Qp(r, i);
-		if (l === t.textNodeName) {
-			let e = c[l];
-			d || (e = t.tagValueProcessor(l, e), e = $p(e, t)), o && (a += n), a += e, o = !1, r.pop();
+	for (let c = 0; c < e.length; c++) {
+		let l = e[c], u = th(l);
+		if (u === void 0) continue;
+		let d = u === t.textNodeName || u === t.cdataPropName || u === t.commentPropName || u[0] === "?" ? u : Ym(u, !1, t, r, a), f = Qm(l[":@"], t);
+		r.push(d, f);
+		let p = rh(r, i);
+		if (d === t.textNodeName) {
+			let e = l[u];
+			p || (e = t.tagValueProcessor(d, e), e = ih(e, t)), s && (o += n), o += e, s = !1, r.pop();
 			continue;
-		} else if (l === t.cdataPropName) {
-			o && (a += n);
-			let e = c[l][0][t.textNodeName], i = Hp(e);
-			a += `<![CDATA[${i}]]>`, o = !1, r.pop();
+		} else if (d === t.cdataPropName) {
+			s && (o += n);
+			let e = l[u][0][t.textNodeName], i = Gm(e);
+			o += `<![CDATA[${i}]]>`, s = !1, r.pop();
 			continue;
-		} else if (l === t.commentPropName) {
-			let e = c[l][0][t.textNodeName], i = Vp(e);
-			a += n + `<!--${i}-->`, o = !0, r.pop();
+		} else if (d === t.commentPropName) {
+			let e = l[u][0][t.textNodeName], i = Wm(e);
+			o += n + `<!--${i}-->`, s = !0, r.pop();
 			continue;
-		} else if (l[0] === "?") {
-			let e = Zp(c[":@"], t, d);
-			a += (l === "?xml" ? "" : n) + `<${l}${e}?>`, o = !0, r.pop();
+		} else if (d[0] === "?") {
+			let e = nh(l[":@"], t, p, r, a);
+			o += (d === "?xml" ? "" : n) + `<${d}${e}?>`, s = !0, r.pop();
 			continue;
 		}
-		let f = n;
-		f !== "" && (f += t.indentBy);
-		let p = n + `<${l}${Zp(c[":@"], t, d)}`, m;
-		m = d ? Jp(c[l], t) : Kp(c[l], t, f, r, i), t.unpairedTags.indexOf(l) === -1 ? (!m || m.length === 0) && t.suppressEmptyNode ? a += p + "/>" : m && m.endsWith(">") ? a += p + `>${m}${n}</${l}>` : (a += p + ">", m && n !== "" && (m.includes("/>") || m.includes("</")) ? a += n + t.indentBy + m + n : a += m, a += `</${l}>`) : t.suppressUnpairedNode ? a += p + ">" : a += p + "/>", o = !0, r.pop();
+		let m = n;
+		m !== "" && (m += t.indentBy);
+		let h = n + `<${d}${nh(l[":@"], t, p, r, a)}`, g;
+		g = p ? $m(l[u], t) : Zm(l[u], t, m, r, i, a), t.unpairedTags.indexOf(d) === -1 ? (!g || g.length === 0) && t.suppressEmptyNode ? o += h + "/>" : g && g.endsWith(">") ? o += h + `>${g}${n}</${d}>` : (o += h + ">", g && n !== "" && (g.includes("/>") || g.includes("</")) ? o += n + t.indentBy + g + n : o += g, o += `</${d}>`) : t.suppressUnpairedNode ? o += h + ">" : o += h + "/>", s = !0, r.pop();
 	}
-	return a;
+	return o;
 }
-function qp(e, t) {
+function Qm(e, t) {
 	if (!e || t.ignoreAttributes) return null;
 	let n = {}, r = !1;
 	for (let i in e) {
 		if (!Object.prototype.hasOwnProperty.call(e, i)) continue;
 		let a = i.startsWith(t.attributeNamePrefix) ? i.substr(t.attributeNamePrefix.length) : i;
-		n[a] = Up(e[i]), r = !0;
+		n[a] = Km(e[i]), r = !0;
 	}
 	return r ? n : null;
 }
-function Jp(e, t) {
+function $m(e, t) {
 	if (!Array.isArray(e)) return e == null ? "" : e.toString();
 	let n = "";
 	for (let r = 0; r < e.length; r++) {
-		let i = e[r], a = Xp(i);
+		let i = e[r], a = th(i);
 		if (a === t.textNodeName) n += i[a];
 		else if (a === t.cdataPropName) n += i[a][0][t.textNodeName];
 		else if (a === t.commentPropName) n += i[a][0][t.textNodeName];
 		else if (a && a[0] === "?") continue;
 		else if (a) {
-			let e = Yp(i[":@"], t), r = Jp(i[a], t);
+			let e = eh(i[":@"], t), r = $m(i[a], t);
 			!r || r.length === 0 ? n += `<${a}${e}/>` : n += `<${a}${e}>${r}</${a}>`;
 		}
 	}
 	return n;
 }
-function Yp(e, t) {
+function eh(e, t) {
 	let n = "";
 	if (e && !t.ignoreAttributes) for (let r in e) {
 		if (!Object.prototype.hasOwnProperty.call(e, r)) continue;
 		let i = e[r];
-		i === !0 && t.suppressBooleanAttributes ? n += ` ${r.substr(t.attributeNamePrefix.length)}` : n += ` ${r.substr(t.attributeNamePrefix.length)}="${Up(i)}"`;
+		i === !0 && t.suppressBooleanAttributes ? n += ` ${r.substr(t.attributeNamePrefix.length)}` : n += ` ${r.substr(t.attributeNamePrefix.length)}="${Km(i)}"`;
 	}
 	return n;
 }
-function Xp(e) {
+function th(e) {
 	let t = Object.keys(e);
 	for (let n = 0; n < t.length; n++) {
 		let r = t[n];
 		if (Object.prototype.hasOwnProperty.call(e, r) && r !== ":@") return r;
 	}
 }
-function Zp(e, t, n) {
-	let r = "";
-	if (e && !t.ignoreAttributes) for (let i in e) {
-		if (!Object.prototype.hasOwnProperty.call(e, i)) continue;
-		let a;
-		n ? a = e[i] : (a = t.attributeValueProcessor(i, e[i]), a = $p(a, t)), a === !0 && t.suppressBooleanAttributes ? r += ` ${i.substr(t.attributeNamePrefix.length)}` : r += ` ${i.substr(t.attributeNamePrefix.length)}="${Up(a)}"`;
+function nh(e, t, n, r, i) {
+	let a = "";
+	if (e && !t.ignoreAttributes) for (let o in e) {
+		if (!Object.prototype.hasOwnProperty.call(e, o)) continue;
+		let s = o.substr(t.attributeNamePrefix.length), c = n ? s : Ym(s, !0, t, r, i), l;
+		n ? l = e[o] : (l = t.attributeValueProcessor(o, e[o]), l = ih(l, t)), l === !0 && t.suppressBooleanAttributes ? a += ` ${c}` : a += ` ${c}="${Km(l)}"`;
 	}
-	return r;
+	return a;
 }
-function Qp(e, t) {
+function rh(e, t) {
 	if (!t || t.length === 0) return !1;
 	for (let n = 0; n < t.length; n++) if (e.matches(t[n])) return !0;
 	return !1;
 }
-function $p(e, t) {
+function ih(e, t) {
 	if (e && e.length > 0 && t.processEntities) for (let n = 0; n < t.entities.length; n++) {
 		let r = t.entities[n];
 		e = e.replace(r.regex, r.val);
 	}
 	return e;
 }
-function em(e) {
+function ah(e) {
 	return typeof e == "function" ? e : Array.isArray(e) ? (t) => {
 		for (let n of e) if (typeof n == "string" && t === n || n instanceof RegExp && n.test(t)) return !0;
 	} : () => !1;
 }
-var tm = {
+var oh = {
 	attributeNamePrefix: "@_",
 	attributesGroupName: !1,
 	textNodeName: "#text",
@@ -18728,91 +19477,119 @@ var tm = {
 	stopNodes: [],
 	oneListGroup: !1,
 	maxNestedTags: 100,
-	jPath: !0
+	jPath: !0,
+	sanitizeName: !1
 };
-function nm(e) {
-	if (this.options = Object.assign({}, tm, e), this.options.stopNodes && Array.isArray(this.options.stopNodes) && (this.options.stopNodes = this.options.stopNodes.map((e) => typeof e == "string" && e.startsWith("*.") ? ".." + e.substring(2) : e)), this.stopNodeExpressions = [], this.options.stopNodes && Array.isArray(this.options.stopNodes)) for (let e = 0; e < this.options.stopNodes.length; e++) {
+function sh(e) {
+	if (this.options = Object.assign({}, oh, e), this.options.stopNodes && Array.isArray(this.options.stopNodes) && (this.options.stopNodes = this.options.stopNodes.map((e) => typeof e == "string" && e.startsWith("*.") ? ".." + e.substring(2) : e)), this.stopNodeExpressions = [], this.options.stopNodes && Array.isArray(this.options.stopNodes)) for (let e = 0; e < this.options.stopNodes.length; e++) {
 		let t = this.options.stopNodes[e];
-		typeof t == "string" ? this.stopNodeExpressions.push(new lp(t)) : t instanceof lp && this.stopNodeExpressions.push(t);
+		typeof t == "string" ? this.stopNodeExpressions.push(new fm(t)) : t instanceof fm && this.stopNodeExpressions.push(t);
 	}
 	this.options.ignoreAttributes === !0 || this.options.attributesGroupName ? this.isAttribute = function() {
 		return !1;
-	} : (this.ignoreAttributesFn = em(this.options.ignoreAttributes), this.attrPrefixLen = this.options.attributeNamePrefix.length, this.isAttribute = am), this.processTextOrObjNode = rm, this.options.format ? (this.indentate = im, this.tagEndChar = ">\n", this.newLine = "\n") : (this.indentate = function() {
+	} : (this.ignoreAttributesFn = ah(this.options.ignoreAttributes), this.attrPrefixLen = this.options.attributeNamePrefix.length, this.isAttribute = fh), this.processTextOrObjNode = uh, this.options.format ? (this.indentate = dh, this.tagEndChar = ">\n", this.newLine = "\n") : (this.indentate = function() {
 		return "";
 	}, this.tagEndChar = ">", this.newLine = "");
 }
-nm.prototype.build = function(e) {
-	if (this.options.preserveOrder) return Gp(e, this.options);
+function ch(e, t) {
+	let n = e["?xml"];
+	if (n && typeof n == "object") {
+		if (t.attributesGroupName && n[t.attributesGroupName]) {
+			let e = n[t.attributesGroupName][t.attributeNamePrefix + "version"];
+			if (e) return e;
+		}
+		let e = n[t.attributeNamePrefix + "version"];
+		if (e) return e;
+	}
+	return "1.0";
+}
+function lh(e, t, n, r, i) {
+	return !n.sanitizeName || Yp(e, { xmlVersion: i }) ? e : n.sanitizeName(e, {
+		isAttribute: t,
+		matcher: r.readOnly()
+	});
+}
+sh.prototype.build = function(e) {
+	if (this.options.preserveOrder) return Xm(e, this.options);
 	{
 		Array.isArray(e) && this.options.arrayNodeName && this.options.arrayNodeName.length > 1 && (e = { [this.options.arrayNodeName]: e });
-		let t = new fp();
-		return this.j2x(e, 0, t).val;
+		let t = new hm(), n = ch(e, this.options);
+		return this.j2x(e, 0, t, n).val;
 	}
-}, nm.prototype.j2x = function(e, t, n) {
-	let r = "", i = "";
+}, sh.prototype.j2x = function(e, t, n, r) {
+	let i = "", a = "";
 	if (this.options.maxNestedTags && n.getDepth() >= this.options.maxNestedTags) throw Error("Maximum nested tags exceeded");
-	let a = this.options.jPath ? n.toString() : n, o = this.checkStopNode(n);
-	for (let s in e) if (Object.prototype.hasOwnProperty.call(e, s)) if (e[s] === void 0) this.isAttribute(s) && (i += "");
-	else if (e[s] === null) this.isAttribute(s) || s === this.options.cdataPropName || s === this.options.commentPropName ? i += "" : s[0] === "?" ? i += this.indentate(t) + "<" + s + "?" + this.tagEndChar : i += this.indentate(t) + "<" + s + "/" + this.tagEndChar;
-	else if (e[s] instanceof Date) i += this.buildTextValNode(e[s], s, "", t, n);
-	else if (typeof e[s] != "object") {
-		let c = this.isAttribute(s);
-		if (c && !this.ignoreAttributesFn(c, a)) r += this.buildAttrPairStr(c, "" + e[s], o);
-		else if (!c) if (s === this.options.textNodeName) {
-			let t = this.options.tagValueProcessor(s, "" + e[s]);
-			i += this.replaceEntitiesValue(t);
-		} else {
-			n.push(s);
-			let r = this.checkStopNode(n);
-			if (n.pop(), r) {
-				let n = "" + e[s];
-				n === "" ? i += this.indentate(t) + "<" + s + this.closeTag(s) + this.tagEndChar : i += this.indentate(t) + "<" + s + ">" + n + "</" + s + this.tagEndChar;
-			} else i += this.buildTextValNode(e[s], s, "", t, n);
-		}
-	} else if (Array.isArray(e[s])) {
-		let r = e[s].length, a = "", o = "";
-		for (let c = 0; c < r; c++) {
-			let r = e[s][c];
-			if (r !== void 0) if (r === null) s[0] === "?" ? i += this.indentate(t) + "<" + s + "?" + this.tagEndChar : i += this.indentate(t) + "<" + s + "/" + this.tagEndChar;
-			else if (typeof r == "object") if (this.options.oneListGroup) {
-				n.push(s);
-				let e = this.j2x(r, t + 1, n);
-				n.pop(), a += e.val, this.options.attributesGroupName && r.hasOwnProperty(this.options.attributesGroupName) && (o += e.attrStr);
-			} else a += this.processTextOrObjNode(r, s, t, n);
-			else if (this.options.oneListGroup) {
-				let e = this.options.tagValueProcessor(s, r);
-				e = this.replaceEntitiesValue(e), a += e;
+	let o = this.options.jPath ? n.toString() : n, s = this.checkStopNode(n);
+	for (let c in e) {
+		if (!Object.prototype.hasOwnProperty.call(e, c)) continue;
+		let l = c === this.options.textNodeName || c === this.options.cdataPropName || c === this.options.commentPropName || this.options.attributesGroupName && c === this.options.attributesGroupName || this.isAttribute(c) || c[0] === "?" ? c : lh(c, !1, this.options, n, r);
+		if (e[c] === void 0) this.isAttribute(c) && (a += "");
+		else if (e[c] === null) this.isAttribute(c) || l === this.options.cdataPropName || l === this.options.commentPropName ? a += "" : l[0] === "?" ? a += this.indentate(t) + "<" + l + "?" + this.tagEndChar : a += this.indentate(t) + "<" + l + "/" + this.tagEndChar;
+		else if (e[c] instanceof Date) a += this.buildTextValNode(e[c], l, "", t, n);
+		else if (typeof e[c] != "object") {
+			let u = this.isAttribute(c);
+			if (u && !this.ignoreAttributesFn(u, o)) {
+				let t = lh(u, !0, this.options, n, r);
+				i += this.buildAttrPairStr(t, "" + e[c], s);
+			} else if (!u) if (c === this.options.textNodeName) {
+				let t = this.options.tagValueProcessor(c, "" + e[c]);
+				a += this.replaceEntitiesValue(t);
 			} else {
-				n.push(s);
-				let e = this.checkStopNode(n);
-				if (n.pop(), e) {
-					let e = "" + r;
-					e === "" ? a += this.indentate(t) + "<" + s + this.closeTag(s) + this.tagEndChar : a += this.indentate(t) + "<" + s + ">" + e + "</" + s + this.tagEndChar;
-				} else a += this.buildTextValNode(r, s, "", t, n);
+				n.push(l);
+				let r = this.checkStopNode(n);
+				if (n.pop(), r) {
+					let n = "" + e[c];
+					n === "" ? a += this.indentate(t) + "<" + l + this.closeTag(l) + this.tagEndChar : a += this.indentate(t) + "<" + l + ">" + n + "</" + l + this.tagEndChar;
+				} else a += this.buildTextValNode(e[c], l, "", t, n);
 			}
-		}
-		this.options.oneListGroup && (a = this.buildObjectNode(a, s, o, t)), i += a;
-	} else if (this.options.attributesGroupName && s === this.options.attributesGroupName) {
-		let t = Object.keys(e[s]), n = t.length;
-		for (let i = 0; i < n; i++) r += this.buildAttrPairStr(t[i], "" + e[s][t[i]], o);
-	} else i += this.processTextOrObjNode(e[s], s, t, n);
+		} else if (Array.isArray(e[c])) {
+			let i = e[c].length, o = "", s = "";
+			for (let u = 0; u < i; u++) {
+				let i = e[c][u];
+				if (i !== void 0) if (i === null) l[0] === "?" ? a += this.indentate(t) + "<" + l + "?" + this.tagEndChar : a += this.indentate(t) + "<" + l + "/" + this.tagEndChar;
+				else if (typeof i == "object") if (this.options.oneListGroup) {
+					n.push(l);
+					let e = this.j2x(i, t + 1, n, r);
+					n.pop(), o += e.val, this.options.attributesGroupName && i.hasOwnProperty(this.options.attributesGroupName) && (s += e.attrStr);
+				} else o += this.processTextOrObjNode(i, l, t, n, r);
+				else if (this.options.oneListGroup) {
+					let e = this.options.tagValueProcessor(l, i);
+					e = this.replaceEntitiesValue(e), o += e;
+				} else {
+					n.push(l);
+					let e = this.checkStopNode(n);
+					if (n.pop(), e) {
+						let e = "" + i;
+						e === "" ? o += this.indentate(t) + "<" + l + this.closeTag(l) + this.tagEndChar : o += this.indentate(t) + "<" + l + ">" + e + "</" + l + this.tagEndChar;
+					} else o += this.buildTextValNode(i, l, "", t, n);
+				}
+			}
+			this.options.oneListGroup && (o = this.buildObjectNode(o, l, s, t)), a += o;
+		} else if (this.options.attributesGroupName && c === this.options.attributesGroupName) {
+			let t = Object.keys(e[c]), a = t.length;
+			for (let o = 0; o < a; o++) {
+				let a = lh(t[o], !0, this.options, n, r);
+				i += this.buildAttrPairStr(a, "" + e[c][t[o]], s);
+			}
+		} else a += this.processTextOrObjNode(e[c], l, t, n, r);
+	}
 	return {
-		attrStr: r,
-		val: i
+		attrStr: i,
+		val: a
 	};
-}, nm.prototype.buildAttrPairStr = function(e, t, n) {
-	return n || (t = this.options.attributeValueProcessor(e, "" + t), t = this.replaceEntitiesValue(t)), this.options.suppressBooleanAttributes && t === "true" ? " " + e : " " + e + "=\"" + Up(t) + "\"";
+}, sh.prototype.buildAttrPairStr = function(e, t, n) {
+	return n || (t = this.options.attributeValueProcessor(e, "" + t), t = this.replaceEntitiesValue(t)), this.options.suppressBooleanAttributes && t === "true" ? " " + e : " " + e + "=\"" + Km(t) + "\"";
 };
-function rm(e, t, n, r) {
-	let i = this.extractAttributes(e);
-	if (r.push(t, i), this.checkStopNode(r)) {
+function uh(e, t, n, r, i) {
+	let a = this.extractAttributes(e);
+	if (r.push(t, a), this.checkStopNode(r)) {
 		let i = this.buildRawContent(e), a = this.buildAttributesForStopNode(e);
 		return r.pop(), this.buildObjectNode(i, t, a, n);
 	}
-	let a = this.j2x(e, n + 1, r);
-	return r.pop(), t[0] === "?" ? this.buildTextValNode("", t, a.attrStr, n, r) : e[this.options.textNodeName] !== void 0 && Object.keys(e).length === 1 ? this.buildTextValNode(e[this.options.textNodeName], t, a.attrStr, n, r) : this.buildObjectNode(a.val, t, a.attrStr, n);
+	let o = this.j2x(e, n + 1, r, i);
+	return r.pop(), t[0] === "?" ? this.buildTextValNode("", t, o.attrStr, n, r) : e[this.options.textNodeName] !== void 0 && Object.keys(e).length === 1 ? this.buildTextValNode(e[this.options.textNodeName], t, o.attrStr, n, r) : this.buildObjectNode(o.val, t, o.attrStr, n);
 }
-nm.prototype.extractAttributes = function(e) {
+sh.prototype.extractAttributes = function(e) {
 	if (!e || typeof e != "object") return null;
 	let t = {}, n = !1;
 	if (this.options.attributesGroupName && e[this.options.attributesGroupName]) {
@@ -18820,15 +19597,15 @@ nm.prototype.extractAttributes = function(e) {
 		for (let e in r) {
 			if (!Object.prototype.hasOwnProperty.call(r, e)) continue;
 			let i = e.startsWith(this.options.attributeNamePrefix) ? e.substring(this.options.attributeNamePrefix.length) : e;
-			t[i] = Up(r[e]), n = !0;
+			t[i] = Km(r[e]), n = !0;
 		}
 	} else for (let r in e) {
 		if (!Object.prototype.hasOwnProperty.call(e, r)) continue;
 		let i = this.isAttribute(r);
-		i && (t[i] = Up(e[r]), n = !0);
+		i && (t[i] = Km(e[r]), n = !0);
 	}
 	return n ? t : null;
-}, nm.prototype.buildRawContent = function(e) {
+}, sh.prototype.buildRawContent = function(e) {
 	if (typeof e == "string") return e;
 	if (typeof e != "object" || !e) return String(e);
 	if (e[this.options.textNodeName] !== void 0) return e[this.options.textNodeName];
@@ -18849,7 +19626,7 @@ nm.prototype.extractAttributes = function(e) {
 		} else t += `<${n}>${r}</${n}>`;
 	}
 	return t;
-}, nm.prototype.buildAttributesForStopNode = function(e) {
+}, sh.prototype.buildAttributesForStopNode = function(e) {
 	if (!e || typeof e != "object") return "";
 	let t = "";
 	if (this.options.attributesGroupName && e[this.options.attributesGroupName]) {
@@ -18868,47 +19645,47 @@ nm.prototype.extractAttributes = function(e) {
 		}
 	}
 	return t;
-}, nm.prototype.buildObjectNode = function(e, t, n, r) {
+}, sh.prototype.buildObjectNode = function(e, t, n, r) {
 	if (e === "") return t[0] === "?" ? this.indentate(r) + "<" + t + n + "?" + this.tagEndChar : this.indentate(r) + "<" + t + n + this.closeTag(t) + this.tagEndChar;
 	if (t[0] === "?") return this.indentate(r) + "<" + t + n + "?" + this.tagEndChar;
 	{
 		let i = "</" + t + this.tagEndChar, a = "";
 		return t[0] === "?" && (a = "?", i = ""), (n || n === "") && e.indexOf("<") === -1 ? this.indentate(r) + "<" + t + n + a + ">" + e + i : this.options.commentPropName !== !1 && t === this.options.commentPropName && a.length === 0 ? this.indentate(r) + `<!--${e}-->` + this.newLine : this.indentate(r) + "<" + t + n + a + this.tagEndChar + e + this.indentate(r) + i;
 	}
-}, nm.prototype.closeTag = function(e) {
+}, sh.prototype.closeTag = function(e) {
 	let t = "";
 	return this.options.unpairedTags.indexOf(e) === -1 ? t = this.options.suppressEmptyNode ? "/" : `></${e}` : this.options.suppressUnpairedNode || (t = "/"), t;
-}, nm.prototype.checkStopNode = function(e) {
+}, sh.prototype.checkStopNode = function(e) {
 	if (!this.stopNodeExpressions || this.stopNodeExpressions.length === 0) return !1;
 	for (let t = 0; t < this.stopNodeExpressions.length; t++) if (e.matches(this.stopNodeExpressions[t])) return !0;
 	return !1;
-}, nm.prototype.buildTextValNode = function(e, t, n, r, i) {
+}, sh.prototype.buildTextValNode = function(e, t, n, r, i) {
 	if (this.options.cdataPropName !== !1 && t === this.options.cdataPropName) {
-		let t = Hp(e);
+		let t = Gm(e);
 		return this.indentate(r) + `<![CDATA[${t}]]>` + this.newLine;
 	} else if (this.options.commentPropName !== !1 && t === this.options.commentPropName) {
-		let t = Vp(e);
+		let t = Wm(e);
 		return this.indentate(r) + `<!--${t}-->` + this.newLine;
 	} else if (t[0] === "?") return this.indentate(r) + "<" + t + n + "?" + this.tagEndChar;
 	else {
 		let i = this.options.tagValueProcessor(t, e);
 		return i = this.replaceEntitiesValue(i), i === "" ? this.indentate(r) + "<" + t + n + this.closeTag(t) + this.tagEndChar : this.indentate(r) + "<" + t + n + ">" + i + "</" + t + this.tagEndChar;
 	}
-}, nm.prototype.replaceEntitiesValue = function(e) {
+}, sh.prototype.replaceEntitiesValue = function(e) {
 	if (e && e.length > 0 && this.options.processEntities) for (let t = 0; t < this.options.entities.length; t++) {
 		let n = this.options.entities[t];
 		e = e.replace(n.regex, n.val);
 	}
 	return e;
 };
-function im(e) {
+function dh(e) {
 	return this.options.indentBy.repeat(e);
 }
-function am(e) {
+function fh(e) {
 	return e.startsWith(this.options.attributeNamePrefix) && e !== this.options.textNodeName ? e.substr(this.attrPrefixLen) : !1;
 }
-var om = nm, sm = { validate: $d };
-function cm(e) {
+var ph = sh, mh = { validate: Kf };
+function hh(e) {
 	return {
 		attributesGroupName: "$",
 		textNodeName: e.xmlCharKey ?? "_",
@@ -18916,8 +19693,8 @@ function cm(e) {
 		suppressBooleanAttributes: !1
 	};
 }
-function lm(e = {}) {
-	return Object.assign(Object.assign({}, cm(e)), {
+function gh(e = {}) {
+	return Object.assign(Object.assign({}, hh(e)), {
 		attributeNamePrefix: "@_",
 		format: !0,
 		suppressEmptyNode: !0,
@@ -18926,8 +19703,8 @@ function lm(e = {}) {
 		cdataPropName: e.cdataPropName ?? "__cdata"
 	});
 }
-function um(e = {}) {
-	return Object.assign(Object.assign({}, cm(e)), {
+function _h(e = {}) {
+	return Object.assign(Object.assign({}, hh(e)), {
 		parseAttributeValue: !1,
 		parseTagValue: !1,
 		attributeNamePrefix: "",
@@ -18936,22 +19713,22 @@ function um(e = {}) {
 		trimValues: !1
 	});
 }
-function dm(e, t = {}) {
-	let n = lm(t), r = new om(n), i = { [n.rootNodeName]: e };
+function vh(e, t = {}) {
+	let n = gh(t), r = new ph(n), i = { [n.rootNodeName]: e };
 	return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>${r.build(i)}`.replace(/\n/g, "");
 }
-async function fm(e, t = {}) {
+async function yh(e, t = {}) {
 	if (!e) throw Error("Document is empty");
-	let n = sm.validate(e);
+	let n = mh.validate(e);
 	if (n !== !0) throw n;
-	let r = new Bp(um(t)).parse(e);
+	let r = new Um(_h(t)).parse(e);
 	if (r["?xml"] && delete r["?xml"], !t.includeRoot) for (let e of Object.keys(r)) {
 		let t = r[e];
 		return typeof t == "object" ? Object.assign({}, t) : t;
 	}
 	return r;
 }
-var pm = kc("storage-blob"), mm = class extends b {
+var bh = xl("storage-blob"), xh = class extends b {
 	buffers;
 	byteLength;
 	byteOffsetInCurrentBuffer;
@@ -18979,7 +19756,7 @@ var pm = kc("storage-blob"), mm = class extends b {
 		}
 		t.length > 1 ? this.push(Buffer.concat(t)) : t.length === 1 && this.push(t[0]);
 	}
-}, hm = S.constants.MAX_LENGTH, gm = class {
+}, Sh = S.constants.MAX_LENGTH, Ch = class {
 	buffers = [];
 	capacity;
 	_size;
@@ -18988,10 +19765,10 @@ var pm = kc("storage-blob"), mm = class extends b {
 	}
 	constructor(e, t, n) {
 		this.capacity = e, this._size = 0;
-		let r = Math.ceil(e / hm);
+		let r = Math.ceil(e / Sh);
 		for (let t = 0; t < r; t++) {
-			let n = t === r - 1 ? e % hm : hm;
-			n === 0 && (n = hm), this.buffers.push(Buffer.allocUnsafe(n));
+			let n = t === r - 1 ? e % Sh : Sh;
+			n === 0 && (n = Sh), this.buffers.push(Buffer.allocUnsafe(n));
 		}
 		t && this.fill(t, n);
 	}
@@ -19005,9 +19782,9 @@ var pm = kc("storage-blob"), mm = class extends b {
 		e.splice(0, n), e.length > 0 && (e[0] = e[0].slice(a));
 	}
 	getReadableStream() {
-		return new mm(this.buffers, this.size);
+		return new xh(this.buffers, this.size);
 	}
-}, _m = class {
+}, wh = class {
 	bufferSize;
 	maxBuffers;
 	readable;
@@ -19057,7 +19834,7 @@ var pm = kc("storage-blob"), mm = class extends b {
 		this.unresolvedDataArray.push(e), this.unresolvedLength += e.length;
 	}
 	shiftBufferFromUnresolvedDataArray(e) {
-		return e ? e.fill(this.unresolvedDataArray, this.unresolvedLength) : e = new gm(this.bufferSize, this.unresolvedDataArray, this.unresolvedLength), this.unresolvedLength -= e.size, e;
+		return e ? e.fill(this.unresolvedDataArray, this.unresolvedLength) : e = new Ch(this.bufferSize, this.unresolvedDataArray, this.unresolvedLength), this.unresolvedLength -= e.size, e;
 	}
 	resolveData() {
 		for (; this.unresolvedLength >= this.bufferSize;) {
@@ -19090,11 +19867,11 @@ var pm = kc("storage-blob"), mm = class extends b {
 	reuseBuffer(e) {
 		this.incoming.push(e), !this.isError && this.resolveData() && !this.isStreamEnd && this.readable.resume();
 	}
-}, vm;
-function ym() {
-	return vm ||= Ml(), vm;
+}, Th;
+function Eh() {
+	return Th ||= wu(), Th;
 }
-var bm = class {
+var Dh = class {
 	_nextPolicy;
 	_options;
 	constructor(e, t) {
@@ -19106,7 +19883,7 @@ var bm = class {
 	log(e, t) {
 		this._options.log(e, t);
 	}
-}, xm = { Parameters: {
+}, Oh = { Parameters: {
 	FORCE_BROWSER_NO_CACHE: "_",
 	SIGNATURE: "sig",
 	SNAPSHOT: "snapshot",
@@ -19138,7 +19915,7 @@ var bm = class {
 	X_MS_VERSION: "x-ms-version",
 	X_MS_CopySourceErrorCode: "x-ms-copy-source-error-code"
 };
-function Sm(e, t, n) {
+function kh(e, t, n) {
 	let r = new URL(e), i = encodeURIComponent(t), a = n ? encodeURIComponent(n) : void 0, o = r.search === "" ? "?" : r.search, s = [];
 	for (let e of o.slice(1).split("&")) if (e) {
 		let [t] = e.split("=", 2);
@@ -19146,18 +19923,18 @@ function Sm(e, t, n) {
 	}
 	return a && s.push(`${i}=${a}`), r.search = s.length ? `?${s.join("&")}` : "", r.toString();
 }
-function Cm(e, t) {
+function Ah(e, t) {
 	let n = new URL(e);
 	return n.hostname = t, n.toString();
 }
-function wm(e) {
+function jh(e) {
 	try {
 		return new URL(e).pathname;
 	} catch {
 		return;
 	}
 }
-function Tm(e) {
+function Mh(e) {
 	let t = new URL(e).search;
 	if (!t) return {};
 	t = t.trim(), t = t.startsWith("?") ? t.substring(1) : t;
@@ -19173,7 +19950,7 @@ function Tm(e) {
 	}
 	return r;
 }
-async function Em(e, t, n) {
+async function Nh(e, t, n) {
 	return new Promise((r, i) => {
 		let a, o = () => {
 			a !== void 0 && clearTimeout(a), i(n);
@@ -19183,37 +19960,37 @@ async function Em(e, t, n) {
 		}, e), t !== void 0 && t.addEventListener("abort", o);
 	});
 }
-var Dm = class extends bm {
+var Ph = class extends Dh {
 	constructor(e, t) {
 		super(e, t);
 	}
 	async sendRequest(e) {
-		return Xc ? this._nextPolicy.sendRequest(e) : ((e.method.toUpperCase() === "GET" || e.method.toUpperCase() === "HEAD") && (e.url = Sm(e.url, xm.Parameters.FORCE_BROWSER_NO_CACHE, (/* @__PURE__ */ new Date()).getTime().toString())), e.headers.remove(B.COOKIE), e.headers.remove(B.CONTENT_LENGTH), this._nextPolicy.sendRequest(e));
+		return Hl ? this._nextPolicy.sendRequest(e) : ((e.method.toUpperCase() === "GET" || e.method.toUpperCase() === "HEAD") && (e.url = kh(e.url, Oh.Parameters.FORCE_BROWSER_NO_CACHE, (/* @__PURE__ */ new Date()).getTime().toString())), e.headers.remove(B.COOKIE), e.headers.remove(B.CONTENT_LENGTH), this._nextPolicy.sendRequest(e));
 	}
-}, Om = class {
+}, Fh = class {
 	create(e, t) {
-		return new Dm(e, t);
+		return new Ph(e, t);
 	}
-}, km = class extends bm {
+}, Ih = class extends Dh {
 	sendRequest(e) {
 		return this._nextPolicy.sendRequest(this.signRequest(e));
 	}
 	signRequest(e) {
 		return e;
 	}
-}, Am = class extends km {
+}, Lh = class extends Ih {
 	constructor(e, t) {
 		super(e, t);
 	}
-}, jm = class {
+}, Rh = class {
 	create(e, t) {
 		throw Error("Method should be implemented in children classes.");
 	}
-}, Mm = class extends jm {
+}, zh = class extends Rh {
 	create(e, t) {
-		return new Am(e, t);
+		return new Lh(e, t);
 	}
-}, Nm = new Uint32Array([
+}, Bh = new Uint32Array([
 	0,
 	0,
 	0,
@@ -19342,7 +20119,7 @@ var Dm = class extends bm {
 	0,
 	1872,
 	0
-]), Pm = new Uint32Array([
+]), Vh = new Uint32Array([
 	0,
 	0,
 	0,
@@ -19471,7 +20248,7 @@ var Dm = class extends bm {
 	0,
 	0,
 	0
-]), Fm = new Uint32Array([
+]), Hh = new Uint32Array([
 	0,
 	0,
 	0,
@@ -19601,14 +20378,14 @@ var Dm = class extends bm {
 	0,
 	0
 ]);
-function Im(e, t) {
-	return Lm(e, t) ? -1 : 1;
+function Uh(e, t) {
+	return Wh(e, t) ? -1 : 1;
 }
-function Lm(e, t) {
+function Wh(e, t) {
 	let n = [
-		Nm,
-		Pm,
-		Fm
+		Bh,
+		Vh,
+		Hh
 	], r = 0, i = 0, a = 0;
 	for (; r < n.length;) {
 		if (r === n.length - 1 && i !== a) return i > a;
@@ -19621,7 +20398,7 @@ function Lm(e, t) {
 	}
 	return !1;
 }
-var Rm = class extends km {
+var Gh = class extends Ih {
 	factory;
 	constructor(e, t, n) {
 		super(e, t), this.factory = n;
@@ -19650,16 +20427,16 @@ var Rm = class extends km {
 	}
 	getCanonicalizedHeadersString(e) {
 		let t = e.headers.headersArray().filter((e) => e.name.toLowerCase().startsWith(B.PREFIX_FOR_STORAGE));
-		t.sort((e, t) => Im(e.name.toLowerCase(), t.name.toLowerCase())), t = t.filter((e, t, n) => !(t > 0 && e.name.toLowerCase() === n[t - 1].name.toLowerCase()));
+		t.sort((e, t) => Uh(e.name.toLowerCase(), t.name.toLowerCase())), t = t.filter((e, t, n) => !(t > 0 && e.name.toLowerCase() === n[t - 1].name.toLowerCase()));
 		let n = "";
 		return t.forEach((e) => {
 			n += `${e.name.toLowerCase().trimRight()}:${e.value.trimLeft()}\n`;
 		}), n;
 	}
 	getCanonicalizedResourceString(e) {
-		let t = wm(e.url) || "/", n = "";
+		let t = jh(e.url) || "/", n = "";
 		n += `/${this.factory.accountName}${t}`;
-		let r = Tm(e.url), i = {};
+		let r = Mh(e.url), i = {};
 		if (r) {
 			let e = [];
 			for (let t in r) if (Object.prototype.hasOwnProperty.call(r, t)) {
@@ -19671,39 +20448,39 @@ var Rm = class extends km {
 		}
 		return n;
 	}
-}, zm = class extends jm {
+}, Kh = class extends Rh {
 	accountName;
 	accountKey;
 	constructor(e, t) {
 		super(), this.accountName = e, this.accountKey = Buffer.from(t, "base64");
 	}
 	create(e, t) {
-		return new Rm(e, t, this);
+		return new Gh(e, t, this);
 	}
 	computeHMACSHA256(e) {
 		return E("sha256", this.accountKey).update(e, "utf8").digest("base64");
 	}
-}, Bm = kc("storage-common"), Vm;
+}, qh = xl("storage-common"), Jh;
 (function(e) {
 	e[e.EXPONENTIAL = 0] = "EXPONENTIAL", e[e.FIXED = 1] = "FIXED";
-})(Vm ||= {});
-var Hm = {
+})(Jh ||= {});
+var Yh = {
 	maxRetryDelayInMs: 120 * 1e3,
 	maxTries: 4,
 	retryDelayInMs: 4 * 1e3,
-	retryPolicyType: Vm.EXPONENTIAL,
+	retryPolicyType: Jh.EXPONENTIAL,
 	secondaryHost: "",
 	tryTimeoutInMs: void 0
-}, Um = new Uc("The operation was aborted."), Wm = class extends bm {
+}, Xh = new Fl("The operation was aborted."), Zh = class extends Dh {
 	retryOptions;
-	constructor(e, t, n = Hm) {
+	constructor(e, t, n = Yh) {
 		super(e, t), this.retryOptions = {
-			retryPolicyType: n.retryPolicyType ? n.retryPolicyType : Hm.retryPolicyType,
-			maxTries: n.maxTries && n.maxTries >= 1 ? Math.floor(n.maxTries) : Hm.maxTries,
-			tryTimeoutInMs: n.tryTimeoutInMs && n.tryTimeoutInMs >= 0 ? n.tryTimeoutInMs : Hm.tryTimeoutInMs,
-			retryDelayInMs: n.retryDelayInMs && n.retryDelayInMs >= 0 ? Math.min(n.retryDelayInMs, n.maxRetryDelayInMs ? n.maxRetryDelayInMs : Hm.maxRetryDelayInMs) : Hm.retryDelayInMs,
-			maxRetryDelayInMs: n.maxRetryDelayInMs && n.maxRetryDelayInMs >= 0 ? n.maxRetryDelayInMs : Hm.maxRetryDelayInMs,
-			secondaryHost: n.secondaryHost ? n.secondaryHost : Hm.secondaryHost
+			retryPolicyType: n.retryPolicyType ? n.retryPolicyType : Yh.retryPolicyType,
+			maxTries: n.maxTries && n.maxTries >= 1 ? Math.floor(n.maxTries) : Yh.maxTries,
+			tryTimeoutInMs: n.tryTimeoutInMs && n.tryTimeoutInMs >= 0 ? n.tryTimeoutInMs : Yh.tryTimeoutInMs,
+			retryDelayInMs: n.retryDelayInMs && n.retryDelayInMs >= 0 ? Math.min(n.retryDelayInMs, n.maxRetryDelayInMs ? n.maxRetryDelayInMs : Yh.maxRetryDelayInMs) : Yh.retryDelayInMs,
+			maxRetryDelayInMs: n.maxRetryDelayInMs && n.maxRetryDelayInMs >= 0 ? n.maxRetryDelayInMs : Yh.maxRetryDelayInMs,
+			secondaryHost: n.secondaryHost ? n.secondaryHost : Yh.secondaryHost
 		};
 	}
 	async sendRequest(e) {
@@ -19711,18 +20488,18 @@ var Hm = {
 	}
 	async attemptSendRequest(e, t, n) {
 		let r = e.clone(), i = t || !this.retryOptions.secondaryHost || !(e.method === "GET" || e.method === "HEAD" || e.method === "OPTIONS") || n % 2 == 1;
-		i || (r.url = Cm(r.url, this.retryOptions.secondaryHost)), this.retryOptions.tryTimeoutInMs && (r.url = Sm(r.url, xm.Parameters.TIMEOUT, Math.floor(this.retryOptions.tryTimeoutInMs / 1e3).toString()));
+		i || (r.url = Ah(r.url, this.retryOptions.secondaryHost)), this.retryOptions.tryTimeoutInMs && (r.url = kh(r.url, Oh.Parameters.TIMEOUT, Math.floor(this.retryOptions.tryTimeoutInMs / 1e3).toString()));
 		let a;
 		try {
-			if (Bm.info(`RetryPolicy: =====> Try=${n} ${i ? "Primary" : "Secondary"}`), a = await this._nextPolicy.sendRequest(r), !this.shouldRetry(i, n, a)) return a;
+			if (qh.info(`RetryPolicy: =====> Try=${n} ${i ? "Primary" : "Secondary"}`), a = await this._nextPolicy.sendRequest(r), !this.shouldRetry(i, n, a)) return a;
 			t ||= !i && a.status === 404;
 		} catch (e) {
-			if (Bm.error(`RetryPolicy: Caught error, message: ${e.message}, code: ${e.code}`), !this.shouldRetry(i, n, a, e)) throw e;
+			if (qh.error(`RetryPolicy: Caught error, message: ${e.message}, code: ${e.code}`), !this.shouldRetry(i, n, a, e)) throw e;
 		}
 		return await this.delay(i, n, e.abortSignal), this.attemptSendRequest(e, t, ++n);
 	}
 	shouldRetry(e, t, n, r) {
-		if (t >= this.retryOptions.maxTries) return Bm.info(`RetryPolicy: Attempt(s) ${t} >= maxTries ${this.retryOptions.maxTries}, no further try.`), !1;
+		if (t >= this.retryOptions.maxTries) return qh.info(`RetryPolicy: Attempt(s) ${t} >= maxTries ${this.retryOptions.maxTries}, no further try.`), !1;
 		let i = [
 			"ETIMEDOUT",
 			"ESOCKETTIMEDOUT",
@@ -19735,12 +20512,12 @@ var Hm = {
 			"REQUEST_SEND_ERROR"
 		];
 		if (r) {
-			for (let e of i) if (r.name.toUpperCase().includes(e) || r.message.toUpperCase().includes(e) || r.code && r.code.toString().toUpperCase() === e) return Bm.info(`RetryPolicy: Network error ${e} found, will retry.`), !0;
+			for (let e of i) if (r.name.toUpperCase().includes(e) || r.message.toUpperCase().includes(e) || r.code && r.code.toString().toUpperCase() === e) return qh.info(`RetryPolicy: Network error ${e} found, will retry.`), !0;
 		}
 		if (n || r) {
 			let t = n ? n.status : r ? r.statusCode : 0;
-			if (!e && t === 404) return Bm.info("RetryPolicy: Secondary access with 404, will retry."), !0;
-			if (t === 503 || t === 500) return Bm.info(`RetryPolicy: Will retry for status code ${t}.`), !0;
+			if (!e && t === 404) return qh.info("RetryPolicy: Secondary access with 404, will retry."), !0;
+			if (t === 503 || t === 500) return qh.info(`RetryPolicy: Will retry for status code ${t}.`), !0;
 		}
 		if (n && n?.status >= 400) {
 			let e = n.headers.get(B.X_MS_CopySourceErrorCode);
@@ -19750,58 +20527,58 @@ var Hm = {
 				case "ServerBusy": return !0;
 			}
 		}
-		return r?.code === "PARSE_ERROR" && r?.message.startsWith("Error \"Error: Unclosed root tag") ? (Bm.info("RetryPolicy: Incomplete XML response likely due to service timeout, will retry."), !0) : !1;
+		return r?.code === "PARSE_ERROR" && r?.message.startsWith("Error \"Error: Unclosed root tag") ? (qh.info("RetryPolicy: Incomplete XML response likely due to service timeout, will retry."), !0) : !1;
 	}
 	async delay(e, t, n) {
 		let r = 0;
 		if (e) switch (this.retryOptions.retryPolicyType) {
-			case Vm.EXPONENTIAL:
+			case Jh.EXPONENTIAL:
 				r = Math.min((2 ** (t - 1) - 1) * this.retryOptions.retryDelayInMs, this.retryOptions.maxRetryDelayInMs);
 				break;
-			case Vm.FIXED:
+			case Jh.FIXED:
 				r = this.retryOptions.retryDelayInMs;
 				break;
 		}
 		else r = Math.random() * 1e3;
-		return Bm.info(`RetryPolicy: Delay for ${r}ms`), Em(r, n, Um);
+		return qh.info(`RetryPolicy: Delay for ${r}ms`), Nh(r, n, Xh);
 	}
-}, Gm = class {
+}, Qh = class {
 	retryOptions;
 	constructor(e) {
 		this.retryOptions = e;
 	}
 	create(e, t) {
-		return new Wm(e, t, this.retryOptions);
+		return new Zh(e, t, this.retryOptions);
 	}
-}, Km = "storageBrowserPolicy";
-function qm() {
+}, $h = "storageBrowserPolicy";
+function eg() {
 	return {
-		name: Km,
+		name: $h,
 		async sendRequest(e, t) {
-			return Xc ? t(e) : ((e.method === "GET" || e.method === "HEAD") && (e.url = Sm(e.url, xm.Parameters.FORCE_BROWSER_NO_CACHE, (/* @__PURE__ */ new Date()).getTime().toString())), e.headers.delete(B.COOKIE), e.headers.delete(B.CONTENT_LENGTH), t(e));
+			return Hl ? t(e) : ((e.method === "GET" || e.method === "HEAD") && (e.url = kh(e.url, Oh.Parameters.FORCE_BROWSER_NO_CACHE, (/* @__PURE__ */ new Date()).getTime().toString())), e.headers.delete(B.COOKIE), e.headers.delete(B.CONTENT_LENGTH), t(e));
 		}
 	};
 }
-var Jm = "StorageCorrectContentLengthPolicy";
-function Ym() {
+var tg = "StorageCorrectContentLengthPolicy";
+function ng() {
 	function e(e) {
 		e.body && (typeof e.body == "string" || Buffer.isBuffer(e.body)) && e.body.length > 0 && e.headers.set(B.CONTENT_LENGTH, Buffer.byteLength(e.body));
 	}
 	return {
-		name: Jm,
+		name: tg,
 		async sendRequest(t, n) {
 			return e(t), n(t);
 		}
 	};
 }
-var Xm = "storageRetryPolicy", Zm = {
+var rg = "storageRetryPolicy", ig = {
 	maxRetryDelayInMs: 120 * 1e3,
 	maxTries: 4,
 	retryDelayInMs: 4 * 1e3,
-	retryPolicyType: Vm.EXPONENTIAL,
+	retryPolicyType: Jh.EXPONENTIAL,
 	secondaryHost: "",
 	tryTimeoutInMs: void 0
-}, Qm = [
+}, ag = [
 	"ETIMEDOUT",
 	"ESOCKETTIMEDOUT",
 	"ECONNREFUSED",
@@ -19811,19 +20588,19 @@ var Xm = "storageRetryPolicy", Zm = {
 	"TIMEOUT",
 	"EPIPE",
 	"REQUEST_SEND_ERROR"
-], $m = new Uc("The operation was aborted.");
-function eh(e = {}) {
-	let t = e.retryPolicyType ?? Zm.retryPolicyType, n = e.maxTries ?? Zm.maxTries, r = e.retryDelayInMs ?? Zm.retryDelayInMs, i = e.maxRetryDelayInMs ?? Zm.maxRetryDelayInMs, a = e.secondaryHost ?? Zm.secondaryHost, o = e.tryTimeoutInMs ?? Zm.tryTimeoutInMs;
+], og = new Fl("The operation was aborted.");
+function sg(e = {}) {
+	let t = e.retryPolicyType ?? ig.retryPolicyType, n = e.maxTries ?? ig.maxTries, r = e.retryDelayInMs ?? ig.retryDelayInMs, i = e.maxRetryDelayInMs ?? ig.maxRetryDelayInMs, a = e.secondaryHost ?? ig.secondaryHost, o = e.tryTimeoutInMs ?? ig.tryTimeoutInMs;
 	function s({ isPrimaryRetry: e, attempt: t, response: r, error: i }) {
-		if (t >= n) return Bm.info(`RetryPolicy: Attempt(s) ${t} >= maxTries ${n}, no further try.`), !1;
+		if (t >= n) return qh.info(`RetryPolicy: Attempt(s) ${t} >= maxTries ${n}, no further try.`), !1;
 		if (i) {
-			for (let e of Qm) if (i.name.toUpperCase().includes(e) || i.message.toUpperCase().includes(e) || i.code && i.code.toString().toUpperCase() === e) return Bm.info(`RetryPolicy: Network error ${e} found, will retry.`), !0;
-			if (i?.code === "PARSE_ERROR" && i?.message.startsWith("Error \"Error: Unclosed root tag")) return Bm.info("RetryPolicy: Incomplete XML response likely due to service timeout, will retry."), !0;
+			for (let e of ag) if (i.name.toUpperCase().includes(e) || i.message.toUpperCase().includes(e) || i.code && i.code.toString().toUpperCase() === e) return qh.info(`RetryPolicy: Network error ${e} found, will retry.`), !0;
+			if (i?.code === "PARSE_ERROR" && i?.message.startsWith("Error \"Error: Unclosed root tag")) return qh.info("RetryPolicy: Incomplete XML response likely due to service timeout, will retry."), !0;
 		}
 		if (r || i) {
 			let t = r?.status ?? i?.statusCode ?? 0;
-			if (!e && t === 404) return Bm.info("RetryPolicy: Secondary access with 404, will retry."), !0;
-			if (t === 503 || t === 500) return Bm.info(`RetryPolicy: Will retry for status code ${t}.`), !0;
+			if (!e && t === 404) return qh.info("RetryPolicy: Secondary access with 404, will retry."), !0;
+			if (t === 503 || t === 500) return qh.info(`RetryPolicy: Will retry for status code ${t}.`), !0;
 		}
 		if (r && r?.status >= 400) {
 			let e = r.headers.get(B.X_MS_CopySourceErrorCode);
@@ -19838,21 +20615,21 @@ function eh(e = {}) {
 	function c(e, n) {
 		let a = 0;
 		if (e) switch (t) {
-			case Vm.EXPONENTIAL:
+			case Jh.EXPONENTIAL:
 				a = Math.min((2 ** (n - 1) - 1) * r, i);
 				break;
-			case Vm.FIXED:
+			case Jh.FIXED:
 				a = r;
 				break;
 		}
 		else a = Math.random() * 1e3;
-		return Bm.info(`RetryPolicy: Delay for ${a}ms`), a;
+		return qh.info(`RetryPolicy: Delay for ${a}ms`), a;
 	}
 	return {
-		name: Xm,
+		name: rg,
 		async sendRequest(e, t) {
-			o && (e.url = Sm(e.url, xm.Parameters.TIMEOUT, String(Math.floor(o / 1e3))));
-			let n = e.url, r = a ? Cm(e.url, a) : void 0, i = !1, l = 1, u = !0, d, f;
+			o && (e.url = kh(e.url, Oh.Parameters.TIMEOUT, String(Math.floor(o / 1e3))));
+			let n = e.url, r = a ? Ah(e.url, a) : void 0, i = !1, l = 1, u = !0, d, f;
 			for (; u;) {
 				let a = i || !r || ![
 					"GET",
@@ -19861,25 +20638,25 @@ function eh(e = {}) {
 				].includes(e.method) || l % 2 == 1;
 				e.url = a ? n : r, d = void 0, f = void 0;
 				try {
-					Bm.info(`RetryPolicy: =====> Try=${l} ${a ? "Primary" : "Secondary"}`), d = await t(e), i ||= !a && d.status === 404;
+					qh.info(`RetryPolicy: =====> Try=${l} ${a ? "Primary" : "Secondary"}`), d = await t(e), i ||= !a && d.status === 404;
 				} catch (e) {
-					if (xl(e)) Bm.error(`RetryPolicy: Caught error, message: ${e.message}, code: ${e.code}`), f = e;
-					else throw Bm.error(`RetryPolicy: Caught error, message: ${qc(e)}`), e;
+					if (pu(e)) qh.error(`RetryPolicy: Caught error, message: ${e.message}, code: ${e.code}`), f = e;
+					else throw qh.error(`RetryPolicy: Caught error, message: ${zl(e)}`), e;
 				}
 				u = s({
 					isPrimaryRetry: a,
 					attempt: l,
 					response: d,
 					error: f
-				}), u && await Em(c(a, l), e.abortSignal, $m), l++;
+				}), u && await Nh(c(a, l), e.abortSignal, og), l++;
 			}
 			if (d) return d;
-			throw f ?? new bl("RetryPolicy failed without known error.");
+			throw f ?? new fu("RetryPolicy failed without known error.");
 		}
 	};
 }
-var th = "storageSharedKeyCredentialPolicy";
-function nh(e) {
+var cg = "storageSharedKeyCredentialPolicy";
+function lg(e) {
 	function t(t) {
 		t.headers.set(B.X_MS_DATE, (/* @__PURE__ */ new Date()).toUTCString()), t.body && (typeof t.body == "string" || Buffer.isBuffer(t.body)) && t.body.length > 0 && t.headers.set(B.CONTENT_LENGTH, Buffer.byteLength(t.body));
 		let a = [
@@ -19908,16 +20685,16 @@ function nh(e) {
 			name: n,
 			value: r
 		});
-		t.sort((e, t) => Im(e.name.toLowerCase(), t.name.toLowerCase())), t = t.filter((e, t, n) => !(t > 0 && e.name.toLowerCase() === n[t - 1].name.toLowerCase()));
+		t.sort((e, t) => Uh(e.name.toLowerCase(), t.name.toLowerCase())), t = t.filter((e, t, n) => !(t > 0 && e.name.toLowerCase() === n[t - 1].name.toLowerCase()));
 		let n = "";
 		return t.forEach((e) => {
 			n += `${e.name.toLowerCase().trimRight()}:${e.value.trimLeft()}\n`;
 		}), n;
 	}
 	function i(t) {
-		let n = wm(t.url) || "/", r = "";
+		let n = jh(t.url) || "/", r = "";
 		r += `/${e.accountName}${n}`;
-		let i = Tm(t.url), a = {};
+		let i = Mh(t.url), a = {};
 		if (i) {
 			let e = [];
 			for (let t in i) if (Object.prototype.hasOwnProperty.call(i, t)) {
@@ -19930,16 +20707,16 @@ function nh(e) {
 		return r;
 	}
 	return {
-		name: th,
+		name: cg,
 		async sendRequest(e, n) {
 			return t(e), n(e);
 		}
 	};
 }
-var rh = "storageRequestFailureDetailsParserPolicy";
-function ih() {
+var ug = "storageRequestFailureDetailsParserPolicy";
+function dg() {
 	return {
-		name: rh,
+		name: ug,
 		async sendRequest(e, t) {
 			try {
 				return await t(e);
@@ -19949,7 +20726,7 @@ function ih() {
 		}
 	};
 }
-var ah = class {
+var fg = class {
 	accountName;
 	userDelegationKey;
 	key;
@@ -19959,13 +20736,13 @@ var ah = class {
 	computeHMACSHA256(e) {
 		return E("sha256", this.key).update(e, "utf8").digest("base64");
 	}
-}, oh = "12.31.0", sh = "2026-02-06", ch = 256 * 1024 * 1024, lh = 4e3 * 1024 * 1024, uh = 5e4, dh = 8 * 1024 * 1024, fh = 4 * 1024 * 1024, ph = 100 * 1e3, mh = { Parameters: {
+}, pg = "12.31.0", mg = "2026-02-06", hg = 256 * 1024 * 1024, gg = 4e3 * 1024 * 1024, _g = 5e4, vg = 8 * 1024 * 1024, yg = 4 * 1024 * 1024, bg = 100 * 1e3, xg = { Parameters: {
 	FORCE_BROWSER_NO_CACHE: "_",
 	SIGNATURE: "sig",
 	SNAPSHOT: "snapshot",
 	VERSIONID: "versionid",
 	TIMEOUT: "timeout"
-} }, hh = "AES256", gh = "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;", _h = /* @__PURE__ */ "Access-Control-Allow-Origin.Cache-Control.Content-Length.Content-Type.Date.Request-Id.traceparent.Transfer-Encoding.User-Agent.x-ms-client-request-id.x-ms-date.x-ms-error-code.x-ms-request-id.x-ms-return-client-request-id.x-ms-version.Accept-Ranges.Content-Disposition.Content-Encoding.Content-Language.Content-MD5.Content-Range.ETag.Last-Modified.Server.Vary.x-ms-content-crc64.x-ms-copy-action.x-ms-copy-completion-time.x-ms-copy-id.x-ms-copy-progress.x-ms-copy-status.x-ms-has-immutability-policy.x-ms-has-legal-hold.x-ms-lease-state.x-ms-lease-status.x-ms-range.x-ms-request-server-encrypted.x-ms-server-encrypted.x-ms-snapshot.x-ms-source-range.If-Match.If-Modified-Since.If-None-Match.If-Unmodified-Since.x-ms-access-tier.x-ms-access-tier-change-time.x-ms-access-tier-inferred.x-ms-account-kind.x-ms-archive-status.x-ms-blob-append-offset.x-ms-blob-cache-control.x-ms-blob-committed-block-count.x-ms-blob-condition-appendpos.x-ms-blob-condition-maxsize.x-ms-blob-content-disposition.x-ms-blob-content-encoding.x-ms-blob-content-language.x-ms-blob-content-length.x-ms-blob-content-md5.x-ms-blob-content-type.x-ms-blob-public-access.x-ms-blob-sequence-number.x-ms-blob-type.x-ms-copy-destination-snapshot.x-ms-creation-time.x-ms-default-encryption-scope.x-ms-delete-snapshots.x-ms-delete-type-permanent.x-ms-deny-encryption-scope-override.x-ms-encryption-algorithm.x-ms-if-sequence-number-eq.x-ms-if-sequence-number-le.x-ms-if-sequence-number-lt.x-ms-incremental-copy.x-ms-lease-action.x-ms-lease-break-period.x-ms-lease-duration.x-ms-lease-id.x-ms-lease-time.x-ms-page-write.x-ms-proposed-lease-id.x-ms-range-get-content-md5.x-ms-rehydrate-priority.x-ms-sequence-number-action.x-ms-sku-name.x-ms-source-content-md5.x-ms-source-if-match.x-ms-source-if-modified-since.x-ms-source-if-none-match.x-ms-source-if-unmodified-since.x-ms-tag-count.x-ms-encryption-key-sha256.x-ms-copy-source-error-code.x-ms-copy-source-status-code.x-ms-if-tags.x-ms-source-if-tags".split("."), vh = /* @__PURE__ */ "comp.maxresults.rscc.rscd.rsce.rscl.rsct.se.si.sip.sp.spr.sr.srt.ss.st.sv.include.marker.prefix.copyid.restype.blockid.blocklisttype.delimiter.prevsnapshot.ske.skoid.sks.skt.sktid.skv.snapshot".split("."), yh = [
+} }, Sg = "AES256", Cg = "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;", wg = /* @__PURE__ */ "Access-Control-Allow-Origin.Cache-Control.Content-Length.Content-Type.Date.Request-Id.traceparent.Transfer-Encoding.User-Agent.x-ms-client-request-id.x-ms-date.x-ms-error-code.x-ms-request-id.x-ms-return-client-request-id.x-ms-version.Accept-Ranges.Content-Disposition.Content-Encoding.Content-Language.Content-MD5.Content-Range.ETag.Last-Modified.Server.Vary.x-ms-content-crc64.x-ms-copy-action.x-ms-copy-completion-time.x-ms-copy-id.x-ms-copy-progress.x-ms-copy-status.x-ms-has-immutability-policy.x-ms-has-legal-hold.x-ms-lease-state.x-ms-lease-status.x-ms-range.x-ms-request-server-encrypted.x-ms-server-encrypted.x-ms-snapshot.x-ms-source-range.If-Match.If-Modified-Since.If-None-Match.If-Unmodified-Since.x-ms-access-tier.x-ms-access-tier-change-time.x-ms-access-tier-inferred.x-ms-account-kind.x-ms-archive-status.x-ms-blob-append-offset.x-ms-blob-cache-control.x-ms-blob-committed-block-count.x-ms-blob-condition-appendpos.x-ms-blob-condition-maxsize.x-ms-blob-content-disposition.x-ms-blob-content-encoding.x-ms-blob-content-language.x-ms-blob-content-length.x-ms-blob-content-md5.x-ms-blob-content-type.x-ms-blob-public-access.x-ms-blob-sequence-number.x-ms-blob-type.x-ms-copy-destination-snapshot.x-ms-creation-time.x-ms-default-encryption-scope.x-ms-delete-snapshots.x-ms-delete-type-permanent.x-ms-deny-encryption-scope-override.x-ms-encryption-algorithm.x-ms-if-sequence-number-eq.x-ms-if-sequence-number-le.x-ms-if-sequence-number-lt.x-ms-incremental-copy.x-ms-lease-action.x-ms-lease-break-period.x-ms-lease-duration.x-ms-lease-id.x-ms-lease-time.x-ms-page-write.x-ms-proposed-lease-id.x-ms-range-get-content-md5.x-ms-rehydrate-priority.x-ms-sequence-number-action.x-ms-sku-name.x-ms-source-content-md5.x-ms-source-if-match.x-ms-source-if-modified-since.x-ms-source-if-none-match.x-ms-source-if-unmodified-since.x-ms-tag-count.x-ms-encryption-key-sha256.x-ms-copy-source-error-code.x-ms-copy-source-status-code.x-ms-if-tags.x-ms-source-if-tags".split("."), Tg = /* @__PURE__ */ "comp.maxresults.rscc.rscd.rsce.rscl.rsct.se.si.sip.sp.spr.sr.srt.ss.st.sv.include.marker.prefix.copyid.restype.blockid.blocklisttype.delimiter.prevsnapshot.ske.skoid.sks.skt.sktid.skv.snapshot".split("."), Eg = [
 	"10000",
 	"10001",
 	"10002",
@@ -19987,12 +20764,12 @@ var ah = class {
 	"11103",
 	"11104"
 ];
-function bh(e) {
+function Dg(e) {
 	if (!e || typeof e != "object") return !1;
 	let t = e;
 	return Array.isArray(t.factories) && typeof t.options == "object" && typeof t.toServiceClientOptions == "function";
 }
-var xh = class {
+var Og = class {
 	factories;
 	options;
 	constructor(e, t = {}) {
@@ -20005,63 +20782,63 @@ var xh = class {
 		};
 	}
 };
-function Sh(e, t = {}) {
-	e ||= new Mm();
-	let n = new xh([], t);
+function kg(e, t = {}) {
+	e ||= new zh();
+	let n = new Og([], t);
 	return n._credential = e, n;
 }
-function Ch(e) {
+function Ag(e) {
 	let t = [
-		Dh,
-		Eh,
-		Oh,
-		kh,
-		Ah,
-		jh,
-		Nh
+		Pg,
+		Ng,
+		Fg,
+		Ig,
+		Lg,
+		Rg,
+		Bg
 	];
 	if (e.factories.length) {
 		let n = e.factories.filter((e) => !t.some((t) => t(e)));
 		if (n.length) {
-			let e = n.some((e) => Mh(e));
+			let e = n.some((e) => zg(e));
 			return {
-				wrappedPolicies: Hd(n),
+				wrappedPolicies: Ff(n),
 				afterRetry: e
 			};
 		}
 	}
 }
-function wh(e) {
+function jg(e) {
 	let { httpClient: t, ...n } = e.options, r = e._coreHttpClient;
-	r || (r = t ? Ud(t) : ym(), e._coreHttpClient = r);
+	r || (r = t ? If(t) : Eh(), e._coreHttpClient = r);
 	let i = e._corePipeline;
 	if (!i) {
-		let t = `azsdk-js-azure-storage-blob/${oh}`, r = n.userAgentOptions && n.userAgentOptions.userAgentPrefix ? `${n.userAgentOptions.userAgentPrefix} ${t}` : `${t}`;
-		i = id({
+		let t = `azsdk-js-azure-storage-blob/${pg}`, r = n.userAgentOptions && n.userAgentOptions.userAgentPrefix ? `${n.userAgentOptions.userAgentPrefix} ${t}` : `${t}`;
+		i = Xd({
 			...n,
 			loggingOptions: {
-				additionalAllowedHeaderNames: _h,
-				additionalAllowedQueryParameters: vh,
-				logger: pm.info
+				additionalAllowedHeaderNames: wg,
+				additionalAllowedQueryParameters: Tg,
+				logger: bh.info
 			},
 			userAgentOptions: { userAgentPrefix: r },
 			serializationOptions: {
-				stringifyXML: dm,
+				stringifyXML: vh,
 				serializerOptions: { xml: { xmlCharKey: "#" } }
 			},
 			deserializationOptions: {
-				parseXML: fm,
+				parseXML: yh,
 				serializerOptions: { xml: { xmlCharKey: "#" } }
 			}
-		}), i.removePolicy({ phase: "Retry" }), i.removePolicy({ name: nl }), i.addPolicy(Ym()), i.addPolicy(eh(n.retryOptions), { phase: "Retry" }), i.addPolicy(ih()), i.addPolicy(qm());
-		let a = Ch(e);
+		}), i.removePolicy({ phase: "Retry" }), i.removePolicy({ name: Jl }), i.addPolicy(ng()), i.addPolicy(sg(n.retryOptions), { phase: "Retry" }), i.addPolicy(dg()), i.addPolicy(eg());
+		let a = Ag(e);
 		a && i.addPolicy(a.wrappedPolicies, a.afterRetry ? { afterPhase: "Retry" } : void 0);
-		let o = Th(e);
-		Kl(o) ? i.addPolicy(Ul({
+		let o = Mg(e);
+		Ru(o) ? i.addPolicy(Fu({
 			credential: o,
 			scopes: n.audience ?? "https://storage.azure.com/.default",
-			challengeCallbacks: { authorizeRequestOnChallenge: Sd }
-		}), { phase: "Sign" }) : o instanceof zm && i.addPolicy(nh({
+			challengeCallbacks: { authorizeRequestOnChallenge: hf }
+		}), { phase: "Sign" }) : o instanceof Kh && i.addPolicy(lg({
 			accountName: o.accountName,
 			accountKey: o.accountKey
 		}), { phase: "Sign" }), e._corePipeline = i;
@@ -20073,35 +20850,35 @@ function wh(e) {
 		pipeline: i
 	};
 }
-function Th(e) {
+function Mg(e) {
 	if (e._credential) return e._credential;
-	let t = new Mm();
-	for (let n of e.factories) if (Kl(n.credential)) t = n.credential;
-	else if (Eh(n)) return n;
+	let t = new zh();
+	for (let n of e.factories) if (Ru(n.credential)) t = n.credential;
+	else if (Ng(n)) return n;
 	return t;
 }
-function Eh(e) {
-	return e instanceof zm ? !0 : e.constructor.name === "StorageSharedKeyCredential";
+function Ng(e) {
+	return e instanceof Kh ? !0 : e.constructor.name === "StorageSharedKeyCredential";
 }
-function Dh(e) {
-	return e instanceof Mm ? !0 : e.constructor.name === "AnonymousCredential";
+function Pg(e) {
+	return e instanceof zh ? !0 : e.constructor.name === "AnonymousCredential";
 }
-function Oh(e) {
-	return Kl(e.credential);
+function Fg(e) {
+	return Ru(e.credential);
 }
-function kh(e) {
-	return e instanceof Om ? !0 : e.constructor.name === "StorageBrowserPolicyFactory";
+function Ig(e) {
+	return e instanceof Fh ? !0 : e.constructor.name === "StorageBrowserPolicyFactory";
 }
-function Ah(e) {
-	return e instanceof Gm ? !0 : e.constructor.name === "StorageRetryPolicyFactory";
+function Lg(e) {
+	return e instanceof Qh ? !0 : e.constructor.name === "StorageRetryPolicyFactory";
 }
-function jh(e) {
+function Rg(e) {
 	return e.constructor.name === "TelemetryPolicyFactory";
 }
-function Mh(e) {
+function zg(e) {
 	return e.constructor.name === "InjectorPolicyFactory";
 }
-function Nh(e) {
+function Bg(e) {
 	let t = [
 		"GenerateClientRequestIdPolicy",
 		"TracingPolicy",
@@ -20122,187 +20899,187 @@ function Nh(e) {
 	}).constructor.name;
 	return t.some((e) => n.startsWith(e));
 }
-var Ph = /* @__PURE__ */ fe({
-	AccessPolicy: () => $h,
-	AppendBlobAppendBlockExceptionHeaders: () => Pv,
-	AppendBlobAppendBlockFromUrlExceptionHeaders: () => Iv,
-	AppendBlobAppendBlockFromUrlHeaders: () => Fv,
-	AppendBlobAppendBlockHeaders: () => Nv,
-	AppendBlobCreateExceptionHeaders: () => Mv,
-	AppendBlobCreateHeaders: () => jv,
-	AppendBlobSealExceptionHeaders: () => Rv,
-	AppendBlobSealHeaders: () => Lv,
-	ArrowConfiguration: () => yg,
-	ArrowField: () => bg,
-	BlobAbortCopyFromURLExceptionHeaders: () => nv,
-	BlobAbortCopyFromURLHeaders: () => tv,
-	BlobAcquireLeaseExceptionHeaders: () => B_,
-	BlobAcquireLeaseHeaders: () => z_,
-	BlobBreakLeaseExceptionHeaders: () => J_,
-	BlobBreakLeaseHeaders: () => q_,
-	BlobChangeLeaseExceptionHeaders: () => K_,
-	BlobChangeLeaseHeaders: () => G_,
-	BlobCopyFromURLExceptionHeaders: () => ev,
-	BlobCopyFromURLHeaders: () => $_,
-	BlobCreateSnapshotExceptionHeaders: () => X_,
-	BlobCreateSnapshotHeaders: () => Y_,
-	BlobDeleteExceptionHeaders: () => w_,
-	BlobDeleteHeaders: () => C_,
-	BlobDeleteImmutabilityPolicyExceptionHeaders: () => P_,
-	BlobDeleteImmutabilityPolicyHeaders: () => N_,
-	BlobDownloadExceptionHeaders: () => b_,
-	BlobDownloadHeaders: () => y_,
-	BlobFlatListSegment: () => tg,
-	BlobGetAccountInfoExceptionHeaders: () => ov,
-	BlobGetAccountInfoHeaders: () => av,
-	BlobGetPropertiesExceptionHeaders: () => S_,
-	BlobGetPropertiesHeaders: () => x_,
-	BlobGetTagsExceptionHeaders: () => uv,
-	BlobGetTagsHeaders: () => lv,
-	BlobHierarchyListSegment: () => og,
-	BlobItemInternal: () => ng,
-	BlobName: () => rg,
-	BlobPrefix: () => sg,
-	BlobPropertiesInternal: () => ig,
-	BlobQueryExceptionHeaders: () => cv,
-	BlobQueryHeaders: () => sv,
-	BlobReleaseLeaseExceptionHeaders: () => H_,
-	BlobReleaseLeaseHeaders: () => V_,
-	BlobRenewLeaseExceptionHeaders: () => W_,
-	BlobRenewLeaseHeaders: () => U_,
-	BlobServiceProperties: () => Fh,
-	BlobServiceStatistics: () => Vh,
-	BlobSetExpiryExceptionHeaders: () => O_,
-	BlobSetExpiryHeaders: () => D_,
-	BlobSetHttpHeadersExceptionHeaders: () => A_,
-	BlobSetHttpHeadersHeaders: () => k_,
-	BlobSetImmutabilityPolicyExceptionHeaders: () => M_,
-	BlobSetImmutabilityPolicyHeaders: () => j_,
-	BlobSetLegalHoldExceptionHeaders: () => I_,
-	BlobSetLegalHoldHeaders: () => F_,
-	BlobSetMetadataExceptionHeaders: () => R_,
-	BlobSetMetadataHeaders: () => L_,
-	BlobSetTagsExceptionHeaders: () => fv,
-	BlobSetTagsHeaders: () => dv,
-	BlobSetTierExceptionHeaders: () => iv,
-	BlobSetTierHeaders: () => rv,
-	BlobStartCopyFromURLExceptionHeaders: () => Q_,
-	BlobStartCopyFromURLHeaders: () => Z_,
-	BlobTag: () => Zh,
-	BlobTags: () => Xh,
-	BlobUndeleteExceptionHeaders: () => E_,
-	BlobUndeleteHeaders: () => T_,
-	Block: () => ug,
-	BlockBlobCommitBlockListExceptionHeaders: () => Jv,
-	BlockBlobCommitBlockListHeaders: () => qv,
-	BlockBlobGetBlockListExceptionHeaders: () => Xv,
-	BlockBlobGetBlockListHeaders: () => Yv,
-	BlockBlobPutBlobFromUrlExceptionHeaders: () => Hv,
-	BlockBlobPutBlobFromUrlHeaders: () => Vv,
-	BlockBlobStageBlockExceptionHeaders: () => Wv,
-	BlockBlobStageBlockFromURLExceptionHeaders: () => Kv,
-	BlockBlobStageBlockFromURLHeaders: () => Gv,
-	BlockBlobStageBlockHeaders: () => Uv,
-	BlockBlobUploadExceptionHeaders: () => Bv,
-	BlockBlobUploadHeaders: () => zv,
-	BlockList: () => lg,
-	BlockLookupList: () => cg,
-	ClearRange: () => pg,
-	ContainerAcquireLeaseExceptionHeaders: () => i_,
-	ContainerAcquireLeaseHeaders: () => r_,
-	ContainerBreakLeaseExceptionHeaders: () => u_,
-	ContainerBreakLeaseHeaders: () => l_,
-	ContainerChangeLeaseExceptionHeaders: () => f_,
-	ContainerChangeLeaseHeaders: () => d_,
-	ContainerCreateExceptionHeaders: () => Rg,
-	ContainerCreateHeaders: () => Lg,
-	ContainerDeleteExceptionHeaders: () => Hg,
-	ContainerDeleteHeaders: () => Vg,
-	ContainerFilterBlobsExceptionHeaders: () => n_,
-	ContainerFilterBlobsHeaders: () => t_,
-	ContainerGetAccessPolicyExceptionHeaders: () => Kg,
-	ContainerGetAccessPolicyHeaders: () => Gg,
-	ContainerGetAccountInfoExceptionHeaders: () => v_,
-	ContainerGetAccountInfoHeaders: () => __,
-	ContainerGetPropertiesExceptionHeaders: () => Bg,
-	ContainerGetPropertiesHeaders: () => zg,
-	ContainerItem: () => Wh,
-	ContainerListBlobFlatSegmentExceptionHeaders: () => m_,
-	ContainerListBlobFlatSegmentHeaders: () => p_,
-	ContainerListBlobHierarchySegmentExceptionHeaders: () => g_,
-	ContainerListBlobHierarchySegmentHeaders: () => h_,
-	ContainerProperties: () => Gh,
-	ContainerReleaseLeaseExceptionHeaders: () => o_,
-	ContainerReleaseLeaseHeaders: () => a_,
-	ContainerRenameExceptionHeaders: () => Qg,
-	ContainerRenameHeaders: () => Zg,
-	ContainerRenewLeaseExceptionHeaders: () => c_,
-	ContainerRenewLeaseHeaders: () => s_,
-	ContainerRestoreExceptionHeaders: () => Xg,
-	ContainerRestoreHeaders: () => Yg,
-	ContainerSetAccessPolicyExceptionHeaders: () => Jg,
-	ContainerSetAccessPolicyHeaders: () => qg,
-	ContainerSetMetadataExceptionHeaders: () => Wg,
-	ContainerSetMetadataHeaders: () => Ug,
-	ContainerSubmitBatchExceptionHeaders: () => e_,
-	ContainerSubmitBatchHeaders: () => $g,
-	CorsRule: () => zh,
-	DelimitedTextConfiguration: () => _g,
-	FilterBlobItem: () => Yh,
-	FilterBlobSegment: () => Jh,
-	GeoReplication: () => Hh,
-	JsonTextConfiguration: () => vg,
-	KeyInfo: () => Kh,
-	ListBlobsFlatSegmentResponse: () => eg,
-	ListBlobsHierarchySegmentResponse: () => ag,
-	ListContainersSegmentResponse: () => Uh,
-	Logging: () => Ih,
-	Metrics: () => Rh,
-	PageBlobClearPagesExceptionHeaders: () => vv,
-	PageBlobClearPagesHeaders: () => _v,
-	PageBlobCopyIncrementalExceptionHeaders: () => Av,
-	PageBlobCopyIncrementalHeaders: () => kv,
-	PageBlobCreateExceptionHeaders: () => mv,
-	PageBlobCreateHeaders: () => pv,
-	PageBlobGetPageRangesDiffExceptionHeaders: () => wv,
-	PageBlobGetPageRangesDiffHeaders: () => Cv,
-	PageBlobGetPageRangesExceptionHeaders: () => Sv,
-	PageBlobGetPageRangesHeaders: () => xv,
-	PageBlobResizeExceptionHeaders: () => Ev,
-	PageBlobResizeHeaders: () => Tv,
-	PageBlobUpdateSequenceNumberExceptionHeaders: () => Ov,
-	PageBlobUpdateSequenceNumberHeaders: () => Dv,
-	PageBlobUploadPagesExceptionHeaders: () => gv,
-	PageBlobUploadPagesFromURLExceptionHeaders: () => bv,
-	PageBlobUploadPagesFromURLHeaders: () => yv,
-	PageBlobUploadPagesHeaders: () => hv,
-	PageList: () => dg,
-	PageRange: () => fg,
-	QueryFormat: () => gg,
-	QueryRequest: () => mg,
-	QuerySerialization: () => hg,
-	RetentionPolicy: () => Lh,
-	ServiceFilterBlobsExceptionHeaders: () => Ig,
-	ServiceFilterBlobsHeaders: () => Fg,
-	ServiceGetAccountInfoExceptionHeaders: () => Mg,
-	ServiceGetAccountInfoHeaders: () => jg,
-	ServiceGetPropertiesExceptionHeaders: () => wg,
-	ServiceGetPropertiesHeaders: () => Cg,
-	ServiceGetStatisticsExceptionHeaders: () => Eg,
-	ServiceGetStatisticsHeaders: () => Tg,
-	ServiceGetUserDelegationKeyExceptionHeaders: () => Ag,
-	ServiceGetUserDelegationKeyHeaders: () => kg,
-	ServiceListContainersSegmentExceptionHeaders: () => Og,
-	ServiceListContainersSegmentHeaders: () => Dg,
-	ServiceSetPropertiesExceptionHeaders: () => Sg,
-	ServiceSetPropertiesHeaders: () => xg,
-	ServiceSubmitBatchExceptionHeaders: () => Pg,
-	ServiceSubmitBatchHeaders: () => Ng,
-	SignedIdentifier: () => Qh,
-	StaticWebsite: () => Bh,
+var Vg = /* @__PURE__ */ fe({
+	AccessPolicy: () => o_,
+	AppendBlobAppendBlockExceptionHeaders: () => Vy,
+	AppendBlobAppendBlockFromUrlExceptionHeaders: () => Uy,
+	AppendBlobAppendBlockFromUrlHeaders: () => Hy,
+	AppendBlobAppendBlockHeaders: () => By,
+	AppendBlobCreateExceptionHeaders: () => zy,
+	AppendBlobCreateHeaders: () => Ry,
+	AppendBlobSealExceptionHeaders: () => Gy,
+	AppendBlobSealHeaders: () => Wy,
+	ArrowConfiguration: () => E_,
+	ArrowField: () => D_,
+	BlobAbortCopyFromURLExceptionHeaders: () => ly,
+	BlobAbortCopyFromURLHeaders: () => cy,
+	BlobAcquireLeaseExceptionHeaders: () => qv,
+	BlobAcquireLeaseHeaders: () => Kv,
+	BlobBreakLeaseExceptionHeaders: () => ty,
+	BlobBreakLeaseHeaders: () => ey,
+	BlobChangeLeaseExceptionHeaders: () => $v,
+	BlobChangeLeaseHeaders: () => Qv,
+	BlobCopyFromURLExceptionHeaders: () => sy,
+	BlobCopyFromURLHeaders: () => oy,
+	BlobCreateSnapshotExceptionHeaders: () => ry,
+	BlobCreateSnapshotHeaders: () => ny,
+	BlobDeleteExceptionHeaders: () => jv,
+	BlobDeleteHeaders: () => Av,
+	BlobDeleteImmutabilityPolicyExceptionHeaders: () => Vv,
+	BlobDeleteImmutabilityPolicyHeaders: () => Bv,
+	BlobDownloadExceptionHeaders: () => Dv,
+	BlobDownloadHeaders: () => Ev,
+	BlobFlatListSegment: () => c_,
+	BlobGetAccountInfoExceptionHeaders: () => py,
+	BlobGetAccountInfoHeaders: () => fy,
+	BlobGetPropertiesExceptionHeaders: () => kv,
+	BlobGetPropertiesHeaders: () => Ov,
+	BlobGetTagsExceptionHeaders: () => _y,
+	BlobGetTagsHeaders: () => gy,
+	BlobHierarchyListSegment: () => p_,
+	BlobItemInternal: () => l_,
+	BlobName: () => u_,
+	BlobPrefix: () => m_,
+	BlobPropertiesInternal: () => d_,
+	BlobQueryExceptionHeaders: () => hy,
+	BlobQueryHeaders: () => my,
+	BlobReleaseLeaseExceptionHeaders: () => Yv,
+	BlobReleaseLeaseHeaders: () => Jv,
+	BlobRenewLeaseExceptionHeaders: () => Zv,
+	BlobRenewLeaseHeaders: () => Xv,
+	BlobServiceProperties: () => Hg,
+	BlobServiceStatistics: () => Jg,
+	BlobSetExpiryExceptionHeaders: () => Fv,
+	BlobSetExpiryHeaders: () => Pv,
+	BlobSetHttpHeadersExceptionHeaders: () => Lv,
+	BlobSetHttpHeadersHeaders: () => Iv,
+	BlobSetImmutabilityPolicyExceptionHeaders: () => zv,
+	BlobSetImmutabilityPolicyHeaders: () => Rv,
+	BlobSetLegalHoldExceptionHeaders: () => Uv,
+	BlobSetLegalHoldHeaders: () => Hv,
+	BlobSetMetadataExceptionHeaders: () => Gv,
+	BlobSetMetadataHeaders: () => Wv,
+	BlobSetTagsExceptionHeaders: () => yy,
+	BlobSetTagsHeaders: () => vy,
+	BlobSetTierExceptionHeaders: () => dy,
+	BlobSetTierHeaders: () => uy,
+	BlobStartCopyFromURLExceptionHeaders: () => ay,
+	BlobStartCopyFromURLHeaders: () => iy,
+	BlobTag: () => i_,
+	BlobTags: () => r_,
+	BlobUndeleteExceptionHeaders: () => Nv,
+	BlobUndeleteHeaders: () => Mv,
+	Block: () => __,
+	BlockBlobCommitBlockListExceptionHeaders: () => tb,
+	BlockBlobCommitBlockListHeaders: () => eb,
+	BlockBlobGetBlockListExceptionHeaders: () => rb,
+	BlockBlobGetBlockListHeaders: () => nb,
+	BlockBlobPutBlobFromUrlExceptionHeaders: () => Yy,
+	BlockBlobPutBlobFromUrlHeaders: () => Jy,
+	BlockBlobStageBlockExceptionHeaders: () => Zy,
+	BlockBlobStageBlockFromURLExceptionHeaders: () => $y,
+	BlockBlobStageBlockFromURLHeaders: () => Qy,
+	BlockBlobStageBlockHeaders: () => Xy,
+	BlockBlobUploadExceptionHeaders: () => qy,
+	BlockBlobUploadHeaders: () => Ky,
+	BlockList: () => g_,
+	BlockLookupList: () => h_,
+	ClearRange: () => b_,
+	ContainerAcquireLeaseExceptionHeaders: () => dv,
+	ContainerAcquireLeaseHeaders: () => uv,
+	ContainerBreakLeaseExceptionHeaders: () => _v,
+	ContainerBreakLeaseHeaders: () => gv,
+	ContainerChangeLeaseExceptionHeaders: () => yv,
+	ContainerChangeLeaseHeaders: () => vv,
+	ContainerCreateExceptionHeaders: () => G_,
+	ContainerCreateHeaders: () => W_,
+	ContainerDeleteExceptionHeaders: () => Y_,
+	ContainerDeleteHeaders: () => J_,
+	ContainerFilterBlobsExceptionHeaders: () => lv,
+	ContainerFilterBlobsHeaders: () => cv,
+	ContainerGetAccessPolicyExceptionHeaders: () => $_,
+	ContainerGetAccessPolicyHeaders: () => Q_,
+	ContainerGetAccountInfoExceptionHeaders: () => Tv,
+	ContainerGetAccountInfoHeaders: () => wv,
+	ContainerGetPropertiesExceptionHeaders: () => q_,
+	ContainerGetPropertiesHeaders: () => K_,
+	ContainerItem: () => Zg,
+	ContainerListBlobFlatSegmentExceptionHeaders: () => xv,
+	ContainerListBlobFlatSegmentHeaders: () => bv,
+	ContainerListBlobHierarchySegmentExceptionHeaders: () => Cv,
+	ContainerListBlobHierarchySegmentHeaders: () => Sv,
+	ContainerProperties: () => Qg,
+	ContainerReleaseLeaseExceptionHeaders: () => pv,
+	ContainerReleaseLeaseHeaders: () => fv,
+	ContainerRenameExceptionHeaders: () => av,
+	ContainerRenameHeaders: () => iv,
+	ContainerRenewLeaseExceptionHeaders: () => hv,
+	ContainerRenewLeaseHeaders: () => mv,
+	ContainerRestoreExceptionHeaders: () => rv,
+	ContainerRestoreHeaders: () => nv,
+	ContainerSetAccessPolicyExceptionHeaders: () => tv,
+	ContainerSetAccessPolicyHeaders: () => ev,
+	ContainerSetMetadataExceptionHeaders: () => Z_,
+	ContainerSetMetadataHeaders: () => X_,
+	ContainerSubmitBatchExceptionHeaders: () => sv,
+	ContainerSubmitBatchHeaders: () => ov,
+	CorsRule: () => Kg,
+	DelimitedTextConfiguration: () => w_,
+	FilterBlobItem: () => n_,
+	FilterBlobSegment: () => t_,
+	GeoReplication: () => Yg,
+	JsonTextConfiguration: () => T_,
+	KeyInfo: () => $g,
+	ListBlobsFlatSegmentResponse: () => s_,
+	ListBlobsHierarchySegmentResponse: () => f_,
+	ListContainersSegmentResponse: () => Xg,
+	Logging: () => Ug,
+	Metrics: () => Gg,
+	PageBlobClearPagesExceptionHeaders: () => Ty,
+	PageBlobClearPagesHeaders: () => wy,
+	PageBlobCopyIncrementalExceptionHeaders: () => Ly,
+	PageBlobCopyIncrementalHeaders: () => Iy,
+	PageBlobCreateExceptionHeaders: () => xy,
+	PageBlobCreateHeaders: () => by,
+	PageBlobGetPageRangesDiffExceptionHeaders: () => jy,
+	PageBlobGetPageRangesDiffHeaders: () => Ay,
+	PageBlobGetPageRangesExceptionHeaders: () => ky,
+	PageBlobGetPageRangesHeaders: () => Oy,
+	PageBlobResizeExceptionHeaders: () => Ny,
+	PageBlobResizeHeaders: () => My,
+	PageBlobUpdateSequenceNumberExceptionHeaders: () => Fy,
+	PageBlobUpdateSequenceNumberHeaders: () => Py,
+	PageBlobUploadPagesExceptionHeaders: () => Cy,
+	PageBlobUploadPagesFromURLExceptionHeaders: () => Dy,
+	PageBlobUploadPagesFromURLHeaders: () => Ey,
+	PageBlobUploadPagesHeaders: () => Sy,
+	PageList: () => v_,
+	PageRange: () => y_,
+	QueryFormat: () => C_,
+	QueryRequest: () => x_,
+	QuerySerialization: () => S_,
+	RetentionPolicy: () => Wg,
+	ServiceFilterBlobsExceptionHeaders: () => U_,
+	ServiceFilterBlobsHeaders: () => H_,
+	ServiceGetAccountInfoExceptionHeaders: () => z_,
+	ServiceGetAccountInfoHeaders: () => R_,
+	ServiceGetPropertiesExceptionHeaders: () => j_,
+	ServiceGetPropertiesHeaders: () => A_,
+	ServiceGetStatisticsExceptionHeaders: () => N_,
+	ServiceGetStatisticsHeaders: () => M_,
+	ServiceGetUserDelegationKeyExceptionHeaders: () => L_,
+	ServiceGetUserDelegationKeyHeaders: () => I_,
+	ServiceListContainersSegmentExceptionHeaders: () => F_,
+	ServiceListContainersSegmentHeaders: () => P_,
+	ServiceSetPropertiesExceptionHeaders: () => k_,
+	ServiceSetPropertiesHeaders: () => O_,
+	ServiceSubmitBatchExceptionHeaders: () => V_,
+	ServiceSubmitBatchHeaders: () => B_,
+	SignedIdentifier: () => a_,
+	StaticWebsite: () => qg,
 	StorageError: () => V,
-	UserDelegationKey: () => qh
-}), Fh = {
+	UserDelegationKey: () => e_
+}), Hg = {
 	serializedName: "BlobServiceProperties",
 	xmlName: "StorageServiceProperties",
 	type: {
@@ -20369,7 +21146,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Ih = {
+}, Ug = {
 	serializedName: "Logging",
 	type: {
 		name: "Composite",
@@ -20409,7 +21186,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Lh = {
+}, Wg = {
 	serializedName: "RetentionPolicy",
 	type: {
 		name: "Composite",
@@ -20429,7 +21206,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Rh = {
+}, Gg = {
 	serializedName: "Metrics",
 	type: {
 		name: "Composite",
@@ -20461,7 +21238,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, zh = {
+}, Kg = {
 	serializedName: "CorsRule",
 	type: {
 		name: "Composite",
@@ -20500,7 +21277,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Bh = {
+}, qg = {
 	serializedName: "StaticWebsite",
 	type: {
 		name: "Composite",
@@ -20567,7 +21344,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Vh = {
+}, Jg = {
 	serializedName: "BlobServiceStatistics",
 	xmlName: "StorageServiceStats",
 	type: {
@@ -20582,7 +21359,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		} }
 	}
-}, Hh = {
+}, Yg = {
 	serializedName: "GeoReplication",
 	type: {
 		name: "Composite",
@@ -20609,7 +21386,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Uh = {
+}, Xg = {
 	serializedName: "ListContainersSegmentResponse",
 	xmlName: "EnumerationResults",
 	type: {
@@ -20659,7 +21436,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Wh = {
+}, Zg = {
 	serializedName: "ContainerItem",
 	xmlName: "Container",
 	type: {
@@ -20700,7 +21477,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Gh = {
+}, Qg = {
 	serializedName: "ContainerProperties",
 	type: {
 		name: "Composite",
@@ -20793,7 +21570,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Kh = {
+}, $g = {
 	serializedName: "KeyInfo",
 	type: {
 		name: "Composite",
@@ -20813,7 +21590,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, qh = {
+}, e_ = {
 	serializedName: "UserDelegationKey",
 	type: {
 		name: "Composite",
@@ -20863,7 +21640,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Jh = {
+}, t_ = {
 	serializedName: "FilterBlobSegment",
 	xmlName: "EnumerationResults",
 	type: {
@@ -20904,7 +21681,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Yh = {
+}, n_ = {
 	serializedName: "FilterBlobItem",
 	xmlName: "Blob",
 	type: {
@@ -20933,7 +21710,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Xh = {
+}, r_ = {
 	serializedName: "BlobTags",
 	xmlName: "Tags",
 	type: {
@@ -20954,7 +21731,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		} }
 	}
-}, Zh = {
+}, i_ = {
 	serializedName: "BlobTag",
 	xmlName: "Tag",
 	type: {
@@ -20975,7 +21752,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Qh = {
+}, a_ = {
 	serializedName: "SignedIdentifier",
 	xmlName: "SignedIdentifier",
 	type: {
@@ -20998,7 +21775,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, $h = {
+}, o_ = {
 	serializedName: "AccessPolicy",
 	type: {
 		name: "Composite",
@@ -21021,7 +21798,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, eg = {
+}, s_ = {
 	serializedName: "ListBlobsFlatSegmentResponse",
 	xmlName: "EnumerationResults",
 	type: {
@@ -21072,7 +21849,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, tg = {
+}, c_ = {
 	serializedName: "BlobFlatListSegment",
 	xmlName: "Blobs",
 	type: {
@@ -21092,7 +21869,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		} }
 	}
-}, ng = {
+}, l_ = {
 	serializedName: "BlobItemInternal",
 	xmlName: "Blob",
 	type: {
@@ -21168,7 +21945,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, rg = {
+}, u_ = {
 	serializedName: "BlobName",
 	type: {
 		name: "Composite",
@@ -21188,7 +21965,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, ig = {
+}, d_ = {
 	serializedName: "BlobPropertiesInternal",
 	xmlName: "Properties",
 	type: {
@@ -21465,7 +22242,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, ag = {
+}, f_ = {
 	serializedName: "ListBlobsHierarchySegmentResponse",
 	xmlName: "EnumerationResults",
 	type: {
@@ -21521,7 +22298,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, og = {
+}, p_ = {
 	serializedName: "BlobHierarchyListSegment",
 	xmlName: "Blobs",
 	type: {
@@ -21555,7 +22332,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, sg = {
+}, m_ = {
 	serializedName: "BlobPrefix",
 	type: {
 		name: "Composite",
@@ -21569,7 +22346,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		} }
 	}
-}, cg = {
+}, h_ = {
 	serializedName: "BlockLookupList",
 	xmlName: "BlockList",
 	type: {
@@ -21605,7 +22382,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, lg = {
+}, g_ = {
 	serializedName: "BlockList",
 	type: {
 		name: "Composite",
@@ -21639,7 +22416,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, ug = {
+}, __ = {
 	serializedName: "Block",
 	type: {
 		name: "Composite",
@@ -21659,7 +22436,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, dg = {
+}, v_ = {
 	serializedName: "PageList",
 	type: {
 		name: "Composite",
@@ -21696,7 +22473,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, fg = {
+}, y_ = {
 	serializedName: "PageRange",
 	xmlName: "PageRange",
 	type: {
@@ -21717,7 +22494,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, pg = {
+}, b_ = {
 	serializedName: "ClearRange",
 	xmlName: "ClearRange",
 	type: {
@@ -21738,7 +22515,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, mg = {
+}, x_ = {
 	serializedName: "QueryRequest",
 	xmlName: "QueryRequest",
 	type: {
@@ -21775,7 +22552,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, hg = {
+}, S_ = {
 	serializedName: "QuerySerialization",
 	type: {
 		name: "Composite",
@@ -21789,7 +22566,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		} }
 	}
-}, gg = {
+}, C_ = {
 	serializedName: "QueryFormat",
 	type: {
 		name: "Composite",
@@ -21843,7 +22620,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, _g = {
+}, w_ = {
 	serializedName: "DelimitedTextConfiguration",
 	xmlName: "DelimitedTextConfiguration",
 	type: {
@@ -21877,7 +22654,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, vg = {
+}, T_ = {
 	serializedName: "JsonTextConfiguration",
 	xmlName: "JsonTextConfiguration",
 	type: {
@@ -21889,7 +22666,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, yg = {
+}, E_ = {
 	serializedName: "ArrowConfiguration",
 	xmlName: "ArrowConfiguration",
 	type: {
@@ -21910,7 +22687,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		} }
 	}
-}, bg = {
+}, D_ = {
 	serializedName: "ArrowField",
 	xmlName: "Field",
 	type: {
@@ -21940,7 +22717,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, xg = {
+}, O_ = {
 	serializedName: "Service_setPropertiesHeaders",
 	type: {
 		name: "Composite",
@@ -21968,7 +22745,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Sg = {
+}, k_ = {
 	serializedName: "Service_setPropertiesExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -21979,7 +22756,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Cg = {
+}, A_ = {
 	serializedName: "Service_getPropertiesHeaders",
 	type: {
 		name: "Composite",
@@ -22007,7 +22784,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, wg = {
+}, j_ = {
 	serializedName: "Service_getPropertiesExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22018,7 +22795,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Tg = {
+}, M_ = {
 	serializedName: "Service_getStatisticsHeaders",
 	type: {
 		name: "Composite",
@@ -22051,7 +22828,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Eg = {
+}, N_ = {
 	serializedName: "Service_getStatisticsExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22062,7 +22839,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Dg = {
+}, P_ = {
 	serializedName: "Service_listContainersSegmentHeaders",
 	type: {
 		name: "Composite",
@@ -22090,7 +22867,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Og = {
+}, F_ = {
 	serializedName: "Service_listContainersSegmentExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22101,7 +22878,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, kg = {
+}, I_ = {
 	serializedName: "Service_getUserDelegationKeyHeaders",
 	type: {
 		name: "Composite",
@@ -22134,7 +22911,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Ag = {
+}, L_ = {
 	serializedName: "Service_getUserDelegationKeyExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22145,7 +22922,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, jg = {
+}, R_ = {
 	serializedName: "Service_getAccountInfoHeaders",
 	type: {
 		name: "Composite",
@@ -22211,7 +22988,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Mg = {
+}, z_ = {
 	serializedName: "Service_getAccountInfoExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22222,7 +22999,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Ng = {
+}, B_ = {
 	serializedName: "Service_submitBatchHeaders",
 	type: {
 		name: "Composite",
@@ -22255,7 +23032,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Pg = {
+}, V_ = {
 	serializedName: "Service_submitBatchExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22266,7 +23043,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Fg = {
+}, H_ = {
 	serializedName: "Service_filterBlobsHeaders",
 	type: {
 		name: "Composite",
@@ -22299,7 +23076,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Ig = {
+}, U_ = {
 	serializedName: "Service_filterBlobsExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22310,7 +23087,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Lg = {
+}, W_ = {
 	serializedName: "Container_createHeaders",
 	type: {
 		name: "Composite",
@@ -22353,7 +23130,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Rg = {
+}, G_ = {
 	serializedName: "Container_createExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22364,7 +23141,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, zg = {
+}, K_ = {
 	serializedName: "Container_getPropertiesHeaders",
 	type: {
 		name: "Composite",
@@ -22479,7 +23256,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Bg = {
+}, q_ = {
 	serializedName: "Container_getPropertiesExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22490,7 +23267,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Vg = {
+}, J_ = {
 	serializedName: "Container_deleteHeaders",
 	type: {
 		name: "Composite",
@@ -22523,7 +23300,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Hg = {
+}, Y_ = {
 	serializedName: "Container_deleteExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22534,7 +23311,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Ug = {
+}, X_ = {
 	serializedName: "Container_setMetadataHeaders",
 	type: {
 		name: "Composite",
@@ -22577,7 +23354,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Wg = {
+}, Z_ = {
 	serializedName: "Container_setMetadataExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22588,7 +23365,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Gg = {
+}, Q_ = {
 	serializedName: "Container_getAccessPolicyHeaders",
 	type: {
 		name: "Composite",
@@ -22639,7 +23416,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Kg = {
+}, $_ = {
 	serializedName: "Container_getAccessPolicyExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22650,7 +23427,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, qg = {
+}, ev = {
 	serializedName: "Container_setAccessPolicyHeaders",
 	type: {
 		name: "Composite",
@@ -22693,7 +23470,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Jg = {
+}, tv = {
 	serializedName: "Container_setAccessPolicyExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22704,7 +23481,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Yg = {
+}, nv = {
 	serializedName: "Container_restoreHeaders",
 	type: {
 		name: "Composite",
@@ -22737,7 +23514,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Xg = {
+}, rv = {
 	serializedName: "Container_restoreExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22748,7 +23525,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Zg = {
+}, iv = {
 	serializedName: "Container_renameHeaders",
 	type: {
 		name: "Composite",
@@ -22781,7 +23558,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Qg = {
+}, av = {
 	serializedName: "Container_renameExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22792,7 +23569,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, $g = {
+}, ov = {
 	serializedName: "Container_submitBatchHeaders",
 	type: {
 		name: "Composite",
@@ -22815,7 +23592,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, e_ = {
+}, sv = {
 	serializedName: "Container_submitBatchExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22826,7 +23603,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, t_ = {
+}, cv = {
 	serializedName: "Container_filterBlobsHeaders",
 	type: {
 		name: "Composite",
@@ -22854,7 +23631,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, n_ = {
+}, lv = {
 	serializedName: "Container_filterBlobsExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22865,7 +23642,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, r_ = {
+}, uv = {
 	serializedName: "Container_acquireLeaseHeaders",
 	type: {
 		name: "Composite",
@@ -22908,7 +23685,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, i_ = {
+}, dv = {
 	serializedName: "Container_acquireLeaseExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22919,7 +23696,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, a_ = {
+}, fv = {
 	serializedName: "Container_releaseLeaseHeaders",
 	type: {
 		name: "Composite",
@@ -22957,7 +23734,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, o_ = {
+}, pv = {
 	serializedName: "Container_releaseLeaseExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -22968,7 +23745,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, s_ = {
+}, mv = {
 	serializedName: "Container_renewLeaseHeaders",
 	type: {
 		name: "Composite",
@@ -23011,7 +23788,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, c_ = {
+}, hv = {
 	serializedName: "Container_renewLeaseExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -23022,7 +23799,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, l_ = {
+}, gv = {
 	serializedName: "Container_breakLeaseHeaders",
 	type: {
 		name: "Composite",
@@ -23065,7 +23842,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, u_ = {
+}, _v = {
 	serializedName: "Container_breakLeaseExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -23076,7 +23853,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, d_ = {
+}, vv = {
 	serializedName: "Container_changeLeaseHeaders",
 	type: {
 		name: "Composite",
@@ -23119,7 +23896,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, f_ = {
+}, yv = {
 	serializedName: "Container_changeLeaseExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -23130,7 +23907,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, p_ = {
+}, bv = {
 	serializedName: "Container_listBlobFlatSegmentHeaders",
 	type: {
 		name: "Composite",
@@ -23168,7 +23945,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, m_ = {
+}, xv = {
 	serializedName: "Container_listBlobFlatSegmentExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -23179,7 +23956,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, h_ = {
+}, Sv = {
 	serializedName: "Container_listBlobHierarchySegmentHeaders",
 	type: {
 		name: "Composite",
@@ -23217,7 +23994,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, g_ = {
+}, Cv = {
 	serializedName: "Container_listBlobHierarchySegmentExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -23228,7 +24005,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, __ = {
+}, wv = {
 	serializedName: "Container_getAccountInfoHeaders",
 	type: {
 		name: "Composite",
@@ -23289,7 +24066,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, v_ = {
+}, Tv = {
 	serializedName: "Container_getAccountInfoExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -23300,7 +24077,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, y_ = {
+}, Ev = {
 	serializedName: "Blob_downloadHeaders",
 	type: {
 		name: "Composite",
@@ -23578,7 +24355,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, b_ = {
+}, Dv = {
 	serializedName: "Blob_downloadExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -23589,7 +24366,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, x_ = {
+}, Ov = {
 	serializedName: "Blob_getPropertiesHeaders",
 	type: {
 		name: "Composite",
@@ -23895,7 +24672,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, S_ = {
+}, kv = {
 	serializedName: "Blob_getPropertiesExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -23906,7 +24683,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, C_ = {
+}, Av = {
 	serializedName: "Blob_deleteHeaders",
 	type: {
 		name: "Composite",
@@ -23939,7 +24716,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, w_ = {
+}, jv = {
 	serializedName: "Blob_deleteExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -23950,7 +24727,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, T_ = {
+}, Mv = {
 	serializedName: "Blob_undeleteHeaders",
 	type: {
 		name: "Composite",
@@ -23983,7 +24760,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, E_ = {
+}, Nv = {
 	serializedName: "Blob_undeleteExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -23994,7 +24771,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, D_ = {
+}, Pv = {
 	serializedName: "Blob_setExpiryHeaders",
 	type: {
 		name: "Composite",
@@ -24032,7 +24809,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, O_ = {
+}, Fv = {
 	serializedName: "Blob_setExpiryExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24043,7 +24820,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, k_ = {
+}, Iv = {
 	serializedName: "Blob_setHttpHeadersHeaders",
 	type: {
 		name: "Composite",
@@ -24091,7 +24868,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, A_ = {
+}, Lv = {
 	serializedName: "Blob_setHttpHeadersExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24102,7 +24879,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, j_ = {
+}, Rv = {
 	serializedName: "Blob_setImmutabilityPolicyHeaders",
 	type: {
 		name: "Composite",
@@ -24147,7 +24924,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, M_ = {
+}, zv = {
 	serializedName: "Blob_setImmutabilityPolicyExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24158,7 +24935,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, N_ = {
+}, Bv = {
 	serializedName: "Blob_deleteImmutabilityPolicyHeaders",
 	type: {
 		name: "Composite",
@@ -24186,7 +24963,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, P_ = {
+}, Vv = {
 	serializedName: "Blob_deleteImmutabilityPolicyExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24197,7 +24974,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, F_ = {
+}, Hv = {
 	serializedName: "Blob_setLegalHoldHeaders",
 	type: {
 		name: "Composite",
@@ -24230,7 +25007,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, I_ = {
+}, Uv = {
 	serializedName: "Blob_setLegalHoldExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24241,7 +25018,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, L_ = {
+}, Wv = {
 	serializedName: "Blob_setMetadataHeaders",
 	type: {
 		name: "Composite",
@@ -24304,7 +25081,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, R_ = {
+}, Gv = {
 	serializedName: "Blob_setMetadataExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24315,7 +25092,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, z_ = {
+}, Kv = {
 	serializedName: "Blob_acquireLeaseHeaders",
 	type: {
 		name: "Composite",
@@ -24358,7 +25135,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, B_ = {
+}, qv = {
 	serializedName: "Blob_acquireLeaseExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24369,7 +25146,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, V_ = {
+}, Jv = {
 	serializedName: "Blob_releaseLeaseHeaders",
 	type: {
 		name: "Composite",
@@ -24407,7 +25184,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, H_ = {
+}, Yv = {
 	serializedName: "Blob_releaseLeaseExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24418,7 +25195,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, U_ = {
+}, Xv = {
 	serializedName: "Blob_renewLeaseHeaders",
 	type: {
 		name: "Composite",
@@ -24461,7 +25238,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, W_ = {
+}, Zv = {
 	serializedName: "Blob_renewLeaseExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24472,7 +25249,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, G_ = {
+}, Qv = {
 	serializedName: "Blob_changeLeaseHeaders",
 	type: {
 		name: "Composite",
@@ -24515,7 +25292,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, K_ = {
+}, $v = {
 	serializedName: "Blob_changeLeaseExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24526,7 +25303,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, q_ = {
+}, ey = {
 	serializedName: "Blob_breakLeaseHeaders",
 	type: {
 		name: "Composite",
@@ -24569,7 +25346,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, J_ = {
+}, ty = {
 	serializedName: "Blob_breakLeaseExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24580,7 +25357,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Y_ = {
+}, ny = {
 	serializedName: "Blob_createSnapshotHeaders",
 	type: {
 		name: "Composite",
@@ -24638,7 +25415,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, X_ = {
+}, ry = {
 	serializedName: "Blob_createSnapshotExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24649,7 +25426,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Z_ = {
+}, iy = {
 	serializedName: "Blob_startCopyFromURLHeaders",
 	type: {
 		name: "Composite",
@@ -24715,7 +25492,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Q_ = {
+}, ay = {
 	serializedName: "Blob_startCopyFromURLExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24738,7 +25515,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, $_ = {
+}, oy = {
 	serializedName: "Blob_copyFromURLHeaders",
 	type: {
 		name: "Composite",
@@ -24812,7 +25589,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, ev = {
+}, sy = {
 	serializedName: "Blob_copyFromURLExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24835,7 +25612,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, tv = {
+}, cy = {
 	serializedName: "Blob_abortCopyFromURLHeaders",
 	type: {
 		name: "Composite",
@@ -24868,7 +25645,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, nv = {
+}, ly = {
 	serializedName: "Blob_abortCopyFromURLExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24879,7 +25656,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, rv = {
+}, uy = {
 	serializedName: "Blob_setTierHeaders",
 	type: {
 		name: "Composite",
@@ -24907,7 +25684,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, iv = {
+}, dy = {
 	serializedName: "Blob_setTierExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24918,7 +25695,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, av = {
+}, fy = {
 	serializedName: "Blob_getAccountInfoHeaders",
 	type: {
 		name: "Composite",
@@ -24979,7 +25756,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, ov = {
+}, py = {
 	serializedName: "Blob_getAccountInfoExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -24990,7 +25767,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, sv = {
+}, my = {
 	serializedName: "Blob_queryHeaders",
 	type: {
 		name: "Composite",
@@ -25202,7 +25979,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, cv = {
+}, hy = {
 	serializedName: "Blob_queryExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -25213,7 +25990,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, lv = {
+}, gy = {
 	serializedName: "Blob_getTagsHeaders",
 	type: {
 		name: "Composite",
@@ -25246,7 +26023,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, uv = {
+}, _y = {
 	serializedName: "Blob_getTagsExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -25257,7 +26034,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, dv = {
+}, vy = {
 	serializedName: "Blob_setTagsHeaders",
 	type: {
 		name: "Composite",
@@ -25290,7 +26067,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, fv = {
+}, yy = {
 	serializedName: "Blob_setTagsExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -25301,7 +26078,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, pv = {
+}, by = {
 	serializedName: "PageBlob_createHeaders",
 	type: {
 		name: "Composite",
@@ -25369,7 +26146,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, mv = {
+}, xy = {
 	serializedName: "PageBlob_createExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -25380,7 +26157,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, hv = {
+}, Sy = {
 	serializedName: "PageBlob_uploadPagesHeaders",
 	type: {
 		name: "Composite",
@@ -25453,7 +26230,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, gv = {
+}, Cy = {
 	serializedName: "PageBlob_uploadPagesExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -25464,7 +26241,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, _v = {
+}, wy = {
 	serializedName: "PageBlob_clearPagesHeaders",
 	type: {
 		name: "Composite",
@@ -25522,7 +26299,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, vv = {
+}, Ty = {
 	serializedName: "PageBlob_clearPagesExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -25533,7 +26310,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, yv = {
+}, Ey = {
 	serializedName: "PageBlob_uploadPagesFromURLHeaders",
 	type: {
 		name: "Composite",
@@ -25601,7 +26378,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, bv = {
+}, Dy = {
 	serializedName: "PageBlob_uploadPagesFromURLExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -25624,7 +26401,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, xv = {
+}, Oy = {
 	serializedName: "PageBlob_getPageRangesHeaders",
 	type: {
 		name: "Composite",
@@ -25672,7 +26449,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Sv = {
+}, ky = {
 	serializedName: "PageBlob_getPageRangesExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -25683,7 +26460,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Cv = {
+}, Ay = {
 	serializedName: "PageBlob_getPageRangesDiffHeaders",
 	type: {
 		name: "Composite",
@@ -25731,7 +26508,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, wv = {
+}, jy = {
 	serializedName: "PageBlob_getPageRangesDiffExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -25742,7 +26519,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Tv = {
+}, My = {
 	serializedName: "PageBlob_resizeHeaders",
 	type: {
 		name: "Composite",
@@ -25790,7 +26567,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Ev = {
+}, Ny = {
 	serializedName: "PageBlob_resizeExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -25801,7 +26578,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Dv = {
+}, Py = {
 	serializedName: "PageBlob_updateSequenceNumberHeaders",
 	type: {
 		name: "Composite",
@@ -25849,7 +26626,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Ov = {
+}, Fy = {
 	serializedName: "PageBlob_updateSequenceNumberExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -25860,7 +26637,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, kv = {
+}, Iy = {
 	serializedName: "PageBlob_copyIncrementalHeaders",
 	type: {
 		name: "Composite",
@@ -25921,7 +26698,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Av = {
+}, Ly = {
 	serializedName: "PageBlob_copyIncrementalExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -25932,7 +26709,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, jv = {
+}, Ry = {
 	serializedName: "AppendBlob_createHeaders",
 	type: {
 		name: "Composite",
@@ -26000,7 +26777,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Mv = {
+}, zy = {
 	serializedName: "AppendBlob_createExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -26011,7 +26788,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Nv = {
+}, By = {
 	serializedName: "AppendBlob_appendBlockHeaders",
 	type: {
 		name: "Composite",
@@ -26089,7 +26866,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Pv = {
+}, Vy = {
 	serializedName: "AppendBlob_appendBlockExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -26100,7 +26877,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Fv = {
+}, Hy = {
 	serializedName: "AppendBlob_appendBlockFromUrlHeaders",
 	type: {
 		name: "Composite",
@@ -26173,7 +26950,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Iv = {
+}, Uy = {
 	serializedName: "AppendBlob_appendBlockFromUrlExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -26196,7 +26973,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Lv = {
+}, Wy = {
 	serializedName: "AppendBlob_sealHeaders",
 	type: {
 		name: "Composite",
@@ -26239,7 +27016,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Rv = {
+}, Gy = {
 	serializedName: "AppendBlob_sealExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -26250,7 +27027,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, zv = {
+}, Ky = {
 	serializedName: "BlockBlob_uploadHeaders",
 	type: {
 		name: "Composite",
@@ -26318,7 +27095,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Bv = {
+}, qy = {
 	serializedName: "BlockBlob_uploadExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -26329,7 +27106,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Vv = {
+}, Jy = {
 	serializedName: "BlockBlob_putBlobFromUrlHeaders",
 	type: {
 		name: "Composite",
@@ -26397,7 +27174,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Hv = {
+}, Yy = {
 	serializedName: "BlockBlob_putBlobFromUrlExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -26420,7 +27197,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Uv = {
+}, Xy = {
 	serializedName: "BlockBlob_stageBlockHeaders",
 	type: {
 		name: "Composite",
@@ -26478,7 +27255,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Wv = {
+}, Zy = {
 	serializedName: "BlockBlob_stageBlockExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -26489,7 +27266,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Gv = {
+}, Qy = {
 	serializedName: "BlockBlob_stageBlockFromURLHeaders",
 	type: {
 		name: "Composite",
@@ -26547,7 +27324,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Kv = {
+}, $y = {
 	serializedName: "BlockBlob_stageBlockFromURLExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -26570,7 +27347,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, qv = {
+}, eb = {
 	serializedName: "BlockBlob_commitBlockListHeaders",
 	type: {
 		name: "Composite",
@@ -26643,7 +27420,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Jv = {
+}, tb = {
 	serializedName: "BlockBlob_commitBlockListExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -26654,7 +27431,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Yv = {
+}, nb = {
 	serializedName: "BlockBlob_getBlockListHeaders",
 	type: {
 		name: "Composite",
@@ -26707,7 +27484,7 @@ var Ph = /* @__PURE__ */ fe({
 			}
 		}
 	}
-}, Xv = {
+}, rb = {
 	serializedName: "BlockBlob_getBlockListExceptionHeaders",
 	type: {
 		name: "Composite",
@@ -26718,7 +27495,7 @@ var Ph = /* @__PURE__ */ fe({
 			type: { name: "String" }
 		} }
 	}
-}, Zv = {
+}, ib = {
 	parameterPath: ["options", "contentType"],
 	mapper: {
 		defaultValue: "application/xml",
@@ -26726,10 +27503,10 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "Content-Type",
 		type: { name: "String" }
 	}
-}, Qv = {
+}, ab = {
 	parameterPath: "blobServiceProperties",
-	mapper: Fh
-}, $v = {
+	mapper: Hg
+}, ob = {
 	parameterPath: "accept",
 	mapper: {
 		defaultValue: "application/xml",
@@ -26746,7 +27523,7 @@ var Ph = /* @__PURE__ */ fe({
 		type: { name: "String" }
 	},
 	skipEncoding: !0
-}, ey = {
+}, sb = {
 	parameterPath: "restype",
 	mapper: {
 		defaultValue: "service",
@@ -26754,7 +27531,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "restype",
 		type: { name: "String" }
 	}
-}, ty = {
+}, cb = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "properties",
@@ -26793,7 +27570,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "Accept",
 		type: { name: "String" }
 	}
-}, ny = {
+}, lb = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "stats",
@@ -26801,7 +27578,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, ry = {
+}, ub = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "list",
@@ -26809,21 +27586,21 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, iy = {
+}, db = {
 	parameterPath: ["options", "prefix"],
 	mapper: {
 		serializedName: "prefix",
 		xmlName: "prefix",
 		type: { name: "String" }
 	}
-}, ay = {
+}, fb = {
 	parameterPath: ["options", "marker"],
 	mapper: {
 		serializedName: "marker",
 		xmlName: "marker",
 		type: { name: "String" }
 	}
-}, oy = {
+}, pb = {
 	parameterPath: ["options", "maxPageSize"],
 	mapper: {
 		constraints: { InclusiveMinimum: 1 },
@@ -26831,7 +27608,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "maxresults",
 		type: { name: "Number" }
 	}
-}, sy = {
+}, mb = {
 	parameterPath: ["options", "include"],
 	mapper: {
 		serializedName: "include",
@@ -26850,10 +27627,10 @@ var Ph = /* @__PURE__ */ fe({
 		}
 	},
 	collectionFormat: "CSV"
-}, cy = {
+}, hb = {
 	parameterPath: "keyInfo",
-	mapper: Kh
-}, ly = {
+	mapper: $g
+}, gb = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "userdelegationkey",
@@ -26861,7 +27638,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, uy = {
+}, _b = {
 	parameterPath: "restype",
 	mapper: {
 		defaultValue: "account",
@@ -26869,7 +27646,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "restype",
 		type: { name: "String" }
 	}
-}, dy = {
+}, vb = {
 	parameterPath: "body",
 	mapper: {
 		serializedName: "body",
@@ -26877,7 +27654,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "body",
 		type: { name: "Stream" }
 	}
-}, fy = {
+}, yb = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "batch",
@@ -26885,7 +27662,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, py = {
+}, bb = {
 	parameterPath: "contentLength",
 	mapper: {
 		serializedName: "Content-Length",
@@ -26893,7 +27670,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "Content-Length",
 		type: { name: "Number" }
 	}
-}, my = {
+}, xb = {
 	parameterPath: "multipartContentType",
 	mapper: {
 		serializedName: "Content-Type",
@@ -26901,7 +27678,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "Content-Type",
 		type: { name: "String" }
 	}
-}, hy = {
+}, Sb = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "blobs",
@@ -26909,14 +27686,14 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, gy = {
+}, Cb = {
 	parameterPath: ["options", "where"],
 	mapper: {
 		serializedName: "where",
 		xmlName: "where",
 		type: { name: "String" }
 	}
-}, _y = {
+}, wb = {
 	parameterPath: "restype",
 	mapper: {
 		defaultValue: "container",
@@ -26924,7 +27701,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "restype",
 		type: { name: "String" }
 	}
-}, vy = {
+}, Tb = {
 	parameterPath: ["options", "metadata"],
 	mapper: {
 		serializedName: "x-ms-meta",
@@ -26935,7 +27712,7 @@ var Ph = /* @__PURE__ */ fe({
 			value: { type: { name: "String" } }
 		}
 	}
-}, yy = {
+}, Eb = {
 	parameterPath: ["options", "access"],
 	mapper: {
 		serializedName: "x-ms-blob-public-access",
@@ -26945,7 +27722,7 @@ var Ph = /* @__PURE__ */ fe({
 			allowedValues: ["container", "blob"]
 		}
 	}
-}, by = {
+}, Db = {
 	parameterPath: [
 		"options",
 		"containerEncryptionScope",
@@ -26956,7 +27733,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-default-encryption-scope",
 		type: { name: "String" }
 	}
-}, xy = {
+}, Ob = {
 	parameterPath: [
 		"options",
 		"containerEncryptionScope",
@@ -27000,7 +27777,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "If-Unmodified-Since",
 		type: { name: "DateTimeRfc1123" }
 	}
-}, Sy = {
+}, kb = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "metadata",
@@ -27008,7 +27785,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, Cy = {
+}, Ab = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "acl",
@@ -27016,7 +27793,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, wy = {
+}, jb = {
 	parameterPath: ["options", "containerAcl"],
 	mapper: {
 		serializedName: "containerAcl",
@@ -27031,7 +27808,7 @@ var Ph = /* @__PURE__ */ fe({
 			} }
 		}
 	}
-}, Ty = {
+}, Mb = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "undelete",
@@ -27039,21 +27816,21 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, Ey = {
+}, Nb = {
 	parameterPath: ["options", "deletedContainerName"],
 	mapper: {
 		serializedName: "x-ms-deleted-container-name",
 		xmlName: "x-ms-deleted-container-name",
 		type: { name: "String" }
 	}
-}, Dy = {
+}, Pb = {
 	parameterPath: ["options", "deletedContainerVersion"],
 	mapper: {
 		serializedName: "x-ms-deleted-container-version",
 		xmlName: "x-ms-deleted-container-version",
 		type: { name: "String" }
 	}
-}, Oy = {
+}, Fb = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "rename",
@@ -27061,7 +27838,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, ky = {
+}, Ib = {
 	parameterPath: "sourceContainerName",
 	mapper: {
 		serializedName: "x-ms-source-container-name",
@@ -27069,14 +27846,14 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-source-container-name",
 		type: { name: "String" }
 	}
-}, Ay = {
+}, Lb = {
 	parameterPath: ["options", "sourceLeaseId"],
 	mapper: {
 		serializedName: "x-ms-source-lease-id",
 		xmlName: "x-ms-source-lease-id",
 		type: { name: "String" }
 	}
-}, jy = {
+}, Rb = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "lease",
@@ -27084,7 +27861,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, My = {
+}, zb = {
 	parameterPath: "action",
 	mapper: {
 		defaultValue: "acquire",
@@ -27092,21 +27869,21 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "x-ms-lease-action",
 		type: { name: "String" }
 	}
-}, Ny = {
+}, Bb = {
 	parameterPath: ["options", "duration"],
 	mapper: {
 		serializedName: "x-ms-lease-duration",
 		xmlName: "x-ms-lease-duration",
 		type: { name: "Number" }
 	}
-}, Py = {
+}, Vb = {
 	parameterPath: ["options", "proposedLeaseId"],
 	mapper: {
 		serializedName: "x-ms-proposed-lease-id",
 		xmlName: "x-ms-proposed-lease-id",
 		type: { name: "String" }
 	}
-}, Fy = {
+}, Hb = {
 	parameterPath: "action",
 	mapper: {
 		defaultValue: "release",
@@ -27114,7 +27891,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "x-ms-lease-action",
 		type: { name: "String" }
 	}
-}, Iy = {
+}, Ub = {
 	parameterPath: "leaseId",
 	mapper: {
 		serializedName: "x-ms-lease-id",
@@ -27122,7 +27899,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-lease-id",
 		type: { name: "String" }
 	}
-}, Ly = {
+}, Wb = {
 	parameterPath: "action",
 	mapper: {
 		defaultValue: "renew",
@@ -27130,7 +27907,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "x-ms-lease-action",
 		type: { name: "String" }
 	}
-}, Ry = {
+}, Gb = {
 	parameterPath: "action",
 	mapper: {
 		defaultValue: "break",
@@ -27138,14 +27915,14 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "x-ms-lease-action",
 		type: { name: "String" }
 	}
-}, zy = {
+}, Kb = {
 	parameterPath: ["options", "breakPeriod"],
 	mapper: {
 		serializedName: "x-ms-lease-break-period",
 		xmlName: "x-ms-lease-break-period",
 		type: { name: "Number" }
 	}
-}, By = {
+}, qb = {
 	parameterPath: "action",
 	mapper: {
 		defaultValue: "change",
@@ -27153,7 +27930,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "x-ms-lease-action",
 		type: { name: "String" }
 	}
-}, Vy = {
+}, Jb = {
 	parameterPath: "proposedLeaseId",
 	mapper: {
 		serializedName: "x-ms-proposed-lease-id",
@@ -27161,7 +27938,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-proposed-lease-id",
 		type: { name: "String" }
 	}
-}, Hy = {
+}, Yb = {
 	parameterPath: ["options", "include"],
 	mapper: {
 		serializedName: "include",
@@ -27187,14 +27964,14 @@ var Ph = /* @__PURE__ */ fe({
 		}
 	},
 	collectionFormat: "CSV"
-}, Uy = {
+}, Xb = {
 	parameterPath: ["options", "startFrom"],
 	mapper: {
 		serializedName: "startFrom",
 		xmlName: "startFrom",
 		type: { name: "String" }
 	}
-}, Wy = {
+}, Zb = {
 	parameterPath: "delimiter",
 	mapper: {
 		serializedName: "delimiter",
@@ -27202,42 +27979,42 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "delimiter",
 		type: { name: "String" }
 	}
-}, Gy = {
+}, Qb = {
 	parameterPath: ["options", "snapshot"],
 	mapper: {
 		serializedName: "snapshot",
 		xmlName: "snapshot",
 		type: { name: "String" }
 	}
-}, Ky = {
+}, $b = {
 	parameterPath: ["options", "versionId"],
 	mapper: {
 		serializedName: "versionid",
 		xmlName: "versionid",
 		type: { name: "String" }
 	}
-}, qy = {
+}, ex = {
 	parameterPath: ["options", "range"],
 	mapper: {
 		serializedName: "x-ms-range",
 		xmlName: "x-ms-range",
 		type: { name: "String" }
 	}
-}, Jy = {
+}, tx = {
 	parameterPath: ["options", "rangeGetContentMD5"],
 	mapper: {
 		serializedName: "x-ms-range-get-content-md5",
 		xmlName: "x-ms-range-get-content-md5",
 		type: { name: "Boolean" }
 	}
-}, Yy = {
+}, nx = {
 	parameterPath: ["options", "rangeGetContentCRC64"],
 	mapper: {
 		serializedName: "x-ms-range-get-content-crc64",
 		xmlName: "x-ms-range-get-content-crc64",
 		type: { name: "Boolean" }
 	}
-}, Xy = {
+}, rx = {
 	parameterPath: [
 		"options",
 		"cpkInfo",
@@ -27248,7 +28025,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-encryption-key",
 		type: { name: "String" }
 	}
-}, Zy = {
+}, ix = {
 	parameterPath: [
 		"options",
 		"cpkInfo",
@@ -27259,7 +28036,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-encryption-key-sha256",
 		type: { name: "String" }
 	}
-}, Qy = {
+}, ax = {
 	parameterPath: [
 		"options",
 		"cpkInfo",
@@ -27270,7 +28047,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-encryption-algorithm",
 		type: { name: "String" }
 	}
-}, $y = {
+}, ox = {
 	parameterPath: [
 		"options",
 		"modifiedAccessConditions",
@@ -27281,7 +28058,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "If-Match",
 		type: { name: "String" }
 	}
-}, eb = {
+}, sx = {
 	parameterPath: [
 		"options",
 		"modifiedAccessConditions",
@@ -27292,7 +28069,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "If-None-Match",
 		type: { name: "String" }
 	}
-}, tb = {
+}, cx = {
 	parameterPath: [
 		"options",
 		"modifiedAccessConditions",
@@ -27303,7 +28080,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-if-tags",
 		type: { name: "String" }
 	}
-}, nb = {
+}, lx = {
 	parameterPath: ["options", "deleteSnapshots"],
 	mapper: {
 		serializedName: "x-ms-delete-snapshots",
@@ -27313,14 +28090,14 @@ var Ph = /* @__PURE__ */ fe({
 			allowedValues: ["include", "only"]
 		}
 	}
-}, rb = {
+}, ux = {
 	parameterPath: ["options", "blobDeleteType"],
 	mapper: {
 		serializedName: "deletetype",
 		xmlName: "deletetype",
 		type: { name: "String" }
 	}
-}, ib = {
+}, dx = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "expiry",
@@ -27328,7 +28105,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, ab = {
+}, fx = {
 	parameterPath: "expiryOptions",
 	mapper: {
 		serializedName: "x-ms-expiry-option",
@@ -27336,14 +28113,14 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-expiry-option",
 		type: { name: "String" }
 	}
-}, ob = {
+}, px = {
 	parameterPath: ["options", "expiresOn"],
 	mapper: {
 		serializedName: "x-ms-expiry-time",
 		xmlName: "x-ms-expiry-time",
 		type: { name: "String" }
 	}
-}, sb = {
+}, mx = {
 	parameterPath: [
 		"options",
 		"blobHttpHeaders",
@@ -27354,7 +28131,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-cache-control",
 		type: { name: "String" }
 	}
-}, cb = {
+}, hx = {
 	parameterPath: [
 		"options",
 		"blobHttpHeaders",
@@ -27365,7 +28142,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-content-type",
 		type: { name: "String" }
 	}
-}, lb = {
+}, gx = {
 	parameterPath: [
 		"options",
 		"blobHttpHeaders",
@@ -27376,7 +28153,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-content-md5",
 		type: { name: "ByteArray" }
 	}
-}, ub = {
+}, _x = {
 	parameterPath: [
 		"options",
 		"blobHttpHeaders",
@@ -27387,7 +28164,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-content-encoding",
 		type: { name: "String" }
 	}
-}, db = {
+}, vx = {
 	parameterPath: [
 		"options",
 		"blobHttpHeaders",
@@ -27398,7 +28175,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-content-language",
 		type: { name: "String" }
 	}
-}, fb = {
+}, yx = {
 	parameterPath: [
 		"options",
 		"blobHttpHeaders",
@@ -27409,7 +28186,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-content-disposition",
 		type: { name: "String" }
 	}
-}, pb = {
+}, bx = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "immutabilityPolicies",
@@ -27417,14 +28194,14 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, mb = {
+}, xx = {
 	parameterPath: ["options", "immutabilityPolicyExpiry"],
 	mapper: {
 		serializedName: "x-ms-immutability-policy-until-date",
 		xmlName: "x-ms-immutability-policy-until-date",
 		type: { name: "DateTimeRfc1123" }
 	}
-}, hb = {
+}, Sx = {
 	parameterPath: ["options", "immutabilityPolicyMode"],
 	mapper: {
 		serializedName: "x-ms-immutability-policy-mode",
@@ -27438,7 +28215,7 @@ var Ph = /* @__PURE__ */ fe({
 			]
 		}
 	}
-}, gb = {
+}, Cx = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "legalhold",
@@ -27446,7 +28223,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, _b = {
+}, wx = {
 	parameterPath: "legalHold",
 	mapper: {
 		serializedName: "x-ms-legal-hold",
@@ -27454,14 +28231,14 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-legal-hold",
 		type: { name: "Boolean" }
 	}
-}, vb = {
+}, Tx = {
 	parameterPath: ["options", "encryptionScope"],
 	mapper: {
 		serializedName: "x-ms-encryption-scope",
 		xmlName: "x-ms-encryption-scope",
 		type: { name: "String" }
 	}
-}, yb = {
+}, Ex = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "snapshot",
@@ -27469,7 +28246,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, bb = {
+}, Dx = {
 	parameterPath: ["options", "tier"],
 	mapper: {
 		serializedName: "x-ms-access-tier",
@@ -27495,7 +28272,7 @@ var Ph = /* @__PURE__ */ fe({
 			]
 		}
 	}
-}, xb = {
+}, Ox = {
 	parameterPath: ["options", "rehydratePriority"],
 	mapper: {
 		serializedName: "x-ms-rehydrate-priority",
@@ -27505,7 +28282,7 @@ var Ph = /* @__PURE__ */ fe({
 			allowedValues: ["High", "Standard"]
 		}
 	}
-}, Sb = {
+}, kx = {
 	parameterPath: [
 		"options",
 		"sourceModifiedAccessConditions",
@@ -27516,7 +28293,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-source-if-modified-since",
 		type: { name: "DateTimeRfc1123" }
 	}
-}, Cb = {
+}, Ax = {
 	parameterPath: [
 		"options",
 		"sourceModifiedAccessConditions",
@@ -27527,7 +28304,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-source-if-unmodified-since",
 		type: { name: "DateTimeRfc1123" }
 	}
-}, wb = {
+}, jx = {
 	parameterPath: [
 		"options",
 		"sourceModifiedAccessConditions",
@@ -27538,7 +28315,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-source-if-match",
 		type: { name: "String" }
 	}
-}, Tb = {
+}, Mx = {
 	parameterPath: [
 		"options",
 		"sourceModifiedAccessConditions",
@@ -27549,7 +28326,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-source-if-none-match",
 		type: { name: "String" }
 	}
-}, Eb = {
+}, Nx = {
 	parameterPath: [
 		"options",
 		"sourceModifiedAccessConditions",
@@ -27560,7 +28337,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-source-if-tags",
 		type: { name: "String" }
 	}
-}, Db = {
+}, Px = {
 	parameterPath: "copySource",
 	mapper: {
 		serializedName: "x-ms-copy-source",
@@ -27568,28 +28345,28 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-copy-source",
 		type: { name: "String" }
 	}
-}, Ob = {
+}, Fx = {
 	parameterPath: ["options", "blobTagsString"],
 	mapper: {
 		serializedName: "x-ms-tags",
 		xmlName: "x-ms-tags",
 		type: { name: "String" }
 	}
-}, kb = {
+}, Ix = {
 	parameterPath: ["options", "sealBlob"],
 	mapper: {
 		serializedName: "x-ms-seal-blob",
 		xmlName: "x-ms-seal-blob",
 		type: { name: "Boolean" }
 	}
-}, Ab = {
+}, Lx = {
 	parameterPath: ["options", "legalHold"],
 	mapper: {
 		serializedName: "x-ms-legal-hold",
 		xmlName: "x-ms-legal-hold",
 		type: { name: "Boolean" }
 	}
-}, jb = {
+}, Rx = {
 	parameterPath: "xMsRequiresSync",
 	mapper: {
 		defaultValue: "true",
@@ -27597,21 +28374,21 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "x-ms-requires-sync",
 		type: { name: "String" }
 	}
-}, Mb = {
+}, zx = {
 	parameterPath: ["options", "sourceContentMD5"],
 	mapper: {
 		serializedName: "x-ms-source-content-md5",
 		xmlName: "x-ms-source-content-md5",
 		type: { name: "ByteArray" }
 	}
-}, Nb = {
+}, Bx = {
 	parameterPath: ["options", "copySourceAuthorization"],
 	mapper: {
 		serializedName: "x-ms-copy-source-authorization",
 		xmlName: "x-ms-copy-source-authorization",
 		type: { name: "String" }
 	}
-}, Pb = {
+}, Vx = {
 	parameterPath: ["options", "copySourceTags"],
 	mapper: {
 		serializedName: "x-ms-copy-source-tag-option",
@@ -27621,14 +28398,14 @@ var Ph = /* @__PURE__ */ fe({
 			allowedValues: ["REPLACE", "COPY"]
 		}
 	}
-}, Fb = {
+}, Hx = {
 	parameterPath: ["options", "fileRequestIntent"],
 	mapper: {
 		serializedName: "x-ms-file-request-intent",
 		xmlName: "x-ms-file-request-intent",
 		type: { name: "String" }
 	}
-}, Ib = {
+}, Ux = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "copy",
@@ -27636,7 +28413,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, Lb = {
+}, Wx = {
 	parameterPath: "copyActionAbortConstant",
 	mapper: {
 		defaultValue: "abort",
@@ -27644,7 +28421,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "x-ms-copy-action",
 		type: { name: "String" }
 	}
-}, Rb = {
+}, Gx = {
 	parameterPath: "copyId",
 	mapper: {
 		serializedName: "copyid",
@@ -27652,7 +28429,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "copyid",
 		type: { name: "String" }
 	}
-}, zb = {
+}, Kx = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "tier",
@@ -27660,7 +28437,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, Bb = {
+}, qx = {
 	parameterPath: "tier",
 	mapper: {
 		serializedName: "x-ms-access-tier",
@@ -27687,10 +28464,10 @@ var Ph = /* @__PURE__ */ fe({
 			]
 		}
 	}
-}, Vb = {
+}, Jx = {
 	parameterPath: ["options", "queryRequest"],
-	mapper: mg
-}, Hb = {
+	mapper: x_
+}, Yx = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "query",
@@ -27698,7 +28475,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, Ub = {
+}, Xx = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "tags",
@@ -27706,7 +28483,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, Wb = {
+}, Zx = {
 	parameterPath: [
 		"options",
 		"blobModifiedAccessConditions",
@@ -27717,7 +28494,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-if-modified-since",
 		type: { name: "DateTimeRfc1123" }
 	}
-}, Gb = {
+}, Qx = {
 	parameterPath: [
 		"options",
 		"blobModifiedAccessConditions",
@@ -27728,7 +28505,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-if-unmodified-since",
 		type: { name: "DateTimeRfc1123" }
 	}
-}, Kb = {
+}, $x = {
 	parameterPath: [
 		"options",
 		"blobModifiedAccessConditions",
@@ -27739,7 +28516,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-if-match",
 		type: { name: "String" }
 	}
-}, qb = {
+}, eS = {
 	parameterPath: [
 		"options",
 		"blobModifiedAccessConditions",
@@ -27750,24 +28527,24 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-if-none-match",
 		type: { name: "String" }
 	}
-}, Jb = {
+}, tS = {
 	parameterPath: ["options", "tags"],
-	mapper: Xh
-}, Yb = {
+	mapper: r_
+}, nS = {
 	parameterPath: ["options", "transactionalContentMD5"],
 	mapper: {
 		serializedName: "Content-MD5",
 		xmlName: "Content-MD5",
 		type: { name: "ByteArray" }
 	}
-}, Xb = {
+}, rS = {
 	parameterPath: ["options", "transactionalContentCrc64"],
 	mapper: {
 		serializedName: "x-ms-content-crc64",
 		xmlName: "x-ms-content-crc64",
 		type: { name: "ByteArray" }
 	}
-}, Zb = {
+}, iS = {
 	parameterPath: "blobType",
 	mapper: {
 		defaultValue: "PageBlob",
@@ -27775,7 +28552,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "x-ms-blob-type",
 		type: { name: "String" }
 	}
-}, Qb = {
+}, aS = {
 	parameterPath: "blobContentLength",
 	mapper: {
 		serializedName: "x-ms-blob-content-length",
@@ -27783,7 +28560,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-content-length",
 		type: { name: "Number" }
 	}
-}, $b = {
+}, oS = {
 	parameterPath: ["options", "blobSequenceNumber"],
 	mapper: {
 		defaultValue: 0,
@@ -27791,7 +28568,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-sequence-number",
 		type: { name: "Number" }
 	}
-}, ex = {
+}, sS = {
 	parameterPath: ["options", "contentType"],
 	mapper: {
 		defaultValue: "application/octet-stream",
@@ -27799,7 +28576,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "Content-Type",
 		type: { name: "String" }
 	}
-}, tx = {
+}, cS = {
 	parameterPath: "body",
 	mapper: {
 		serializedName: "body",
@@ -27807,7 +28584,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "body",
 		type: { name: "Stream" }
 	}
-}, nx = {
+}, lS = {
 	parameterPath: "accept",
 	mapper: {
 		defaultValue: "application/xml",
@@ -27815,7 +28592,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "Accept",
 		type: { name: "String" }
 	}
-}, rx = {
+}, uS = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "page",
@@ -27823,7 +28600,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, ix = {
+}, dS = {
 	parameterPath: "pageWrite",
 	mapper: {
 		defaultValue: "update",
@@ -27831,7 +28608,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "x-ms-page-write",
 		type: { name: "String" }
 	}
-}, ax = {
+}, fS = {
 	parameterPath: [
 		"options",
 		"sequenceNumberAccessConditions",
@@ -27842,7 +28619,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-if-sequence-number-le",
 		type: { name: "Number" }
 	}
-}, ox = {
+}, pS = {
 	parameterPath: [
 		"options",
 		"sequenceNumberAccessConditions",
@@ -27853,7 +28630,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-if-sequence-number-lt",
 		type: { name: "Number" }
 	}
-}, sx = {
+}, mS = {
 	parameterPath: [
 		"options",
 		"sequenceNumberAccessConditions",
@@ -27864,7 +28641,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-if-sequence-number-eq",
 		type: { name: "Number" }
 	}
-}, cx = {
+}, hS = {
 	parameterPath: "pageWrite",
 	mapper: {
 		defaultValue: "clear",
@@ -27872,7 +28649,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "x-ms-page-write",
 		type: { name: "String" }
 	}
-}, lx = {
+}, gS = {
 	parameterPath: "sourceUrl",
 	mapper: {
 		serializedName: "x-ms-copy-source",
@@ -27880,7 +28657,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-copy-source",
 		type: { name: "String" }
 	}
-}, ux = {
+}, _S = {
 	parameterPath: "sourceRange",
 	mapper: {
 		serializedName: "x-ms-source-range",
@@ -27888,14 +28665,14 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-source-range",
 		type: { name: "String" }
 	}
-}, dx = {
+}, vS = {
 	parameterPath: ["options", "sourceContentCrc64"],
 	mapper: {
 		serializedName: "x-ms-source-content-crc64",
 		xmlName: "x-ms-source-content-crc64",
 		type: { name: "ByteArray" }
 	}
-}, fx = {
+}, yS = {
 	parameterPath: "range",
 	mapper: {
 		serializedName: "x-ms-range",
@@ -27903,7 +28680,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-range",
 		type: { name: "String" }
 	}
-}, px = {
+}, bS = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "pagelist",
@@ -27911,21 +28688,21 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, mx = {
+}, xS = {
 	parameterPath: ["options", "prevsnapshot"],
 	mapper: {
 		serializedName: "prevsnapshot",
 		xmlName: "prevsnapshot",
 		type: { name: "String" }
 	}
-}, hx = {
+}, SS = {
 	parameterPath: ["options", "prevSnapshotUrl"],
 	mapper: {
 		serializedName: "x-ms-previous-snapshot-url",
 		xmlName: "x-ms-previous-snapshot-url",
 		type: { name: "String" }
 	}
-}, gx = {
+}, CS = {
 	parameterPath: "sequenceNumberAction",
 	mapper: {
 		serializedName: "x-ms-sequence-number-action",
@@ -27940,7 +28717,7 @@ var Ph = /* @__PURE__ */ fe({
 			]
 		}
 	}
-}, _x = {
+}, wS = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "incrementalcopy",
@@ -27948,7 +28725,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, vx = {
+}, TS = {
 	parameterPath: "blobType",
 	mapper: {
 		defaultValue: "AppendBlob",
@@ -27956,7 +28733,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "x-ms-blob-type",
 		type: { name: "String" }
 	}
-}, yx = {
+}, ES = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "appendblock",
@@ -27964,7 +28741,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, bx = {
+}, DS = {
 	parameterPath: [
 		"options",
 		"appendPositionAccessConditions",
@@ -27975,7 +28752,7 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-condition-maxsize",
 		type: { name: "Number" }
 	}
-}, xx = {
+}, OS = {
 	parameterPath: [
 		"options",
 		"appendPositionAccessConditions",
@@ -27986,14 +28763,14 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "x-ms-blob-condition-appendpos",
 		type: { name: "Number" }
 	}
-}, Sx = {
+}, kS = {
 	parameterPath: ["options", "sourceRange"],
 	mapper: {
 		serializedName: "x-ms-source-range",
 		xmlName: "x-ms-source-range",
 		type: { name: "String" }
 	}
-}, Cx = {
+}, AS = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "seal",
@@ -28001,7 +28778,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, wx = {
+}, jS = {
 	parameterPath: "blobType",
 	mapper: {
 		defaultValue: "BlockBlob",
@@ -28009,14 +28786,14 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "x-ms-blob-type",
 		type: { name: "String" }
 	}
-}, Tx = {
+}, MS = {
 	parameterPath: ["options", "copySourceBlobProperties"],
 	mapper: {
 		serializedName: "x-ms-copy-source-blob-properties",
 		xmlName: "x-ms-copy-source-blob-properties",
 		type: { name: "Boolean" }
 	}
-}, Ex = {
+}, NS = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "block",
@@ -28024,7 +28801,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, Dx = {
+}, PS = {
 	parameterPath: "blockId",
 	mapper: {
 		serializedName: "blockid",
@@ -28032,10 +28809,10 @@ var Ph = /* @__PURE__ */ fe({
 		xmlName: "blockid",
 		type: { name: "String" }
 	}
-}, Ox = {
+}, FS = {
 	parameterPath: "blocks",
-	mapper: cg
-}, kx = {
+	mapper: h_
+}, IS = {
 	parameterPath: "comp",
 	mapper: {
 		defaultValue: "blocklist",
@@ -28043,7 +28820,7 @@ var Ph = /* @__PURE__ */ fe({
 		serializedName: "comp",
 		type: { name: "String" }
 	}
-}, Ax = {
+}, LS = {
 	parameterPath: "listType",
 	mapper: {
 		defaultValue: "committed",
@@ -28059,7 +28836,7 @@ var Ph = /* @__PURE__ */ fe({
 			]
 		}
 	}
-}, jx = class {
+}, RS = class {
 	client;
 	constructor(e) {
 		this.client = e;
@@ -28068,25 +28845,25 @@ var Ph = /* @__PURE__ */ fe({
 		return this.client.sendOperationRequest({
 			blobServiceProperties: e,
 			options: t
-		}, Nx);
+		}, BS);
 	}
 	getProperties(e) {
-		return this.client.sendOperationRequest({ options: e }, Px);
+		return this.client.sendOperationRequest({ options: e }, VS);
 	}
 	getStatistics(e) {
-		return this.client.sendOperationRequest({ options: e }, Fx);
+		return this.client.sendOperationRequest({ options: e }, HS);
 	}
 	listContainersSegment(e) {
-		return this.client.sendOperationRequest({ options: e }, Ix);
+		return this.client.sendOperationRequest({ options: e }, US);
 	}
 	getUserDelegationKey(e, t) {
 		return this.client.sendOperationRequest({
 			keyInfo: e,
 			options: t
-		}, Lx);
+		}, WS);
 	}
 	getAccountInfo(e) {
-		return this.client.sendOperationRequest({ options: e }, Rx);
+		return this.client.sendOperationRequest({ options: e }, GS);
 	}
 	submitBatch(e, t, n, r) {
 		return this.client.sendOperationRequest({
@@ -28094,54 +28871,54 @@ var Ph = /* @__PURE__ */ fe({
 			multipartContentType: t,
 			body: n,
 			options: r
-		}, zx);
+		}, KS);
 	}
 	filterBlobs(e) {
-		return this.client.sendOperationRequest({ options: e }, Bx);
+		return this.client.sendOperationRequest({ options: e }, qS);
 	}
-}, Mx = ou(Ph, !0), Nx = {
+}, zS = Qu(Vg, !0), BS = {
 	path: "/",
 	httpMethod: "PUT",
 	responses: {
-		202: { headersMapper: xg },
+		202: { headersMapper: O_ },
 		default: {
 			bodyMapper: V,
-			headersMapper: Sg
+			headersMapper: k_
 		}
 	},
-	requestBody: Qv,
+	requestBody: ab,
 	queryParameters: [
-		ey,
-		ty,
+		sb,
+		cb,
 		U
 	],
 	urlParameters: [H],
 	headerParameters: [
-		Zv,
-		$v,
+		ib,
+		ob,
 		W,
 		G
 	],
 	isXML: !0,
 	contentType: "application/xml; charset=utf-8",
 	mediaType: "xml",
-	serializer: Mx
-}, Px = {
+	serializer: zS
+}, VS = {
 	path: "/",
 	httpMethod: "GET",
 	responses: {
 		200: {
-			bodyMapper: Fh,
-			headersMapper: Cg
+			bodyMapper: Hg,
+			headersMapper: A_
 		},
 		default: {
 			bodyMapper: V,
-			headersMapper: wg
+			headersMapper: j_
 		}
 	},
 	queryParameters: [
-		ey,
-		ty,
+		sb,
+		cb,
 		U
 	],
 	urlParameters: [H],
@@ -28151,24 +28928,24 @@ var Ph = /* @__PURE__ */ fe({
 		K
 	],
 	isXML: !0,
-	serializer: Mx
-}, Fx = {
+	serializer: zS
+}, HS = {
 	path: "/",
 	httpMethod: "GET",
 	responses: {
 		200: {
-			bodyMapper: Vh,
-			headersMapper: Tg
+			bodyMapper: Jg,
+			headersMapper: M_
 		},
 		default: {
 			bodyMapper: V,
-			headersMapper: Eg
+			headersMapper: N_
 		}
 	},
 	queryParameters: [
-		ey,
+		sb,
 		U,
-		ny
+		lb
 	],
 	urlParameters: [H],
 	headerParameters: [
@@ -28177,27 +28954,27 @@ var Ph = /* @__PURE__ */ fe({
 		K
 	],
 	isXML: !0,
-	serializer: Mx
-}, Ix = {
+	serializer: zS
+}, US = {
 	path: "/",
 	httpMethod: "GET",
 	responses: {
 		200: {
-			bodyMapper: Uh,
-			headersMapper: Dg
+			bodyMapper: Xg,
+			headersMapper: P_
 		},
 		default: {
 			bodyMapper: V,
-			headersMapper: Og
+			headersMapper: F_
 		}
 	},
 	queryParameters: [
 		U,
-		ry,
-		iy,
-		ay,
-		oy,
-		sy
+		ub,
+		db,
+		fb,
+		pb,
+		mb
 	],
 	urlParameters: [H],
 	headerParameters: [
@@ -28206,51 +28983,51 @@ var Ph = /* @__PURE__ */ fe({
 		K
 	],
 	isXML: !0,
-	serializer: Mx
-}, Lx = {
+	serializer: zS
+}, WS = {
 	path: "/",
 	httpMethod: "POST",
 	responses: {
 		200: {
-			bodyMapper: qh,
-			headersMapper: kg
+			bodyMapper: e_,
+			headersMapper: I_
 		},
 		default: {
 			bodyMapper: V,
-			headersMapper: Ag
+			headersMapper: L_
 		}
 	},
-	requestBody: cy,
+	requestBody: hb,
 	queryParameters: [
-		ey,
+		sb,
 		U,
-		ly
+		gb
 	],
 	urlParameters: [H],
 	headerParameters: [
-		Zv,
-		$v,
+		ib,
+		ob,
 		W,
 		G
 	],
 	isXML: !0,
 	contentType: "application/xml; charset=utf-8",
 	mediaType: "xml",
-	serializer: Mx
-}, Rx = {
+	serializer: zS
+}, GS = {
 	path: "/",
 	httpMethod: "GET",
 	responses: {
-		200: { headersMapper: jg },
+		200: { headersMapper: R_ },
 		default: {
 			bodyMapper: V,
-			headersMapper: Mg
+			headersMapper: z_
 		}
 	},
 	queryParameters: [
-		ty,
+		cb,
 		U,
-		uy
+		_b
 	],
 	urlParameters: [H],
 	headerParameters: [
@@ -28259,8 +29036,8 @@ var Ph = /* @__PURE__ */ fe({
 		K
 	],
 	isXML: !0,
-	serializer: Mx
-}, zx = {
+	serializer: zS
+}, KS = {
 	path: "/",
 	httpMethod: "POST",
 	responses: {
@@ -28269,46 +29046,46 @@ var Ph = /* @__PURE__ */ fe({
 				type: { name: "Stream" },
 				serializedName: "parsedResponse"
 			},
-			headersMapper: Ng
+			headersMapper: B_
 		},
 		default: {
 			bodyMapper: V,
-			headersMapper: Pg
+			headersMapper: V_
 		}
 	},
-	requestBody: dy,
-	queryParameters: [U, fy],
+	requestBody: vb,
+	queryParameters: [U, yb],
 	urlParameters: [H],
 	headerParameters: [
-		$v,
+		ob,
 		W,
 		G,
-		py,
-		my
+		bb,
+		xb
 	],
 	isXML: !0,
 	contentType: "application/xml; charset=utf-8",
 	mediaType: "xml",
-	serializer: Mx
-}, Bx = {
+	serializer: zS
+}, qS = {
 	path: "/",
 	httpMethod: "GET",
 	responses: {
 		200: {
-			bodyMapper: Jh,
-			headersMapper: Fg
+			bodyMapper: t_,
+			headersMapper: H_
 		},
 		default: {
 			bodyMapper: V,
-			headersMapper: Ig
+			headersMapper: U_
 		}
 	},
 	queryParameters: [
 		U,
-		ay,
-		oy,
-		hy,
-		gy
+		fb,
+		pb,
+		Sb,
+		Cb
 	],
 	urlParameters: [H],
 	headerParameters: [
@@ -28317,38 +29094,38 @@ var Ph = /* @__PURE__ */ fe({
 		K
 	],
 	isXML: !0,
-	serializer: Mx
-}, Vx = class {
+	serializer: zS
+}, JS = class {
 	client;
 	constructor(e) {
 		this.client = e;
 	}
 	create(e) {
-		return this.client.sendOperationRequest({ options: e }, Ux);
+		return this.client.sendOperationRequest({ options: e }, XS);
 	}
 	getProperties(e) {
-		return this.client.sendOperationRequest({ options: e }, Wx);
+		return this.client.sendOperationRequest({ options: e }, ZS);
 	}
 	delete(e) {
-		return this.client.sendOperationRequest({ options: e }, Gx);
+		return this.client.sendOperationRequest({ options: e }, QS);
 	}
 	setMetadata(e) {
-		return this.client.sendOperationRequest({ options: e }, Kx);
+		return this.client.sendOperationRequest({ options: e }, $S);
 	}
 	getAccessPolicy(e) {
-		return this.client.sendOperationRequest({ options: e }, qx);
+		return this.client.sendOperationRequest({ options: e }, eC);
 	}
 	setAccessPolicy(e) {
-		return this.client.sendOperationRequest({ options: e }, Jx);
+		return this.client.sendOperationRequest({ options: e }, tC);
 	}
 	restore(e) {
-		return this.client.sendOperationRequest({ options: e }, Yx);
+		return this.client.sendOperationRequest({ options: e }, nC);
 	}
 	rename(e, t) {
 		return this.client.sendOperationRequest({
 			sourceContainerName: e,
 			options: t
-		}, Xx);
+		}, rC);
 	}
 	submitBatch(e, t, n, r) {
 		return this.client.sendOperationRequest({
@@ -28356,82 +29133,82 @@ var Ph = /* @__PURE__ */ fe({
 			multipartContentType: t,
 			body: n,
 			options: r
-		}, Zx);
+		}, iC);
 	}
 	filterBlobs(e) {
-		return this.client.sendOperationRequest({ options: e }, Qx);
+		return this.client.sendOperationRequest({ options: e }, aC);
 	}
 	acquireLease(e) {
-		return this.client.sendOperationRequest({ options: e }, $x);
+		return this.client.sendOperationRequest({ options: e }, oC);
 	}
 	releaseLease(e, t) {
 		return this.client.sendOperationRequest({
 			leaseId: e,
 			options: t
-		}, eS);
+		}, sC);
 	}
 	renewLease(e, t) {
 		return this.client.sendOperationRequest({
 			leaseId: e,
 			options: t
-		}, tS);
+		}, cC);
 	}
 	breakLease(e) {
-		return this.client.sendOperationRequest({ options: e }, nS);
+		return this.client.sendOperationRequest({ options: e }, lC);
 	}
 	changeLease(e, t, n) {
 		return this.client.sendOperationRequest({
 			leaseId: e,
 			proposedLeaseId: t,
 			options: n
-		}, rS);
+		}, uC);
 	}
 	listBlobFlatSegment(e) {
-		return this.client.sendOperationRequest({ options: e }, iS);
+		return this.client.sendOperationRequest({ options: e }, dC);
 	}
 	listBlobHierarchySegment(e, t) {
 		return this.client.sendOperationRequest({
 			delimiter: e,
 			options: t
-		}, aS);
+		}, fC);
 	}
 	getAccountInfo(e) {
-		return this.client.sendOperationRequest({ options: e }, oS);
+		return this.client.sendOperationRequest({ options: e }, pC);
 	}
-}, Hx = ou(Ph, !0), Ux = {
+}, YS = Qu(Vg, !0), XS = {
 	path: "/{containerName}",
 	httpMethod: "PUT",
 	responses: {
-		201: { headersMapper: Lg },
+		201: { headersMapper: W_ },
 		default: {
 			bodyMapper: V,
-			headersMapper: Rg
+			headersMapper: G_
 		}
 	},
-	queryParameters: [U, _y],
+	queryParameters: [U, wb],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
 		K,
-		vy,
-		yy,
-		by,
-		xy
+		Tb,
+		Eb,
+		Db,
+		Ob
 	],
 	isXML: !0,
-	serializer: Hx
-}, Wx = {
+	serializer: YS
+}, ZS = {
 	path: "/{containerName}",
 	httpMethod: "GET",
 	responses: {
-		200: { headersMapper: zg },
+		200: { headersMapper: K_ },
 		default: {
 			bodyMapper: V,
-			headersMapper: Bg
+			headersMapper: q_
 		}
 	},
-	queryParameters: [U, _y],
+	queryParameters: [U, wb],
 	urlParameters: [H],
 	headerParameters: [
 		W,
@@ -28440,18 +29217,18 @@ var Ph = /* @__PURE__ */ fe({
 		q
 	],
 	isXML: !0,
-	serializer: Hx
-}, Gx = {
+	serializer: YS
+}, QS = {
 	path: "/{containerName}",
 	httpMethod: "DELETE",
 	responses: {
-		202: { headersMapper: Vg },
+		202: { headersMapper: J_ },
 		default: {
 			bodyMapper: V,
-			headersMapper: Hg
+			headersMapper: Y_
 		}
 	},
-	queryParameters: [U, _y],
+	queryParameters: [U, wb],
 	urlParameters: [H],
 	headerParameters: [
 		W,
@@ -28462,34 +29239,34 @@ var Ph = /* @__PURE__ */ fe({
 		Y
 	],
 	isXML: !0,
-	serializer: Hx
-}, Kx = {
+	serializer: YS
+}, $S = {
 	path: "/{containerName}",
 	httpMethod: "PUT",
 	responses: {
-		200: { headersMapper: Ug },
+		200: { headersMapper: X_ },
 		default: {
 			bodyMapper: V,
-			headersMapper: Wg
+			headersMapper: Z_
 		}
 	},
 	queryParameters: [
 		U,
-		_y,
-		Sy
+		wb,
+		kb
 	],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
 		K,
-		vy,
+		Tb,
 		q,
 		J
 	],
 	isXML: !0,
-	serializer: Hx
-}, qx = {
+	serializer: YS
+}, eC = {
 	path: "/{containerName}",
 	httpMethod: "GET",
 	responses: {
@@ -28507,17 +29284,17 @@ var Ph = /* @__PURE__ */ fe({
 				xmlIsWrapped: !0,
 				xmlElementName: "SignedIdentifier"
 			},
-			headersMapper: Gg
+			headersMapper: Q_
 		},
 		default: {
 			bodyMapper: V,
-			headersMapper: Kg
+			headersMapper: $_
 		}
 	},
 	queryParameters: [
 		U,
-		_y,
-		Cy
+		wb,
+		Ab
 	],
 	urlParameters: [H],
 	headerParameters: [
@@ -28527,30 +29304,30 @@ var Ph = /* @__PURE__ */ fe({
 		q
 	],
 	isXML: !0,
-	serializer: Hx
-}, Jx = {
+	serializer: YS
+}, tC = {
 	path: "/{containerName}",
 	httpMethod: "PUT",
 	responses: {
-		200: { headersMapper: qg },
+		200: { headersMapper: ev },
 		default: {
 			bodyMapper: V,
-			headersMapper: Jg
+			headersMapper: tv
 		}
 	},
-	requestBody: wy,
+	requestBody: jb,
 	queryParameters: [
 		U,
-		_y,
-		Cy
+		wb,
+		Ab
 	],
 	urlParameters: [H],
 	headerParameters: [
-		Zv,
-		$v,
+		ib,
+		ob,
 		W,
 		G,
-		yy,
+		Eb,
 		q,
 		J,
 		Y
@@ -28558,58 +29335,58 @@ var Ph = /* @__PURE__ */ fe({
 	isXML: !0,
 	contentType: "application/xml; charset=utf-8",
 	mediaType: "xml",
-	serializer: Hx
-}, Yx = {
+	serializer: YS
+}, nC = {
 	path: "/{containerName}",
 	httpMethod: "PUT",
 	responses: {
-		201: { headersMapper: Yg },
+		201: { headersMapper: nv },
 		default: {
 			bodyMapper: V,
-			headersMapper: Xg
+			headersMapper: rv
 		}
 	},
 	queryParameters: [
 		U,
-		_y,
-		Ty
+		wb,
+		Mb
 	],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
 		K,
-		Ey,
-		Dy
+		Nb,
+		Pb
 	],
 	isXML: !0,
-	serializer: Hx
-}, Xx = {
+	serializer: YS
+}, rC = {
 	path: "/{containerName}",
 	httpMethod: "PUT",
 	responses: {
-		200: { headersMapper: Zg },
+		200: { headersMapper: iv },
 		default: {
 			bodyMapper: V,
-			headersMapper: Qg
+			headersMapper: av
 		}
 	},
 	queryParameters: [
 		U,
-		_y,
-		Oy
+		wb,
+		Fb
 	],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
 		K,
-		ky,
-		Ay
+		Ib,
+		Lb
 	],
 	isXML: !0,
-	serializer: Hx
-}, Zx = {
+	serializer: YS
+}, iC = {
 	path: "/{containerName}",
 	httpMethod: "POST",
 	responses: {
@@ -28618,932 +29395,73 @@ var Ph = /* @__PURE__ */ fe({
 				type: { name: "Stream" },
 				serializedName: "parsedResponse"
 			},
-			headersMapper: $g
+			headersMapper: ov
 		},
 		default: {
 			bodyMapper: V,
-			headersMapper: e_
+			headersMapper: sv
 		}
 	},
-	requestBody: dy,
+	requestBody: vb,
 	queryParameters: [
 		U,
-		fy,
-		_y
+		yb,
+		wb
 	],
 	urlParameters: [H],
 	headerParameters: [
-		$v,
+		ob,
 		W,
 		G,
-		py,
-		my
+		bb,
+		xb
 	],
 	isXML: !0,
 	contentType: "application/xml; charset=utf-8",
 	mediaType: "xml",
-	serializer: Hx
-}, Qx = {
+	serializer: YS
+}, aC = {
 	path: "/{containerName}",
 	httpMethod: "GET",
 	responses: {
 		200: {
-			bodyMapper: Jh,
-			headersMapper: t_
+			bodyMapper: t_,
+			headersMapper: cv
 		},
 		default: {
 			bodyMapper: V,
-			headersMapper: n_
+			headersMapper: lv
 		}
 	},
 	queryParameters: [
 		U,
-		ay,
-		oy,
-		hy,
-		gy,
-		_y
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K
-	],
-	isXML: !0,
-	serializer: Hx
-}, $x = {
-	path: "/{containerName}",
-	httpMethod: "PUT",
-	responses: {
-		201: { headersMapper: r_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: i_
-		}
-	},
-	queryParameters: [
-		U,
-		_y,
-		jy
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		J,
-		Y,
-		My,
-		Ny,
-		Py
-	],
-	isXML: !0,
-	serializer: Hx
-}, eS = {
-	path: "/{containerName}",
-	httpMethod: "PUT",
-	responses: {
-		200: { headersMapper: a_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: o_
-		}
-	},
-	queryParameters: [
-		U,
-		_y,
-		jy
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		J,
-		Y,
-		Fy,
-		Iy
-	],
-	isXML: !0,
-	serializer: Hx
-}, tS = {
-	path: "/{containerName}",
-	httpMethod: "PUT",
-	responses: {
-		200: { headersMapper: s_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: c_
-		}
-	},
-	queryParameters: [
-		U,
-		_y,
-		jy
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		J,
-		Y,
-		Iy,
-		Ly
-	],
-	isXML: !0,
-	serializer: Hx
-}, nS = {
-	path: "/{containerName}",
-	httpMethod: "PUT",
-	responses: {
-		202: { headersMapper: l_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: u_
-		}
-	},
-	queryParameters: [
-		U,
-		_y,
-		jy
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		J,
-		Y,
-		Ry,
-		zy
-	],
-	isXML: !0,
-	serializer: Hx
-}, rS = {
-	path: "/{containerName}",
-	httpMethod: "PUT",
-	responses: {
-		200: { headersMapper: d_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: f_
-		}
-	},
-	queryParameters: [
-		U,
-		_y,
-		jy
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		J,
-		Y,
-		Iy,
-		By,
-		Vy
-	],
-	isXML: !0,
-	serializer: Hx
-}, iS = {
-	path: "/{containerName}",
-	httpMethod: "GET",
-	responses: {
-		200: {
-			bodyMapper: eg,
-			headersMapper: p_
-		},
-		default: {
-			bodyMapper: V,
-			headersMapper: m_
-		}
-	},
-	queryParameters: [
-		U,
-		ry,
-		iy,
-		ay,
-		oy,
-		_y,
-		Hy,
-		Uy
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K
-	],
-	isXML: !0,
-	serializer: Hx
-}, aS = {
-	path: "/{containerName}",
-	httpMethod: "GET",
-	responses: {
-		200: {
-			bodyMapper: ag,
-			headersMapper: h_
-		},
-		default: {
-			bodyMapper: V,
-			headersMapper: g_
-		}
-	},
-	queryParameters: [
-		U,
-		ry,
-		iy,
-		ay,
-		oy,
-		_y,
-		Hy,
-		Uy,
-		Wy
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K
-	],
-	isXML: !0,
-	serializer: Hx
-}, oS = {
-	path: "/{containerName}",
-	httpMethod: "GET",
-	responses: {
-		200: { headersMapper: __ },
-		default: {
-			bodyMapper: V,
-			headersMapper: v_
-		}
-	},
-	queryParameters: [
-		ty,
-		U,
-		uy
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K
-	],
-	isXML: !0,
-	serializer: Hx
-}, sS = class {
-	client;
-	constructor(e) {
-		this.client = e;
-	}
-	download(e) {
-		return this.client.sendOperationRequest({ options: e }, lS);
-	}
-	getProperties(e) {
-		return this.client.sendOperationRequest({ options: e }, uS);
-	}
-	delete(e) {
-		return this.client.sendOperationRequest({ options: e }, dS);
-	}
-	undelete(e) {
-		return this.client.sendOperationRequest({ options: e }, fS);
-	}
-	setExpiry(e, t) {
-		return this.client.sendOperationRequest({
-			expiryOptions: e,
-			options: t
-		}, pS);
-	}
-	setHttpHeaders(e) {
-		return this.client.sendOperationRequest({ options: e }, mS);
-	}
-	setImmutabilityPolicy(e) {
-		return this.client.sendOperationRequest({ options: e }, hS);
-	}
-	deleteImmutabilityPolicy(e) {
-		return this.client.sendOperationRequest({ options: e }, gS);
-	}
-	setLegalHold(e, t) {
-		return this.client.sendOperationRequest({
-			legalHold: e,
-			options: t
-		}, _S);
-	}
-	setMetadata(e) {
-		return this.client.sendOperationRequest({ options: e }, vS);
-	}
-	acquireLease(e) {
-		return this.client.sendOperationRequest({ options: e }, yS);
-	}
-	releaseLease(e, t) {
-		return this.client.sendOperationRequest({
-			leaseId: e,
-			options: t
-		}, bS);
-	}
-	renewLease(e, t) {
-		return this.client.sendOperationRequest({
-			leaseId: e,
-			options: t
-		}, xS);
-	}
-	changeLease(e, t, n) {
-		return this.client.sendOperationRequest({
-			leaseId: e,
-			proposedLeaseId: t,
-			options: n
-		}, SS);
-	}
-	breakLease(e) {
-		return this.client.sendOperationRequest({ options: e }, CS);
-	}
-	createSnapshot(e) {
-		return this.client.sendOperationRequest({ options: e }, wS);
-	}
-	startCopyFromURL(e, t) {
-		return this.client.sendOperationRequest({
-			copySource: e,
-			options: t
-		}, TS);
-	}
-	copyFromURL(e, t) {
-		return this.client.sendOperationRequest({
-			copySource: e,
-			options: t
-		}, ES);
-	}
-	abortCopyFromURL(e, t) {
-		return this.client.sendOperationRequest({
-			copyId: e,
-			options: t
-		}, DS);
-	}
-	setTier(e, t) {
-		return this.client.sendOperationRequest({
-			tier: e,
-			options: t
-		}, OS);
-	}
-	getAccountInfo(e) {
-		return this.client.sendOperationRequest({ options: e }, kS);
-	}
-	query(e) {
-		return this.client.sendOperationRequest({ options: e }, AS);
-	}
-	getTags(e) {
-		return this.client.sendOperationRequest({ options: e }, jS);
-	}
-	setTags(e) {
-		return this.client.sendOperationRequest({ options: e }, MS);
-	}
-}, cS = ou(Ph, !0), lS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "GET",
-	responses: {
-		200: {
-			bodyMapper: {
-				type: { name: "Stream" },
-				serializedName: "parsedResponse"
-			},
-			headersMapper: y_
-		},
-		206: {
-			bodyMapper: {
-				type: { name: "Stream" },
-				serializedName: "parsedResponse"
-			},
-			headersMapper: y_
-		},
-		default: {
-			bodyMapper: V,
-			headersMapper: b_
-		}
-	},
-	queryParameters: [
-		U,
-		Gy,
-		Ky
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		q,
-		J,
-		Y,
-		qy,
-		Jy,
-		Yy,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb
-	],
-	isXML: !0,
-	serializer: cS
-}, uS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "HEAD",
-	responses: {
-		200: { headersMapper: x_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: S_
-		}
-	},
-	queryParameters: [
-		U,
-		Gy,
-		Ky
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		q,
-		J,
-		Y,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb
-	],
-	isXML: !0,
-	serializer: cS
-}, dS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "DELETE",
-	responses: {
-		202: { headersMapper: C_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: w_
-		}
-	},
-	queryParameters: [
-		U,
-		Gy,
-		Ky,
-		rb
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		q,
-		J,
-		Y,
-		$y,
-		eb,
-		tb,
-		nb
-	],
-	isXML: !0,
-	serializer: cS
-}, fS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		200: { headersMapper: T_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: E_
-		}
-	},
-	queryParameters: [U, Ty],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K
-	],
-	isXML: !0,
-	serializer: cS
-}, pS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		200: { headersMapper: D_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: O_
-		}
-	},
-	queryParameters: [U, ib],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		ab,
-		ob
-	],
-	isXML: !0,
-	serializer: cS
-}, mS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		200: { headersMapper: k_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: A_
-		}
-	},
-	queryParameters: [ty, U],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		q,
-		J,
-		Y,
-		$y,
-		eb,
-		tb,
-		sb,
-		cb,
-		lb,
-		ub,
-		db,
-		fb
-	],
-	isXML: !0,
-	serializer: cS
-}, hS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		200: { headersMapper: j_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: M_
-		}
-	},
-	queryParameters: [
-		U,
-		Gy,
-		Ky,
-		pb
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		Y,
-		mb,
-		hb
-	],
-	isXML: !0,
-	serializer: cS
-}, gS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "DELETE",
-	responses: {
-		200: { headersMapper: N_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: P_
-		}
-	},
-	queryParameters: [
-		U,
-		Gy,
-		Ky,
-		pb
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K
-	],
-	isXML: !0,
-	serializer: cS
-}, _S = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		200: { headersMapper: F_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: I_
-		}
-	},
-	queryParameters: [
-		U,
-		Gy,
-		Ky,
-		gb
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		_b
-	],
-	isXML: !0,
-	serializer: cS
-}, vS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		200: { headersMapper: L_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: R_
-		}
-	},
-	queryParameters: [U, Sy],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		vy,
-		q,
-		J,
-		Y,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb,
-		vb
-	],
-	isXML: !0,
-	serializer: cS
-}, yS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		201: { headersMapper: z_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: B_
-		}
-	},
-	queryParameters: [U, jy],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		J,
-		Y,
-		My,
-		Ny,
-		Py,
-		$y,
-		eb,
-		tb
-	],
-	isXML: !0,
-	serializer: cS
-}, bS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		200: { headersMapper: V_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: H_
-		}
-	},
-	queryParameters: [U, jy],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		J,
-		Y,
-		Fy,
-		Iy,
-		$y,
-		eb,
-		tb
-	],
-	isXML: !0,
-	serializer: cS
-}, xS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		200: { headersMapper: U_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: W_
-		}
-	},
-	queryParameters: [U, jy],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		J,
-		Y,
-		Iy,
-		Ly,
-		$y,
-		eb,
-		tb
-	],
-	isXML: !0,
-	serializer: cS
-}, SS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		200: { headersMapper: G_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: K_
-		}
-	},
-	queryParameters: [U, jy],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		J,
-		Y,
-		Iy,
-		By,
-		Vy,
-		$y,
-		eb,
-		tb
-	],
-	isXML: !0,
-	serializer: cS
-}, CS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		202: { headersMapper: q_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: J_
-		}
-	},
-	queryParameters: [U, jy],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		J,
-		Y,
-		Ry,
-		zy,
-		$y,
-		eb,
-		tb
-	],
-	isXML: !0,
-	serializer: cS
-}, wS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		201: { headersMapper: Y_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: X_
-		}
-	},
-	queryParameters: [U, yb],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		vy,
-		q,
-		J,
-		Y,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb,
-		vb
-	],
-	isXML: !0,
-	serializer: cS
-}, TS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		202: { headersMapper: Z_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: Q_
-		}
-	},
-	queryParameters: [U],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		vy,
-		q,
-		J,
-		Y,
-		$y,
-		eb,
-		tb,
-		mb,
-		hb,
-		bb,
-		xb,
+		fb,
+		pb,
 		Sb,
 		Cb,
-		wb,
-		Tb,
-		Eb,
-		Db,
-		Ob,
-		kb,
-		Ab
+		wb
 	],
-	isXML: !0,
-	serializer: cS
-}, ES = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		202: { headersMapper: $_ },
-		default: {
-			bodyMapper: V,
-			headersMapper: ev
-		}
-	},
-	queryParameters: [U],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
-		K,
-		vy,
-		q,
-		J,
-		Y,
-		$y,
-		eb,
-		tb,
-		mb,
-		hb,
-		vb,
-		bb,
-		Sb,
-		Cb,
-		wb,
-		Tb,
-		Db,
-		Ob,
-		Ab,
-		jb,
-		Mb,
-		Nb,
-		Pb,
-		Fb
+		K
 	],
 	isXML: !0,
-	serializer: cS
-}, DS = {
-	path: "/{containerName}/{blob}",
+	serializer: YS
+}, oC = {
+	path: "/{containerName}",
 	httpMethod: "PUT",
 	responses: {
-		204: { headersMapper: tv },
+		201: { headersMapper: uv },
 		default: {
 			bodyMapper: V,
-			headersMapper: nv
+			headersMapper: dv
 		}
 	},
 	queryParameters: [
 		U,
-		Ib,
+		wb,
 		Rb
 	],
 	urlParameters: [H],
@@ -29551,54 +29469,145 @@ var Ph = /* @__PURE__ */ fe({
 		W,
 		G,
 		K,
-		q,
-		Lb
+		J,
+		Y,
+		zb,
+		Bb,
+		Vb
 	],
 	isXML: !0,
-	serializer: cS
-}, OS = {
-	path: "/{containerName}/{blob}",
+	serializer: YS
+}, sC = {
+	path: "/{containerName}",
 	httpMethod: "PUT",
 	responses: {
-		200: { headersMapper: rv },
-		202: { headersMapper: rv },
+		200: { headersMapper: fv },
 		default: {
 			bodyMapper: V,
-			headersMapper: iv
+			headersMapper: pv
 		}
 	},
 	queryParameters: [
 		U,
-		Gy,
-		Ky,
-		zb
+		wb,
+		Rb
 	],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
 		K,
-		q,
-		tb,
-		xb,
-		Bb
+		J,
+		Y,
+		Hb,
+		Ub
 	],
 	isXML: !0,
-	serializer: cS
-}, kS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "GET",
+	serializer: YS
+}, cC = {
+	path: "/{containerName}",
+	httpMethod: "PUT",
 	responses: {
-		200: { headersMapper: av },
+		200: { headersMapper: mv },
 		default: {
 			bodyMapper: V,
-			headersMapper: ov
+			headersMapper: hv
 		}
 	},
 	queryParameters: [
-		ty,
 		U,
-		uy
+		wb,
+		Rb
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		J,
+		Y,
+		Ub,
+		Wb
+	],
+	isXML: !0,
+	serializer: YS
+}, lC = {
+	path: "/{containerName}",
+	httpMethod: "PUT",
+	responses: {
+		202: { headersMapper: gv },
+		default: {
+			bodyMapper: V,
+			headersMapper: _v
+		}
+	},
+	queryParameters: [
+		U,
+		wb,
+		Rb
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		J,
+		Y,
+		Gb,
+		Kb
+	],
+	isXML: !0,
+	serializer: YS
+}, uC = {
+	path: "/{containerName}",
+	httpMethod: "PUT",
+	responses: {
+		200: { headersMapper: vv },
+		default: {
+			bodyMapper: V,
+			headersMapper: yv
+		}
+	},
+	queryParameters: [
+		U,
+		wb,
+		Rb
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		J,
+		Y,
+		Ub,
+		qb,
+		Jb
+	],
+	isXML: !0,
+	serializer: YS
+}, dC = {
+	path: "/{containerName}",
+	httpMethod: "GET",
+	responses: {
+		200: {
+			bodyMapper: s_,
+			headersMapper: bv
+		},
+		default: {
+			bodyMapper: V,
+			headersMapper: xv
+		}
+	},
+	queryParameters: [
+		U,
+		ub,
+		db,
+		fb,
+		pb,
+		wb,
+		Yb,
+		Xb
 	],
 	urlParameters: [H],
 	headerParameters: [
@@ -29607,8 +29616,776 @@ var Ph = /* @__PURE__ */ fe({
 		K
 	],
 	isXML: !0,
-	serializer: cS
-}, AS = {
+	serializer: YS
+}, fC = {
+	path: "/{containerName}",
+	httpMethod: "GET",
+	responses: {
+		200: {
+			bodyMapper: f_,
+			headersMapper: Sv
+		},
+		default: {
+			bodyMapper: V,
+			headersMapper: Cv
+		}
+	},
+	queryParameters: [
+		U,
+		ub,
+		db,
+		fb,
+		pb,
+		wb,
+		Yb,
+		Xb,
+		Zb
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K
+	],
+	isXML: !0,
+	serializer: YS
+}, pC = {
+	path: "/{containerName}",
+	httpMethod: "GET",
+	responses: {
+		200: { headersMapper: wv },
+		default: {
+			bodyMapper: V,
+			headersMapper: Tv
+		}
+	},
+	queryParameters: [
+		cb,
+		U,
+		_b
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K
+	],
+	isXML: !0,
+	serializer: YS
+}, mC = class {
+	client;
+	constructor(e) {
+		this.client = e;
+	}
+	download(e) {
+		return this.client.sendOperationRequest({ options: e }, gC);
+	}
+	getProperties(e) {
+		return this.client.sendOperationRequest({ options: e }, _C);
+	}
+	delete(e) {
+		return this.client.sendOperationRequest({ options: e }, vC);
+	}
+	undelete(e) {
+		return this.client.sendOperationRequest({ options: e }, yC);
+	}
+	setExpiry(e, t) {
+		return this.client.sendOperationRequest({
+			expiryOptions: e,
+			options: t
+		}, bC);
+	}
+	setHttpHeaders(e) {
+		return this.client.sendOperationRequest({ options: e }, xC);
+	}
+	setImmutabilityPolicy(e) {
+		return this.client.sendOperationRequest({ options: e }, SC);
+	}
+	deleteImmutabilityPolicy(e) {
+		return this.client.sendOperationRequest({ options: e }, CC);
+	}
+	setLegalHold(e, t) {
+		return this.client.sendOperationRequest({
+			legalHold: e,
+			options: t
+		}, wC);
+	}
+	setMetadata(e) {
+		return this.client.sendOperationRequest({ options: e }, TC);
+	}
+	acquireLease(e) {
+		return this.client.sendOperationRequest({ options: e }, EC);
+	}
+	releaseLease(e, t) {
+		return this.client.sendOperationRequest({
+			leaseId: e,
+			options: t
+		}, DC);
+	}
+	renewLease(e, t) {
+		return this.client.sendOperationRequest({
+			leaseId: e,
+			options: t
+		}, OC);
+	}
+	changeLease(e, t, n) {
+		return this.client.sendOperationRequest({
+			leaseId: e,
+			proposedLeaseId: t,
+			options: n
+		}, kC);
+	}
+	breakLease(e) {
+		return this.client.sendOperationRequest({ options: e }, AC);
+	}
+	createSnapshot(e) {
+		return this.client.sendOperationRequest({ options: e }, jC);
+	}
+	startCopyFromURL(e, t) {
+		return this.client.sendOperationRequest({
+			copySource: e,
+			options: t
+		}, MC);
+	}
+	copyFromURL(e, t) {
+		return this.client.sendOperationRequest({
+			copySource: e,
+			options: t
+		}, NC);
+	}
+	abortCopyFromURL(e, t) {
+		return this.client.sendOperationRequest({
+			copyId: e,
+			options: t
+		}, PC);
+	}
+	setTier(e, t) {
+		return this.client.sendOperationRequest({
+			tier: e,
+			options: t
+		}, FC);
+	}
+	getAccountInfo(e) {
+		return this.client.sendOperationRequest({ options: e }, IC);
+	}
+	query(e) {
+		return this.client.sendOperationRequest({ options: e }, LC);
+	}
+	getTags(e) {
+		return this.client.sendOperationRequest({ options: e }, RC);
+	}
+	setTags(e) {
+		return this.client.sendOperationRequest({ options: e }, zC);
+	}
+}, hC = Qu(Vg, !0), gC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "GET",
+	responses: {
+		200: {
+			bodyMapper: {
+				type: { name: "Stream" },
+				serializedName: "parsedResponse"
+			},
+			headersMapper: Ev
+		},
+		206: {
+			bodyMapper: {
+				type: { name: "Stream" },
+				serializedName: "parsedResponse"
+			},
+			headersMapper: Ev
+		},
+		default: {
+			bodyMapper: V,
+			headersMapper: Dv
+		}
+	},
+	queryParameters: [
+		U,
+		Qb,
+		$b
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		q,
+		J,
+		Y,
+		ex,
+		tx,
+		nx,
+		rx,
+		ix,
+		ax,
+		ox,
+		sx,
+		cx
+	],
+	isXML: !0,
+	serializer: hC
+}, _C = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "HEAD",
+	responses: {
+		200: { headersMapper: Ov },
+		default: {
+			bodyMapper: V,
+			headersMapper: kv
+		}
+	},
+	queryParameters: [
+		U,
+		Qb,
+		$b
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		q,
+		J,
+		Y,
+		rx,
+		ix,
+		ax,
+		ox,
+		sx,
+		cx
+	],
+	isXML: !0,
+	serializer: hC
+}, vC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "DELETE",
+	responses: {
+		202: { headersMapper: Av },
+		default: {
+			bodyMapper: V,
+			headersMapper: jv
+		}
+	},
+	queryParameters: [
+		U,
+		Qb,
+		$b,
+		ux
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		q,
+		J,
+		Y,
+		ox,
+		sx,
+		cx,
+		lx
+	],
+	isXML: !0,
+	serializer: hC
+}, yC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		200: { headersMapper: Mv },
+		default: {
+			bodyMapper: V,
+			headersMapper: Nv
+		}
+	},
+	queryParameters: [U, Mb],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K
+	],
+	isXML: !0,
+	serializer: hC
+}, bC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		200: { headersMapper: Pv },
+		default: {
+			bodyMapper: V,
+			headersMapper: Fv
+		}
+	},
+	queryParameters: [U, dx],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		fx,
+		px
+	],
+	isXML: !0,
+	serializer: hC
+}, xC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		200: { headersMapper: Iv },
+		default: {
+			bodyMapper: V,
+			headersMapper: Lv
+		}
+	},
+	queryParameters: [cb, U],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		q,
+		J,
+		Y,
+		ox,
+		sx,
+		cx,
+		mx,
+		hx,
+		gx,
+		_x,
+		vx,
+		yx
+	],
+	isXML: !0,
+	serializer: hC
+}, SC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		200: { headersMapper: Rv },
+		default: {
+			bodyMapper: V,
+			headersMapper: zv
+		}
+	},
+	queryParameters: [
+		U,
+		Qb,
+		$b,
+		bx
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		Y,
+		xx,
+		Sx
+	],
+	isXML: !0,
+	serializer: hC
+}, CC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "DELETE",
+	responses: {
+		200: { headersMapper: Bv },
+		default: {
+			bodyMapper: V,
+			headersMapper: Vv
+		}
+	},
+	queryParameters: [
+		U,
+		Qb,
+		$b,
+		bx
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K
+	],
+	isXML: !0,
+	serializer: hC
+}, wC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		200: { headersMapper: Hv },
+		default: {
+			bodyMapper: V,
+			headersMapper: Uv
+		}
+	},
+	queryParameters: [
+		U,
+		Qb,
+		$b,
+		Cx
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		wx
+	],
+	isXML: !0,
+	serializer: hC
+}, TC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		200: { headersMapper: Wv },
+		default: {
+			bodyMapper: V,
+			headersMapper: Gv
+		}
+	},
+	queryParameters: [U, kb],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		Tb,
+		q,
+		J,
+		Y,
+		rx,
+		ix,
+		ax,
+		ox,
+		sx,
+		cx,
+		Tx
+	],
+	isXML: !0,
+	serializer: hC
+}, EC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		201: { headersMapper: Kv },
+		default: {
+			bodyMapper: V,
+			headersMapper: qv
+		}
+	},
+	queryParameters: [U, Rb],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		J,
+		Y,
+		zb,
+		Bb,
+		Vb,
+		ox,
+		sx,
+		cx
+	],
+	isXML: !0,
+	serializer: hC
+}, DC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		200: { headersMapper: Jv },
+		default: {
+			bodyMapper: V,
+			headersMapper: Yv
+		}
+	},
+	queryParameters: [U, Rb],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		J,
+		Y,
+		Hb,
+		Ub,
+		ox,
+		sx,
+		cx
+	],
+	isXML: !0,
+	serializer: hC
+}, OC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		200: { headersMapper: Xv },
+		default: {
+			bodyMapper: V,
+			headersMapper: Zv
+		}
+	},
+	queryParameters: [U, Rb],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		J,
+		Y,
+		Ub,
+		Wb,
+		ox,
+		sx,
+		cx
+	],
+	isXML: !0,
+	serializer: hC
+}, kC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		200: { headersMapper: Qv },
+		default: {
+			bodyMapper: V,
+			headersMapper: $v
+		}
+	},
+	queryParameters: [U, Rb],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		J,
+		Y,
+		Ub,
+		qb,
+		Jb,
+		ox,
+		sx,
+		cx
+	],
+	isXML: !0,
+	serializer: hC
+}, AC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		202: { headersMapper: ey },
+		default: {
+			bodyMapper: V,
+			headersMapper: ty
+		}
+	},
+	queryParameters: [U, Rb],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		J,
+		Y,
+		Gb,
+		Kb,
+		ox,
+		sx,
+		cx
+	],
+	isXML: !0,
+	serializer: hC
+}, jC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		201: { headersMapper: ny },
+		default: {
+			bodyMapper: V,
+			headersMapper: ry
+		}
+	},
+	queryParameters: [U, Ex],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		Tb,
+		q,
+		J,
+		Y,
+		rx,
+		ix,
+		ax,
+		ox,
+		sx,
+		cx,
+		Tx
+	],
+	isXML: !0,
+	serializer: hC
+}, MC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		202: { headersMapper: iy },
+		default: {
+			bodyMapper: V,
+			headersMapper: ay
+		}
+	},
+	queryParameters: [U],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		Tb,
+		q,
+		J,
+		Y,
+		ox,
+		sx,
+		cx,
+		xx,
+		Sx,
+		Dx,
+		Ox,
+		kx,
+		Ax,
+		jx,
+		Mx,
+		Nx,
+		Px,
+		Fx,
+		Ix,
+		Lx
+	],
+	isXML: !0,
+	serializer: hC
+}, NC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		202: { headersMapper: oy },
+		default: {
+			bodyMapper: V,
+			headersMapper: sy
+		}
+	},
+	queryParameters: [U],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		Tb,
+		q,
+		J,
+		Y,
+		ox,
+		sx,
+		cx,
+		xx,
+		Sx,
+		Tx,
+		Dx,
+		kx,
+		Ax,
+		jx,
+		Mx,
+		Px,
+		Fx,
+		Lx,
+		Rx,
+		zx,
+		Bx,
+		Vx,
+		Hx
+	],
+	isXML: !0,
+	serializer: hC
+}, PC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		204: { headersMapper: cy },
+		default: {
+			bodyMapper: V,
+			headersMapper: ly
+		}
+	},
+	queryParameters: [
+		U,
+		Ux,
+		Gx
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		q,
+		Wx
+	],
+	isXML: !0,
+	serializer: hC
+}, FC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		200: { headersMapper: uy },
+		202: { headersMapper: uy },
+		default: {
+			bodyMapper: V,
+			headersMapper: dy
+		}
+	},
+	queryParameters: [
+		U,
+		Qb,
+		$b,
+		Kx
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		q,
+		cx,
+		Ox,
+		qx
+	],
+	isXML: !0,
+	serializer: hC
+}, IC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "GET",
+	responses: {
+		200: { headersMapper: fy },
+		default: {
+			bodyMapper: V,
+			headersMapper: py
+		}
+	},
+	queryParameters: [
+		cb,
+		U,
+		_b
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K
+	],
+	isXML: !0,
+	serializer: hC
+}, LC = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "POST",
 	responses: {
@@ -29617,64 +30394,64 @@ var Ph = /* @__PURE__ */ fe({
 				type: { name: "Stream" },
 				serializedName: "parsedResponse"
 			},
-			headersMapper: sv
+			headersMapper: my
 		},
 		206: {
 			bodyMapper: {
 				type: { name: "Stream" },
 				serializedName: "parsedResponse"
 			},
-			headersMapper: sv
+			headersMapper: my
 		},
 		default: {
 			bodyMapper: V,
-			headersMapper: cv
+			headersMapper: hy
 		}
 	},
-	requestBody: Vb,
+	requestBody: Jx,
 	queryParameters: [
 		U,
-		Gy,
-		Hb
+		Qb,
+		Yx
 	],
 	urlParameters: [H],
 	headerParameters: [
-		Zv,
-		$v,
+		ib,
+		ob,
 		W,
 		G,
 		q,
 		J,
 		Y,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb
+		rx,
+		ix,
+		ax,
+		ox,
+		sx,
+		cx
 	],
 	isXML: !0,
 	contentType: "application/xml; charset=utf-8",
 	mediaType: "xml",
-	serializer: cS
-}, jS = {
+	serializer: hC
+}, RC = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "GET",
 	responses: {
 		200: {
-			bodyMapper: Xh,
-			headersMapper: lv
+			bodyMapper: r_,
+			headersMapper: gy
 		},
 		default: {
 			bodyMapper: V,
-			headersMapper: uv
+			headersMapper: _y
 		}
 	},
 	queryParameters: [
 		U,
-		Gy,
-		Ky,
-		Ub
+		Qb,
+		$b,
+		Xx
 	],
 	urlParameters: [H],
 	headerParameters: [
@@ -29682,50 +30459,50 @@ var Ph = /* @__PURE__ */ fe({
 		G,
 		K,
 		q,
-		tb,
-		Wb,
-		Gb,
-		Kb,
-		qb
+		cx,
+		Zx,
+		Qx,
+		$x,
+		eS
 	],
 	isXML: !0,
-	serializer: cS
-}, MS = {
+	serializer: hC
+}, zC = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		204: { headersMapper: dv },
+		204: { headersMapper: vy },
 		default: {
 			bodyMapper: V,
-			headersMapper: fv
+			headersMapper: yy
 		}
 	},
-	requestBody: Jb,
+	requestBody: tS,
 	queryParameters: [
 		U,
-		Ky,
-		Ub
+		$b,
+		Xx
 	],
 	urlParameters: [H],
 	headerParameters: [
-		Zv,
-		$v,
+		ib,
+		ob,
 		W,
 		G,
 		q,
-		tb,
-		Wb,
-		Gb,
-		Kb,
-		qb,
-		Yb,
-		Xb
+		cx,
+		Zx,
+		Qx,
+		$x,
+		eS,
+		nS,
+		rS
 	],
 	isXML: !0,
 	contentType: "application/xml; charset=utf-8",
 	mediaType: "xml",
-	serializer: cS
-}, NS = class {
+	serializer: hC
+}, BC = class {
 	client;
 	constructor(e) {
 		this.client = e;
@@ -29735,20 +30512,20 @@ var Ph = /* @__PURE__ */ fe({
 			contentLength: e,
 			blobContentLength: t,
 			options: n
-		}, FS);
+		}, HC);
 	}
 	uploadPages(e, t, n) {
 		return this.client.sendOperationRequest({
 			contentLength: e,
 			body: t,
 			options: n
-		}, IS);
+		}, UC);
 	}
 	clearPages(e, t) {
 		return this.client.sendOperationRequest({
 			contentLength: e,
 			options: t
-		}, LS);
+		}, WC);
 	}
 	uploadPagesFromURL(e, t, n, r, i) {
 		return this.client.sendOperationRequest({
@@ -29757,40 +30534,40 @@ var Ph = /* @__PURE__ */ fe({
 			contentLength: n,
 			range: r,
 			options: i
-		}, RS);
+		}, GC);
 	}
 	getPageRanges(e) {
-		return this.client.sendOperationRequest({ options: e }, zS);
+		return this.client.sendOperationRequest({ options: e }, KC);
 	}
 	getPageRangesDiff(e) {
-		return this.client.sendOperationRequest({ options: e }, BS);
+		return this.client.sendOperationRequest({ options: e }, qC);
 	}
 	resize(e, t) {
 		return this.client.sendOperationRequest({
 			blobContentLength: e,
 			options: t
-		}, VS);
+		}, JC);
 	}
 	updateSequenceNumber(e, t) {
 		return this.client.sendOperationRequest({
 			sequenceNumberAction: e,
 			options: t
-		}, HS);
+		}, YC);
 	}
 	copyIncremental(e, t) {
 		return this.client.sendOperationRequest({
 			copySource: e,
 			options: t
-		}, US);
+		}, XC);
 	}
-}, PS = ou(Ph, !0), FS = {
+}, VC = Qu(Vg, !0), HC = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		201: { headersMapper: pv },
+		201: { headersMapper: by },
 		default: {
 			bodyMapper: V,
-			headersMapper: mv
+			headersMapper: xy
 		}
 	},
 	queryParameters: [U],
@@ -29799,239 +30576,269 @@ var Ph = /* @__PURE__ */ fe({
 		W,
 		G,
 		K,
-		py,
-		vy,
+		bb,
+		Tb,
 		q,
 		J,
 		Y,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb,
-		sb,
-		cb,
-		lb,
-		ub,
-		db,
-		fb,
-		mb,
-		hb,
-		vb,
-		bb,
-		Ob,
-		Ab,
-		Zb,
-		Qb,
-		$b
+		rx,
+		ix,
+		ax,
+		ox,
+		sx,
+		cx,
+		mx,
+		hx,
+		gx,
+		_x,
+		vx,
+		yx,
+		xx,
+		Sx,
+		Tx,
+		Dx,
+		Fx,
+		Lx,
+		iS,
+		aS,
+		oS
 	],
 	isXML: !0,
-	serializer: PS
-}, IS = {
+	serializer: VC
+}, UC = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		201: { headersMapper: hv },
+		201: { headersMapper: Sy },
 		default: {
 			bodyMapper: V,
-			headersMapper: gv
+			headersMapper: Cy
 		}
 	},
-	requestBody: tx,
-	queryParameters: [U, rx],
+	requestBody: cS,
+	queryParameters: [U, uS],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
-		py,
+		bb,
 		q,
 		J,
 		Y,
-		qy,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb,
-		vb,
-		Yb,
-		Xb,
 		ex,
-		nx,
+		rx,
 		ix,
 		ax,
 		ox,
-		sx
+		sx,
+		cx,
+		Tx,
+		nS,
+		rS,
+		sS,
+		lS,
+		dS,
+		fS,
+		pS,
+		mS
 	],
 	isXML: !0,
 	contentType: "application/xml; charset=utf-8",
 	mediaType: "binary",
-	serializer: PS
-}, LS = {
+	serializer: VC
+}, WC = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		201: { headersMapper: _v },
+		201: { headersMapper: wy },
 		default: {
 			bodyMapper: V,
-			headersMapper: vv
+			headersMapper: Ty
 		}
 	},
-	queryParameters: [U, rx],
+	queryParameters: [U, uS],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
 		K,
-		py,
+		bb,
 		q,
 		J,
 		Y,
-		qy,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb,
-		vb,
+		ex,
+		rx,
+		ix,
 		ax,
+		ox,
+		sx,
+		cx,
+		Tx,
+		fS,
+		pS,
+		mS,
+		hS
+	],
+	isXML: !0,
+	serializer: VC
+}, GC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		201: { headersMapper: Ey },
+		default: {
+			bodyMapper: V,
+			headersMapper: Dy
+		}
+	},
+	queryParameters: [U, uS],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		bb,
+		q,
+		J,
+		Y,
+		rx,
+		ix,
+		ax,
+		ox,
+		sx,
+		cx,
+		Tx,
+		kx,
+		Ax,
+		jx,
+		Mx,
+		zx,
+		Bx,
+		Hx,
+		dS,
+		fS,
+		pS,
+		mS,
+		gS,
+		_S,
+		vS,
+		yS
+	],
+	isXML: !0,
+	serializer: VC
+}, KC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "GET",
+	responses: {
+		200: {
+			bodyMapper: v_,
+			headersMapper: Oy
+		},
+		default: {
+			bodyMapper: V,
+			headersMapper: ky
+		}
+	},
+	queryParameters: [
+		U,
+		fb,
+		pb,
+		Qb,
+		bS
+	],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		q,
+		J,
+		Y,
+		ex,
 		ox,
 		sx,
 		cx
 	],
 	isXML: !0,
-	serializer: PS
-}, RS = {
+	serializer: VC
+}, qC = {
 	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
+	httpMethod: "GET",
 	responses: {
-		201: { headersMapper: yv },
+		200: {
+			bodyMapper: v_,
+			headersMapper: Ay
+		},
 		default: {
 			bodyMapper: V,
-			headersMapper: bv
+			headersMapper: jy
 		}
 	},
-	queryParameters: [U, rx],
+	queryParameters: [
+		U,
+		fb,
+		pb,
+		Qb,
+		bS,
+		xS
+	],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
 		K,
-		py,
 		q,
 		J,
 		Y,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb,
-		vb,
-		Sb,
-		Cb,
-		wb,
-		Tb,
-		Mb,
-		Nb,
-		Fb,
+		ex,
+		ox,
+		sx,
+		cx,
+		SS
+	],
+	isXML: !0,
+	serializer: VC
+}, JC = {
+	path: "/{containerName}/{blob}",
+	httpMethod: "PUT",
+	responses: {
+		200: { headersMapper: My },
+		default: {
+			bodyMapper: V,
+			headersMapper: Ny
+		}
+	},
+	queryParameters: [cb, U],
+	urlParameters: [H],
+	headerParameters: [
+		W,
+		G,
+		K,
+		q,
+		J,
+		Y,
+		rx,
 		ix,
 		ax,
 		ox,
 		sx,
-		lx,
-		ux,
-		dx,
-		fx
+		cx,
+		Tx,
+		aS
 	],
 	isXML: !0,
-	serializer: PS
-}, zS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "GET",
-	responses: {
-		200: {
-			bodyMapper: dg,
-			headersMapper: xv
-		},
-		default: {
-			bodyMapper: V,
-			headersMapper: Sv
-		}
-	},
-	queryParameters: [
-		U,
-		ay,
-		oy,
-		Gy,
-		px
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		q,
-		J,
-		Y,
-		qy,
-		$y,
-		eb,
-		tb
-	],
-	isXML: !0,
-	serializer: PS
-}, BS = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "GET",
-	responses: {
-		200: {
-			bodyMapper: dg,
-			headersMapper: Cv
-		},
-		default: {
-			bodyMapper: V,
-			headersMapper: wv
-		}
-	},
-	queryParameters: [
-		U,
-		ay,
-		oy,
-		Gy,
-		px,
-		mx
-	],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		q,
-		J,
-		Y,
-		qy,
-		$y,
-		eb,
-		tb,
-		hx
-	],
-	isXML: !0,
-	serializer: PS
-}, VS = {
+	serializer: VC
+}, YC = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		200: { headersMapper: Tv },
+		200: { headersMapper: Py },
 		default: {
 			bodyMapper: V,
-			headersMapper: Ev
+			headersMapper: Fy
 		}
 	},
-	queryParameters: [ty, U],
+	queryParameters: [cb, U],
 	urlParameters: [H],
 	headerParameters: [
 		W,
@@ -30040,55 +30847,25 @@ var Ph = /* @__PURE__ */ fe({
 		q,
 		J,
 		Y,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb,
-		vb,
-		Qb
+		ox,
+		sx,
+		cx,
+		oS,
+		CS
 	],
 	isXML: !0,
-	serializer: PS
-}, HS = {
+	serializer: VC
+}, XC = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		200: { headersMapper: Dv },
+		202: { headersMapper: Iy },
 		default: {
 			bodyMapper: V,
-			headersMapper: Ov
+			headersMapper: Ly
 		}
 	},
-	queryParameters: [ty, U],
-	urlParameters: [H],
-	headerParameters: [
-		W,
-		G,
-		K,
-		q,
-		J,
-		Y,
-		$y,
-		eb,
-		tb,
-		$b,
-		gx
-	],
-	isXML: !0,
-	serializer: PS
-}, US = {
-	path: "/{containerName}/{blob}",
-	httpMethod: "PUT",
-	responses: {
-		202: { headersMapper: kv },
-		default: {
-			bodyMapper: V,
-			headersMapper: Av
-		}
-	},
-	queryParameters: [U, _x],
+	queryParameters: [U, wS],
 	urlParameters: [H],
 	headerParameters: [
 		W,
@@ -30096,14 +30873,14 @@ var Ph = /* @__PURE__ */ fe({
 		K,
 		J,
 		Y,
-		$y,
-		eb,
-		tb,
-		Db
+		ox,
+		sx,
+		cx,
+		Px
 	],
 	isXML: !0,
-	serializer: PS
-}, WS = class {
+	serializer: VC
+}, ZC = class {
 	client;
 	constructor(e) {
 		this.client = e;
@@ -30112,33 +30889,33 @@ var Ph = /* @__PURE__ */ fe({
 		return this.client.sendOperationRequest({
 			contentLength: e,
 			options: t
-		}, KS);
+		}, $C);
 	}
 	appendBlock(e, t, n) {
 		return this.client.sendOperationRequest({
 			contentLength: e,
 			body: t,
 			options: n
-		}, qS);
+		}, ew);
 	}
 	appendBlockFromUrl(e, t, n) {
 		return this.client.sendOperationRequest({
 			sourceUrl: e,
 			contentLength: t,
 			options: n
-		}, JS);
+		}, tw);
 	}
 	seal(e) {
-		return this.client.sendOperationRequest({ options: e }, YS);
+		return this.client.sendOperationRequest({ options: e }, nw);
 	}
-}, GS = ou(Ph, !0), KS = {
+}, QC = Qu(Vg, !0), $C = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		201: { headersMapper: jv },
+		201: { headersMapper: Ry },
 		default: {
 			bodyMapper: V,
-			headersMapper: Mv
+			headersMapper: zy
 		}
 	},
 	queryParameters: [U],
@@ -30147,124 +30924,124 @@ var Ph = /* @__PURE__ */ fe({
 		W,
 		G,
 		K,
-		py,
-		vy,
+		bb,
+		Tb,
 		q,
 		J,
 		Y,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb,
-		sb,
-		cb,
-		lb,
-		ub,
-		db,
-		fb,
-		mb,
-		hb,
-		vb,
-		Ob,
-		Ab,
-		vx
+		rx,
+		ix,
+		ax,
+		ox,
+		sx,
+		cx,
+		mx,
+		hx,
+		gx,
+		_x,
+		vx,
+		yx,
+		xx,
+		Sx,
+		Tx,
+		Fx,
+		Lx,
+		TS
 	],
 	isXML: !0,
-	serializer: GS
-}, qS = {
+	serializer: QC
+}, ew = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		201: { headersMapper: Nv },
+		201: { headersMapper: By },
 		default: {
 			bodyMapper: V,
-			headersMapper: Pv
+			headersMapper: Vy
 		}
 	},
-	requestBody: tx,
-	queryParameters: [U, yx],
+	requestBody: cS,
+	queryParameters: [U, ES],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
-		py,
+		bb,
 		q,
 		J,
 		Y,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb,
-		vb,
-		Yb,
-		Xb,
-		ex,
-		nx,
-		bx,
-		xx
+		rx,
+		ix,
+		ax,
+		ox,
+		sx,
+		cx,
+		Tx,
+		nS,
+		rS,
+		sS,
+		lS,
+		DS,
+		OS
 	],
 	isXML: !0,
 	contentType: "application/xml; charset=utf-8",
 	mediaType: "binary",
-	serializer: GS
-}, JS = {
+	serializer: QC
+}, tw = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		201: { headersMapper: Fv },
+		201: { headersMapper: Hy },
 		default: {
 			bodyMapper: V,
-			headersMapper: Iv
+			headersMapper: Uy
 		}
 	},
-	queryParameters: [U, yx],
+	queryParameters: [U, ES],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
 		K,
-		py,
+		bb,
 		q,
 		J,
 		Y,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb,
-		vb,
-		Sb,
-		Cb,
-		wb,
-		Tb,
-		Mb,
-		Nb,
-		Fb,
-		Yb,
-		lx,
-		dx,
-		bx,
-		xx,
-		Sx
+		rx,
+		ix,
+		ax,
+		ox,
+		sx,
+		cx,
+		Tx,
+		kx,
+		Ax,
+		jx,
+		Mx,
+		zx,
+		Bx,
+		Hx,
+		nS,
+		gS,
+		vS,
+		DS,
+		OS,
+		kS
 	],
 	isXML: !0,
-	serializer: GS
-}, YS = {
+	serializer: QC
+}, nw = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		200: { headersMapper: Lv },
+		200: { headersMapper: Wy },
 		default: {
 			bodyMapper: V,
-			headersMapper: Rv
+			headersMapper: Gy
 		}
 	},
-	queryParameters: [U, Cx],
+	queryParameters: [U, AS],
 	urlParameters: [H],
 	headerParameters: [
 		W,
@@ -30273,13 +31050,13 @@ var Ph = /* @__PURE__ */ fe({
 		q,
 		J,
 		Y,
-		$y,
-		eb,
-		xx
+		ox,
+		sx,
+		OS
 	],
 	isXML: !0,
-	serializer: GS
-}, XS = class {
+	serializer: QC
+}, rw = class {
 	client;
 	constructor(e) {
 		this.client = e;
@@ -30289,14 +31066,14 @@ var Ph = /* @__PURE__ */ fe({
 			contentLength: e,
 			body: t,
 			options: n
-		}, QS);
+		}, aw);
 	}
 	putBlobFromUrl(e, t, n) {
 		return this.client.sendOperationRequest({
 			contentLength: e,
 			copySource: t,
 			options: n
-		}, $S);
+		}, ow);
 	}
 	stageBlock(e, t, n, r) {
 		return this.client.sendOperationRequest({
@@ -30304,7 +31081,7 @@ var Ph = /* @__PURE__ */ fe({
 			contentLength: t,
 			body: n,
 			options: r
-		}, eC);
+		}, sw);
 	}
 	stageBlockFromURL(e, t, n, r) {
 		return this.client.sendOperationRequest({
@@ -30312,77 +31089,77 @@ var Ph = /* @__PURE__ */ fe({
 			contentLength: t,
 			sourceUrl: n,
 			options: r
-		}, tC);
+		}, cw);
 	}
 	commitBlockList(e, t) {
 		return this.client.sendOperationRequest({
 			blocks: e,
 			options: t
-		}, nC);
+		}, lw);
 	}
 	getBlockList(e, t) {
 		return this.client.sendOperationRequest({
 			listType: e,
 			options: t
-		}, rC);
+		}, uw);
 	}
-}, ZS = ou(Ph, !0), QS = {
+}, iw = Qu(Vg, !0), aw = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		201: { headersMapper: zv },
+		201: { headersMapper: Ky },
 		default: {
 			bodyMapper: V,
-			headersMapper: Bv
+			headersMapper: qy
 		}
 	},
-	requestBody: tx,
+	requestBody: cS,
 	queryParameters: [U],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
-		py,
-		vy,
+		bb,
+		Tb,
 		q,
 		J,
 		Y,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb,
-		sb,
-		cb,
-		lb,
-		ub,
-		db,
-		fb,
-		mb,
-		hb,
-		vb,
-		bb,
-		Ob,
-		Ab,
-		Yb,
-		Xb,
-		ex,
-		nx,
-		wx
+		rx,
+		ix,
+		ax,
+		ox,
+		sx,
+		cx,
+		mx,
+		hx,
+		gx,
+		_x,
+		vx,
+		yx,
+		xx,
+		Sx,
+		Tx,
+		Dx,
+		Fx,
+		Lx,
+		nS,
+		rS,
+		sS,
+		lS,
+		jS
 	],
 	isXML: !0,
 	contentType: "application/xml; charset=utf-8",
 	mediaType: "binary",
-	serializer: ZS
-}, $S = {
+	serializer: iw
+}, ow = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		201: { headersMapper: Vv },
+		201: { headersMapper: Jy },
 		default: {
 			bodyMapper: V,
-			headersMapper: Hv
+			headersMapper: Yy
 		}
 	},
 	queryParameters: [U],
@@ -30391,181 +31168,181 @@ var Ph = /* @__PURE__ */ fe({
 		W,
 		G,
 		K,
-		py,
-		vy,
+		bb,
+		Tb,
 		q,
 		J,
 		Y,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb,
-		sb,
-		cb,
-		lb,
-		ub,
-		db,
-		fb,
-		vb,
-		bb,
-		Sb,
-		Cb,
-		wb,
-		Tb,
-		Eb,
-		Db,
-		Ob,
-		Mb,
-		Nb,
-		Pb,
-		Fb,
-		Yb,
-		wx,
-		Tx
+		rx,
+		ix,
+		ax,
+		ox,
+		sx,
+		cx,
+		mx,
+		hx,
+		gx,
+		_x,
+		vx,
+		yx,
+		Tx,
+		Dx,
+		kx,
+		Ax,
+		jx,
+		Mx,
+		Nx,
+		Px,
+		Fx,
+		zx,
+		Bx,
+		Vx,
+		Hx,
+		nS,
+		jS,
+		MS
 	],
 	isXML: !0,
-	serializer: ZS
-}, eC = {
+	serializer: iw
+}, sw = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		201: { headersMapper: Uv },
+		201: { headersMapper: Xy },
 		default: {
 			bodyMapper: V,
-			headersMapper: Wv
+			headersMapper: Zy
 		}
 	},
-	requestBody: tx,
+	requestBody: cS,
 	queryParameters: [
 		U,
-		Ex,
-		Dx
+		NS,
+		PS
 	],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
-		py,
+		bb,
 		q,
-		Xy,
-		Zy,
-		Qy,
-		vb,
-		Yb,
-		Xb,
-		ex,
-		nx
+		rx,
+		ix,
+		ax,
+		Tx,
+		nS,
+		rS,
+		sS,
+		lS
 	],
 	isXML: !0,
 	contentType: "application/xml; charset=utf-8",
 	mediaType: "binary",
-	serializer: ZS
-}, tC = {
+	serializer: iw
+}, cw = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		201: { headersMapper: Gv },
+		201: { headersMapper: Qy },
 		default: {
 			bodyMapper: V,
-			headersMapper: Kv
+			headersMapper: $y
 		}
 	},
 	queryParameters: [
 		U,
-		Ex,
-		Dx
+		NS,
+		PS
 	],
 	urlParameters: [H],
 	headerParameters: [
 		W,
 		G,
 		K,
-		py,
+		bb,
 		q,
-		Xy,
-		Zy,
-		Qy,
-		vb,
-		Sb,
-		Cb,
-		wb,
-		Tb,
-		Mb,
-		Nb,
-		Fb,
-		lx,
-		dx,
-		Sx
+		rx,
+		ix,
+		ax,
+		Tx,
+		kx,
+		Ax,
+		jx,
+		Mx,
+		zx,
+		Bx,
+		Hx,
+		gS,
+		vS,
+		kS
 	],
 	isXML: !0,
-	serializer: ZS
-}, nC = {
+	serializer: iw
+}, lw = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "PUT",
 	responses: {
-		201: { headersMapper: qv },
+		201: { headersMapper: eb },
 		default: {
 			bodyMapper: V,
-			headersMapper: Jv
+			headersMapper: tb
 		}
 	},
-	requestBody: Ox,
-	queryParameters: [U, kx],
+	requestBody: FS,
+	queryParameters: [U, IS],
 	urlParameters: [H],
 	headerParameters: [
-		Zv,
-		$v,
+		ib,
+		ob,
 		W,
 		G,
-		vy,
+		Tb,
 		q,
 		J,
 		Y,
-		Xy,
-		Zy,
-		Qy,
-		$y,
-		eb,
-		tb,
-		sb,
-		cb,
-		lb,
-		ub,
-		db,
-		fb,
-		mb,
-		hb,
-		vb,
-		bb,
-		Ob,
-		Ab,
-		Yb,
-		Xb
+		rx,
+		ix,
+		ax,
+		ox,
+		sx,
+		cx,
+		mx,
+		hx,
+		gx,
+		_x,
+		vx,
+		yx,
+		xx,
+		Sx,
+		Tx,
+		Dx,
+		Fx,
+		Lx,
+		nS,
+		rS
 	],
 	isXML: !0,
 	contentType: "application/xml; charset=utf-8",
 	mediaType: "xml",
-	serializer: ZS
-}, rC = {
+	serializer: iw
+}, uw = {
 	path: "/{containerName}/{blob}",
 	httpMethod: "GET",
 	responses: {
 		200: {
-			bodyMapper: lg,
-			headersMapper: Yv
+			bodyMapper: g_,
+			headersMapper: nb
 		},
 		default: {
 			bodyMapper: V,
-			headersMapper: Xv
+			headersMapper: rb
 		}
 	},
 	queryParameters: [
 		U,
-		Gy,
-		kx,
-		Ax
+		Qb,
+		IS,
+		LS
 	],
 	urlParameters: [H],
 	headerParameters: [
@@ -30573,11 +31350,11 @@ var Ph = /* @__PURE__ */ fe({
 		G,
 		K,
 		q,
-		tb
+		cx
 	],
 	isXML: !0,
-	serializer: ZS
-}, iC = class extends Rd {
+	serializer: iw
+}, dw = class extends jf {
 	url;
 	version;
 	constructor(e, t) {
@@ -30589,7 +31366,7 @@ var Ph = /* @__PURE__ */ fe({
 			userAgentOptions: { userAgentPrefix: i },
 			endpoint: t.endpoint ?? t.baseUri ?? "{url}"
 		};
-		super(a), this.url = e, this.version = t.version || "2026-02-06", this.service = new jx(this), this.container = new Vx(this), this.blob = new sS(this), this.pageBlob = new NS(this), this.appendBlob = new WS(this), this.blockBlob = new XS(this);
+		super(a), this.url = e, this.version = t.version || "2026-02-06", this.service = new RS(this), this.container = new JS(this), this.blob = new mC(this), this.pageBlob = new BC(this), this.appendBlob = new ZC(this), this.blockBlob = new rw(this);
 	}
 	service;
 	container;
@@ -30597,17 +31374,17 @@ var Ph = /* @__PURE__ */ fe({
 	pageBlob;
 	appendBlob;
 	blockBlob;
-}, aC = class extends iC {
+}, fw = class extends dw {
 	async sendOperationRequest(e, t) {
 		let n = { ...t };
 		return (n.path === "/{containerName}" || n.path === "/{containerName}/{blob}") && (n.path = ""), super.sendOperationRequest(e, n);
 	}
 };
-function oC(e) {
+function pw(e) {
 	let t = new URL(e), n = t.pathname;
-	return n ||= "/", n = uC(n), t.pathname = n, t.toString();
+	return n ||= "/", n = _w(n), t.pathname = n, t.toString();
 }
-function sC(e) {
+function mw(e) {
 	let t = "";
 	if (e.search("DevelopmentStorageProxyUri=") !== -1) {
 		let n = e.split(";");
@@ -30615,22 +31392,22 @@ function sC(e) {
 	}
 	return t;
 }
-function cC(e, t) {
+function hw(e, t) {
 	let n = e.split(";");
 	for (let e of n) if (e.trim().startsWith(t)) return e.trim().match(t + "=(.*)")[1];
 	return "";
 }
-function lC(e) {
+function gw(e) {
 	let t = "";
-	e.startsWith("UseDevelopmentStorage=true") && (t = sC(e), e = gh);
-	let n = cC(e, "BlobEndpoint");
+	e.startsWith("UseDevelopmentStorage=true") && (t = mw(e), e = Cg);
+	let n = hw(e, "BlobEndpoint");
 	if (n = n.endsWith("/") ? n.slice(0, -1) : n, e.search("DefaultEndpointsProtocol=") !== -1 && e.search("AccountKey=") !== -1) {
 		let r = "", i = "", a = Buffer.from("accountKey", "base64"), o = "";
-		if (i = cC(e, "AccountName"), a = Buffer.from(cC(e, "AccountKey"), "base64"), !n) {
-			r = cC(e, "DefaultEndpointsProtocol");
+		if (i = hw(e, "AccountName"), a = Buffer.from(hw(e, "AccountKey"), "base64"), !n) {
+			r = hw(e, "DefaultEndpointsProtocol");
 			let t = r.toLowerCase();
 			if (t !== "https" && t !== "http") throw Error("Invalid DefaultEndpointsProtocol in the provided Connection String. Expecting 'https' or 'http'");
-			if (o = cC(e, "EndpointSuffix"), !o) throw Error("Invalid EndpointSuffix in the provided Connection String");
+			if (o = hw(e, "EndpointSuffix"), !o) throw Error("Invalid EndpointSuffix in the provided Connection String");
 			n = `${r}://${i}.blob.${o}`;
 		}
 		if (!i) throw Error("Invalid AccountName in the provided Connection String");
@@ -30643,8 +31420,8 @@ function lC(e) {
 			proxyUri: t
 		};
 	} else {
-		let t = cC(e, "SharedAccessSignature"), r = cC(e, "AccountName");
-		if (r ||= xC(n), !n) throw Error("Invalid BlobEndpoint in the provided SAS Connection String");
+		let t = hw(e, "SharedAccessSignature"), r = hw(e, "AccountName");
+		if (r ||= Ow(n), !n) throw Error("Invalid BlobEndpoint in the provided SAS Connection String");
 		if (!t) throw Error("Invalid SharedAccessSignature in the provided SAS Connection String");
 		return t.startsWith("?") && (t = t.substring(1)), {
 			kind: "SASConnString",
@@ -30654,14 +31431,14 @@ function lC(e) {
 		};
 	}
 }
-function uC(e) {
+function _w(e) {
 	return encodeURIComponent(e).replace(/%2F/g, "/").replace(/'/g, "%27").replace(/\+/g, "%20").replace(/%25/g, "%");
 }
-function dC(e, t) {
+function vw(e, t) {
 	let n = new URL(e), r = n.pathname;
 	return r = r ? r.endsWith("/") ? `${r}${t}` : `${r}/${t}` : t, n.pathname = r, n.toString();
 }
-function fC(e, t, n) {
+function yw(e, t, n) {
 	let r = new URL(e), i = encodeURIComponent(t), a = n ? encodeURIComponent(n) : void 0, o = r.search === "" ? "?" : r.search, s = [];
 	for (let e of o.slice(1).split("&")) if (e) {
 		let [t] = e.split("=", 2);
@@ -30669,10 +31446,10 @@ function fC(e, t, n) {
 	}
 	return a && s.push(`${i}=${a}`), r.search = s.length ? `?${s.join("&")}` : "", r.toString();
 }
-function pC(e, t) {
+function bw(e, t) {
 	return new URL(e).searchParams.get(t) ?? void 0;
 }
-function mC(e) {
+function xw(e) {
 	try {
 		let t = new URL(e);
 		return t.protocol.endsWith(":") ? t.protocol.slice(0, -1) : t.protocol;
@@ -30680,39 +31457,39 @@ function mC(e) {
 		return;
 	}
 }
-function hC(e, t) {
+function Sw(e, t) {
 	let n = new URL(e), r = n.search;
 	return r ? r += "&" + t : r = t, n.search = r, n.toString();
 }
-function gC(e, t = !0) {
+function Cw(e, t = !0) {
 	let n = e.toISOString();
 	return t ? n.substring(0, n.length - 1) + "0000Z" : n.substring(0, n.length - 5) + "Z";
 }
-function _C(e) {
-	return Xc ? Buffer.from(e).toString("base64") : btoa(e);
+function ww(e) {
+	return Hl ? Buffer.from(e).toString("base64") : btoa(e);
 }
-function vC(e, t) {
-	return e.length > 42 && (e = e.slice(0, 42)), _C(e + yC(t.toString(), 48 - e.length, "0"));
+function Tw(e, t) {
+	return e.length > 42 && (e = e.slice(0, 42)), ww(e + Ew(t.toString(), 48 - e.length, "0"));
 }
-function yC(e, t, n = " ") {
+function Ew(e, t, n = " ") {
 	return String.prototype.padStart ? e.padStart(t, n) : (n ||= " ", e.length > t ? e : (t -= e.length, t > n.length && (n += n.repeat(t / n.length)), n.slice(0, t) + e));
 }
-function bC(e, t) {
+function Dw(e, t) {
 	return e.toLocaleLowerCase() === t.toLocaleLowerCase();
 }
-function xC(e) {
+function Ow(e) {
 	let t = new URL(e), n;
 	try {
-		return n = t.hostname.split(".")[1] === "blob" ? t.hostname.split(".")[0] : SC(t) ? t.pathname.split("/")[1] : "", n;
+		return n = t.hostname.split(".")[1] === "blob" ? t.hostname.split(".")[0] : kw(t) ? t.pathname.split("/")[1] : "", n;
 	} catch {
 		throw Error("Unable to extract accountName with provided information.");
 	}
 }
-function SC(e) {
+function kw(e) {
 	let t = e.host;
-	return /^.*:.*:.*$|^(localhost|host.docker.internal)(:[0-9]+)?$|^(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])){3}(:[0-9]+)?$/.test(t) || !!e.port && yh.includes(e.port);
+	return /^.*:.*:.*$|^(localhost|host.docker.internal)(:[0-9]+)?$|^(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])){3}(:[0-9]+)?$/.test(t) || !!e.port && Eg.includes(e.port);
 }
-function CC(e) {
+function Aw(e) {
 	if (e === void 0) return;
 	let t = [];
 	for (let n in e) if (Object.prototype.hasOwnProperty.call(e, n)) {
@@ -30721,7 +31498,7 @@ function CC(e) {
 	}
 	return t.join("&");
 }
-function wC(e) {
+function jw(e) {
 	if (e === void 0) return;
 	let t = { blobTagSet: [] };
 	for (let n in e) if (Object.prototype.hasOwnProperty.call(e, n)) {
@@ -30733,13 +31510,13 @@ function wC(e) {
 	}
 	return t;
 }
-function TC(e) {
+function Mw(e) {
 	if (e === void 0) return;
 	let t = {};
 	for (let n of e.blobTagSet) t[n.key] = n.value;
 	return t;
 }
-function EC(e) {
+function Nw(e) {
 	if (e !== void 0) switch (e.kind) {
 		case "csv": return { format: {
 			type: "delimited",
@@ -30763,7 +31540,7 @@ function EC(e) {
 		default: throw Error("Invalid BlobQueryTextConfiguration.");
 	}
 }
-function DC(e) {
+function Pw(e) {
 	if (!e || "policy-id" in e) return;
 	let t = [];
 	for (let n in e) {
@@ -30780,10 +31557,10 @@ function DC(e) {
 	}
 	return t;
 }
-function OC(e) {
+function Fw(e) {
 	return e ? e.scheme + " " + e.value : void 0;
 }
-function* kC(e) {
+function* Iw(e) {
 	let t = [], n = [];
 	e.pageRange && (t = e.pageRange), e.clearRange && (n = e.clearRange);
 	let r = 0, i = 0;
@@ -30811,7 +31588,7 @@ function X(e) {
 	if ("_response" in e) return e;
 	throw TypeError(`Unexpected response object ${e}`);
 }
-var AC = class {
+var Lw = class {
 	url;
 	accountName;
 	pipeline;
@@ -30819,15 +31596,15 @@ var AC = class {
 	storageClientContext;
 	isHttps;
 	constructor(e, t) {
-		this.url = oC(e), this.accountName = xC(e), this.pipeline = t, this.storageClientContext = new aC(this.url, wh(t)), this.isHttps = bC(mC(this.url) || "", "https"), this.credential = Th(t);
+		this.url = pw(e), this.accountName = Ow(e), this.pipeline = t, this.storageClientContext = new fw(this.url, jg(t)), this.isHttps = Dw(xw(this.url) || "", "https"), this.credential = Mg(t);
 		let n = this.storageClientContext;
 		n.requestContentType = void 0;
 	}
-}, Z = yl({
+}, Z = du({
 	packageName: "@azure/storage-blob",
-	packageVersion: oh,
+	packageVersion: pg,
 	namespace: "Microsoft.Storage"
-}), jC = class e {
+}), Rw = class e {
 	static parse(t) {
 		let n = new e();
 		for (let e of t) switch (e) {
@@ -30887,7 +31664,7 @@ var AC = class {
 		let e = [];
 		return this.read && e.push("r"), this.add && e.push("a"), this.create && e.push("c"), this.write && e.push("w"), this.delete && e.push("d"), this.deleteVersion && e.push("x"), this.tag && e.push("t"), this.move && e.push("m"), this.execute && e.push("e"), this.setImmutabilityPolicy && e.push("i"), this.permanentDelete && e.push("y"), e.join("");
 	}
-}, MC = class e {
+}, zw = class e {
 	static parse(t) {
 		let n = new e();
 		for (let e of t) switch (e) {
@@ -30956,14 +31733,14 @@ var AC = class {
 		return this.read && e.push("r"), this.add && e.push("a"), this.create && e.push("c"), this.write && e.push("w"), this.delete && e.push("d"), this.deleteVersion && e.push("x"), this.list && e.push("l"), this.tag && e.push("t"), this.move && e.push("m"), this.execute && e.push("e"), this.setImmutabilityPolicy && e.push("i"), this.permanentDelete && e.push("y"), this.filterByTags && e.push("f"), e.join("");
 	}
 };
-function NC(e) {
+function Bw(e) {
 	return e.end ? `${e.start}-${e.end}` : e.start;
 }
-var PC;
+var Vw;
 (function(e) {
 	e.Https = "https", e.HttpsAndHttp = "https,http";
-})(PC ||= {});
-var FC = class {
+})(Vw ||= {});
+var Hw = class {
 	version;
 	protocol;
 	startsOn;
@@ -31015,13 +31792,13 @@ var FC = class {
 				this.tryAppendQueryParameter(t, n, this.protocol);
 				break;
 			case "st":
-				this.tryAppendQueryParameter(t, n, this.startsOn ? gC(this.startsOn, !1) : void 0);
+				this.tryAppendQueryParameter(t, n, this.startsOn ? Cw(this.startsOn, !1) : void 0);
 				break;
 			case "se":
-				this.tryAppendQueryParameter(t, n, this.expiresOn ? gC(this.expiresOn, !1) : void 0);
+				this.tryAppendQueryParameter(t, n, this.expiresOn ? Cw(this.expiresOn, !1) : void 0);
 				break;
 			case "sip":
-				this.tryAppendQueryParameter(t, n, this.ipRange ? NC(this.ipRange) : void 0);
+				this.tryAppendQueryParameter(t, n, this.ipRange ? Bw(this.ipRange) : void 0);
 				break;
 			case "si":
 				this.tryAppendQueryParameter(t, n, this.identifier);
@@ -31036,10 +31813,10 @@ var FC = class {
 				this.tryAppendQueryParameter(t, n, this.signedTenantId);
 				break;
 			case "skt":
-				this.tryAppendQueryParameter(t, n, this.signedStartsOn ? gC(this.signedStartsOn, !1) : void 0);
+				this.tryAppendQueryParameter(t, n, this.signedStartsOn ? Cw(this.signedStartsOn, !1) : void 0);
 				break;
 			case "ske":
-				this.tryAppendQueryParameter(t, n, this.signedExpiresOn ? gC(this.signedExpiresOn, !1) : void 0);
+				this.tryAppendQueryParameter(t, n, this.signedExpiresOn ? Cw(this.signedExpiresOn, !1) : void 0);
 				break;
 			case "sks":
 				this.tryAppendQueryParameter(t, n, this.signedService);
@@ -31087,33 +31864,33 @@ var FC = class {
 		n && (t = encodeURIComponent(t), n = encodeURIComponent(n), t.length > 0 && n.length > 0 && e.push(`${t}=${n}`));
 	}
 };
-function IC(e, t, n) {
-	return LC(e, t, n).sasQueryParameters;
+function Uw(e, t, n) {
+	return Ww(e, t, n).sasQueryParameters;
 }
-function LC(e, t, n) {
-	let r = e.version ? e.version : sh, i = t instanceof zm ? t : void 0, a;
-	if (i === void 0 && n !== void 0 && (a = new ah(n, t)), i === void 0 && a === void 0) throw TypeError("Invalid sharedKeyCredential, userDelegationKey or accountName.");
-	if (r >= "2020-12-06") return i === void 0 ? r >= "2025-07-05" ? WC(e, a) : UC(e, a) : BC(e, i);
-	if (r >= "2018-11-09") return i === void 0 ? r >= "2020-02-10" ? HC(e, a) : VC(e, a) : zC(e, i);
+function Ww(e, t, n) {
+	let r = e.version ? e.version : mg, i = t instanceof Kh ? t : void 0, a;
+	if (i === void 0 && n !== void 0 && (a = new fg(n, t)), i === void 0 && a === void 0) throw TypeError("Invalid sharedKeyCredential, userDelegationKey or accountName.");
+	if (r >= "2020-12-06") return i === void 0 ? r >= "2025-07-05" ? Zw(e, a) : Xw(e, a) : qw(e, i);
+	if (r >= "2018-11-09") return i === void 0 ? r >= "2020-02-10" ? Yw(e, a) : Jw(e, a) : Kw(e, i);
 	if (r >= "2015-04-05") {
-		if (i !== void 0) return RC(e, i);
+		if (i !== void 0) return Gw(e, i);
 		throw RangeError("'version' must be >= '2018-11-09' when generating user delegation SAS using user delegation key.");
 	}
 	throw RangeError("'version' must be >= '2015-04-05'.");
 }
-function RC(e, t) {
-	if (e = KC(e), !e.identifier && !(e.permissions && e.expiresOn)) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when 'identifier' is not provided.");
+function Gw(e, t) {
+	if (e = $w(e), !e.identifier && !(e.permissions && e.expiresOn)) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when 'identifier' is not provided.");
 	let n = "c";
 	e.blobName && (n = "b");
 	let r;
-	e.permissions && (r = e.blobName ? jC.parse(e.permissions.toString()).toString() : MC.parse(e.permissions.toString()).toString());
+	e.permissions && (r = e.blobName ? Rw.parse(e.permissions.toString()).toString() : zw.parse(e.permissions.toString()).toString());
 	let i = [
 		r || "",
-		e.startsOn ? gC(e.startsOn, !1) : "",
-		e.expiresOn ? gC(e.expiresOn, !1) : "",
-		GC(t.accountName, e.containerName, e.blobName),
+		e.startsOn ? Cw(e.startsOn, !1) : "",
+		e.expiresOn ? Cw(e.expiresOn, !1) : "",
+		Qw(t.accountName, e.containerName, e.blobName),
 		e.identifier,
-		e.ipRange ? NC(e.ipRange) : "",
+		e.ipRange ? Bw(e.ipRange) : "",
 		e.protocol ? e.protocol : "",
 		e.version,
 		e.cacheControl ? e.cacheControl : "",
@@ -31123,23 +31900,23 @@ function RC(e, t) {
 		e.contentType ? e.contentType : ""
 	].join("\n"), a = t.computeHMACSHA256(i);
 	return {
-		sasQueryParameters: new FC(e.version, a, r, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType),
+		sasQueryParameters: new Hw(e.version, a, r, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType),
 		stringToSign: i
 	};
 }
-function zC(e, t) {
-	if (e = KC(e), !e.identifier && !(e.permissions && e.expiresOn)) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when 'identifier' is not provided.");
+function Kw(e, t) {
+	if (e = $w(e), !e.identifier && !(e.permissions && e.expiresOn)) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when 'identifier' is not provided.");
 	let n = "c", r = e.snapshotTime;
 	e.blobName && (n = "b", e.snapshotTime ? n = "bs" : e.versionId && (n = "bv", r = e.versionId));
 	let i;
-	e.permissions && (i = e.blobName ? jC.parse(e.permissions.toString()).toString() : MC.parse(e.permissions.toString()).toString());
+	e.permissions && (i = e.blobName ? Rw.parse(e.permissions.toString()).toString() : zw.parse(e.permissions.toString()).toString());
 	let a = [
 		i || "",
-		e.startsOn ? gC(e.startsOn, !1) : "",
-		e.expiresOn ? gC(e.expiresOn, !1) : "",
-		GC(t.accountName, e.containerName, e.blobName),
+		e.startsOn ? Cw(e.startsOn, !1) : "",
+		e.expiresOn ? Cw(e.expiresOn, !1) : "",
+		Qw(t.accountName, e.containerName, e.blobName),
 		e.identifier,
-		e.ipRange ? NC(e.ipRange) : "",
+		e.ipRange ? Bw(e.ipRange) : "",
 		e.protocol ? e.protocol : "",
 		e.version,
 		n,
@@ -31151,23 +31928,23 @@ function zC(e, t) {
 		e.contentType ? e.contentType : ""
 	].join("\n"), o = t.computeHMACSHA256(a);
 	return {
-		sasQueryParameters: new FC(e.version, o, i, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType),
+		sasQueryParameters: new Hw(e.version, o, i, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType),
 		stringToSign: a
 	};
 }
-function BC(e, t) {
-	if (e = KC(e), !e.identifier && !(e.permissions && e.expiresOn)) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when 'identifier' is not provided.");
+function qw(e, t) {
+	if (e = $w(e), !e.identifier && !(e.permissions && e.expiresOn)) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when 'identifier' is not provided.");
 	let n = "c", r = e.snapshotTime;
 	e.blobName && (n = "b", e.snapshotTime ? n = "bs" : e.versionId && (n = "bv", r = e.versionId));
 	let i;
-	e.permissions && (i = e.blobName ? jC.parse(e.permissions.toString()).toString() : MC.parse(e.permissions.toString()).toString());
+	e.permissions && (i = e.blobName ? Rw.parse(e.permissions.toString()).toString() : zw.parse(e.permissions.toString()).toString());
 	let a = [
 		i || "",
-		e.startsOn ? gC(e.startsOn, !1) : "",
-		e.expiresOn ? gC(e.expiresOn, !1) : "",
-		GC(t.accountName, e.containerName, e.blobName),
+		e.startsOn ? Cw(e.startsOn, !1) : "",
+		e.expiresOn ? Cw(e.expiresOn, !1) : "",
+		Qw(t.accountName, e.containerName, e.blobName),
 		e.identifier,
-		e.ipRange ? NC(e.ipRange) : "",
+		e.ipRange ? Bw(e.ipRange) : "",
 		e.protocol ? e.protocol : "",
 		e.version,
 		n,
@@ -31180,28 +31957,28 @@ function BC(e, t) {
 		e.contentType ? e.contentType : ""
 	].join("\n"), o = t.computeHMACSHA256(a);
 	return {
-		sasQueryParameters: new FC(e.version, o, i, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType, void 0, void 0, void 0, e.encryptionScope),
+		sasQueryParameters: new Hw(e.version, o, i, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType, void 0, void 0, void 0, e.encryptionScope),
 		stringToSign: a
 	};
 }
-function VC(e, t) {
-	if (e = KC(e), !e.permissions || !e.expiresOn) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
+function Jw(e, t) {
+	if (e = $w(e), !e.permissions || !e.expiresOn) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
 	let n = "c", r = e.snapshotTime;
 	e.blobName && (n = "b", e.snapshotTime ? n = "bs" : e.versionId && (n = "bv", r = e.versionId));
 	let i;
-	e.permissions && (i = e.blobName ? jC.parse(e.permissions.toString()).toString() : MC.parse(e.permissions.toString()).toString());
+	e.permissions && (i = e.blobName ? Rw.parse(e.permissions.toString()).toString() : zw.parse(e.permissions.toString()).toString());
 	let a = [
 		i || "",
-		e.startsOn ? gC(e.startsOn, !1) : "",
-		e.expiresOn ? gC(e.expiresOn, !1) : "",
-		GC(t.accountName, e.containerName, e.blobName),
+		e.startsOn ? Cw(e.startsOn, !1) : "",
+		e.expiresOn ? Cw(e.expiresOn, !1) : "",
+		Qw(t.accountName, e.containerName, e.blobName),
 		t.userDelegationKey.signedObjectId,
 		t.userDelegationKey.signedTenantId,
-		t.userDelegationKey.signedStartsOn ? gC(t.userDelegationKey.signedStartsOn, !1) : "",
-		t.userDelegationKey.signedExpiresOn ? gC(t.userDelegationKey.signedExpiresOn, !1) : "",
+		t.userDelegationKey.signedStartsOn ? Cw(t.userDelegationKey.signedStartsOn, !1) : "",
+		t.userDelegationKey.signedExpiresOn ? Cw(t.userDelegationKey.signedExpiresOn, !1) : "",
 		t.userDelegationKey.signedService,
 		t.userDelegationKey.signedVersion,
-		e.ipRange ? NC(e.ipRange) : "",
+		e.ipRange ? Bw(e.ipRange) : "",
 		e.protocol ? e.protocol : "",
 		e.version,
 		n,
@@ -31213,31 +31990,31 @@ function VC(e, t) {
 		e.contentType
 	].join("\n"), o = t.computeHMACSHA256(a);
 	return {
-		sasQueryParameters: new FC(e.version, o, i, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType, t.userDelegationKey),
+		sasQueryParameters: new Hw(e.version, o, i, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType, t.userDelegationKey),
 		stringToSign: a
 	};
 }
-function HC(e, t) {
-	if (e = KC(e), !e.permissions || !e.expiresOn) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
+function Yw(e, t) {
+	if (e = $w(e), !e.permissions || !e.expiresOn) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
 	let n = "c", r = e.snapshotTime;
 	e.blobName && (n = "b", e.snapshotTime ? n = "bs" : e.versionId && (n = "bv", r = e.versionId));
 	let i;
-	e.permissions && (i = e.blobName ? jC.parse(e.permissions.toString()).toString() : MC.parse(e.permissions.toString()).toString());
+	e.permissions && (i = e.blobName ? Rw.parse(e.permissions.toString()).toString() : zw.parse(e.permissions.toString()).toString());
 	let a = [
 		i || "",
-		e.startsOn ? gC(e.startsOn, !1) : "",
-		e.expiresOn ? gC(e.expiresOn, !1) : "",
-		GC(t.accountName, e.containerName, e.blobName),
+		e.startsOn ? Cw(e.startsOn, !1) : "",
+		e.expiresOn ? Cw(e.expiresOn, !1) : "",
+		Qw(t.accountName, e.containerName, e.blobName),
 		t.userDelegationKey.signedObjectId,
 		t.userDelegationKey.signedTenantId,
-		t.userDelegationKey.signedStartsOn ? gC(t.userDelegationKey.signedStartsOn, !1) : "",
-		t.userDelegationKey.signedExpiresOn ? gC(t.userDelegationKey.signedExpiresOn, !1) : "",
+		t.userDelegationKey.signedStartsOn ? Cw(t.userDelegationKey.signedStartsOn, !1) : "",
+		t.userDelegationKey.signedExpiresOn ? Cw(t.userDelegationKey.signedExpiresOn, !1) : "",
 		t.userDelegationKey.signedService,
 		t.userDelegationKey.signedVersion,
 		e.preauthorizedAgentObjectId,
 		void 0,
 		e.correlationId,
-		e.ipRange ? NC(e.ipRange) : "",
+		e.ipRange ? Bw(e.ipRange) : "",
 		e.protocol ? e.protocol : "",
 		e.version,
 		n,
@@ -31249,31 +32026,31 @@ function HC(e, t) {
 		e.contentType
 	].join("\n"), o = t.computeHMACSHA256(a);
 	return {
-		sasQueryParameters: new FC(e.version, o, i, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType, t.userDelegationKey, e.preauthorizedAgentObjectId, e.correlationId),
+		sasQueryParameters: new Hw(e.version, o, i, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType, t.userDelegationKey, e.preauthorizedAgentObjectId, e.correlationId),
 		stringToSign: a
 	};
 }
-function UC(e, t) {
-	if (e = KC(e), !e.permissions || !e.expiresOn) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
+function Xw(e, t) {
+	if (e = $w(e), !e.permissions || !e.expiresOn) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
 	let n = "c", r = e.snapshotTime;
 	e.blobName && (n = "b", e.snapshotTime ? n = "bs" : e.versionId && (n = "bv", r = e.versionId));
 	let i;
-	e.permissions && (i = e.blobName ? jC.parse(e.permissions.toString()).toString() : MC.parse(e.permissions.toString()).toString());
+	e.permissions && (i = e.blobName ? Rw.parse(e.permissions.toString()).toString() : zw.parse(e.permissions.toString()).toString());
 	let a = [
 		i || "",
-		e.startsOn ? gC(e.startsOn, !1) : "",
-		e.expiresOn ? gC(e.expiresOn, !1) : "",
-		GC(t.accountName, e.containerName, e.blobName),
+		e.startsOn ? Cw(e.startsOn, !1) : "",
+		e.expiresOn ? Cw(e.expiresOn, !1) : "",
+		Qw(t.accountName, e.containerName, e.blobName),
 		t.userDelegationKey.signedObjectId,
 		t.userDelegationKey.signedTenantId,
-		t.userDelegationKey.signedStartsOn ? gC(t.userDelegationKey.signedStartsOn, !1) : "",
-		t.userDelegationKey.signedExpiresOn ? gC(t.userDelegationKey.signedExpiresOn, !1) : "",
+		t.userDelegationKey.signedStartsOn ? Cw(t.userDelegationKey.signedStartsOn, !1) : "",
+		t.userDelegationKey.signedExpiresOn ? Cw(t.userDelegationKey.signedExpiresOn, !1) : "",
 		t.userDelegationKey.signedService,
 		t.userDelegationKey.signedVersion,
 		e.preauthorizedAgentObjectId,
 		void 0,
 		e.correlationId,
-		e.ipRange ? NC(e.ipRange) : "",
+		e.ipRange ? Bw(e.ipRange) : "",
 		e.protocol ? e.protocol : "",
 		e.version,
 		n,
@@ -31286,25 +32063,25 @@ function UC(e, t) {
 		e.contentType
 	].join("\n"), o = t.computeHMACSHA256(a);
 	return {
-		sasQueryParameters: new FC(e.version, o, i, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType, t.userDelegationKey, e.preauthorizedAgentObjectId, e.correlationId, e.encryptionScope),
+		sasQueryParameters: new Hw(e.version, o, i, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType, t.userDelegationKey, e.preauthorizedAgentObjectId, e.correlationId, e.encryptionScope),
 		stringToSign: a
 	};
 }
-function WC(e, t) {
-	if (e = KC(e), !e.permissions || !e.expiresOn) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
+function Zw(e, t) {
+	if (e = $w(e), !e.permissions || !e.expiresOn) throw RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
 	let n = "c", r = e.snapshotTime;
 	e.blobName && (n = "b", e.snapshotTime ? n = "bs" : e.versionId && (n = "bv", r = e.versionId));
 	let i;
-	e.permissions && (i = e.blobName ? jC.parse(e.permissions.toString()).toString() : MC.parse(e.permissions.toString()).toString());
+	e.permissions && (i = e.blobName ? Rw.parse(e.permissions.toString()).toString() : zw.parse(e.permissions.toString()).toString());
 	let a = [
 		i || "",
-		e.startsOn ? gC(e.startsOn, !1) : "",
-		e.expiresOn ? gC(e.expiresOn, !1) : "",
-		GC(t.accountName, e.containerName, e.blobName),
+		e.startsOn ? Cw(e.startsOn, !1) : "",
+		e.expiresOn ? Cw(e.expiresOn, !1) : "",
+		Qw(t.accountName, e.containerName, e.blobName),
 		t.userDelegationKey.signedObjectId,
 		t.userDelegationKey.signedTenantId,
-		t.userDelegationKey.signedStartsOn ? gC(t.userDelegationKey.signedStartsOn, !1) : "",
-		t.userDelegationKey.signedExpiresOn ? gC(t.userDelegationKey.signedExpiresOn, !1) : "",
+		t.userDelegationKey.signedStartsOn ? Cw(t.userDelegationKey.signedStartsOn, !1) : "",
+		t.userDelegationKey.signedExpiresOn ? Cw(t.userDelegationKey.signedExpiresOn, !1) : "",
 		t.userDelegationKey.signedService,
 		t.userDelegationKey.signedVersion,
 		e.preauthorizedAgentObjectId,
@@ -31312,7 +32089,7 @@ function WC(e, t) {
 		e.correlationId,
 		void 0,
 		e.delegatedUserObjectId,
-		e.ipRange ? NC(e.ipRange) : "",
+		e.ipRange ? Bw(e.ipRange) : "",
 		e.protocol ? e.protocol : "",
 		e.version,
 		n,
@@ -31325,16 +32102,16 @@ function WC(e, t) {
 		e.contentType
 	].join("\n"), o = t.computeHMACSHA256(a);
 	return {
-		sasQueryParameters: new FC(e.version, o, i, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType, t.userDelegationKey, e.preauthorizedAgentObjectId, e.correlationId, e.encryptionScope, e.delegatedUserObjectId),
+		sasQueryParameters: new Hw(e.version, o, i, void 0, void 0, e.protocol, e.startsOn, e.expiresOn, e.ipRange, e.identifier, n, e.cacheControl, e.contentDisposition, e.contentEncoding, e.contentLanguage, e.contentType, t.userDelegationKey, e.preauthorizedAgentObjectId, e.correlationId, e.encryptionScope, e.delegatedUserObjectId),
 		stringToSign: a
 	};
 }
-function GC(e, t, n) {
+function Qw(e, t, n) {
 	let r = [`/blob/${e}/${t}`];
 	return n && r.push(`/${n}`), r.join("");
 }
-function KC(e) {
-	let t = e.version ? e.version : sh;
+function $w(e) {
+	let t = e.version ? e.version : mg;
 	if (e.snapshotTime && t < "2018-11-09") throw RangeError("'version' must be >= '2018-11-09' when providing 'snapshotTime'.");
 	if (e.blobName === void 0 && e.snapshotTime) throw RangeError("Must provide 'blobName' when providing 'snapshotTime'.");
 	if (e.versionId && t < "2019-10-10") throw RangeError("'version' must be >= '2019-10-10' when providing 'versionId'.");
@@ -31349,7 +32126,7 @@ function KC(e) {
 	if (e.encryptionScope && t < "2020-12-06") throw RangeError("'version' must be >= '2020-12-06' when provided 'encryptionScope' in SAS.");
 	return e.version = t, e;
 }
-var qC = class {
+var eT = class {
 	_leaseId;
 	_url;
 	_containerOrBlobOperation;
@@ -31362,7 +32139,7 @@ var qC = class {
 	}
 	constructor(e, t) {
 		let n = e.storageClientContext;
-		this._url = e.url, e.name === void 0 ? (this._isContainer = !0, this._containerOrBlobOperation = n.container) : (this._isContainer = !1, this._containerOrBlobOperation = n.blob), t ||= Yc(), this._leaseId = t;
+		this._url = e.url, e.name === void 0 ? (this._isContainer = !0, this._containerOrBlobOperation = n.container) : (this._isContainer = !1, this._containerOrBlobOperation = n.blob), t ||= Vl(), this._leaseId = t;
 	}
 	async acquireLease(e, t = {}) {
 		if (this._isContainer && (t.conditions?.ifMatch && t.conditions?.ifMatch !== "" || t.conditions?.ifNoneMatch && t.conditions?.ifNoneMatch !== "" || t.conditions?.tagConditions)) throw RangeError("The IfMatch, IfNoneMatch and tags access conditions are ignored by the service. Values other than undefined or their default values are not acceptable.");
@@ -31428,7 +32205,7 @@ var qC = class {
 			return X(await this._containerOrBlobOperation.breakLease(r));
 		});
 	}
-}, JC = class extends b {
+}, tT = class extends b {
 	start;
 	offset;
 	end;
@@ -31458,7 +32235,7 @@ var qC = class {
 		this.offset += e.length, this.onProgress && this.onProgress({ loadedBytes: this.offset - this.start }), this.push(e) || this.source.pause();
 	};
 	sourceAbortedHandler = () => {
-		let e = new Uc("The operation was aborted.");
+		let e = new Fl("The operation was aborted.");
 		this.destroy(e);
 	};
 	sourceErrorOrEndHandler = (e) => {
@@ -31475,7 +32252,7 @@ var qC = class {
 	_destroy(e, t) {
 		this.removeSourceEventHandlers(), this.source.destroy(), t(e === null ? void 0 : e);
 	}
-}, YC = class {
+}, nT = class {
 	get acceptRanges() {
 		return this.originalResponse.acceptRanges;
 	}
@@ -31612,7 +32389,7 @@ var qC = class {
 		return this.originalResponse.blobBody;
 	}
 	get readableStreamBody() {
-		return Xc ? this.blobDownloadStream : void 0;
+		return Hl ? this.blobDownloadStream : void 0;
 	}
 	get _response() {
 		return this.originalResponse._response;
@@ -31620,14 +32397,14 @@ var qC = class {
 	originalResponse;
 	blobDownloadStream;
 	constructor(e, t, n, r, i = {}) {
-		this.originalResponse = e, this.blobDownloadStream = new JC(this.originalResponse.readableStreamBody, t, n, r, i);
+		this.originalResponse = e, this.blobDownloadStream = new tT(this.originalResponse.readableStreamBody, t, n, r, i);
 	}
-}, XC = new Uint8Array([
+}, rT = new Uint8Array([
 	79,
 	98,
 	106,
 	1
-]), ZC = "avro.codec", QC = "avro.schema", $C = class e {
+]), iT = "avro.codec", aT = "avro.schema", oT = class e {
 	static async readFixedBytes(e, t, n = {}) {
 		let r = await e.read(t, { abortSignal: n.abortSignal });
 		if (r.length !== t) throw Error("Hit stream end.");
@@ -31703,33 +32480,33 @@ var qC = class {
 		}
 		return i;
 	}
-}, ew;
+}, sT;
 (function(e) {
 	e.RECORD = "record", e.ENUM = "enum", e.ARRAY = "array", e.MAP = "map", e.UNION = "union", e.FIXED = "fixed";
-})(ew ||= {});
-var tw;
+})(sT ||= {});
+var cT;
 (function(e) {
 	e.NULL = "null", e.BOOLEAN = "boolean", e.INT = "int", e.LONG = "long", e.FLOAT = "float", e.DOUBLE = "double", e.BYTES = "bytes", e.STRING = "string";
-})(tw ||= {});
-var nw = class e {
+})(cT ||= {});
+var lT = class e {
 	static fromSchema(t) {
 		return typeof t == "string" ? e.fromStringSchema(t) : Array.isArray(t) ? e.fromArraySchema(t) : e.fromObjectSchema(t);
 	}
 	static fromStringSchema(e) {
 		switch (e) {
-			case tw.NULL:
-			case tw.BOOLEAN:
-			case tw.INT:
-			case tw.LONG:
-			case tw.FLOAT:
-			case tw.DOUBLE:
-			case tw.BYTES:
-			case tw.STRING: return new rw(e);
+			case cT.NULL:
+			case cT.BOOLEAN:
+			case cT.INT:
+			case cT.LONG:
+			case cT.FLOAT:
+			case cT.DOUBLE:
+			case cT.BYTES:
+			case cT.STRING: return new uT(e);
 			default: throw Error(`Unexpected Avro type ${e}`);
 		}
 	}
 	static fromArraySchema(t) {
-		return new aw(t.map(e.fromSchema));
+		return new fT(t.map(e.fromSchema));
 	}
 	static fromObjectSchema(t) {
 		let n = t.type;
@@ -31737,70 +32514,70 @@ var nw = class e {
 			return e.fromStringSchema(n);
 		} catch {}
 		switch (n) {
-			case ew.RECORD:
+			case sT.RECORD:
 				if (t.aliases) throw Error(`aliases currently is not supported, schema: ${t}`);
 				if (!t.name) throw Error(`Required attribute 'name' doesn't exist on schema: ${t}`);
 				let r = {};
 				if (!t.fields) throw Error(`Required attribute 'fields' doesn't exist on schema: ${t}`);
 				for (let n of t.fields) r[n.name] = e.fromSchema(n.type);
-				return new sw(r, t.name);
-			case ew.ENUM:
+				return new mT(r, t.name);
+			case sT.ENUM:
 				if (t.aliases) throw Error(`aliases currently is not supported, schema: ${t}`);
 				if (!t.symbols) throw Error(`Required attribute 'symbols' doesn't exist on schema: ${t}`);
-				return new iw(t.symbols);
-			case ew.MAP:
+				return new dT(t.symbols);
+			case sT.MAP:
 				if (!t.values) throw Error(`Required attribute 'values' doesn't exist on schema: ${t}`);
-				return new ow(e.fromSchema(t.values));
-			case ew.ARRAY:
-			case ew.FIXED:
+				return new pT(e.fromSchema(t.values));
+			case sT.ARRAY:
+			case sT.FIXED:
 			default: throw Error(`Unexpected Avro type ${n} in ${t}`);
 		}
 	}
-}, rw = class extends nw {
+}, uT = class extends lT {
 	_primitive;
 	constructor(e) {
 		super(), this._primitive = e;
 	}
 	read(e, t = {}) {
 		switch (this._primitive) {
-			case tw.NULL: return $C.readNull();
-			case tw.BOOLEAN: return $C.readBoolean(e, t);
-			case tw.INT: return $C.readInt(e, t);
-			case tw.LONG: return $C.readLong(e, t);
-			case tw.FLOAT: return $C.readFloat(e, t);
-			case tw.DOUBLE: return $C.readDouble(e, t);
-			case tw.BYTES: return $C.readBytes(e, t);
-			case tw.STRING: return $C.readString(e, t);
+			case cT.NULL: return oT.readNull();
+			case cT.BOOLEAN: return oT.readBoolean(e, t);
+			case cT.INT: return oT.readInt(e, t);
+			case cT.LONG: return oT.readLong(e, t);
+			case cT.FLOAT: return oT.readFloat(e, t);
+			case cT.DOUBLE: return oT.readDouble(e, t);
+			case cT.BYTES: return oT.readBytes(e, t);
+			case cT.STRING: return oT.readString(e, t);
 			default: throw Error("Unknown Avro Primitive");
 		}
 	}
-}, iw = class extends nw {
+}, dT = class extends lT {
 	_symbols;
 	constructor(e) {
 		super(), this._symbols = e;
 	}
 	async read(e, t = {}) {
-		let n = await $C.readInt(e, t);
+		let n = await oT.readInt(e, t);
 		return this._symbols[n];
 	}
-}, aw = class extends nw {
+}, fT = class extends lT {
 	_types;
 	constructor(e) {
 		super(), this._types = e;
 	}
 	async read(e, t = {}) {
-		let n = await $C.readInt(e, t);
+		let n = await oT.readInt(e, t);
 		return this._types[n].read(e, t);
 	}
-}, ow = class extends nw {
+}, pT = class extends lT {
 	_itemType;
 	constructor(e) {
 		super(), this._itemType = e;
 	}
 	read(e, t = {}) {
-		return $C.readMap(e, (e, t) => this._itemType.read(e, t), t);
+		return oT.readMap(e, (e, t) => this._itemType.read(e, t), t);
 	}
-}, sw = class extends nw {
+}, mT = class extends lT {
 	_name;
 	_fields;
 	constructor(e, t) {
@@ -31813,13 +32590,13 @@ var nw = class e {
 		return n;
 	}
 };
-function cw(e, t) {
+function hT(e, t) {
 	if (e === t) return !0;
 	if (e == null || t == null || e.length !== t.length) return !1;
 	for (let n = 0; n < e.length; ++n) if (e[n] !== t[n]) return !1;
 	return !0;
 }
-var lw = class {
+var gT = class {
 	_dataStream;
 	_headerStream;
 	_syncMarker;
@@ -31840,13 +32617,13 @@ var lw = class {
 		this._dataStream = e, this._headerStream = t || e, this._initialized = !1, this._blockOffset = n || 0, this._objectIndex = r || 0, this._initialBlockOffset = n || 0;
 	}
 	async initialize(e = {}) {
-		if (!cw(await $C.readFixedBytes(this._headerStream, XC.length, { abortSignal: e.abortSignal }), XC)) throw Error("Stream is not an Avro file.");
-		this._metadata = await $C.readMap(this._headerStream, $C.readString, { abortSignal: e.abortSignal });
-		let t = this._metadata[ZC];
+		if (!hT(await oT.readFixedBytes(this._headerStream, rT.length, { abortSignal: e.abortSignal }), rT)) throw Error("Stream is not an Avro file.");
+		this._metadata = await oT.readMap(this._headerStream, oT.readString, { abortSignal: e.abortSignal });
+		let t = this._metadata[iT];
 		if (!(t == null || t === "null")) throw Error("Codecs are not supported");
-		this._syncMarker = await $C.readFixedBytes(this._headerStream, 16, { abortSignal: e.abortSignal });
-		let n = JSON.parse(this._metadata[QC]);
-		if (this._itemType = nw.fromSchema(n), this._blockOffset === 0 && (this._blockOffset = this._initialBlockOffset + this._dataStream.position), this._itemsRemainingInBlock = await $C.readLong(this._dataStream, { abortSignal: e.abortSignal }), await $C.readLong(this._dataStream, { abortSignal: e.abortSignal }), this._initialized = !0, this._objectIndex && this._objectIndex > 0) for (let t = 0; t < this._objectIndex; t++) await this._itemType.read(this._dataStream, { abortSignal: e.abortSignal }), this._itemsRemainingInBlock--;
+		this._syncMarker = await oT.readFixedBytes(this._headerStream, 16, { abortSignal: e.abortSignal });
+		let n = JSON.parse(this._metadata[aT]);
+		if (this._itemType = lT.fromSchema(n), this._blockOffset === 0 && (this._blockOffset = this._initialBlockOffset + this._dataStream.position), this._itemsRemainingInBlock = await oT.readLong(this._dataStream, { abortSignal: e.abortSignal }), await oT.readLong(this._dataStream, { abortSignal: e.abortSignal }), this._initialized = !0, this._objectIndex && this._objectIndex > 0) for (let t = 0; t < this._objectIndex; t++) await this._itemType.read(this._dataStream, { abortSignal: e.abortSignal }), this._itemsRemainingInBlock--;
 	}
 	hasNext() {
 		return !this._initialized || this._itemsRemainingInBlock > 0;
@@ -31855,19 +32632,19 @@ var lw = class {
 		for (this._initialized || await this.initialize(e); this.hasNext();) {
 			let t = await this._itemType.read(this._dataStream, { abortSignal: e.abortSignal });
 			if (this._itemsRemainingInBlock--, this._objectIndex++, this._itemsRemainingInBlock === 0) {
-				let t = await $C.readFixedBytes(this._dataStream, 16, { abortSignal: e.abortSignal });
-				if (this._blockOffset = this._initialBlockOffset + this._dataStream.position, this._objectIndex = 0, !cw(this._syncMarker, t)) throw Error("Stream is not a valid Avro file.");
+				let t = await oT.readFixedBytes(this._dataStream, 16, { abortSignal: e.abortSignal });
+				if (this._blockOffset = this._initialBlockOffset + this._dataStream.position, this._objectIndex = 0, !hT(this._syncMarker, t)) throw Error("Stream is not a valid Avro file.");
 				try {
-					this._itemsRemainingInBlock = await $C.readLong(this._dataStream, { abortSignal: e.abortSignal });
+					this._itemsRemainingInBlock = await oT.readLong(this._dataStream, { abortSignal: e.abortSignal });
 				} catch {
 					this._itemsRemainingInBlock = 0;
 				}
-				this._itemsRemainingInBlock > 0 && await $C.readLong(this._dataStream, { abortSignal: e.abortSignal });
+				this._itemsRemainingInBlock > 0 && await oT.readLong(this._dataStream, { abortSignal: e.abortSignal });
 			}
 			yield t;
 		}
 	}
-}, uw = class {}, dw = new Uc("Reading from the avro stream was aborted."), fw = class extends uw {
+}, _T = class {}, vT = new Fl("Reading from the avro stream was aborted."), yT = class extends _T {
 	_position;
 	_readable;
 	toUint8Array(e) {
@@ -31880,7 +32657,7 @@ var lw = class {
 		return this._position;
 	}
 	async read(e, t = {}) {
-		if (t.abortSignal?.aborted) throw dw;
+		if (t.abortSignal?.aborted) throw vT;
 		if (e < 0) throw Error(`size parameter should be positive: ${e}`);
 		if (e === 0) return new Uint8Array();
 		if (!this._readable.readable) throw Error("Stream no longer readable.");
@@ -31894,12 +32671,12 @@ var lw = class {
 			}, o = () => {
 				i(), r();
 			}, s = () => {
-				i(), r(dw);
+				i(), r(vT);
 			};
 			this._readable.on("readable", a), this._readable.once("error", o), this._readable.once("end", o), this._readable.once("close", o), t.abortSignal && t.abortSignal.addEventListener("abort", s);
 		});
 	}
-}, pw = class extends b {
+}, bT = class extends b {
 	source;
 	avroReader;
 	avroIter;
@@ -31907,7 +32684,7 @@ var lw = class {
 	onProgress;
 	onError;
 	constructor(e, t = {}) {
-		super(), this.source = e, this.onProgress = t.onProgress, this.onError = t.onError, this.avroReader = new lw(new fw(this.source)), this.avroIter = this.avroReader.parseObjects({ abortSignal: t.abortSignal });
+		super(), this.source = e, this.onProgress = t.onProgress, this.onError = t.onError, this.avroReader = new gT(new yT(this.source)), this.avroIter = this.avroReader.parseObjects({ abortSignal: t.abortSignal });
 	}
 	_read() {
 		this.avroPaused && this.readInternal().catch((e) => {
@@ -31966,7 +32743,7 @@ var lw = class {
 			}
 		} while (!e.done && !this.avroPaused);
 	}
-}, mw = class {
+}, xT = class {
 	get acceptRanges() {
 		return this.originalResponse.acceptRanges;
 	}
@@ -32066,7 +32843,7 @@ var lw = class {
 	}
 	get blobBody() {}
 	get readableStreamBody() {
-		return Xc ? this.blobDownloadStream : void 0;
+		return Hl ? this.blobDownloadStream : void 0;
 	}
 	get _response() {
 		return this.originalResponse._response;
@@ -32074,28 +32851,28 @@ var lw = class {
 	originalResponse;
 	blobDownloadStream;
 	constructor(e, t = {}) {
-		this.originalResponse = e, this.blobDownloadStream = new pw(this.originalResponse.readableStreamBody, t);
+		this.originalResponse = e, this.blobDownloadStream = new bT(this.originalResponse.readableStreamBody, t);
 	}
-}, hw;
+}, ST;
 (function(e) {
 	e.Hot = "Hot", e.Cool = "Cool", e.Cold = "Cold", e.Archive = "Archive";
-})(hw ||= {});
-var gw;
+})(ST ||= {});
+var CT;
 (function(e) {
 	e.P4 = "P4", e.P6 = "P6", e.P10 = "P10", e.P15 = "P15", e.P20 = "P20", e.P30 = "P30", e.P40 = "P40", e.P50 = "P50", e.P60 = "P60", e.P70 = "P70", e.P80 = "P80";
-})(gw ||= {});
-function _w(e) {
+})(CT ||= {});
+function wT(e) {
 	if (e !== void 0) return e;
 }
-function vw(e, t) {
+function TT(e, t) {
 	if (e && !t) throw RangeError("Customer-provided encryption key must be used over HTTPS.");
-	e && !e.encryptionAlgorithm && (e.encryptionAlgorithm = hh);
+	e && !e.encryptionAlgorithm && (e.encryptionAlgorithm = Sg);
 }
-var yw;
+var ET;
 (function(e) {
 	e.StorageOAuthScopes = "https://storage.azure.com/.default", e.DiskComputeOAuthScopes = "https://disk.compute.azure.com/.default";
-})(yw ||= {});
-function bw(e) {
+})(ET ||= {});
+function DT(e) {
 	let t = (e._response.parsedBody.pageRange || []).map((e) => ({
 		offset: e.start,
 		count: e.end - e.start
@@ -32116,15 +32893,15 @@ function bw(e) {
 		}
 	};
 }
-var xw = class e extends Error {
+var OT = class e extends Error {
 	constructor(t) {
 		super(t), this.name = "PollerStoppedError", Object.setPrototypeOf(this, e.prototype);
 	}
-}, Sw = class e extends Error {
+}, kT = class e extends Error {
 	constructor(t) {
 		super(t), this.name = "PollerCancelledError", Object.setPrototypeOf(this, e.prototype);
 	}
-}, Cw = class {
+}, AT = class {
 	constructor(e) {
 		this.resolveOnUnsuccessful = !1, this.stopped = !0, this.pollProgressCallbacks = [], this.operation = e, this.promise = new Promise((e, t) => {
 			this.resolve = e, this.reject = t;
@@ -32158,7 +32935,7 @@ var xw = class e extends Error {
 	processUpdatedState() {
 		if (this.operation.state.error && (this.stopped = !0, !this.resolveOnUnsuccessful)) throw this.reject(this.operation.state.error), this.operation.state.error;
 		if (this.operation.state.isCancelled && (this.stopped = !0, !this.resolveOnUnsuccessful)) {
-			let e = new Sw("Operation was canceled");
+			let e = new kT("Operation was canceled");
 			throw this.reject(e), e;
 		}
 		this.isDone() && this.resolve && this.resolve(this.getResult());
@@ -32176,7 +32953,7 @@ var xw = class e extends Error {
 		return !!(e.isCompleted || e.isCancelled || e.error);
 	}
 	stopPolling() {
-		this.stopped || (this.stopped = !0, this.reject && this.reject(new xw("This poller is already stopped")));
+		this.stopped || (this.stopped = !0, this.reject && this.reject(new OT("This poller is already stopped")));
 	}
 	isStopped() {
 		return this.stopped;
@@ -32195,12 +32972,12 @@ var xw = class e extends Error {
 	toString() {
 		return this.operation.toString();
 	}
-}, ww = class extends Cw {
+}, jT = class extends AT {
 	intervalInMs;
 	constructor(e) {
 		let { blobClient: t, copySource: n, intervalInMs: r = 15e3, onProgress: i, resumeFrom: a, startCopyFromURLOptions: o } = e, s;
 		a && (s = JSON.parse(a).state);
-		let c = Ow({
+		let c = FT({
 			...s,
 			blobClient: t,
 			copySource: n,
@@ -32209,12 +32986,12 @@ var xw = class e extends Error {
 		super(c), typeof i == "function" && this.onProgress(i), this.intervalInMs = r;
 	}
 	delay() {
-		return Kc(this.intervalInMs);
+		return Rl(this.intervalInMs);
 	}
-}, Tw = async function(e = {}) {
+}, MT = async function(e = {}) {
 	let t = this.state, { copyId: n } = t;
-	return t.isCompleted ? Ow(t) : n ? (await t.blobClient.abortCopyFromURL(n, { abortSignal: e.abortSignal }), t.isCancelled = !0, Ow(t)) : (t.isCancelled = !0, Ow(t));
-}, Ew = async function(e = {}) {
+	return t.isCompleted ? FT(t) : n ? (await t.blobClient.abortCopyFromURL(n, { abortSignal: e.abortSignal }), t.isCancelled = !0, FT(t)) : (t.isCancelled = !0, FT(t));
+}, NT = async function(e = {}) {
 	let t = this.state, { blobClient: n, copySource: r, startCopyFromURLOptions: i } = t;
 	if (!t.isStarted) {
 		t.isStarted = !0;
@@ -32226,36 +33003,36 @@ var xw = class e extends Error {
 	} catch (e) {
 		t.error = e, t.isCompleted = !0;
 	}
-	return Ow(t);
-}, Dw = function() {
+	return FT(t);
+}, PT = function() {
 	return JSON.stringify({ state: this.state }, (e, t) => {
 		if (e !== "blobClient") return t;
 	});
 };
-function Ow(e) {
+function FT(e) {
 	return {
 		state: { ...e },
-		cancel: Tw,
-		toString: Dw,
-		update: Ew
+		cancel: MT,
+		toString: PT,
+		update: NT
 	};
 }
-function kw(e) {
+function IT(e) {
 	if (e.offset < 0) throw RangeError("Range.offset cannot be smaller than 0.");
 	if (e.count && e.count <= 0) throw RangeError("Range.count must be larger than 0. Leave it undefined if you want a range from offset to the end.");
 	return e.count ? `bytes=${e.offset}-${e.offset + e.count - 1}` : `bytes=${e.offset}-`;
 }
-var Aw;
+var LT;
 (function(e) {
 	e[e.Good = 0] = "Good", e[e.Error = 1] = "Error";
-})(Aw ||= {});
-var jw = class {
+})(LT ||= {});
+var RT = class {
 	concurrency;
 	actives = 0;
 	completed = 0;
 	offset = 0;
 	operations = [];
-	state = Aw.Good;
+	state = LT.Good;
 	emitter;
 	constructor(e = 5) {
 		if (e < 1) throw RangeError("concurrency must be larger than 0");
@@ -32273,7 +33050,7 @@ var jw = class {
 	async do() {
 		return this.operations.length === 0 ? Promise.resolve() : (this.parallelExecute(), new Promise((e, t) => {
 			this.emitter.on("finish", e), this.emitter.on("error", (e) => {
-				this.state = Aw.Error, t(e);
+				this.state = LT.Error, t(e);
 			});
 		}));
 	}
@@ -32281,7 +33058,7 @@ var jw = class {
 		return this.offset < this.operations.length ? this.operations[this.offset++] : null;
 	}
 	parallelExecute() {
-		if (this.state !== Aw.Error) {
+		if (this.state !== LT.Error) {
 			if (this.completed >= this.operations.length) {
 				this.emitter.emit("finish");
 				return;
@@ -32294,10 +33071,10 @@ var jw = class {
 		}
 	}
 };
-async function Mw(e, t, n, r, i) {
+async function zT(e, t, n, r, i) {
 	let a = 0, o = r - n;
 	return new Promise((r, s) => {
-		let c = setTimeout(() => s(/* @__PURE__ */ Error("The operation cannot be completed in timeout.")), ph);
+		let c = setTimeout(() => s(/* @__PURE__ */ Error("The operation cannot be completed in timeout.")), bg);
 		e.on("readable", () => {
 			if (a >= o) {
 				clearTimeout(c), r();
@@ -32315,7 +33092,7 @@ async function Mw(e, t, n, r, i) {
 		});
 	});
 }
-async function Nw(e, t) {
+async function BT(e, t) {
 	return new Promise((n, r) => {
 		let i = ie.createWriteStream(t);
 		e.on("error", (e) => {
@@ -32325,7 +33102,7 @@ async function Nw(e, t) {
 		}), i.on("close", n), e.pipe(i);
 	});
 }
-var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC {
+var VT = C.promisify(ie.stat), HT = ie.createReadStream, UT = class e extends Lw {
 	blobContext;
 	_name;
 	_containerName;
@@ -32340,37 +33117,37 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 	constructor(e, t, n, r) {
 		r ||= {};
 		let i, a;
-		if (bh(t)) a = e, i = t;
-		else if (Xc && t instanceof zm || t instanceof Mm || Kl(t)) a = e, r = n, i = Sh(t, r);
-		else if (!t && typeof t != "string") a = e, n && typeof n != "string" && (r = n), i = Sh(new Mm(), r);
+		if (Dg(t)) a = e, i = t;
+		else if (Hl && t instanceof Kh || t instanceof zh || Ru(t)) a = e, r = n, i = kg(t, r);
+		else if (!t && typeof t != "string") a = e, n && typeof n != "string" && (r = n), i = kg(new zh(), r);
 		else if (t && typeof t == "string" && n && typeof n == "string") {
-			let o = t, s = n, c = lC(e);
-			if (c.kind === "AccountConnString") if (Xc) {
-				let e = new zm(c.accountName, c.accountKey);
-				a = dC(dC(c.url, encodeURIComponent(o)), encodeURIComponent(s)), r.proxyOptions ||= ol(c.proxyUri), i = Sh(e, r);
+			let o = t, s = n, c = gw(e);
+			if (c.kind === "AccountConnString") if (Hl) {
+				let e = new Kh(c.accountName, c.accountKey);
+				a = vw(vw(c.url, encodeURIComponent(o)), encodeURIComponent(s)), r.proxyOptions ||= Ql(c.proxyUri), i = kg(e, r);
 			} else throw Error("Account connection string is only supported in Node.js environment");
-			else if (c.kind === "SASConnString") a = dC(dC(c.url, encodeURIComponent(o)), encodeURIComponent(s)) + "?" + c.accountSas, i = Sh(new Mm(), r);
+			else if (c.kind === "SASConnString") a = vw(vw(c.url, encodeURIComponent(o)), encodeURIComponent(s)) + "?" + c.accountSas, i = kg(new zh(), r);
 			else throw Error("Connection string must be either an Account connection string or a SAS connection string");
 		} else throw Error("Expecting non-empty strings for containerName and blobName parameters");
-		super(a, i), {blobName: this._name, containerName: this._containerName} = this.getBlobAndContainerNamesFromUrl(), this.blobContext = this.storageClientContext.blob, this._snapshot = pC(this.url, mh.Parameters.SNAPSHOT), this._versionId = pC(this.url, mh.Parameters.VERSIONID);
+		super(a, i), {blobName: this._name, containerName: this._containerName} = this.getBlobAndContainerNamesFromUrl(), this.blobContext = this.storageClientContext.blob, this._snapshot = bw(this.url, xg.Parameters.SNAPSHOT), this._versionId = bw(this.url, xg.Parameters.VERSIONID);
 	}
 	withSnapshot(t) {
-		return new e(fC(this.url, mh.Parameters.SNAPSHOT, t.length === 0 ? void 0 : t), this.pipeline);
+		return new e(yw(this.url, xg.Parameters.SNAPSHOT, t.length === 0 ? void 0 : t), this.pipeline);
 	}
 	withVersion(t) {
-		return new e(fC(this.url, mh.Parameters.VERSIONID, t.length === 0 ? void 0 : t), this.pipeline);
+		return new e(yw(this.url, xg.Parameters.VERSIONID, t.length === 0 ? void 0 : t), this.pipeline);
 	}
 	getAppendBlobClient() {
-		return new Lw(this.url, this.pipeline);
+		return new WT(this.url, this.pipeline);
 	}
 	getBlockBlobClient() {
-		return new Rw(this.url, this.pipeline);
+		return new GT(this.url, this.pipeline);
 	}
 	getPageBlobClient() {
-		return new zw(this.url, this.pipeline);
+		return new KT(this.url, this.pipeline);
 	}
 	async download(e = 0, t, n = {}) {
-		return n.conditions = n.conditions || {}, n.conditions = n.conditions || {}, vw(n.customerProvidedKey, this.isHttps), Z.withSpan("BlobClient-download", n, async (r) => {
+		return n.conditions = n.conditions || {}, n.conditions = n.conditions || {}, TT(n.customerProvidedKey, this.isHttps), Z.withSpan("BlobClient-download", n, async (r) => {
 			let i = X(await this.blobContext.download({
 				abortSignal: n.abortSignal,
 				leaseAccessConditions: n.conditions,
@@ -32378,8 +33155,8 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 					...n.conditions,
 					ifTags: n.conditions?.tagConditions
 				},
-				requestOptions: { onDownloadProgress: Xc ? void 0 : n.onProgress },
-				range: e === 0 && !t ? void 0 : kw({
+				requestOptions: { onDownloadProgress: Hl ? void 0 : n.onProgress },
+				range: e === 0 && !t ? void 0 : IT({
 					offset: e,
 					count: t
 				}),
@@ -32392,12 +33169,12 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 				...i,
 				_response: i._response,
 				objectReplicationDestinationPolicyId: i.objectReplicationPolicyId,
-				objectReplicationSourceProperties: DC(i.objectReplicationRules)
+				objectReplicationSourceProperties: Pw(i.objectReplicationRules)
 			};
-			if (!Xc) return a;
+			if (!Hl) return a;
 			if ((n.maxRetryRequests === void 0 || n.maxRetryRequests < 0) && (n.maxRetryRequests = 5), i.contentLength === void 0) throw RangeError("File download response doesn't contain valid content length header");
 			if (!i.etag) throw RangeError("File download response doesn't contain valid etag header");
-			return new YC(a, async (t) => {
+			return new nT(a, async (t) => {
 				let r = {
 					leaseAccessConditions: n.conditions,
 					modifiedAccessConditions: {
@@ -32407,7 +33184,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 						ifUnmodifiedSince: n.conditions.ifUnmodifiedSince,
 						ifTags: n.conditions?.tagConditions
 					},
-					range: kw({
+					range: IT({
 						count: e + i.contentLength - t,
 						offset: t
 					}),
@@ -32429,7 +33206,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 	async exists(e = {}) {
 		return Z.withSpan("BlobClient-exists", e, async (t) => {
 			try {
-				return vw(e.customerProvidedKey, this.isHttps), await this.getProperties({
+				return TT(e.customerProvidedKey, this.isHttps), await this.getProperties({
 					abortSignal: e.abortSignal,
 					customerProvidedKey: e.customerProvidedKey,
 					conditions: e.conditions,
@@ -32443,7 +33220,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		});
 	}
 	async getProperties(e = {}) {
-		return e.conditions = e.conditions || {}, vw(e.customerProvidedKey, this.isHttps), Z.withSpan("BlobClient-getProperties", e, async (t) => {
+		return e.conditions = e.conditions || {}, TT(e.customerProvidedKey, this.isHttps), Z.withSpan("BlobClient-getProperties", e, async (t) => {
 			let n = X(await this.blobContext.getProperties({
 				abortSignal: e.abortSignal,
 				leaseAccessConditions: e.conditions,
@@ -32458,7 +33235,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 				...n,
 				_response: n._response,
 				objectReplicationDestinationPolicyId: n.objectReplicationPolicyId,
-				objectReplicationSourceProperties: DC(n.objectReplicationRules)
+				objectReplicationSourceProperties: Pw(n.objectReplicationRules)
 			};
 		});
 	}
@@ -32500,7 +33277,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		})));
 	}
 	async setHTTPHeaders(e, t = {}) {
-		return t.conditions = t.conditions || {}, vw(t.customerProvidedKey, this.isHttps), Z.withSpan("BlobClient-setHTTPHeaders", t, async (n) => X(await this.blobContext.setHttpHeaders({
+		return t.conditions = t.conditions || {}, TT(t.customerProvidedKey, this.isHttps), Z.withSpan("BlobClient-setHTTPHeaders", t, async (n) => X(await this.blobContext.setHttpHeaders({
 			abortSignal: t.abortSignal,
 			blobHttpHeaders: e,
 			leaseAccessConditions: t.conditions,
@@ -32512,7 +33289,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		})));
 	}
 	async setMetadata(e, t = {}) {
-		return t.conditions = t.conditions || {}, vw(t.customerProvidedKey, this.isHttps), Z.withSpan("BlobClient-setMetadata", t, async (n) => X(await this.blobContext.setMetadata({
+		return t.conditions = t.conditions || {}, TT(t.customerProvidedKey, this.isHttps), Z.withSpan("BlobClient-setMetadata", t, async (n) => X(await this.blobContext.setMetadata({
 			abortSignal: t.abortSignal,
 			leaseAccessConditions: t.conditions,
 			metadata: e,
@@ -32535,7 +33312,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 			},
 			blobModifiedAccessConditions: t.conditions,
 			tracingOptions: n.tracingOptions,
-			tags: wC(e)
+			tags: jw(e)
 		})));
 	}
 	async getTags(e = {}) {
@@ -32553,15 +33330,15 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 			return {
 				...n,
 				_response: n._response,
-				tags: TC({ blobTagSet: n.blobTagSet }) || {}
+				tags: Mw({ blobTagSet: n.blobTagSet }) || {}
 			};
 		});
 	}
 	getBlobLeaseClient(e) {
-		return new qC(this, e);
+		return new eT(this, e);
 	}
 	async createSnapshot(e = {}) {
-		return e.conditions = e.conditions || {}, vw(e.customerProvidedKey, this.isHttps), Z.withSpan("BlobClient-createSnapshot", e, async (t) => X(await this.blobContext.createSnapshot({
+		return e.conditions = e.conditions || {}, TT(e.customerProvidedKey, this.isHttps), Z.withSpan("BlobClient-createSnapshot", e, async (t) => X(await this.blobContext.createSnapshot({
 			abortSignal: e.abortSignal,
 			leaseAccessConditions: e.conditions,
 			metadata: e.metadata,
@@ -32575,7 +33352,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		})));
 	}
 	async beginCopyFromURL(e, t = {}) {
-		let n = new ww({
+		let n = new jT({
 			blobClient: {
 				abortCopyFromURL: (...e) => this.abortCopyFromURL(...e),
 				getProperties: (...e) => this.getProperties(...e),
@@ -32612,9 +33389,9 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 				sourceIfUnmodifiedSince: t.sourceConditions?.ifUnmodifiedSince
 			},
 			sourceContentMD5: t.sourceContentMD5,
-			copySourceAuthorization: OC(t.sourceAuthorization),
-			tier: _w(t.tier),
-			blobTagsString: CC(t.tags),
+			copySourceAuthorization: Fw(t.sourceAuthorization),
+			tier: wT(t.tier),
+			blobTagsString: Aw(t.tags),
 			immutabilityPolicyExpiry: t.immutabilityPolicy?.expiriesOn,
 			immutabilityPolicyMode: t.immutabilityPolicy?.policyMode,
 			legalHold: t.legalHold,
@@ -32625,7 +33402,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		})));
 	}
 	async setAccessTier(e, t = {}) {
-		return Z.withSpan("BlobClient-setAccessTier", t, async (n) => X(await this.blobContext.setTier(_w(e), {
+		return Z.withSpan("BlobClient-setAccessTier", t, async (n) => X(await this.blobContext.setTier(wT(e), {
 			abortSignal: t.abortSignal,
 			leaseAccessConditions: t.conditions,
 			modifiedAccessConditions: {
@@ -32641,7 +33418,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		e instanceof Buffer ? (i = e, a = t || 0, o = typeof n == "number" ? n : 0) : (a = typeof e == "number" ? e : 0, o = typeof t == "number" ? t : 0, s = n || {});
 		let c = s.blockSize ?? 0;
 		if (c < 0) throw RangeError("blockSize option must be >= 0");
-		if (c === 0 && (c = fh), a < 0) throw RangeError("offset option must be >= 0");
+		if (c === 0 && (c = yg), a < 0) throw RangeError("offset option must be >= 0");
 		if (o && o <= 0) throw RangeError("count option must be greater than 0");
 		return s.conditions ||= {}, Z.withSpan("BlobClient-downloadToBuffer", s, async (e) => {
 			if (!o) {
@@ -32657,7 +33434,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 				throw Error(`Unable to allocate the buffer of size: ${o}(in bytes). Please try passing your own buffer to the "downloadToBuffer" method or try using other methods like "download" or "downloadToFile".\t ${e.message}`);
 			}
 			if (i.length < o) throw RangeError(`The buffer's size should be equal to or larger than the request count of bytes: ${o}`);
-			let t = 0, n = new jw(s.concurrency);
+			let t = 0, n = new RT(s.concurrency);
 			for (let r = a; r < a + o; r += c) n.addOperation(async () => {
 				let n = a + o;
 				r + c < n && (n = r + c);
@@ -32668,7 +33445,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 					customerProvidedKey: s.customerProvidedKey,
 					tracingOptions: e.tracingOptions
 				})).readableStreamBody;
-				await Mw(l, i, r - a, n - a), t += n - r, s.onProgress && s.onProgress({ loadedBytes: t });
+				await zT(l, i, r - a, n - a), t += n - r, s.onProgress && s.onProgress({ loadedBytes: t });
 			});
 			return await n.do(), i;
 		});
@@ -32679,7 +33456,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 				...r,
 				tracingOptions: i.tracingOptions
 			});
-			return a.readableStreamBody && await Nw(a.readableStreamBody, e), a.blobDownloadStream = void 0, a;
+			return a.readableStreamBody && await BT(a.readableStreamBody, e), a.blobDownloadStream = void 0, a;
 		});
 	}
 	getBlobAndContainerNamesFromUrl() {
@@ -32689,7 +33466,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 			if (n.host.split(".")[1] === "blob") {
 				let r = n.pathname.match("/([^/]*)(/(.*))?");
 				e = r[1], t = r[3];
-			} else if (SC(n)) {
+			} else if (kw(n)) {
 				let r = n.pathname.match("/([^/]*)/([^/]*)(/(.*))?");
 				e = r[2], t = r[4];
 			} else {
@@ -32725,28 +33502,28 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 			immutabilityPolicyMode: t.immutabilityPolicy?.policyMode,
 			legalHold: t.legalHold,
 			rehydratePriority: t.rehydratePriority,
-			tier: _w(t.tier),
-			blobTagsString: CC(t.tags),
+			tier: wT(t.tier),
+			blobTagsString: Aw(t.tags),
 			sealBlob: t.sealBlob,
 			tracingOptions: n.tracingOptions
 		}))));
 	}
 	generateSasUrl(e) {
 		return new Promise((t) => {
-			if (!(this.credential instanceof zm)) throw RangeError("Can only generate the SAS when the client is initialized with a shared key credential");
-			let n = IC({
+			if (!(this.credential instanceof Kh)) throw RangeError("Can only generate the SAS when the client is initialized with a shared key credential");
+			let n = Uw({
 				containerName: this._containerName,
 				blobName: this._name,
 				snapshotTime: this._snapshot,
 				versionId: this._versionId,
 				...e
 			}, this.credential).toString();
-			t(hC(this.url, n));
+			t(Sw(this.url, n));
 		});
 	}
 	generateSasStringToSign(e) {
-		if (!(this.credential instanceof zm)) throw RangeError("Can only generate the SAS when the client is initialized with a shared key credential");
-		return LC({
+		if (!(this.credential instanceof Kh)) throw RangeError("Can only generate the SAS when the client is initialized with a shared key credential");
+		return Ww({
 			containerName: this._containerName,
 			blobName: this._name,
 			snapshotTime: this._snapshot,
@@ -32756,18 +33533,18 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 	}
 	generateUserDelegationSasUrl(e, t) {
 		return new Promise((n) => {
-			let r = IC({
+			let r = Uw({
 				containerName: this._containerName,
 				blobName: this._name,
 				snapshotTime: this._snapshot,
 				versionId: this._versionId,
 				...e
 			}, t, this.accountName).toString();
-			n(hC(this.url, r));
+			n(Sw(this.url, r));
 		});
 	}
 	generateUserDelegationSasStringToSign(e, t) {
-		return LC({
+		return Ww({
 			containerName: this._containerName,
 			blobName: this._name,
 			snapshotTime: this._snapshot,
@@ -32794,29 +33571,29 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 			tracingOptions: t.tracingOptions
 		})));
 	}
-}, Lw = class e extends Iw {
+}, WT = class e extends UT {
 	appendBlobContext;
 	constructor(e, t, n, r) {
 		let i, a;
-		if (r ||= {}, bh(t)) a = e, i = t;
-		else if (Xc && t instanceof zm || t instanceof Mm || Kl(t)) a = e, r = n, i = Sh(t, r);
-		else if (!t && typeof t != "string") a = e, i = Sh(new Mm(), r);
+		if (r ||= {}, Dg(t)) a = e, i = t;
+		else if (Hl && t instanceof Kh || t instanceof zh || Ru(t)) a = e, r = n, i = kg(t, r);
+		else if (!t && typeof t != "string") a = e, i = kg(new zh(), r);
 		else if (t && typeof t == "string" && n && typeof n == "string") {
-			let o = t, s = n, c = lC(e);
-			if (c.kind === "AccountConnString") if (Xc) {
-				let e = new zm(c.accountName, c.accountKey);
-				a = dC(dC(c.url, encodeURIComponent(o)), encodeURIComponent(s)), r.proxyOptions ||= ol(c.proxyUri), i = Sh(e, r);
+			let o = t, s = n, c = gw(e);
+			if (c.kind === "AccountConnString") if (Hl) {
+				let e = new Kh(c.accountName, c.accountKey);
+				a = vw(vw(c.url, encodeURIComponent(o)), encodeURIComponent(s)), r.proxyOptions ||= Ql(c.proxyUri), i = kg(e, r);
 			} else throw Error("Account connection string is only supported in Node.js environment");
-			else if (c.kind === "SASConnString") a = dC(dC(c.url, encodeURIComponent(o)), encodeURIComponent(s)) + "?" + c.accountSas, i = Sh(new Mm(), r);
+			else if (c.kind === "SASConnString") a = vw(vw(c.url, encodeURIComponent(o)), encodeURIComponent(s)) + "?" + c.accountSas, i = kg(new zh(), r);
 			else throw Error("Connection string must be either an Account connection string or a SAS connection string");
 		} else throw Error("Expecting non-empty strings for containerName and blobName parameters");
 		super(a, i), this.appendBlobContext = this.storageClientContext.appendBlob;
 	}
 	withSnapshot(t) {
-		return new e(fC(this.url, mh.Parameters.SNAPSHOT, t.length === 0 ? void 0 : t), this.pipeline);
+		return new e(yw(this.url, xg.Parameters.SNAPSHOT, t.length === 0 ? void 0 : t), this.pipeline);
 	}
 	async create(e = {}) {
-		return e.conditions = e.conditions || {}, vw(e.customerProvidedKey, this.isHttps), Z.withSpan("AppendBlobClient-create", e, async (t) => X(await this.appendBlobContext.create(0, {
+		return e.conditions = e.conditions || {}, TT(e.customerProvidedKey, this.isHttps), Z.withSpan("AppendBlobClient-create", e, async (t) => X(await this.appendBlobContext.create(0, {
 			abortSignal: e.abortSignal,
 			blobHttpHeaders: e.blobHTTPHeaders,
 			leaseAccessConditions: e.conditions,
@@ -32830,7 +33607,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 			immutabilityPolicyExpiry: e.immutabilityPolicy?.expiriesOn,
 			immutabilityPolicyMode: e.immutabilityPolicy?.policyMode,
 			legalHold: e.legalHold,
-			blobTagsString: CC(e.tags),
+			blobTagsString: Aw(e.tags),
 			tracingOptions: t.tracingOptions
 		})));
 	}
@@ -32870,7 +33647,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		})));
 	}
 	async appendBlock(e, t, n = {}) {
-		return n.conditions = n.conditions || {}, vw(n.customerProvidedKey, this.isHttps), Z.withSpan("AppendBlobClient-appendBlock", n, async (r) => X(await this.appendBlobContext.appendBlock(t, e, {
+		return n.conditions = n.conditions || {}, TT(n.customerProvidedKey, this.isHttps), Z.withSpan("AppendBlobClient-appendBlock", n, async (r) => X(await this.appendBlobContext.appendBlock(t, e, {
 			abortSignal: n.abortSignal,
 			appendPositionAccessConditions: n.conditions,
 			leaseAccessConditions: n.conditions,
@@ -32887,9 +33664,9 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		})));
 	}
 	async appendBlockFromURL(e, t, n, r = {}) {
-		return r.conditions = r.conditions || {}, r.sourceConditions = r.sourceConditions || {}, vw(r.customerProvidedKey, this.isHttps), Z.withSpan("AppendBlobClient-appendBlockFromURL", r, async (i) => X(await this.appendBlobContext.appendBlockFromUrl(e, 0, {
+		return r.conditions = r.conditions || {}, r.sourceConditions = r.sourceConditions || {}, TT(r.customerProvidedKey, this.isHttps), Z.withSpan("AppendBlobClient-appendBlockFromURL", r, async (i) => X(await this.appendBlobContext.appendBlockFromUrl(e, 0, {
 			abortSignal: r.abortSignal,
-			sourceRange: kw({
+			sourceRange: IT({
 				offset: t,
 				count: n
 			}),
@@ -32907,44 +33684,44 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 				sourceIfNoneMatch: r.sourceConditions?.ifNoneMatch,
 				sourceIfUnmodifiedSince: r.sourceConditions?.ifUnmodifiedSince
 			},
-			copySourceAuthorization: OC(r.sourceAuthorization),
+			copySourceAuthorization: Fw(r.sourceAuthorization),
 			cpkInfo: r.customerProvidedKey,
 			encryptionScope: r.encryptionScope,
 			fileRequestIntent: r.sourceShareTokenIntent,
 			tracingOptions: i.tracingOptions
 		})));
 	}
-}, Rw = class e extends Iw {
+}, GT = class e extends UT {
 	_blobContext;
 	blockBlobContext;
 	constructor(e, t, n, r) {
 		let i, a;
-		if (r ||= {}, bh(t)) a = e, i = t;
-		else if (Xc && t instanceof zm || t instanceof Mm || Kl(t)) a = e, r = n, i = Sh(t, r);
-		else if (!t && typeof t != "string") a = e, n && typeof n != "string" && (r = n), i = Sh(new Mm(), r);
+		if (r ||= {}, Dg(t)) a = e, i = t;
+		else if (Hl && t instanceof Kh || t instanceof zh || Ru(t)) a = e, r = n, i = kg(t, r);
+		else if (!t && typeof t != "string") a = e, n && typeof n != "string" && (r = n), i = kg(new zh(), r);
 		else if (t && typeof t == "string" && n && typeof n == "string") {
-			let o = t, s = n, c = lC(e);
-			if (c.kind === "AccountConnString") if (Xc) {
-				let e = new zm(c.accountName, c.accountKey);
-				a = dC(dC(c.url, encodeURIComponent(o)), encodeURIComponent(s)), r.proxyOptions ||= ol(c.proxyUri), i = Sh(e, r);
+			let o = t, s = n, c = gw(e);
+			if (c.kind === "AccountConnString") if (Hl) {
+				let e = new Kh(c.accountName, c.accountKey);
+				a = vw(vw(c.url, encodeURIComponent(o)), encodeURIComponent(s)), r.proxyOptions ||= Ql(c.proxyUri), i = kg(e, r);
 			} else throw Error("Account connection string is only supported in Node.js environment");
-			else if (c.kind === "SASConnString") a = dC(dC(c.url, encodeURIComponent(o)), encodeURIComponent(s)) + "?" + c.accountSas, i = Sh(new Mm(), r);
+			else if (c.kind === "SASConnString") a = vw(vw(c.url, encodeURIComponent(o)), encodeURIComponent(s)) + "?" + c.accountSas, i = kg(new zh(), r);
 			else throw Error("Connection string must be either an Account connection string or a SAS connection string");
 		} else throw Error("Expecting non-empty strings for containerName and blobName parameters");
 		super(a, i), this.blockBlobContext = this.storageClientContext.blockBlob, this._blobContext = this.storageClientContext.blob;
 	}
 	withSnapshot(t) {
-		return new e(fC(this.url, mh.Parameters.SNAPSHOT, t.length === 0 ? void 0 : t), this.pipeline);
+		return new e(yw(this.url, xg.Parameters.SNAPSHOT, t.length === 0 ? void 0 : t), this.pipeline);
 	}
 	async query(e, t = {}) {
-		if (vw(t.customerProvidedKey, this.isHttps), !Xc) throw Error("This operation currently is only supported in Node.js.");
-		return Z.withSpan("BlockBlobClient-query", t, async (n) => new mw(X(await this._blobContext.query({
+		if (TT(t.customerProvidedKey, this.isHttps), !Hl) throw Error("This operation currently is only supported in Node.js.");
+		return Z.withSpan("BlockBlobClient-query", t, async (n) => new xT(X(await this._blobContext.query({
 			abortSignal: t.abortSignal,
 			queryRequest: {
 				queryType: "SQL",
 				expression: e,
-				inputSerialization: EC(t.inputTextConfiguration),
-				outputSerialization: EC(t.outputTextConfiguration)
+				inputSerialization: Nw(t.inputTextConfiguration),
+				outputSerialization: Nw(t.outputTextConfiguration)
 			},
 			leaseAccessConditions: t.conditions,
 			modifiedAccessConditions: {
@@ -32960,7 +33737,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		}));
 	}
 	async upload(e, t, n = {}) {
-		return n.conditions = n.conditions || {}, vw(n.customerProvidedKey, this.isHttps), Z.withSpan("BlockBlobClient-upload", n, async (r) => X(await this.blockBlobContext.upload(t, e, {
+		return n.conditions = n.conditions || {}, TT(n.customerProvidedKey, this.isHttps), Z.withSpan("BlockBlobClient-upload", n, async (r) => X(await this.blockBlobContext.upload(t, e, {
 			abortSignal: n.abortSignal,
 			blobHttpHeaders: n.blobHTTPHeaders,
 			leaseAccessConditions: n.conditions,
@@ -32975,13 +33752,13 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 			immutabilityPolicyExpiry: n.immutabilityPolicy?.expiriesOn,
 			immutabilityPolicyMode: n.immutabilityPolicy?.policyMode,
 			legalHold: n.legalHold,
-			tier: _w(n.tier),
-			blobTagsString: CC(n.tags),
+			tier: wT(n.tier),
+			blobTagsString: Aw(n.tags),
 			tracingOptions: r.tracingOptions
 		})));
 	}
 	async syncUploadFromURL(e, t = {}) {
-		return t.conditions = t.conditions || {}, vw(t.customerProvidedKey, this.isHttps), Z.withSpan("BlockBlobClient-syncUploadFromURL", t, async (n) => X(await this.blockBlobContext.putBlobFromUrl(0, e, {
+		return t.conditions = t.conditions || {}, TT(t.customerProvidedKey, this.isHttps), Z.withSpan("BlockBlobClient-syncUploadFromURL", t, async (n) => X(await this.blockBlobContext.putBlobFromUrl(0, e, {
 			...t,
 			blobHttpHeaders: t.blobHTTPHeaders,
 			leaseAccessConditions: t.conditions,
@@ -32997,16 +33774,16 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 				sourceIfTags: t.sourceConditions?.tagConditions
 			},
 			cpkInfo: t.customerProvidedKey,
-			copySourceAuthorization: OC(t.sourceAuthorization),
-			tier: _w(t.tier),
-			blobTagsString: CC(t.tags),
+			copySourceAuthorization: Fw(t.sourceAuthorization),
+			tier: wT(t.tier),
+			blobTagsString: Aw(t.tags),
 			copySourceTags: t.copySourceTags,
 			fileRequestIntent: t.sourceShareTokenIntent,
 			tracingOptions: n.tracingOptions
 		})));
 	}
 	async stageBlock(e, t, n, r = {}) {
-		return vw(r.customerProvidedKey, this.isHttps), Z.withSpan("BlockBlobClient-stageBlock", r, async (i) => X(await this.blockBlobContext.stageBlock(e, n, t, {
+		return TT(r.customerProvidedKey, this.isHttps), Z.withSpan("BlockBlobClient-stageBlock", r, async (i) => X(await this.blockBlobContext.stageBlock(e, n, t, {
 			abortSignal: r.abortSignal,
 			leaseAccessConditions: r.conditions,
 			requestOptions: { onUploadProgress: r.onProgress },
@@ -33018,24 +33795,24 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		})));
 	}
 	async stageBlockFromURL(e, t, n = 0, r, i = {}) {
-		return vw(i.customerProvidedKey, this.isHttps), Z.withSpan("BlockBlobClient-stageBlockFromURL", i, async (a) => X(await this.blockBlobContext.stageBlockFromURL(e, 0, t, {
+		return TT(i.customerProvidedKey, this.isHttps), Z.withSpan("BlockBlobClient-stageBlockFromURL", i, async (a) => X(await this.blockBlobContext.stageBlockFromURL(e, 0, t, {
 			abortSignal: i.abortSignal,
 			leaseAccessConditions: i.conditions,
 			sourceContentMD5: i.sourceContentMD5,
 			sourceContentCrc64: i.sourceContentCrc64,
-			sourceRange: n === 0 && !r ? void 0 : kw({
+			sourceRange: n === 0 && !r ? void 0 : IT({
 				offset: n,
 				count: r
 			}),
 			cpkInfo: i.customerProvidedKey,
 			encryptionScope: i.encryptionScope,
-			copySourceAuthorization: OC(i.sourceAuthorization),
+			copySourceAuthorization: Fw(i.sourceAuthorization),
 			fileRequestIntent: i.sourceShareTokenIntent,
 			tracingOptions: a.tracingOptions
 		})));
 	}
 	async commitBlockList(e, t = {}) {
-		return t.conditions = t.conditions || {}, vw(t.customerProvidedKey, this.isHttps), Z.withSpan("BlockBlobClient-commitBlockList", t, async (n) => X(await this.blockBlobContext.commitBlockList({ latest: e }, {
+		return t.conditions = t.conditions || {}, TT(t.customerProvidedKey, this.isHttps), Z.withSpan("BlockBlobClient-commitBlockList", t, async (n) => X(await this.blockBlobContext.commitBlockList({ latest: e }, {
 			abortSignal: t.abortSignal,
 			blobHttpHeaders: t.blobHTTPHeaders,
 			leaseAccessConditions: t.conditions,
@@ -33049,8 +33826,8 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 			immutabilityPolicyExpiry: t.immutabilityPolicy?.expiriesOn,
 			immutabilityPolicyMode: t.immutabilityPolicy?.policyMode,
 			legalHold: t.legalHold,
-			tier: _w(t.tier),
-			blobTagsString: CC(t.tags),
+			tier: wT(t.tier),
+			blobTagsString: Aw(t.tags),
 			tracingOptions: n.tracingOptions
 		})));
 	}
@@ -33070,7 +33847,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 	}
 	async uploadData(e, t = {}) {
 		return Z.withSpan("BlockBlobClient-uploadData", t, async (t) => {
-			if (Xc) {
+			if (Hl) {
 				let n;
 				return e instanceof Buffer ? n = e : e instanceof ArrayBuffer ? n = Buffer.from(e) : (e = e, n = Buffer.from(e.buffer, e.byteOffset, e.byteLength)), this.uploadSeekableInternal((e, t) => n.slice(e, e + t), n.byteLength, t);
 			} else {
@@ -33087,20 +33864,20 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 	}
 	async uploadSeekableInternal(e, t, n = {}) {
 		let r = n.blockSize ?? 0;
-		if (r < 0 || r > 4194304e3) throw RangeError(`blockSize option must be >= 0 and <= ${lh}`);
+		if (r < 0 || r > 4194304e3) throw RangeError(`blockSize option must be >= 0 and <= ${gg}`);
 		let i = n.maxSingleShotSize ?? 268435456;
-		if (i < 0 || i > 268435456) throw RangeError(`maxSingleShotSize option must be >= 0 and <= ${ch}`);
+		if (i < 0 || i > 268435456) throw RangeError(`maxSingleShotSize option must be >= 0 and <= ${hg}`);
 		if (r === 0) {
 			if (t > 4194304e3 * 5e4) throw RangeError(`${t} is too larger to upload to a block blob.`);
-			t > i && (r = Math.ceil(t / uh), r < 4194304 && (r = fh));
+			t > i && (r = Math.ceil(t / _g), r < 4194304 && (r = yg));
 		}
 		return n.blobHTTPHeaders ||= {}, n.conditions ||= {}, Z.withSpan("BlockBlobClient-uploadSeekableInternal", n, async (a) => {
 			if (t <= i) return X(await this.upload(e(0, t), t, a));
 			let o = Math.floor((t - 1) / r) + 1;
-			if (o > 5e4) throw RangeError(`The buffer's size is too big or the BlockSize is too small;the number of blocks must be <= ${uh}`);
-			let s = [], c = Yc(), l = 0, u = new jw(n.concurrency);
+			if (o > 5e4) throw RangeError(`The buffer's size is too big or the BlockSize is too small;the number of blocks must be <= ${_g}`);
+			let s = [], c = Vl(), l = 0, u = new RT(n.concurrency);
 			for (let i = 0; i < o; i++) u.addOperation(async () => {
-				let u = vC(c, i), d = r * i, f = (i === o - 1 ? t : d + r) - d;
+				let u = Tw(c, i), d = r * i, f = (i === o - 1 ? t : d + r) - d;
 				s.push(u), await this.stageBlock(u, e(d, f), f, {
 					abortSignal: n.abortSignal,
 					conditions: n.conditions,
@@ -33113,8 +33890,8 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 	}
 	async uploadFile(e, t = {}) {
 		return Z.withSpan("BlockBlobClient-uploadFile", t, async (n) => {
-			let r = (await Pw(e)).size;
-			return this.uploadSeekableInternal((t, n) => () => Fw(e, {
+			let r = (await VT(e)).size;
+			return this.uploadSeekableInternal((t, n) => () => HT(e, {
 				autoClose: !0,
 				end: n ? t + n - 1 : Infinity,
 				start: t
@@ -33124,11 +33901,11 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 			});
 		});
 	}
-	async uploadStream(e, t = dh, n = 5, r = {}) {
+	async uploadStream(e, t = vg, n = 5, r = {}) {
 		return r.blobHTTPHeaders ||= {}, r.conditions ||= {}, Z.withSpan("BlockBlobClient-uploadStream", r, async (i) => {
-			let a = 0, o = Yc(), s = 0, c = [];
-			return await new _m(e, t, n, async (e, t) => {
-				let n = vC(o, a);
+			let a = 0, o = Vl(), s = 0, c = [];
+			return await new wh(e, t, n, async (e, t) => {
+				let n = Tw(o, a);
 				c.push(n), a++, await this.stageBlock(n, e, t, {
 					customerProvidedKey: r.customerProvidedKey,
 					conditions: r.conditions,
@@ -33141,29 +33918,29 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 			}));
 		});
 	}
-}, zw = class e extends Iw {
+}, KT = class e extends UT {
 	pageBlobContext;
 	constructor(e, t, n, r) {
 		let i, a;
-		if (r ||= {}, bh(t)) a = e, i = t;
-		else if (Xc && t instanceof zm || t instanceof Mm || Kl(t)) a = e, r = n, i = Sh(t, r);
-		else if (!t && typeof t != "string") a = e, i = Sh(new Mm(), r);
+		if (r ||= {}, Dg(t)) a = e, i = t;
+		else if (Hl && t instanceof Kh || t instanceof zh || Ru(t)) a = e, r = n, i = kg(t, r);
+		else if (!t && typeof t != "string") a = e, i = kg(new zh(), r);
 		else if (t && typeof t == "string" && n && typeof n == "string") {
-			let o = t, s = n, c = lC(e);
-			if (c.kind === "AccountConnString") if (Xc) {
-				let e = new zm(c.accountName, c.accountKey);
-				a = dC(dC(c.url, encodeURIComponent(o)), encodeURIComponent(s)), r.proxyOptions ||= ol(c.proxyUri), i = Sh(e, r);
+			let o = t, s = n, c = gw(e);
+			if (c.kind === "AccountConnString") if (Hl) {
+				let e = new Kh(c.accountName, c.accountKey);
+				a = vw(vw(c.url, encodeURIComponent(o)), encodeURIComponent(s)), r.proxyOptions ||= Ql(c.proxyUri), i = kg(e, r);
 			} else throw Error("Account connection string is only supported in Node.js environment");
-			else if (c.kind === "SASConnString") a = dC(dC(c.url, encodeURIComponent(o)), encodeURIComponent(s)) + "?" + c.accountSas, i = Sh(new Mm(), r);
+			else if (c.kind === "SASConnString") a = vw(vw(c.url, encodeURIComponent(o)), encodeURIComponent(s)) + "?" + c.accountSas, i = kg(new zh(), r);
 			else throw Error("Connection string must be either an Account connection string or a SAS connection string");
 		} else throw Error("Expecting non-empty strings for containerName and blobName parameters");
 		super(a, i), this.pageBlobContext = this.storageClientContext.pageBlob;
 	}
 	withSnapshot(t) {
-		return new e(fC(this.url, mh.Parameters.SNAPSHOT, t.length === 0 ? void 0 : t), this.pipeline);
+		return new e(yw(this.url, xg.Parameters.SNAPSHOT, t.length === 0 ? void 0 : t), this.pipeline);
 	}
 	async create(e, t = {}) {
-		return t.conditions = t.conditions || {}, vw(t.customerProvidedKey, this.isHttps), Z.withSpan("PageBlobClient-create", t, async (n) => X(await this.pageBlobContext.create(0, e, {
+		return t.conditions = t.conditions || {}, TT(t.customerProvidedKey, this.isHttps), Z.withSpan("PageBlobClient-create", t, async (n) => X(await this.pageBlobContext.create(0, e, {
 			abortSignal: t.abortSignal,
 			blobHttpHeaders: t.blobHTTPHeaders,
 			blobSequenceNumber: t.blobSequenceNumber,
@@ -33178,8 +33955,8 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 			immutabilityPolicyExpiry: t.immutabilityPolicy?.expiriesOn,
 			immutabilityPolicyMode: t.immutabilityPolicy?.policyMode,
 			legalHold: t.legalHold,
-			tier: _w(t.tier),
-			blobTagsString: CC(t.tags),
+			tier: wT(t.tier),
+			blobTagsString: Aw(t.tags),
 			tracingOptions: n.tracingOptions
 		})));
 	}
@@ -33207,7 +33984,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		});
 	}
 	async uploadPages(e, t, n, r = {}) {
-		return r.conditions = r.conditions || {}, vw(r.customerProvidedKey, this.isHttps), Z.withSpan("PageBlobClient-uploadPages", r, async (i) => X(await this.pageBlobContext.uploadPages(n, e, {
+		return r.conditions = r.conditions || {}, TT(r.customerProvidedKey, this.isHttps), Z.withSpan("PageBlobClient-uploadPages", r, async (i) => X(await this.pageBlobContext.uploadPages(n, e, {
 			abortSignal: r.abortSignal,
 			leaseAccessConditions: r.conditions,
 			modifiedAccessConditions: {
@@ -33215,7 +33992,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 				ifTags: r.conditions?.tagConditions
 			},
 			requestOptions: { onUploadProgress: r.onProgress },
-			range: kw({
+			range: IT({
 				offset: t,
 				count: n
 			}),
@@ -33228,10 +34005,10 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		})));
 	}
 	async uploadPagesFromURL(e, t, n, r, i = {}) {
-		return i.conditions = i.conditions || {}, i.sourceConditions = i.sourceConditions || {}, vw(i.customerProvidedKey, this.isHttps), Z.withSpan("PageBlobClient-uploadPagesFromURL", i, async (a) => X(await this.pageBlobContext.uploadPagesFromURL(e, kw({
+		return i.conditions = i.conditions || {}, i.sourceConditions = i.sourceConditions || {}, TT(i.customerProvidedKey, this.isHttps), Z.withSpan("PageBlobClient-uploadPagesFromURL", i, async (a) => X(await this.pageBlobContext.uploadPagesFromURL(e, IT({
 			offset: t,
 			count: r
-		}), 0, kw({
+		}), 0, IT({
 			offset: n,
 			count: r
 		}), {
@@ -33252,7 +34029,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 			},
 			cpkInfo: i.customerProvidedKey,
 			encryptionScope: i.encryptionScope,
-			copySourceAuthorization: OC(i.sourceAuthorization),
+			copySourceAuthorization: Fw(i.sourceAuthorization),
 			fileRequestIntent: i.sourceShareTokenIntent,
 			tracingOptions: a.tracingOptions
 		})));
@@ -33265,7 +34042,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 				...n.conditions,
 				ifTags: n.conditions?.tagConditions
 			},
-			range: kw({
+			range: IT({
 				offset: e,
 				count: t
 			}),
@@ -33276,14 +34053,14 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		})));
 	}
 	async getPageRanges(e = 0, t, n = {}) {
-		return n.conditions = n.conditions || {}, Z.withSpan("PageBlobClient-getPageRanges", n, async (r) => bw(X(await this.pageBlobContext.getPageRanges({
+		return n.conditions = n.conditions || {}, Z.withSpan("PageBlobClient-getPageRanges", n, async (r) => DT(X(await this.pageBlobContext.getPageRanges({
 			abortSignal: n.abortSignal,
 			leaseAccessConditions: n.conditions,
 			modifiedAccessConditions: {
 				...n.conditions,
 				ifTags: n.conditions?.tagConditions
 			},
-			range: kw({
+			range: IT({
 				offset: e,
 				count: t
 			}),
@@ -33298,7 +34075,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 				...r.conditions,
 				ifTags: r.conditions?.tagConditions
 			},
-			range: kw({
+			range: IT({
 				offset: e,
 				count: t
 			}),
@@ -33314,7 +34091,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		while (n);
 	}
 	async *listPageRangeItems(e = 0, t, n = {}) {
-		for await (let r of this.listPageRangeItemSegments(e, t, void 0, n)) yield* kC(r);
+		for await (let r of this.listPageRangeItemSegments(e, t, void 0, n)) yield* Iw(r);
 	}
 	listPageRanges(e = 0, t, n = {}) {
 		n.conditions = n.conditions || {};
@@ -33333,7 +34110,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		};
 	}
 	async getPageRangesDiff(e, t, n, r = {}) {
-		return r.conditions = r.conditions || {}, Z.withSpan("PageBlobClient-getPageRangesDiff", r, async (i) => bw(X(await this.pageBlobContext.getPageRangesDiff({
+		return r.conditions = r.conditions || {}, Z.withSpan("PageBlobClient-getPageRangesDiff", r, async (i) => DT(X(await this.pageBlobContext.getPageRangesDiff({
 			abortSignal: r.abortSignal,
 			leaseAccessConditions: r.conditions,
 			modifiedAccessConditions: {
@@ -33341,7 +34118,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 				ifTags: r.conditions?.tagConditions
 			},
 			prevsnapshot: n,
-			range: kw({
+			range: IT({
 				offset: e,
 				count: t
 			}),
@@ -33357,7 +34134,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 				ifTags: i?.conditions?.tagConditions
 			},
 			prevsnapshot: n,
-			range: kw({
+			range: IT({
 				offset: e,
 				count: t
 			}),
@@ -33373,7 +34150,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		while (r);
 	}
 	async *listPageRangeDiffItems(e, t, n, r) {
-		for await (let i of this.listPageRangeDiffItemSegments(e, t, n, void 0, r)) yield* kC(i);
+		for await (let i of this.listPageRangeDiffItemSegments(e, t, n, void 0, r)) yield* Iw(i);
 	}
 	listPageRangesDiff(e, t, n, r = {}) {
 		r.conditions = r.conditions || {};
@@ -33392,7 +34169,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 		};
 	}
 	async getPageRangesDiffForManagedDisks(e, t, n, r = {}) {
-		return r.conditions = r.conditions || {}, Z.withSpan("PageBlobClient-GetPageRangesDiffForManagedDisks", r, async (i) => bw(X(await this.pageBlobContext.getPageRangesDiff({
+		return r.conditions = r.conditions || {}, Z.withSpan("PageBlobClient-GetPageRangesDiffForManagedDisks", r, async (i) => DT(X(await this.pageBlobContext.getPageRangesDiff({
 			abortSignal: r.abortSignal,
 			leaseAccessConditions: r.conditions,
 			modifiedAccessConditions: {
@@ -33400,7 +34177,7 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 				ifTags: r.conditions?.tagConditions
 			},
 			prevSnapshotUrl: n,
-			range: kw({
+			range: IT({
 				offset: e,
 				count: t
 			}),
@@ -33441,34 +34218,34 @@ var Pw = C.promisify(ie.stat), Fw = ie.createReadStream, Iw = class e extends AC
 			tracingOptions: n.tracingOptions
 		})));
 	}
-}, Bw = class extends Error {
+}, qT = class extends Error {
 	constructor(e) {
 		super(e), this.name = "InvalidResponseError";
 	}
-}, Vw = class extends Error {
+}, JT = class extends Error {
 	constructor(e) {
 		let t = `Unable to make request: ${e}\nIf you are using self-hosted runners, please make sure your runner has access to all GitHub endpoints: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#communication-between-self-hosted-runners-and-github`;
 		super(t), this.code = e, this.name = "NetworkError";
 	}
 };
-Vw.isNetworkErrorCode = (e) => e ? [
+JT.isNetworkErrorCode = (e) => e ? [
 	"ECONNRESET",
 	"ENOTFOUND",
 	"ETIMEDOUT",
 	"ECONNREFUSED",
 	"EHOSTUNREACH"
 ].includes(e) : !1;
-var Hw = class extends Error {
+var YT = class extends Error {
 	constructor() {
 		super("Cache storage quota has been hit. Unable to upload any new cache entries. Usage is recalculated every 6-12 hours.\nMore info on storage limits: https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions#calculating-minute-and-storage-spending"), this.name = "UsageError";
 	}
 };
-Hw.isUsageErrorMessage = (e) => e ? e.includes("insufficient usage") : !1;
-var Uw = class extends Error {
+YT.isUsageErrorMessage = (e) => e ? e.includes("insufficient usage") : !1;
+var XT = class extends Error {
 	constructor(e) {
 		super(e), this.name = "RateLimitError";
 	}
-}, Ww = function(e, t, n, r) {
+}, ZT = function(e, t, n, r) {
 	function i(e) {
 		return e instanceof n ? e : new n(function(t) {
 			t(e);
@@ -33494,7 +34271,7 @@ var Uw = class extends Error {
 		}
 		c((r = r.apply(e, t || [])).next());
 	});
-}, Gw = class {
+}, QT = class {
 	constructor(e) {
 		this.contentLength = e, this.sentBytes = 0, this.displayedComplete = !1, this.startTime = Date.now();
 	}
@@ -33527,9 +34304,9 @@ var Uw = class extends Error {
 		this.timeoutHandle &&= (clearTimeout(this.timeoutHandle), void 0), this.display();
 	}
 };
-function Kw(e, t, n) {
-	return Ww(this, void 0, void 0, function* () {
-		let r = new Iw(e), i = r.getBlockBlobClient(), a = new Gw(n?.archiveSizeBytes ?? 0), o = {
+function $T(e, t, n) {
+	return ZT(this, void 0, void 0, function* () {
+		let r = new UT(e), i = r.getBlockBlobClient(), a = new QT(n?.archiveSizeBytes ?? 0), o = {
 			blockSize: n?.uploadChunkSize,
 			concurrency: n?.uploadConcurrency,
 			maxSingleShotSize: 128 * 1024 * 1024,
@@ -33538,7 +34315,7 @@ function Kw(e, t, n) {
 		try {
 			a.startDisplayTimer(), z(`BlobClient: ${r.name}:${r.accountName}:${r.containerName}`);
 			let e = yield i.uploadFile(t, o);
-			if (e._response.status >= 400) throw new Bw(`uploadCacheArchiveSDK: upload failed with status code ${e._response.status}`);
+			if (e._response.status >= 400) throw new qT(`uploadCacheArchiveSDK: upload failed with status code ${e._response.status}`);
 			return e;
 		} catch (e) {
 			throw Mr(`uploadCacheArchiveSDK: internal error uploading cache archive: ${e.message}`), e;
@@ -33547,7 +34324,7 @@ function Kw(e, t, n) {
 		}
 	});
 }
-var qw = function(e, t, n, r) {
+var eE = function(e, t, n, r) {
 	function i(e) {
 		return e instanceof n ? e : new n(function(t) {
 			t(e);
@@ -33574,26 +34351,26 @@ var qw = function(e, t, n, r) {
 		c((r = r.apply(e, t || [])).next());
 	});
 };
-function Jw(e) {
+function tE(e) {
 	return e ? e >= 200 && e < 300 : !1;
 }
-function Yw(e) {
+function nE(e) {
 	return e ? e >= 500 : !0;
 }
-function Xw(e) {
+function rE(e) {
 	return e ? [
 		Sn.BadGateway,
 		Sn.ServiceUnavailable,
 		Sn.GatewayTimeout
 	].includes(e) : !1;
 }
-function Zw(e) {
-	return qw(this, void 0, void 0, function* () {
+function iE(e) {
+	return eE(this, void 0, void 0, function* () {
 		return new Promise((t) => setTimeout(t, e));
 	});
 }
-function Qw(e, t, n) {
-	return qw(this, arguments, void 0, function* (e, t, n, r = 2, i = ja, a = void 0) {
+function aE(e, t, n) {
+	return eE(this, arguments, void 0, function* (e, t, n, r = 2, i = wo, a = void 0) {
 		let o = "", s = 1;
 		for (; s <= r;) {
 			let c, l, u = !1;
@@ -33602,19 +34379,19 @@ function Qw(e, t, n) {
 			} catch (e) {
 				a && (c = a(e)), u = !0, o = e.message;
 			}
-			if (c && (l = n(c), !Yw(l))) return c;
-			if (l && (u = Xw(l), o = `Cache service responded with ${l}`), z(`${e} - Attempt ${s} of ${r} failed with error: ${o}`), !u) {
+			if (c && (l = n(c), !nE(l))) return c;
+			if (l && (u = rE(l), o = `Cache service responded with ${l}`), z(`${e} - Attempt ${s} of ${r} failed with error: ${o}`), !u) {
 				z(`${e} - Error is not retryable`);
 				break;
 			}
-			yield Zw(i), s++;
+			yield iE(i), s++;
 		}
 		throw Error(`${e} failed: ${o}`);
 	});
 }
-function $w(e, t) {
-	return qw(this, arguments, void 0, function* (e, t, n = 2, r = ja) {
-		return yield Qw(e, t, (e) => e.statusCode, n, r, (e) => {
+function oE(e, t) {
+	return eE(this, arguments, void 0, function* (e, t, n = 2, r = wo) {
+		return yield aE(e, t, (e) => e.statusCode, n, r, (e) => {
 			if (e instanceof An) return {
 				statusCode: e.statusCode,
 				result: null,
@@ -33624,12 +34401,12 @@ function $w(e, t) {
 		});
 	});
 }
-function eT(e, t) {
-	return qw(this, arguments, void 0, function* (e, t, n = 2, r = ja) {
-		return yield Qw(e, t, (e) => e.message.statusCode, n, r);
+function sE(e, t) {
+	return eE(this, arguments, void 0, function* (e, t, n = 2, r = wo) {
+		return yield aE(e, t, (e) => e.message.statusCode, n, r);
 	});
 }
-var tT = function(e, t, n, r) {
+var cE = function(e, t, n, r) {
 	function i(e) {
 		return e instanceof n ? e : new n(function(t) {
 			t(e);
@@ -33656,12 +34433,12 @@ var tT = function(e, t, n, r) {
 		c((r = r.apply(e, t || [])).next());
 	});
 };
-function nT(e, t) {
-	return tT(this, void 0, void 0, function* () {
+function lE(e, t) {
+	return cE(this, void 0, void 0, function* () {
 		yield v.promisify(k.pipeline)(e.message, t);
 	});
 }
-var rT = class {
+var uE = class {
 	constructor(e) {
 		this.contentLength = e, this.segmentIndex = 0, this.segmentSize = 0, this.segmentOffset = 0, this.receivedBytes = 0, this.displayedComplete = !1, this.startTime = Date.now();
 	}
@@ -33697,29 +34474,29 @@ var rT = class {
 		this.timeoutHandle &&= (clearTimeout(this.timeoutHandle), void 0), this.display();
 	}
 };
-function iT(e, t) {
-	return tT(this, void 0, void 0, function* () {
-		let n = a.createWriteStream(t), r = new Mn("actions/cache"), i = yield eT("downloadCache", () => tT(this, void 0, void 0, function* () {
+function dE(e, t) {
+	return cE(this, void 0, void 0, function* () {
+		let n = a.createWriteStream(t), r = new Mn("actions/cache"), i = yield sE("downloadCache", () => cE(this, void 0, void 0, function* () {
 			return r.get(e);
 		}));
-		i.message.socket.setTimeout(Ma, () => {
-			i.message.destroy(), z(`Aborting download, socket timed out after ${Ma} ms`);
-		}), yield nT(i, n);
+		i.message.socket.setTimeout(To, () => {
+			i.message.destroy(), z(`Aborting download, socket timed out after ${To} ms`);
+		}), yield lE(i, n);
 		let o = i.message.headers["content-length"];
 		if (o) {
-			let e = parseInt(o), n = Va(t);
+			let e = parseInt(o), n = Po(t);
 			if (n !== e) throw Error(`Incomplete download. Expected file size: ${e}, actual file size: ${n}`);
 		} else z("Unable to validate download, no Content-Length header");
 	});
 }
-function aT(e, t, n) {
-	return tT(this, void 0, void 0, function* () {
+function fE(e, t, n) {
+	return cE(this, void 0, void 0, function* () {
 		let r = yield a.promises.open(t, "w"), i = new Mn("actions/cache", void 0, {
 			socketTimeout: n.timeoutInMs,
 			keepAlive: !0
 		});
 		try {
-			let t = (yield eT("downloadCacheMetadata", () => tT(this, void 0, void 0, function* () {
+			let t = (yield sE("downloadCacheMetadata", () => cE(this, void 0, void 0, function* () {
 				return yield i.request("HEAD", e, null, {});
 			}))).message.headers["content-length"];
 			if (t == null) throw Error("Content-Length not found on blob response");
@@ -33730,15 +34507,15 @@ function aT(e, t, n) {
 				let n = Math.min(s, a - t);
 				o.push({
 					offset: t,
-					promiseGetter: () => tT(this, void 0, void 0, function* () {
-						return yield oT(i, e, t, n);
+					promiseGetter: () => cE(this, void 0, void 0, function* () {
+						return yield pE(i, e, t, n);
 					})
 				});
 			}
 			o.reverse();
-			let c = 0, l = 0, u = new rT(a);
+			let c = 0, l = 0, u = new uE(a);
 			u.startDisplayTimer();
-			let d = u.onProgress(), f = [], p, m = () => tT(this, void 0, void 0, function* () {
+			let d = u.onProgress(), f = [], p, m = () => cE(this, void 0, void 0, function* () {
 				let e = yield Promise.race(Object.values(f));
 				yield r.write(e.buffer, 0, e.count, e.offset), c--, delete f[e.offset], l += e.count, d({ loadedBytes: l });
 			});
@@ -33749,11 +34526,11 @@ function aT(e, t, n) {
 		}
 	});
 }
-function oT(e, t, n, r) {
-	return tT(this, void 0, void 0, function* () {
+function pE(e, t, n, r) {
+	return cE(this, void 0, void 0, function* () {
 		let i = 0;
 		for (;;) try {
-			let i = yield lT(3e4, sT(e, t, n, r));
+			let i = yield gE(3e4, mE(e, t, n, r));
 			if (typeof i == "string") throw Error("downloadSegmentRetry failed due to timeout");
 			return i;
 		} catch (e) {
@@ -33762,9 +34539,9 @@ function oT(e, t, n, r) {
 		}
 	});
 }
-function sT(e, t, n, r) {
-	return tT(this, void 0, void 0, function* () {
-		let i = yield eT("downloadCachePart", () => tT(this, void 0, void 0, function* () {
+function mE(e, t, n, r) {
+	return cE(this, void 0, void 0, function* () {
+		let i = yield sE("downloadCachePart", () => cE(this, void 0, void 0, function* () {
 			return yield e.get(t, { Range: `bytes=${n}-${n + r - 1}` });
 		}));
 		if (!i.readBodyBuffer) throw Error("Expected HttpClientResponse to implement readBodyBuffer");
@@ -33775,19 +34552,19 @@ function sT(e, t, n, r) {
 		};
 	});
 }
-function cT(e, t, n) {
-	return tT(this, void 0, void 0, function* () {
-		let r = new Rw(e, void 0, { retryOptions: { tryTimeoutInMs: n.timeoutInMs } }), i = (yield r.getProperties()).contentLength ?? -1;
-		if (i < 0) z("Unable to determine content length, downloading file with http-client..."), yield iT(e, t);
+function hE(e, t, n) {
+	return cE(this, void 0, void 0, function* () {
+		let r = new GT(e, void 0, { retryOptions: { tryTimeoutInMs: n.timeoutInMs } }), i = (yield r.getProperties()).contentLength ?? -1;
+		if (i < 0) z("Unable to determine content length, downloading file with http-client..."), yield dE(e, t);
 		else {
-			let e = Math.min(134217728, ne.constants.MAX_LENGTH), o = new rT(i), s = a.openSync(t, "w");
+			let e = Math.min(134217728, ne.constants.MAX_LENGTH), o = new uE(i), s = a.openSync(t, "w");
 			try {
 				o.startDisplayTimer();
 				let t = new AbortController(), c = t.signal;
 				for (; !o.isDone();) {
 					let l = o.segmentOffset + o.segmentSize, u = Math.min(e, i - l);
 					o.nextSegment(u);
-					let d = yield lT(n.segmentTimeoutInMs || 36e5, r.downloadToBuffer(l, u, {
+					let d = yield gE(n.segmentTimeoutInMs || 36e5, r.downloadToBuffer(l, u, {
 						abortSignal: c,
 						concurrency: n.downloadConcurrency,
 						onProgress: o.onProgress()
@@ -33801,13 +34578,13 @@ function cT(e, t, n) {
 		}
 	});
 }
-var lT = (e, t) => tT(void 0, void 0, void 0, function* () {
+var gE = (e, t) => cE(void 0, void 0, void 0, function* () {
 	let n, r = new Promise((t) => {
 		n = setTimeout(() => t("timeout"), e);
 	});
 	return Promise.race([t, r]).then((e) => (clearTimeout(n), e));
 });
-function uT(e) {
+function _E(e) {
 	let t = {
 		useAzureSdk: !1,
 		uploadConcurrency: 4,
@@ -33815,7 +34592,7 @@ function uT(e) {
 	};
 	return e && (typeof e.useAzureSdk == "boolean" && (t.useAzureSdk = e.useAzureSdk), typeof e.uploadConcurrency == "number" && (t.uploadConcurrency = e.uploadConcurrency), typeof e.uploadChunkSize == "number" && (t.uploadChunkSize = e.uploadChunkSize)), t.uploadConcurrency = isNaN(Number(process.env.CACHE_UPLOAD_CONCURRENCY)) ? t.uploadConcurrency : Math.min(32, Number(process.env.CACHE_UPLOAD_CONCURRENCY)), t.uploadChunkSize = isNaN(Number(process.env.CACHE_UPLOAD_CHUNK_SIZE)) ? t.uploadChunkSize : Math.min(128 * 1024 * 1024, Number(process.env.CACHE_UPLOAD_CHUNK_SIZE) * 1024 * 1024), z(`Use Azure SDK: ${t.useAzureSdk}`), z(`Upload concurrency: ${t.uploadConcurrency}`), z(`Upload chunk size: ${t.uploadChunkSize}`), t;
 }
-function dT(e) {
+function vE(e) {
 	let t = {
 		useAzureSdk: !1,
 		concurrentBlobDownloads: !0,
@@ -33828,62 +34605,62 @@ function dT(e) {
 	let n = process.env.SEGMENT_DOWNLOAD_TIMEOUT_MINS;
 	return n && !isNaN(Number(n)) && isFinite(Number(n)) && (t.segmentTimeoutInMs = Number(n) * 60 * 1e3), z(`Use Azure SDK: ${t.useAzureSdk}`), z(`Download concurrency: ${t.downloadConcurrency}`), z(`Request timeout (ms): ${t.timeoutInMs}`), z(`Cache segment download timeout mins env var: ${process.env.SEGMENT_DOWNLOAD_TIMEOUT_MINS}`), z(`Segment download timeout (ms): ${t.segmentTimeoutInMs}`), z(`Lookup only: ${t.lookupOnly}`), t;
 }
-function fT() {
+function yE() {
 	let e = new URL(process.env.GITHUB_SERVER_URL || "https://github.com").hostname.trimEnd().toUpperCase(), t = e === "GITHUB.COM", n = e.endsWith(".GHE.COM"), r = e.endsWith(".LOCALHOST");
 	return !t && !n && !r;
 }
-function pT() {
-	return fT() ? "v1" : process.env.ACTIONS_CACHE_SERVICE_V2 ? "v2" : "v1";
+function bE() {
+	return yE() ? "v1" : process.env.ACTIONS_CACHE_SERVICE_V2 ? "v2" : "v1";
 }
-function mT() {
-	let e = pT();
+function xE() {
+	let e = bE();
 	switch (e) {
 		case "v1": return process.env.ACTIONS_CACHE_URL || process.env.ACTIONS_RESULTS_URL || "";
 		case "v2": return process.env.ACTIONS_RESULTS_URL || "";
 		default: throw Error(`Unsupported cache service version: ${e}`);
 	}
 }
-var hT = /* @__PURE__ */ fe({
-	bugs: () => AT,
-	default: () => PT,
-	dependencies: () => jT,
-	description: () => vT,
-	devDependencies: () => MT,
-	directories: () => TT,
-	exports: () => wT,
-	files: () => ET,
-	homepage: () => bT,
-	keywords: () => yT,
+var SE = /* @__PURE__ */ fe({
+	bugs: () => LE,
+	default: () => VE,
+	dependencies: () => RE,
+	description: () => TE,
+	devDependencies: () => zE,
+	directories: () => ME,
+	exports: () => jE,
+	files: () => NE,
+	homepage: () => DE,
+	keywords: () => EE,
 	license: () => "MIT",
-	main: () => ST,
-	name: () => gT,
-	overrides: () => NT,
-	publishConfig: () => DT,
-	repository: () => OT,
-	scripts: () => kT,
-	type: () => xT,
-	types: () => CT,
-	version: () => _T
-}), gT, _T, vT, yT, bT, xT, ST, CT, wT, TT, ET, DT, OT, kT, AT, jT, MT, NT, PT, FT = de((() => {
-	gT = "@actions/cache", _T = "6.0.0", vT = "Actions cache lib", yT = [
+	main: () => kE,
+	name: () => CE,
+	overrides: () => BE,
+	publishConfig: () => PE,
+	repository: () => FE,
+	scripts: () => IE,
+	type: () => OE,
+	types: () => AE,
+	version: () => wE
+}), CE, wE, TE, EE, DE, OE, kE, AE, jE, ME, NE, PE, FE, IE, LE, RE, zE, BE, VE, HE = de((() => {
+	CE = "@actions/cache", wE = "6.0.0", TE = "Actions cache lib", EE = [
 		"github",
 		"actions",
 		"cache"
-	], bT = "https://github.com/actions/toolkit/tree/main/packages/cache", xT = "module", ST = "lib/cache.js", CT = "lib/cache.d.ts", wT = { ".": {
+	], DE = "https://github.com/actions/toolkit/tree/main/packages/cache", OE = "module", kE = "lib/cache.js", AE = "lib/cache.d.ts", jE = { ".": {
 		types: "./lib/cache.d.ts",
 		import: "./lib/cache.js"
-	} }, TT = {
+	} }, ME = {
 		lib: "lib",
 		test: "__tests__"
-	}, ET = ["lib", "!.DS_Store"], DT = { access: "public" }, OT = {
+	}, NE = ["lib", "!.DS_Store"], PE = { access: "public" }, FE = {
 		type: "git",
 		url: "git+https://github.com/actions/toolkit.git",
 		directory: "packages/cache"
-	}, kT = {
+	}, IE = {
 		"audit-moderate": "npm install && npm audit --json --audit-level=moderate > audit.json",
 		test: "echo \"Error: run tests from root\" && exit 1",
 		tsc: "tsc && cp src/internal/shared/package-version.cjs lib/internal/shared/"
-	}, AT = { url: "https://github.com/actions/toolkit/issues" }, jT = {
+	}, LE = { url: "https://github.com/actions/toolkit/issues" }, RE = {
 		"@actions/core": "^3.0.0",
 		"@actions/exec": "^3.0.0",
 		"@actions/glob": "^0.6.1",
@@ -33893,42 +34670,42 @@ var hT = /* @__PURE__ */ fe({
 		"@azure/storage-blob": "^12.30.0",
 		"@protobuf-ts/runtime-rpc": "^2.11.1",
 		semver: "^7.7.3"
-	}, MT = {
+	}, zE = {
 		"@protobuf-ts/plugin": "^2.9.4",
 		"@types/node": "^25.1.0",
 		"@types/semver": "^7.7.1",
 		typescript: "^5.2.2"
-	}, NT = {
+	}, BE = {
 		"uri-js": "npm:uri-js-replace@^1.0.1",
 		"node-fetch": "^3.3.2"
-	}, PT = {
-		name: gT,
-		version: _T,
-		description: vT,
-		keywords: yT,
-		homepage: bT,
+	}, VE = {
+		name: CE,
+		version: wE,
+		description: TE,
+		keywords: EE,
+		homepage: DE,
 		license: "MIT",
-		type: xT,
-		main: ST,
-		types: CT,
-		exports: wT,
-		directories: TT,
-		files: ET,
-		publishConfig: DT,
-		repository: OT,
-		scripts: kT,
-		bugs: AT,
-		dependencies: jT,
-		devDependencies: MT,
-		overrides: NT
+		type: OE,
+		main: kE,
+		types: AE,
+		exports: jE,
+		directories: ME,
+		files: NE,
+		publishConfig: PE,
+		repository: FE,
+		scripts: IE,
+		bugs: LE,
+		dependencies: RE,
+		devDependencies: zE,
+		overrides: BE
 	};
-})), IT = (/* @__PURE__ */ F(((e, t) => {
-	t.exports = { version: (FT(), me(hT).default).version };
+})), UE = (/* @__PURE__ */ F(((e, t) => {
+	t.exports = { version: (HE(), me(SE).default).version };
 })))();
-function LT() {
-	return `@actions/cache-${IT.version}`;
+function WE() {
+	return `@actions/cache-${UE.version}`;
 }
-var RT = function(e, t, n, r) {
+var GE = function(e, t, n, r) {
 	function i(e) {
 		return e instanceof n ? e : new n(function(t) {
 			t(e);
@@ -33955,38 +34732,38 @@ var RT = function(e, t, n, r) {
 		c((r = r.apply(e, t || [])).next());
 	});
 };
-function zT(e) {
-	let t = mT();
+function KE(e) {
+	let t = xE();
 	if (!t) throw Error("Cache Service Url not found, unable to restore cache.");
 	let n = `${t}_apis/artifactcache/${e}`;
 	return z(`Resource Url: ${n}`), n;
 }
-function BT(e, t) {
+function qE(e, t) {
 	return `${e};api-version=${t}`;
 }
-function VT() {
-	return { headers: { Accept: BT("application/json", "6.0-preview.1") } };
+function JE() {
+	return { headers: { Accept: qE("application/json", "6.0-preview.1") } };
 }
-function HT() {
+function YE() {
 	let e = new Fn(process.env.ACTIONS_RUNTIME_TOKEN || "");
-	return new Mn(LT(), [e], VT());
+	return new Mn(WE(), [e], JE());
 }
-function UT(e, t, n) {
-	return RT(this, void 0, void 0, function* () {
-		let r = HT(), i = Ya(t, n?.compressionMethod, n?.enableCrossOsArchive), a = `cache?keys=${encodeURIComponent(e.join(","))}&version=${i}`, o = yield $w("getCacheEntry", () => RT(this, void 0, void 0, function* () {
-			return r.getJson(zT(a));
+function XE(e, t, n) {
+	return GE(this, void 0, void 0, function* () {
+		let r = YE(), i = Ho(t, n?.compressionMethod, n?.enableCrossOsArchive), a = `cache?keys=${encodeURIComponent(e.join(","))}&version=${i}`, o = yield oE("getCacheEntry", () => GE(this, void 0, void 0, function* () {
+			return r.getJson(KE(a));
 		}));
-		if (o.statusCode === 204) return Ar() && (yield WT(e[0], r, i)), null;
-		if (!Jw(o.statusCode)) throw Error(`Cache service responded with ${o.statusCode}`);
+		if (o.statusCode === 204) return Ar() && (yield ZE(e[0], r, i)), null;
+		if (!tE(o.statusCode)) throw Error(`Cache service responded with ${o.statusCode}`);
 		let s = o.result, c = s?.archiveLocation;
 		if (!c) throw Error("Cache not found.");
 		return Tr(c), z("Cache Result:"), z(JSON.stringify(s)), s;
 	});
 }
-function WT(e, t, n) {
-	return RT(this, void 0, void 0, function* () {
-		let r = `caches?key=${encodeURIComponent(e)}`, i = yield $w("listCache", () => RT(this, void 0, void 0, function* () {
-			return t.getJson(zT(r));
+function ZE(e, t, n) {
+	return GE(this, void 0, void 0, function* () {
+		let r = `caches?key=${encodeURIComponent(e)}`, i = yield oE("listCache", () => GE(this, void 0, void 0, function* () {
+			return t.getJson(KE(r));
 		}));
 		if (i.statusCode === 200) {
 			let t = i.result, r = t?.totalCount;
@@ -33997,49 +34774,49 @@ function WT(e, t, n) {
 		}
 	});
 }
-function GT(e, t, n) {
-	return RT(this, void 0, void 0, function* () {
-		let r = new M(e), i = dT(n);
-		r.hostname.endsWith(".blob.core.windows.net") ? i.useAzureSdk ? yield cT(e, t, i) : i.concurrentBlobDownloads ? yield aT(e, t, i) : yield iT(e, t) : yield iT(e, t);
+function QE(e, t, n) {
+	return GE(this, void 0, void 0, function* () {
+		let r = new M(e), i = vE(n);
+		r.hostname.endsWith(".blob.core.windows.net") ? i.useAzureSdk ? yield hE(e, t, i) : i.concurrentBlobDownloads ? yield fE(e, t, i) : yield dE(e, t) : yield dE(e, t);
 	});
 }
-function KT(e, t, n) {
-	return RT(this, void 0, void 0, function* () {
-		let r = HT(), i = {
+function $E(e, t, n) {
+	return GE(this, void 0, void 0, function* () {
+		let r = YE(), i = {
 			key: e,
-			version: Ya(t, n?.compressionMethod, n?.enableCrossOsArchive),
+			version: Ho(t, n?.compressionMethod, n?.enableCrossOsArchive),
 			cacheSize: n?.cacheSize
 		};
-		return yield $w("reserveCache", () => RT(this, void 0, void 0, function* () {
-			return r.postJson(zT("caches"), i);
+		return yield oE("reserveCache", () => GE(this, void 0, void 0, function* () {
+			return r.postJson(KE("caches"), i);
 		}));
 	});
 }
-function qT(e, t) {
+function eD(e, t) {
 	return `bytes ${e}-${t}/*`;
 }
-function JT(e, t, n, r, i) {
-	return RT(this, void 0, void 0, function* () {
-		z(`Uploading chunk of size ${i - r + 1} bytes at offset ${r} with content range: ${qT(r, i)}`);
+function tD(e, t, n, r, i) {
+	return GE(this, void 0, void 0, function* () {
+		z(`Uploading chunk of size ${i - r + 1} bytes at offset ${r} with content range: ${eD(r, i)}`);
 		let a = {
 			"Content-Type": "application/octet-stream",
-			"Content-Range": qT(r, i)
-		}, o = yield eT(`uploadChunk (start: ${r}, end: ${i})`, () => RT(this, void 0, void 0, function* () {
+			"Content-Range": eD(r, i)
+		}, o = yield sE(`uploadChunk (start: ${r}, end: ${i})`, () => GE(this, void 0, void 0, function* () {
 			return e.sendStream("PATCH", t, n(), a);
 		}));
-		if (!Jw(o.message.statusCode)) throw Error(`Cache service responded with ${o.message.statusCode} during upload chunk.`);
+		if (!tE(o.message.statusCode)) throw Error(`Cache service responded with ${o.message.statusCode} during upload chunk.`);
 	});
 }
-function YT(e, t, n, r) {
-	return RT(this, void 0, void 0, function* () {
-		let i = Va(n), o = zT(`caches/${t.toString()}`), s = a.openSync(n, "r"), c = uT(r), l = Ja("uploadConcurrency", c.uploadConcurrency), u = Ja("uploadChunkSize", c.uploadChunkSize), d = [...Array(l).keys()];
+function nD(e, t, n, r) {
+	return GE(this, void 0, void 0, function* () {
+		let i = Po(n), o = KE(`caches/${t.toString()}`), s = a.openSync(n, "r"), c = _E(r), l = Vo("uploadConcurrency", c.uploadConcurrency), u = Vo("uploadChunkSize", c.uploadChunkSize), d = [...Array(l).keys()];
 		z("Awaiting all uploads");
 		let f = 0;
 		try {
-			yield Promise.all(d.map(() => RT(this, void 0, void 0, function* () {
+			yield Promise.all(d.map(() => GE(this, void 0, void 0, function* () {
 				for (; f < i;) {
 					let t = Math.min(i - f, u), r = f, c = f + t - 1;
-					f += u, yield JT(e, o, () => a.createReadStream(n, {
+					f += u, yield tD(e, o, () => a.createReadStream(n, {
 						fd: s,
 						start: r,
 						end: c,
@@ -34054,31 +34831,31 @@ function YT(e, t, n, r) {
 		}
 	});
 }
-function XT(e, t, n) {
-	return RT(this, void 0, void 0, function* () {
+function rD(e, t, n) {
+	return GE(this, void 0, void 0, function* () {
 		let r = { size: n };
-		return yield $w("commitCache", () => RT(this, void 0, void 0, function* () {
-			return e.postJson(zT(`caches/${t.toString()}`), r);
+		return yield oE("commitCache", () => GE(this, void 0, void 0, function* () {
+			return e.postJson(KE(`caches/${t.toString()}`), r);
 		}));
 	});
 }
-function ZT(e, t, n, r) {
-	return RT(this, void 0, void 0, function* () {
-		if (uT(r).useAzureSdk) {
+function iD(e, t, n, r) {
+	return GE(this, void 0, void 0, function* () {
+		if (_E(r).useAzureSdk) {
 			if (!n) throw Error("Azure Storage SDK can only be used when a signed URL is provided.");
-			yield Kw(n, t, r);
+			yield $T(n, t, r);
 		} else {
-			let n = HT();
-			z("Upload cache"), yield YT(n, e, t, r), z("Commiting cache");
-			let i = Va(t);
+			let n = YE();
+			z("Upload cache"), yield nD(n, e, t, r), z("Commiting cache");
+			let i = Po(t);
 			Nr(`Cache Size: ~${Math.round(i / (1024 * 1024))} MB (${i} B)`);
-			let a = yield XT(n, e, i);
-			if (!Jw(a.statusCode)) throw Error(`Cache service responded with ${a.statusCode} during commit cache.`);
+			let a = yield rD(n, e, i);
+			if (!tE(a.statusCode)) throw Error(`Cache service responded with ${a.statusCode} during commit cache.`);
 			Nr("Cache saved successfully");
 		}
 	});
 }
-function QT(e) {
+function aD(e) {
 	let t = typeof e;
 	if (t == "object") {
 		if (Array.isArray(e)) return "array";
@@ -34086,18 +34863,18 @@ function QT(e) {
 	}
 	return t;
 }
-function $T(e) {
+function oD(e) {
 	return typeof e == "object" && !!e && !Array.isArray(e);
 }
-var eE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".split(""), tE = [];
-for (let e = 0; e < eE.length; e++) tE[eE[e].charCodeAt(0)] = e;
-tE[45] = eE.indexOf("+"), tE[95] = eE.indexOf("/");
-function nE(e) {
+var sD = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".split(""), cD = [];
+for (let e = 0; e < sD.length; e++) cD[sD[e].charCodeAt(0)] = e;
+cD[45] = sD.indexOf("+"), cD[95] = sD.indexOf("/");
+function lD(e) {
 	let t = e.length * 3 / 4;
 	e[e.length - 2] == "=" ? t -= 2 : e[e.length - 1] == "=" && --t;
 	let n = new Uint8Array(t), r = 0, i = 0, a, o = 0;
 	for (let t = 0; t < e.length; t++) {
-		if (a = tE[e.charCodeAt(t)], a === void 0) switch (e[t]) {
+		if (a = cD[e.charCodeAt(t)], a === void 0) switch (e[t]) {
 			case "=": i = 0;
 			case "\n":
 			case "\r":
@@ -34123,22 +34900,22 @@ function nE(e) {
 	if (i == 1) throw Error("invalid base64 string.");
 	return n.subarray(0, r);
 }
-function rE(e) {
+function uD(e) {
 	let t = "", n = 0, r, i = 0;
 	for (let a = 0; a < e.length; a++) switch (r = e[a], n) {
 		case 0:
-			t += eE[r >> 2], i = (r & 3) << 4, n = 1;
+			t += sD[r >> 2], i = (r & 3) << 4, n = 1;
 			break;
 		case 1:
-			t += eE[i | r >> 4], i = (r & 15) << 2, n = 2;
+			t += sD[i | r >> 4], i = (r & 15) << 2, n = 2;
 			break;
 		case 2:
-			t += eE[i | r >> 6], t += eE[r & 63], n = 0;
+			t += sD[i | r >> 6], t += sD[r & 63], n = 0;
 			break;
 	}
-	return n && (t += eE[i], t += "=", n == 1 && (t += "=")), t;
+	return n && (t += sD[i], t += "=", n == 1 && (t += "=")), t;
 }
-var iE;
+var dD;
 (function(e) {
 	e.symbol = Symbol.for("protobuf-ts/unknown"), e.onRead = (n, r, i, a, o) => {
 		(t(r) ? r[e.symbol] : r[e.symbol] = []).push({
@@ -34156,12 +34933,12 @@ var iE;
 		return [];
 	}, e.last = (t, n) => e.list(t, n).slice(-1)[0];
 	let t = (t) => t && Array.isArray(t[e.symbol]);
-})(iE ||= {});
+})(dD ||= {});
 var Q;
 (function(e) {
 	e[e.Varint = 0] = "Varint", e[e.Bit64 = 1] = "Bit64", e[e.LengthDelimited = 2] = "LengthDelimited", e[e.StartGroup = 3] = "StartGroup", e[e.EndGroup = 4] = "EndGroup", e[e.Bit32 = 5] = "Bit32";
 })(Q ||= {});
-function aE() {
+function fD() {
 	let e = 0, t = 0;
 	for (let n = 0; n < 28; n += 7) {
 		let r = this.buf[this.pos++];
@@ -34175,7 +34952,7 @@ function aE() {
 	}
 	throw Error("invalid varint");
 }
-function oE(e, t, n) {
+function pD(e, t, n) {
 	for (let r = 0; r < 28; r += 7) {
 		let i = e >>> r, a = !(!(i >>> 7) && t == 0), o = (a ? i | 128 : i) & 255;
 		if (n.push(o), !a) return;
@@ -34189,14 +34966,14 @@ function oE(e, t, n) {
 		n.push(t >>> 31 & 1);
 	}
 }
-var sE = 65536 * 65536;
-function cE(e) {
+var mD = 65536 * 65536;
+function hD(e) {
 	let t = e[0] == "-";
 	t && (e = e.slice(1));
 	let n = 1e6, r = 0, i = 0;
 	function a(t, a) {
 		let o = Number(e.slice(t, a));
-		i *= n, r = r * n + o, r >= sE && (i += r / sE | 0, r %= sE);
+		i *= n, r = r * n + o, r >= mD && (i += r / mD | 0, r %= mD);
 	}
 	return a(-24, -18), a(-18, -12), a(-12, -6), a(-6), [
 		t,
@@ -34204,8 +34981,8 @@ function cE(e) {
 		i
 	];
 }
-function lE(e, t) {
-	if (t >>> 0 <= 2097151) return "" + (sE * t + (e >>> 0));
+function gD(e, t) {
+	if (t >>> 0 <= 2097151) return "" + (mD * t + (e >>> 0));
 	let n = e & 16777215, r = (e >>> 24 | t << 8) >>> 0 & 16777215, i = t >> 16 & 65535, a = n + r * 6777216 + i * 6710656, o = r + i * 8147497, s = i * 2, c = 1e7;
 	a >= c && (o += Math.floor(a / c), a %= c), o >= c && (s += Math.floor(o / c), o %= c);
 	function l(e, t) {
@@ -34214,7 +34991,7 @@ function lE(e, t) {
 	}
 	return l(s, 0) + l(o, s) + l(a, 1);
 }
-function uE(e, t) {
+function _D(e, t) {
 	if (e >= 0) {
 		for (; e > 127;) t.push(e & 127 | 128), e >>>= 7;
 		t.push(e);
@@ -34223,7 +35000,7 @@ function uE(e, t) {
 		t.push(1);
 	}
 }
-function dE() {
+function vD() {
 	let e = this.buf[this.pos++], t = e & 127;
 	if (!(e & 128) || (e = this.buf[this.pos++], t |= (e & 127) << 7, !(e & 128)) || (e = this.buf[this.pos++], t |= (e & 127) << 14, !(e & 128)) || (e = this.buf[this.pos++], t |= (e & 127) << 21, !(e & 128))) return this.assertBounds(), t;
 	e = this.buf[this.pos++], t |= (e & 15) << 28;
@@ -34231,10 +35008,10 @@ function dE() {
 	if (e & 128) throw Error("invalid varint");
 	return this.assertBounds(), t >>> 0;
 }
-var fE;
-function pE() {
+var yD;
+function bD() {
 	let e = /* @__PURE__ */ new DataView(/* @__PURE__ */ new ArrayBuffer(8));
-	fE = globalThis.BigInt !== void 0 && typeof e.getBigInt64 == "function" && typeof e.getBigUint64 == "function" && typeof e.setBigInt64 == "function" && typeof e.setBigUint64 == "function" ? {
+	yD = globalThis.BigInt !== void 0 && typeof e.getBigInt64 == "function" && typeof e.getBigUint64 == "function" && typeof e.setBigInt64 == "function" && typeof e.setBigUint64 == "function" ? {
 		MIN: BigInt("-9223372036854775808"),
 		MAX: BigInt("9223372036854775807"),
 		UMIN: BigInt("0"),
@@ -34243,11 +35020,11 @@ function pE() {
 		V: e
 	} : void 0;
 }
-pE();
-function mE(e) {
+bD();
+function xD(e) {
 	if (!e) throw Error("BigInt unavailable, see https://github.com/timostamm/protobuf-ts/blob/v1.0.8/MANUAL.md#bigint-support");
 }
-var hE = /^-?[0-9]+$/, gE = 4294967296, _E = 2147483648, vE = class {
+var SD = /^-?[0-9]+$/, CD = 4294967296, wD = 2147483648, TD = class {
 	constructor(e, t) {
 		this.lo = e | 0, this.hi = t | 0;
 	}
@@ -34255,112 +35032,112 @@ var hE = /^-?[0-9]+$/, gE = 4294967296, _E = 2147483648, vE = class {
 		return this.lo == 0 && this.hi == 0;
 	}
 	toNumber() {
-		let e = this.hi * gE + (this.lo >>> 0);
+		let e = this.hi * CD + (this.lo >>> 0);
 		if (!Number.isSafeInteger(e)) throw Error("cannot convert to safe number");
 		return e;
 	}
-}, yE = class e extends vE {
+}, ED = class e extends TD {
 	static from(t) {
-		if (fE) switch (typeof t) {
+		if (yD) switch (typeof t) {
 			case "string":
 				if (t == "0") return this.ZERO;
 				if (t == "") throw Error("string is no integer");
-				t = fE.C(t);
+				t = yD.C(t);
 			case "number":
 				if (t === 0) return this.ZERO;
-				t = fE.C(t);
+				t = yD.C(t);
 			case "bigint":
 				if (!t) return this.ZERO;
-				if (t < fE.UMIN) throw Error("signed value for ulong");
-				if (t > fE.UMAX) throw Error("ulong too large");
-				return fE.V.setBigUint64(0, t, !0), new e(fE.V.getInt32(0, !0), fE.V.getInt32(4, !0));
+				if (t < yD.UMIN) throw Error("signed value for ulong");
+				if (t > yD.UMAX) throw Error("ulong too large");
+				return yD.V.setBigUint64(0, t, !0), new e(yD.V.getInt32(0, !0), yD.V.getInt32(4, !0));
 		}
 		else switch (typeof t) {
 			case "string":
 				if (t == "0") return this.ZERO;
-				if (t = t.trim(), !hE.test(t)) throw Error("string is no integer");
-				let [n, r, i] = cE(t);
+				if (t = t.trim(), !SD.test(t)) throw Error("string is no integer");
+				let [n, r, i] = hD(t);
 				if (n) throw Error("signed value for ulong");
 				return new e(r, i);
 			case "number":
 				if (t == 0) return this.ZERO;
 				if (!Number.isSafeInteger(t)) throw Error("number is no integer");
 				if (t < 0) throw Error("signed value for ulong");
-				return new e(t, t / gE);
+				return new e(t, t / CD);
 		}
 		throw Error("unknown value " + typeof t);
 	}
 	toString() {
-		return fE ? this.toBigInt().toString() : lE(this.lo, this.hi);
+		return yD ? this.toBigInt().toString() : gD(this.lo, this.hi);
 	}
 	toBigInt() {
-		return mE(fE), fE.V.setInt32(0, this.lo, !0), fE.V.setInt32(4, this.hi, !0), fE.V.getBigUint64(0, !0);
+		return xD(yD), yD.V.setInt32(0, this.lo, !0), yD.V.setInt32(4, this.hi, !0), yD.V.getBigUint64(0, !0);
 	}
 };
-yE.ZERO = new yE(0, 0);
-var bE = class e extends vE {
+ED.ZERO = new ED(0, 0);
+var DD = class e extends TD {
 	static from(t) {
-		if (fE) switch (typeof t) {
+		if (yD) switch (typeof t) {
 			case "string":
 				if (t == "0") return this.ZERO;
 				if (t == "") throw Error("string is no integer");
-				t = fE.C(t);
+				t = yD.C(t);
 			case "number":
 				if (t === 0) return this.ZERO;
-				t = fE.C(t);
+				t = yD.C(t);
 			case "bigint":
 				if (!t) return this.ZERO;
-				if (t < fE.MIN) throw Error("signed long too small");
-				if (t > fE.MAX) throw Error("signed long too large");
-				return fE.V.setBigInt64(0, t, !0), new e(fE.V.getInt32(0, !0), fE.V.getInt32(4, !0));
+				if (t < yD.MIN) throw Error("signed long too small");
+				if (t > yD.MAX) throw Error("signed long too large");
+				return yD.V.setBigInt64(0, t, !0), new e(yD.V.getInt32(0, !0), yD.V.getInt32(4, !0));
 		}
 		else switch (typeof t) {
 			case "string":
 				if (t == "0") return this.ZERO;
-				if (t = t.trim(), !hE.test(t)) throw Error("string is no integer");
-				let [n, r, i] = cE(t);
+				if (t = t.trim(), !SD.test(t)) throw Error("string is no integer");
+				let [n, r, i] = hD(t);
 				if (n) {
-					if (i > _E || i == _E && r != 0) throw Error("signed long too small");
-				} else if (i >= _E) throw Error("signed long too large");
+					if (i > wD || i == wD && r != 0) throw Error("signed long too small");
+				} else if (i >= wD) throw Error("signed long too large");
 				let a = new e(r, i);
 				return n ? a.negate() : a;
 			case "number":
 				if (t == 0) return this.ZERO;
 				if (!Number.isSafeInteger(t)) throw Error("number is no integer");
-				return t > 0 ? new e(t, t / gE) : new e(-t, -t / gE).negate();
+				return t > 0 ? new e(t, t / CD) : new e(-t, -t / CD).negate();
 		}
 		throw Error("unknown value " + typeof t);
 	}
 	isNegative() {
-		return (this.hi & _E) !== 0;
+		return (this.hi & wD) !== 0;
 	}
 	negate() {
 		let t = ~this.hi, n = this.lo;
 		return n ? n = ~n + 1 : t += 1, new e(n, t);
 	}
 	toString() {
-		if (fE) return this.toBigInt().toString();
+		if (yD) return this.toBigInt().toString();
 		if (this.isNegative()) {
 			let e = this.negate();
-			return "-" + lE(e.lo, e.hi);
+			return "-" + gD(e.lo, e.hi);
 		}
-		return lE(this.lo, this.hi);
+		return gD(this.lo, this.hi);
 	}
 	toBigInt() {
-		return mE(fE), fE.V.setInt32(0, this.lo, !0), fE.V.setInt32(4, this.hi, !0), fE.V.getBigInt64(0, !0);
+		return xD(yD), yD.V.setInt32(0, this.lo, !0), yD.V.setInt32(4, this.hi, !0), yD.V.getBigInt64(0, !0);
 	}
 };
-bE.ZERO = new bE(0, 0);
-var xE = {
+DD.ZERO = new DD(0, 0);
+var OD = {
 	readUnknownField: !0,
-	readerFactory: (e) => new CE(e)
+	readerFactory: (e) => new AD(e)
 };
-function SE(e) {
-	return e ? Object.assign(Object.assign({}, xE), e) : xE;
+function kD(e) {
+	return e ? Object.assign(Object.assign({}, OD), e) : OD;
 }
-var CE = class {
+var AD = class {
 	constructor(e, t) {
-		this.varint64 = aE, this.uint32 = dE, this.buf = e, this.len = e.length, this.pos = 0, this.view = new DataView(e.buffer, e.byteOffset, e.byteLength), this.textDecoder = t ?? new TextDecoder("utf-8", {
+		this.varint64 = fD, this.uint32 = vD, this.buf = e, this.len = e.length, this.pos = 0, this.view = new DataView(e.buffer, e.byteOffset, e.byteLength), this.textDecoder = t ?? new TextDecoder("utf-8", {
 			fatal: !0,
 			ignoreBOM: !0
 		});
@@ -34403,14 +35180,14 @@ var CE = class {
 		return e >>> 1 ^ -(e & 1);
 	}
 	int64() {
-		return new bE(...this.varint64());
+		return new DD(...this.varint64());
 	}
 	uint64() {
-		return new yE(...this.varint64());
+		return new ED(...this.varint64());
 	}
 	sint64() {
 		let [e, t] = this.varint64(), n = -(e & 1);
-		return e = (e >>> 1 | (t & 1) << 31) ^ n, t = t >>> 1 ^ n, new bE(e, t);
+		return e = (e >>> 1 | (t & 1) << 31) ^ n, t = t >>> 1 ^ n, new DD(e, t);
 	}
 	bool() {
 		let [e, t] = this.varint64();
@@ -34423,10 +35200,10 @@ var CE = class {
 		return this.view.getInt32((this.pos += 4) - 4, !0);
 	}
 	fixed64() {
-		return new yE(this.sfixed32(), this.sfixed32());
+		return new ED(this.sfixed32(), this.sfixed32());
 	}
 	sfixed64() {
-		return new bE(this.sfixed32(), this.sfixed32());
+		return new DD(this.sfixed32(), this.sfixed32());
 	}
 	float() {
 		return this.view.getFloat32((this.pos += 4) - 4, !0);
@@ -34442,30 +35219,30 @@ var CE = class {
 		return this.textDecoder.decode(this.bytes());
 	}
 };
-function wE(e, t) {
+function jD(e, t) {
 	if (!e) throw Error(t);
 }
-var TE = 34028234663852886e22, EE = -34028234663852886e22, DE = 4294967295, OE = 2147483647, kE = -2147483648;
-function AE(e) {
+var MD = 34028234663852886e22, ND = -34028234663852886e22, PD = 4294967295, FD = 2147483647, ID = -2147483648;
+function LD(e) {
 	if (typeof e != "number") throw Error("invalid int 32: " + typeof e);
-	if (!Number.isInteger(e) || e > OE || e < kE) throw Error("invalid int 32: " + e);
+	if (!Number.isInteger(e) || e > FD || e < ID) throw Error("invalid int 32: " + e);
 }
-function jE(e) {
+function RD(e) {
 	if (typeof e != "number") throw Error("invalid uint 32: " + typeof e);
-	if (!Number.isInteger(e) || e > DE || e < 0) throw Error("invalid uint 32: " + e);
+	if (!Number.isInteger(e) || e > PD || e < 0) throw Error("invalid uint 32: " + e);
 }
-function ME(e) {
+function zD(e) {
 	if (typeof e != "number") throw Error("invalid float 32: " + typeof e);
-	if (Number.isFinite(e) && (e > TE || e < EE)) throw Error("invalid float 32: " + e);
+	if (Number.isFinite(e) && (e > MD || e < ND)) throw Error("invalid float 32: " + e);
 }
-var NE = {
+var BD = {
 	writeUnknownFields: !0,
-	writerFactory: () => new FE()
+	writerFactory: () => new HD()
 };
-function PE(e) {
-	return e ? Object.assign(Object.assign({}, NE), e) : NE;
+function VD(e) {
+	return e ? Object.assign(Object.assign({}, BD), e) : BD;
 }
-var FE = class {
+var HD = class {
 	constructor(e) {
 		this.stack = [], this.textEncoder = e ?? new TextEncoder(), this.chunks = [], this.buf = [];
 	}
@@ -34495,11 +35272,11 @@ var FE = class {
 		return this.buf.length && (this.chunks.push(new Uint8Array(this.buf)), this.buf = []), this.chunks.push(e), this;
 	}
 	uint32(e) {
-		for (jE(e); e > 127;) this.buf.push(e & 127 | 128), e >>>= 7;
+		for (RD(e); e > 127;) this.buf.push(e & 127 | 128), e >>>= 7;
 		return this.buf.push(e), this;
 	}
 	int32(e) {
-		return AE(e), uE(e, this.buf), this;
+		return LD(e), _D(e, this.buf), this;
 	}
 	bool(e) {
 		return this.buf.push(+!!e), this;
@@ -34512,7 +35289,7 @@ var FE = class {
 		return this.uint32(t.byteLength), this.raw(t);
 	}
 	float(e) {
-		ME(e);
+		zD(e);
 		let t = new Uint8Array(4);
 		return new DataView(t.buffer).setFloat32(0, e, !0), this.raw(t);
 	}
@@ -34521,52 +35298,52 @@ var FE = class {
 		return new DataView(t.buffer).setFloat64(0, e, !0), this.raw(t);
 	}
 	fixed32(e) {
-		jE(e);
+		RD(e);
 		let t = new Uint8Array(4);
 		return new DataView(t.buffer).setUint32(0, e, !0), this.raw(t);
 	}
 	sfixed32(e) {
-		AE(e);
+		LD(e);
 		let t = new Uint8Array(4);
 		return new DataView(t.buffer).setInt32(0, e, !0), this.raw(t);
 	}
 	sint32(e) {
-		return AE(e), e = (e << 1 ^ e >> 31) >>> 0, uE(e, this.buf), this;
+		return LD(e), e = (e << 1 ^ e >> 31) >>> 0, _D(e, this.buf), this;
 	}
 	sfixed64(e) {
-		let t = new Uint8Array(8), n = new DataView(t.buffer), r = bE.from(e);
+		let t = new Uint8Array(8), n = new DataView(t.buffer), r = DD.from(e);
 		return n.setInt32(0, r.lo, !0), n.setInt32(4, r.hi, !0), this.raw(t);
 	}
 	fixed64(e) {
-		let t = new Uint8Array(8), n = new DataView(t.buffer), r = yE.from(e);
+		let t = new Uint8Array(8), n = new DataView(t.buffer), r = ED.from(e);
 		return n.setInt32(0, r.lo, !0), n.setInt32(4, r.hi, !0), this.raw(t);
 	}
 	int64(e) {
-		let t = bE.from(e);
-		return oE(t.lo, t.hi, this.buf), this;
+		let t = DD.from(e);
+		return pD(t.lo, t.hi, this.buf), this;
 	}
 	sint64(e) {
-		let t = bE.from(e), n = t.hi >> 31;
-		return oE(t.lo << 1 ^ n, (t.hi << 1 | t.lo >>> 31) ^ n, this.buf), this;
+		let t = DD.from(e), n = t.hi >> 31;
+		return pD(t.lo << 1 ^ n, (t.hi << 1 | t.lo >>> 31) ^ n, this.buf), this;
 	}
 	uint64(e) {
-		let t = yE.from(e);
-		return oE(t.lo, t.hi, this.buf), this;
+		let t = ED.from(e);
+		return pD(t.lo, t.hi, this.buf), this;
 	}
-}, IE = {
+}, UD = {
 	emitDefaultValues: !1,
 	enumAsInteger: !1,
 	useProtoFieldName: !1,
 	prettySpaces: 0
-}, LE = { ignoreUnknownFields: !1 };
-function RE(e) {
-	return e ? Object.assign(Object.assign({}, LE), e) : LE;
+}, WD = { ignoreUnknownFields: !1 };
+function GD(e) {
+	return e ? Object.assign(Object.assign({}, WD), e) : WD;
 }
-function zE(e) {
-	return e ? Object.assign(Object.assign({}, IE), e) : IE;
+function KD(e) {
+	return e ? Object.assign(Object.assign({}, UD), e) : UD;
 }
-var BE = Symbol.for("protobuf-ts/message-type");
-function VE(e) {
+var qD = Symbol.for("protobuf-ts/message-type");
+function JD(e) {
 	let t = !1, n = [];
 	for (let r = 0; r < e.length; r++) {
 		let i = e.charAt(r);
@@ -34578,18 +35355,18 @@ var $;
 (function(e) {
 	e[e.DOUBLE = 1] = "DOUBLE", e[e.FLOAT = 2] = "FLOAT", e[e.INT64 = 3] = "INT64", e[e.UINT64 = 4] = "UINT64", e[e.INT32 = 5] = "INT32", e[e.FIXED64 = 6] = "FIXED64", e[e.FIXED32 = 7] = "FIXED32", e[e.BOOL = 8] = "BOOL", e[e.STRING = 9] = "STRING", e[e.BYTES = 12] = "BYTES", e[e.UINT32 = 13] = "UINT32", e[e.SFIXED32 = 15] = "SFIXED32", e[e.SFIXED64 = 16] = "SFIXED64", e[e.SINT32 = 17] = "SINT32", e[e.SINT64 = 18] = "SINT64";
 })($ ||= {});
-var HE;
+var YD;
 (function(e) {
 	e[e.BIGINT = 0] = "BIGINT", e[e.STRING = 1] = "STRING", e[e.NUMBER = 2] = "NUMBER";
-})(HE ||= {});
-var UE;
+})(YD ||= {});
+var XD;
 (function(e) {
 	e[e.NO = 0] = "NO", e[e.PACKED = 1] = "PACKED", e[e.UNPACKED = 2] = "UNPACKED";
-})(UE ||= {});
-function WE(e) {
-	return e.localName = e.localName ?? VE(e.name), e.jsonName = e.jsonName ?? VE(e.name), e.repeat = e.repeat ?? UE.NO, e.opt = e.opt ?? (e.repeat || e.oneof ? !1 : e.kind == "message"), e;
+})(XD ||= {});
+function ZD(e) {
+	return e.localName = e.localName ?? JD(e.name), e.jsonName = e.jsonName ?? JD(e.name), e.repeat = e.repeat ?? XD.NO, e.opt = e.opt ?? (e.repeat || e.oneof ? !1 : e.kind == "message"), e;
 }
-function GE(e) {
+function QD(e) {
 	if (typeof e != "object" || !e || !e.hasOwnProperty("oneofKind")) return !1;
 	switch (typeof e.oneofKind) {
 		case "string": return e[e.oneofKind] === void 0 ? !1 : Object.keys(e).length == 2;
@@ -34597,7 +35374,7 @@ function GE(e) {
 		default: return !1;
 	}
 }
-var KE = class {
+var $D = class {
 	constructor(e) {
 		this.fields = e.fields ?? [];
 	}
@@ -34632,7 +35409,7 @@ var KE = class {
 		if (t < 1) return !0;
 		for (let r of i.oneofs) {
 			let i = e[r];
-			if (!GE(i)) return !1;
+			if (!QD(i)) return !1;
 			if (i.oneofKind === void 0) continue;
 			let a = this.fields.find((e) => e.localName === i.oneofKind);
 			if (!a || !this.field(i[i.oneofKind], a, n, t)) return !1;
@@ -34678,8 +35455,8 @@ var KE = class {
 			case $.INT64:
 			case $.SFIXED64:
 			case $.SINT64: switch (n) {
-				case HE.BIGINT: return r == "bigint";
-				case HE.NUMBER: return r == "number" && !isNaN(e);
+				case YD.BIGINT: return r == "bigint";
+				case YD.NUMBER: return r == "number" && !isNaN(e);
 				default: return r == "string";
 			}
 			case $.BOOL: return r == "boolean";
@@ -34707,18 +35484,18 @@ var KE = class {
 			case $.SINT32:
 			case $.UINT32: return this.scalars(r.slice(0, n).map((e) => parseInt(e)), t, n);
 			case $.BOOL: return this.scalars(r.slice(0, n).map((e) => e == "true" ? !0 : e == "false" ? !1 : e), t, n);
-			default: return this.scalars(r, t, n, HE.STRING);
+			default: return this.scalars(r, t, n, YD.STRING);
 		}
 	}
 };
-function qE(e, t) {
+function eO(e, t) {
 	switch (t) {
-		case HE.BIGINT: return e.toBigInt();
-		case HE.NUMBER: return e.toNumber();
+		case YD.BIGINT: return e.toBigInt();
+		case YD.NUMBER: return e.toNumber();
 		default: return e.toString();
 	}
 }
-var JE = class {
+var tO = class {
 	constructor(e) {
 		this.info = e;
 	}
@@ -34731,7 +35508,7 @@ var JE = class {
 	}
 	assert(e, t, n) {
 		if (!e) {
-			let e = QT(n);
+			let e = aD(n);
 			throw (e == "number" || e == "boolean") && (e = n.toString()), Error(`Cannot parse JSON ${e} for ${this.info.typeName}#${t}`);
 		}
 	}
@@ -34752,7 +35529,7 @@ var JE = class {
 			} else s = t;
 			if (e.kind == "map") {
 				if (a === null) continue;
-				this.assert($T(a), e.name, a);
+				this.assert(oD(a), e.name, a);
 				let t = s[o];
 				for (let [r, i] of Object.entries(a)) {
 					this.assert(i !== null, e.name + " map value", null);
@@ -34770,7 +35547,7 @@ var JE = class {
 					}
 					this.assert(a !== void 0, e.name + " map value", i);
 					let o = r;
-					e.K == $.BOOL && (o = o == "true" ? !0 : o == "false" ? !1 : o), o = this.scalar(o, e.K, HE.STRING, e.name).toString(), t[o] = a;
+					e.K == $.BOOL && (o = o == "true" ? !0 : o == "false" ? !1 : o), o = this.scalar(o, e.K, YD.STRING, e.name).toString(), t[o] = a;
 				}
 			} else if (e.repeat) {
 				if (a === null) continue;
@@ -34814,16 +35591,16 @@ var JE = class {
 		}
 	}
 	enum(e, t, n, r) {
-		if (e[0] == "google.protobuf.NullValue" && wE(t === null || t === "NULL_VALUE", `Unable to parse field ${this.info.typeName}#${n}, enum ${e[0]} only accepts null.`), t === null) return 0;
+		if (e[0] == "google.protobuf.NullValue" && jD(t === null || t === "NULL_VALUE", `Unable to parse field ${this.info.typeName}#${n}, enum ${e[0]} only accepts null.`), t === null) return 0;
 		switch (typeof t) {
-			case "number": return wE(Number.isInteger(t), `Unable to parse field ${this.info.typeName}#${n}, enum can only be integral number, got ${t}.`), t;
+			case "number": return jD(Number.isInteger(t), `Unable to parse field ${this.info.typeName}#${n}, enum can only be integral number, got ${t}.`), t;
 			case "string":
 				let i = t;
 				e[2] && t.substring(0, e[2].length) === e[2] && (i = t.substring(e[2].length));
 				let a = e[1][i];
-				return a === void 0 && r ? !1 : (wE(typeof a == "number", `Unable to parse field ${this.info.typeName}#${n}, enum ${e[0]} has no value for "${t}".`), a);
+				return a === void 0 && r ? !1 : (jD(typeof a == "number", `Unable to parse field ${this.info.typeName}#${n}, enum ${e[0]} has no value for "${t}".`), a);
 		}
-		wE(!1, `Unable to parse field ${this.info.typeName}#${n}, cannot parse enum value from ${typeof t}".`);
+		jD(!1, `Unable to parse field ${this.info.typeName}#${n}, cannot parse enum value from ${typeof t}".`);
 	}
 	scalar(e, t, n, r) {
 		let i;
@@ -34853,7 +35630,7 @@ var JE = class {
 						i = "too large or small";
 						break;
 					}
-					return t == $.FLOAT && ME(r), r;
+					return t == $.FLOAT && zD(r), r;
 				case $.INT32:
 				case $.FIXED32:
 				case $.SFIXED32:
@@ -34862,18 +35639,18 @@ var JE = class {
 					if (e === null) return 0;
 					let a;
 					if (typeof e == "number" ? a = e : e === "" ? i = "empty string" : typeof e == "string" && (e.trim().length === e.length ? a = Number(e) : i = "extra whitespace"), a === void 0) break;
-					return t == $.UINT32 ? jE(a) : AE(a), a;
+					return t == $.UINT32 ? RD(a) : LD(a), a;
 				case $.INT64:
 				case $.SFIXED64:
 				case $.SINT64:
-					if (e === null) return qE(bE.ZERO, n);
+					if (e === null) return eO(DD.ZERO, n);
 					if (typeof e != "number" && typeof e != "string") break;
-					return qE(bE.from(e), n);
+					return eO(DD.from(e), n);
 				case $.FIXED64:
 				case $.UINT64:
-					if (e === null) return qE(yE.ZERO, n);
+					if (e === null) return eO(ED.ZERO, n);
 					if (typeof e != "number" && typeof e != "string") break;
-					return qE(yE.from(e), n);
+					return eO(ED.from(e), n);
 				case $.BOOL:
 					if (e === null) return !1;
 					if (typeof e != "boolean") break;
@@ -34888,14 +35665,14 @@ var JE = class {
 				case $.BYTES:
 					if (e === null || e === "") return new Uint8Array();
 					if (typeof e != "string") break;
-					return nE(e);
+					return lD(e);
 			}
 		} catch (e) {
 			i = e.message;
 		}
 		this.assert(!1, r + (i ? " - " + i : ""), e);
 	}
-}, YE = class {
+}, nO = class {
 	constructor(e) {
 		this.fields = e.fields ?? [];
 	}
@@ -34910,62 +35687,62 @@ var JE = class {
 			let i = r[e.oneof];
 			if (i.oneofKind !== e.localName) continue;
 			let a = e.kind == "scalar" || e.kind == "enum" ? Object.assign(Object.assign({}, t), { emitDefaultValues: !0 }) : t, o = this.field(e, i[e.localName], a);
-			wE(o !== void 0), n[t.useProtoFieldName ? e.name : e.jsonName] = o;
+			jD(o !== void 0), n[t.useProtoFieldName ? e.name : e.jsonName] = o;
 		}
 		return n;
 	}
 	field(e, t, n) {
 		let r;
 		if (e.kind == "map") {
-			wE(typeof t == "object" && !!t);
+			jD(typeof t == "object" && !!t);
 			let i = {};
 			switch (e.V.kind) {
 				case "scalar":
 					for (let [n, r] of Object.entries(t)) {
 						let t = this.scalar(e.V.T, r, e.name, !1, !0);
-						wE(t !== void 0), i[n.toString()] = t;
+						jD(t !== void 0), i[n.toString()] = t;
 					}
 					break;
 				case "message":
 					let r = e.V.T();
 					for (let [a, o] of Object.entries(t)) {
 						let t = this.message(r, o, e.name, n);
-						wE(t !== void 0), i[a.toString()] = t;
+						jD(t !== void 0), i[a.toString()] = t;
 					}
 					break;
 				case "enum":
 					let a = e.V.T();
 					for (let [r, o] of Object.entries(t)) {
-						wE(o === void 0 || typeof o == "number");
+						jD(o === void 0 || typeof o == "number");
 						let t = this.enum(a, o, e.name, !1, !0, n.enumAsInteger);
-						wE(t !== void 0), i[r.toString()] = t;
+						jD(t !== void 0), i[r.toString()] = t;
 					}
 					break;
 			}
 			(n.emitDefaultValues || Object.keys(i).length > 0) && (r = i);
 		} else if (e.repeat) {
-			wE(Array.isArray(t));
+			jD(Array.isArray(t));
 			let i = [];
 			switch (e.kind) {
 				case "scalar":
 					for (let n = 0; n < t.length; n++) {
 						let r = this.scalar(e.T, t[n], e.name, e.opt, !0);
-						wE(r !== void 0), i.push(r);
+						jD(r !== void 0), i.push(r);
 					}
 					break;
 				case "enum":
 					let r = e.T();
 					for (let a = 0; a < t.length; a++) {
-						wE(t[a] === void 0 || typeof t[a] == "number");
+						jD(t[a] === void 0 || typeof t[a] == "number");
 						let o = this.enum(r, t[a], e.name, e.opt, !0, n.enumAsInteger);
-						wE(o !== void 0), i.push(o);
+						jD(o !== void 0), i.push(o);
 					}
 					break;
 				case "message":
 					let a = e.T();
 					for (let r = 0; r < t.length; r++) {
 						let o = this.message(a, t[r], e.name, n);
-						wE(o !== void 0), i.push(o);
+						jD(o !== void 0), i.push(o);
 					}
 					break;
 			}
@@ -34986,53 +35763,53 @@ var JE = class {
 	enum(e, t, n, r, i, a) {
 		if (e[0] == "google.protobuf.NullValue") return !i && !r ? void 0 : null;
 		if (t === void 0) {
-			wE(r);
+			jD(r);
 			return;
 		}
-		if (!(t === 0 && !i && !r)) return wE(typeof t == "number"), wE(Number.isInteger(t)), a || !e[1].hasOwnProperty(t) ? t : e[2] ? e[2] + e[1][t] : e[1][t];
+		if (!(t === 0 && !i && !r)) return jD(typeof t == "number"), jD(Number.isInteger(t)), a || !e[1].hasOwnProperty(t) ? t : e[2] ? e[2] + e[1][t] : e[1][t];
 	}
 	message(e, t, n, r) {
 		return t === void 0 ? r.emitDefaultValues ? null : void 0 : e.internalJsonWrite(t, r);
 	}
 	scalar(e, t, n, r, i) {
 		if (t === void 0) {
-			wE(r);
+			jD(r);
 			return;
 		}
 		let a = i || r;
 		switch (e) {
 			case $.INT32:
 			case $.SFIXED32:
-			case $.SINT32: return t === 0 ? a ? 0 : void 0 : (AE(t), t);
+			case $.SINT32: return t === 0 ? a ? 0 : void 0 : (LD(t), t);
 			case $.FIXED32:
-			case $.UINT32: return t === 0 ? a ? 0 : void 0 : (jE(t), t);
-			case $.FLOAT: ME(t);
-			case $.DOUBLE: return t === 0 ? a ? 0 : void 0 : (wE(typeof t == "number"), Number.isNaN(t) ? "NaN" : t === Infinity ? "Infinity" : t === -Infinity ? "-Infinity" : t);
-			case $.STRING: return t === "" ? a ? "" : void 0 : (wE(typeof t == "string"), t);
-			case $.BOOL: return t === !1 ? a ? !1 : void 0 : (wE(typeof t == "boolean"), t);
+			case $.UINT32: return t === 0 ? a ? 0 : void 0 : (RD(t), t);
+			case $.FLOAT: zD(t);
+			case $.DOUBLE: return t === 0 ? a ? 0 : void 0 : (jD(typeof t == "number"), Number.isNaN(t) ? "NaN" : t === Infinity ? "Infinity" : t === -Infinity ? "-Infinity" : t);
+			case $.STRING: return t === "" ? a ? "" : void 0 : (jD(typeof t == "string"), t);
+			case $.BOOL: return t === !1 ? a ? !1 : void 0 : (jD(typeof t == "boolean"), t);
 			case $.UINT64:
 			case $.FIXED64:
-				wE(typeof t == "number" || typeof t == "string" || typeof t == "bigint");
-				let e = yE.from(t);
+				jD(typeof t == "number" || typeof t == "string" || typeof t == "bigint");
+				let e = ED.from(t);
 				return e.isZero() && !a ? void 0 : e.toString();
 			case $.INT64:
 			case $.SFIXED64:
 			case $.SINT64:
-				wE(typeof t == "number" || typeof t == "string" || typeof t == "bigint");
-				let n = bE.from(t);
+				jD(typeof t == "number" || typeof t == "string" || typeof t == "bigint");
+				let n = DD.from(t);
 				return n.isZero() && !a ? void 0 : n.toString();
-			case $.BYTES: return wE(t instanceof Uint8Array), t.byteLength ? rE(t) : a ? "" : void 0;
+			case $.BYTES: return jD(t instanceof Uint8Array), t.byteLength ? uD(t) : a ? "" : void 0;
 		}
 	}
 };
-function XE(e, t = HE.STRING) {
+function rO(e, t = YD.STRING) {
 	switch (e) {
 		case $.BOOL: return !1;
 		case $.UINT64:
-		case $.FIXED64: return qE(yE.ZERO, t);
+		case $.FIXED64: return eO(ED.ZERO, t);
 		case $.INT64:
 		case $.SFIXED64:
-		case $.SINT64: return qE(bE.ZERO, t);
+		case $.SINT64: return eO(DD.ZERO, t);
 		case $.DOUBLE:
 		case $.FLOAT: return 0;
 		case $.BYTES: return new Uint8Array();
@@ -35040,7 +35817,7 @@ function XE(e, t = HE.STRING) {
 		default: return 0;
 	}
 }
-var ZE = class {
+var iO = class {
 	constructor(e) {
 		this.info = e;
 	}
@@ -35059,7 +35836,7 @@ var ZE = class {
 				let a = n.readUnknownField;
 				if (a == "throw") throw Error(`Unknown field ${r} (wire type ${i}) for ${this.info.typeName}`);
 				let o = e.skip(i);
-				a !== !1 && (a === !0 ? iE.onRead : a)(this.info.typeName, t, r, i, o);
+				a !== !1 && (a === !0 ? dD.onRead : a)(this.info.typeName, t, r, i, o);
 				continue;
 			}
 			let o = t, s = a.repeat, c = a.localName;
@@ -35094,7 +35871,7 @@ var ZE = class {
 			let [r, i] = t.tag();
 			switch (r) {
 				case 1:
-					a = e.K == $.BOOL ? t.bool().toString() : this.scalar(t, e.K, HE.STRING);
+					a = e.K == $.BOOL ? t.bool().toString() : this.scalar(t, e.K, YD.STRING);
 					break;
 				case 2:
 					switch (e.V.kind) {
@@ -35113,12 +35890,12 @@ var ZE = class {
 			}
 		}
 		if (a === void 0) {
-			let t = XE(e.K);
+			let t = rO(e.K);
 			a = e.K == $.BOOL ? t.toString() : t;
 		}
 		if (o === void 0) switch (e.V.kind) {
 			case "scalar":
-				o = XE(e.V.T, e.V.L);
+				o = rO(e.V.T, e.V.L);
 				break;
 			case "enum":
 				o = 0;
@@ -35136,19 +35913,19 @@ var ZE = class {
 			case $.BOOL: return e.bool();
 			case $.DOUBLE: return e.double();
 			case $.FLOAT: return e.float();
-			case $.INT64: return qE(e.int64(), n);
-			case $.UINT64: return qE(e.uint64(), n);
-			case $.FIXED64: return qE(e.fixed64(), n);
+			case $.INT64: return eO(e.int64(), n);
+			case $.UINT64: return eO(e.uint64(), n);
+			case $.FIXED64: return eO(e.fixed64(), n);
 			case $.FIXED32: return e.fixed32();
 			case $.BYTES: return e.bytes();
 			case $.UINT32: return e.uint32();
 			case $.SFIXED32: return e.sfixed32();
-			case $.SFIXED64: return qE(e.sfixed64(), n);
+			case $.SFIXED64: return eO(e.sfixed64(), n);
 			case $.SINT32: return e.sint32();
-			case $.SINT64: return qE(e.sint64(), n);
+			case $.SINT64: return eO(e.sint64(), n);
 		}
 	}
-}, QE = class {
+}, aO = class {
 	constructor(e) {
 		this.info = e;
 	}
@@ -35171,24 +35948,24 @@ var ZE = class {
 				case "scalar":
 				case "enum":
 					let e = r.kind == "enum" ? $.INT32 : r.T;
-					if (o) if (wE(Array.isArray(i)), o == UE.PACKED) this.packed(t, e, r.no, i);
+					if (o) if (jD(Array.isArray(i)), o == XD.PACKED) this.packed(t, e, r.no, i);
 					else for (let n of i) this.scalar(t, e, r.no, n, !0);
-					else i === void 0 ? wE(r.opt) : this.scalar(t, e, r.no, i, a || r.opt);
+					else i === void 0 ? jD(r.opt) : this.scalar(t, e, r.no, i, a || r.opt);
 					break;
 				case "message":
 					if (o) {
-						wE(Array.isArray(i));
+						jD(Array.isArray(i));
 						for (let e of i) this.message(t, n, r.T(), r.no, e);
 					} else this.message(t, n, r.T(), r.no, i);
 					break;
 				case "map":
-					wE(typeof i == "object" && !!i);
+					jD(typeof i == "object" && !!i);
 					for (let [e, a] of Object.entries(i)) this.mapEntry(t, n, r, e, a);
 					break;
 			}
 		}
 		let r = n.writeUnknownFields;
-		r !== !1 && (r === !0 ? iE.onWrite : r)(this.info.typeName, e, t);
+		r !== !1 && (r === !0 ? dD.onWrite : r)(this.info.typeName, e, t);
 	}
 	mapEntry(e, t, n, r, i) {
 		e.tag(n.no, Q.LengthDelimited), e.fork();
@@ -35202,7 +35979,7 @@ var ZE = class {
 				a = Number.parseInt(r);
 				break;
 			case $.BOOL:
-				wE(r == "true" || r == "false"), a = r == "true";
+				jD(r == "true" || r == "false"), a = r == "true";
 				break;
 		}
 		switch (this.scalar(e, n.K, 1, a, !0), n.V.kind) {
@@ -35227,7 +36004,7 @@ var ZE = class {
 	}
 	packed(e, t, n, r) {
 		if (!r.length) return;
-		wE(t !== $.BYTES && t !== $.STRING), e.tag(n, Q.LengthDelimited), e.fork();
+		jD(t !== $.BYTES && t !== $.STRING), e.tag(n, Q.LengthDelimited), e.fork();
 		let [, i] = this.scalarInfo(t);
 		for (let t = 0; t < r.length; t++) e[i](r[t]);
 		e.join();
@@ -35254,13 +36031,13 @@ var ZE = class {
 				n = Q.Bit32, r = "float";
 				break;
 			case $.INT64:
-				a = i || bE.from(t).isZero(), r = "int64";
+				a = i || DD.from(t).isZero(), r = "int64";
 				break;
 			case $.UINT64:
-				a = i || yE.from(t).isZero(), r = "uint64";
+				a = i || ED.from(t).isZero(), r = "uint64";
 				break;
 			case $.FIXED64:
-				a = i || yE.from(t).isZero(), n = Q.Bit64, r = "fixed64";
+				a = i || ED.from(t).isZero(), n = Q.Bit64, r = "fixed64";
 				break;
 			case $.BYTES:
 				a = i || !t.byteLength, n = Q.LengthDelimited, r = "bytes";
@@ -35272,13 +36049,13 @@ var ZE = class {
 				n = Q.Bit32, r = "sfixed32";
 				break;
 			case $.SFIXED64:
-				a = i || bE.from(t).isZero(), n = Q.Bit64, r = "sfixed64";
+				a = i || DD.from(t).isZero(), n = Q.Bit64, r = "sfixed64";
 				break;
 			case $.SINT32:
 				r = "sint32";
 				break;
 			case $.SINT64:
-				a = i || bE.from(t).isZero(), r = "sint64";
+				a = i || DD.from(t).isZero(), r = "sint64";
 				break;
 		}
 		return [
@@ -35288,15 +36065,15 @@ var ZE = class {
 		];
 	}
 };
-function $E(e) {
-	let t = e.messagePrototype ? Object.create(e.messagePrototype) : Object.defineProperty({}, BE, { value: e });
+function oO(e) {
+	let t = e.messagePrototype ? Object.create(e.messagePrototype) : Object.defineProperty({}, qD, { value: e });
 	for (let n of e.fields) {
 		let e = n.localName;
 		if (!n.opt) if (n.oneof) t[n.oneof] = { oneofKind: void 0 };
 		else if (n.repeat) t[e] = [];
 		else switch (n.kind) {
 			case "scalar":
-				t[e] = XE(n.T, n.L);
+				t[e] = rO(n.T, n.L);
 				break;
 			case "enum":
 				t[e] = 0;
@@ -35308,7 +36085,7 @@ function $E(e) {
 	}
 	return t;
 }
-function eD(e, t, n) {
+function sO(e, t, n) {
 	let r, i = n, a;
 	for (let n of e.fields) {
 		let e = n.localName;
@@ -35346,7 +36123,7 @@ function eD(e, t, n) {
 		}
 	}
 }
-function tD(e, t, n) {
+function cO(e, t, n) {
 	if (t === n) return !0;
 	if (!t || !n) return !1;
 	for (let r of e.fields) {
@@ -35355,21 +36132,21 @@ function tD(e, t, n) {
 			case "enum":
 			case "scalar":
 				let e = r.kind == "enum" ? $.INT32 : r.T;
-				if (!(r.repeat ? iD(e, i, a) : rD(e, i, a))) return !1;
+				if (!(r.repeat ? dO(e, i, a) : uO(e, i, a))) return !1;
 				break;
 			case "map":
-				if (!(r.V.kind == "message" ? aD(r.V.T(), nD(i), nD(a)) : iD(r.V.kind == "enum" ? $.INT32 : r.V.T, nD(i), nD(a)))) return !1;
+				if (!(r.V.kind == "message" ? fO(r.V.T(), lO(i), lO(a)) : dO(r.V.kind == "enum" ? $.INT32 : r.V.T, lO(i), lO(a)))) return !1;
 				break;
 			case "message":
 				let t = r.T();
-				if (!(r.repeat ? aD(t, i, a) : t.equals(i, a))) return !1;
+				if (!(r.repeat ? fO(t, i, a) : t.equals(i, a))) return !1;
 				break;
 		}
 	}
 	return !0;
 }
-var nD = Object.values;
-function rD(e, t, n) {
+var lO = Object.values;
+function uO(e, t, n) {
 	if (t === n) return !0;
 	if (e !== $.BYTES) return !1;
 	let r = t, i = n;
@@ -35377,30 +36154,30 @@ function rD(e, t, n) {
 	for (let e = 0; e < r.length; e++) if (r[e] != i[e]) return !1;
 	return !0;
 }
-function iD(e, t, n) {
+function dO(e, t, n) {
 	if (t.length !== n.length) return !1;
-	for (let r = 0; r < t.length; r++) if (!rD(e, t[r], n[r])) return !1;
+	for (let r = 0; r < t.length; r++) if (!uO(e, t[r], n[r])) return !1;
 	return !0;
 }
-function aD(e, t, n) {
+function fO(e, t, n) {
 	if (t.length !== n.length) return !1;
 	for (let r = 0; r < t.length; r++) if (!e.equals(t[r], n[r])) return !1;
 	return !0;
 }
-var oD = Object.getOwnPropertyDescriptors(Object.getPrototypeOf({})), sD = oD[BE] = {}, cD = class {
+var pO = Object.getOwnPropertyDescriptors(Object.getPrototypeOf({})), mO = pO[qD] = {}, hO = class {
 	constructor(e, t, n) {
-		this.defaultCheckDepth = 16, this.typeName = e, this.fields = t.map(WE), this.options = n ?? {}, sD.value = this, this.messagePrototype = Object.create(null, oD), this.refTypeCheck = new KE(this), this.refJsonReader = new JE(this), this.refJsonWriter = new YE(this), this.refBinReader = new ZE(this), this.refBinWriter = new QE(this);
+		this.defaultCheckDepth = 16, this.typeName = e, this.fields = t.map(ZD), this.options = n ?? {}, mO.value = this, this.messagePrototype = Object.create(null, pO), this.refTypeCheck = new $D(this), this.refJsonReader = new tO(this), this.refJsonWriter = new nO(this), this.refBinReader = new iO(this), this.refBinWriter = new aO(this);
 	}
 	create(e) {
-		let t = $E(this);
-		return e !== void 0 && eD(this, t, e), t;
+		let t = oO(this);
+		return e !== void 0 && sO(this, t, e), t;
 	}
 	clone(e) {
 		let t = this.create();
-		return eD(this, t, e), t;
+		return sO(this, t, e), t;
 	}
 	equals(e, t) {
-		return tD(this, e, t);
+		return cO(this, e, t);
 	}
 	is(e, t = this.defaultCheckDepth) {
 		return this.refTypeCheck.is(e, t, !1);
@@ -35409,28 +36186,28 @@ var oD = Object.getOwnPropertyDescriptors(Object.getPrototypeOf({})), sD = oD[BE
 		return this.refTypeCheck.is(e, t, !0);
 	}
 	mergePartial(e, t) {
-		eD(this, e, t);
+		sO(this, e, t);
 	}
 	fromBinary(e, t) {
-		let n = SE(t);
+		let n = kD(t);
 		return this.internalBinaryRead(n.readerFactory(e), e.byteLength, n);
 	}
 	fromJson(e, t) {
-		return this.internalJsonRead(e, RE(t));
+		return this.internalJsonRead(e, GD(t));
 	}
 	fromJsonString(e, t) {
 		let n = JSON.parse(e);
 		return this.fromJson(n, t);
 	}
 	toJson(e, t) {
-		return this.internalJsonWrite(e, zE(t));
+		return this.internalJsonWrite(e, KD(t));
 	}
 	toJsonString(e, t) {
 		let n = this.toJson(e, t);
 		return JSON.stringify(n, null, t?.prettySpaces ?? 0);
 	}
 	toBinary(e, t) {
-		let n = PE(t);
+		let n = VD(t);
 		return this.internalBinaryWrite(e, n.writerFactory(), n).finish();
 	}
 	internalJsonRead(e, t, n) {
@@ -35438,7 +36215,7 @@ var oD = Object.getOwnPropertyDescriptors(Object.getPrototypeOf({})), sD = oD[BE
 			let r = n ?? this.create();
 			return this.refJsonReader.read(e, r, t), r;
 		}
-		throw Error(`Unable to parse message ${this.typeName} from JSON ${QT(e)}.`);
+		throw Error(`Unable to parse message ${this.typeName} from JSON ${aD(e)}.`);
 	}
 	internalJsonWrite(e, t) {
 		return this.refJsonWriter.write(e, t);
@@ -35451,15 +36228,15 @@ var oD = Object.getOwnPropertyDescriptors(Object.getPrototypeOf({})), sD = oD[BE
 		return this.refBinReader.read(e, i, n, t), i;
 	}
 };
-function lD(e, t) {
+function gO(e, t) {
 	let n = e;
-	return n.service = t, n.localName = n.localName ?? VE(n.name), n.serverStreaming = !!n.serverStreaming, n.clientStreaming = !!n.clientStreaming, n.options = n.options ?? {}, n.idempotency = n.idempotency ?? void 0, n;
+	return n.service = t, n.localName = n.localName ?? JD(n.name), n.serverStreaming = !!n.serverStreaming, n.clientStreaming = !!n.clientStreaming, n.options = n.options ?? {}, n.idempotency = n.idempotency ?? void 0, n;
 }
-var uD = class {
+var _O = class {
 	constructor(e, t, n) {
-		this.typeName = e, this.methods = t.map((e) => lD(e, this)), this.options = n ?? {};
+		this.typeName = e, this.methods = t.map((e) => gO(e, this)), this.options = n ?? {};
 	}
-}, dD = new class extends cD {
+}, vO = new class extends hO {
 	constructor() {
 		super("github.actions.results.entities.v1.CacheScope", [{
 			no: 1,
@@ -35478,10 +36255,10 @@ var uD = class {
 			scope: "",
 			permission: "0"
 		};
-		return globalThis.Object.defineProperty(t, BE, {
+		return globalThis.Object.defineProperty(t, qD, {
 			enumerable: !1,
 			value: this
-		}), e !== void 0 && eD(this, t, e), t;
+		}), e !== void 0 && sO(this, t, e), t;
 	}
 	internalBinaryRead(e, t, n, r) {
 		let i = r ?? this.create(), a = e.pos + t;
@@ -35498,7 +36275,7 @@ var uD = class {
 					let a = n.readUnknownField;
 					if (a === "throw") throw new globalThis.Error(`Unknown field ${t} (wire type ${r}) for ${this.typeName}`);
 					let o = e.skip(r);
-					a !== !1 && (a === !0 ? iE.onRead : a)(this.typeName, i, t, r, o);
+					a !== !1 && (a === !0 ? dD.onRead : a)(this.typeName, i, t, r, o);
 			}
 		}
 		return i;
@@ -35506,9 +36283,9 @@ var uD = class {
 	internalBinaryWrite(e, t, n) {
 		e.scope !== "" && t.tag(1, Q.LengthDelimited).string(e.scope), e.permission !== "0" && t.tag(2, Q.Varint).int64(e.permission);
 		let r = n.writeUnknownFields;
-		return r !== !1 && (r == 1 ? iE.onWrite : r)(this.typeName, e, t), t;
+		return r !== !1 && (r == 1 ? dD.onWrite : r)(this.typeName, e, t), t;
 	}
-}(), fD = new class extends cD {
+}(), yO = new class extends hO {
 	constructor() {
 		super("github.actions.results.entities.v1.CacheMetadata", [{
 			no: 1,
@@ -35520,7 +36297,7 @@ var uD = class {
 			name: "scope",
 			kind: "message",
 			repeat: 1,
-			T: () => dD
+			T: () => vO
 		}]);
 	}
 	create(e) {
@@ -35528,10 +36305,10 @@ var uD = class {
 			repositoryId: "0",
 			scope: []
 		};
-		return globalThis.Object.defineProperty(t, BE, {
+		return globalThis.Object.defineProperty(t, qD, {
 			enumerable: !1,
 			value: this
-		}), e !== void 0 && eD(this, t, e), t;
+		}), e !== void 0 && sO(this, t, e), t;
 	}
 	internalBinaryRead(e, t, n, r) {
 		let i = r ?? this.create(), a = e.pos + t;
@@ -35542,31 +36319,31 @@ var uD = class {
 					i.repositoryId = e.int64().toString();
 					break;
 				case 2:
-					i.scope.push(dD.internalBinaryRead(e, e.uint32(), n));
+					i.scope.push(vO.internalBinaryRead(e, e.uint32(), n));
 					break;
 				default:
 					let a = n.readUnknownField;
 					if (a === "throw") throw new globalThis.Error(`Unknown field ${t} (wire type ${r}) for ${this.typeName}`);
 					let o = e.skip(r);
-					a !== !1 && (a === !0 ? iE.onRead : a)(this.typeName, i, t, r, o);
+					a !== !1 && (a === !0 ? dD.onRead : a)(this.typeName, i, t, r, o);
 			}
 		}
 		return i;
 	}
 	internalBinaryWrite(e, t, n) {
 		e.repositoryId !== "0" && t.tag(1, Q.Varint).int64(e.repositoryId);
-		for (let r = 0; r < e.scope.length; r++) dD.internalBinaryWrite(e.scope[r], t.tag(2, Q.LengthDelimited).fork(), n).join();
+		for (let r = 0; r < e.scope.length; r++) vO.internalBinaryWrite(e.scope[r], t.tag(2, Q.LengthDelimited).fork(), n).join();
 		let r = n.writeUnknownFields;
-		return r !== !1 && (r == 1 ? iE.onWrite : r)(this.typeName, e, t), t;
+		return r !== !1 && (r == 1 ? dD.onWrite : r)(this.typeName, e, t), t;
 	}
-}(), pD = new class extends cD {
+}(), bO = new class extends hO {
 	constructor() {
 		super("github.actions.results.api.v1.CreateCacheEntryRequest", [
 			{
 				no: 1,
 				name: "metadata",
 				kind: "message",
-				T: () => fD
+				T: () => yO
 			},
 			{
 				no: 2,
@@ -35587,10 +36364,10 @@ var uD = class {
 			key: "",
 			version: ""
 		};
-		return globalThis.Object.defineProperty(t, BE, {
+		return globalThis.Object.defineProperty(t, qD, {
 			enumerable: !1,
 			value: this
-		}), e !== void 0 && eD(this, t, e), t;
+		}), e !== void 0 && sO(this, t, e), t;
 	}
 	internalBinaryRead(e, t, n, r) {
 		let i = r ?? this.create(), a = e.pos + t;
@@ -35598,7 +36375,7 @@ var uD = class {
 			let [t, r] = e.tag();
 			switch (t) {
 				case 1:
-					i.metadata = fD.internalBinaryRead(e, e.uint32(), n, i.metadata);
+					i.metadata = yO.internalBinaryRead(e, e.uint32(), n, i.metadata);
 					break;
 				case 2:
 					i.key = e.string();
@@ -35610,17 +36387,17 @@ var uD = class {
 					let a = n.readUnknownField;
 					if (a === "throw") throw new globalThis.Error(`Unknown field ${t} (wire type ${r}) for ${this.typeName}`);
 					let o = e.skip(r);
-					a !== !1 && (a === !0 ? iE.onRead : a)(this.typeName, i, t, r, o);
+					a !== !1 && (a === !0 ? dD.onRead : a)(this.typeName, i, t, r, o);
 			}
 		}
 		return i;
 	}
 	internalBinaryWrite(e, t, n) {
-		e.metadata && fD.internalBinaryWrite(e.metadata, t.tag(1, Q.LengthDelimited).fork(), n).join(), e.key !== "" && t.tag(2, Q.LengthDelimited).string(e.key), e.version !== "" && t.tag(3, Q.LengthDelimited).string(e.version);
+		e.metadata && yO.internalBinaryWrite(e.metadata, t.tag(1, Q.LengthDelimited).fork(), n).join(), e.key !== "" && t.tag(2, Q.LengthDelimited).string(e.key), e.version !== "" && t.tag(3, Q.LengthDelimited).string(e.version);
 		let r = n.writeUnknownFields;
-		return r !== !1 && (r == 1 ? iE.onWrite : r)(this.typeName, e, t), t;
+		return r !== !1 && (r == 1 ? dD.onWrite : r)(this.typeName, e, t), t;
 	}
-}(), mD = new class extends cD {
+}(), xO = new class extends hO {
 	constructor() {
 		super("github.actions.results.api.v1.CreateCacheEntryResponse", [
 			{
@@ -35649,10 +36426,10 @@ var uD = class {
 			signedUploadUrl: "",
 			message: ""
 		};
-		return globalThis.Object.defineProperty(t, BE, {
+		return globalThis.Object.defineProperty(t, qD, {
 			enumerable: !1,
 			value: this
-		}), e !== void 0 && eD(this, t, e), t;
+		}), e !== void 0 && sO(this, t, e), t;
 	}
 	internalBinaryRead(e, t, n, r) {
 		let i = r ?? this.create(), a = e.pos + t;
@@ -35672,7 +36449,7 @@ var uD = class {
 					let a = n.readUnknownField;
 					if (a === "throw") throw new globalThis.Error(`Unknown field ${t} (wire type ${r}) for ${this.typeName}`);
 					let o = e.skip(r);
-					a !== !1 && (a === !0 ? iE.onRead : a)(this.typeName, i, t, r, o);
+					a !== !1 && (a === !0 ? dD.onRead : a)(this.typeName, i, t, r, o);
 			}
 		}
 		return i;
@@ -35680,16 +36457,16 @@ var uD = class {
 	internalBinaryWrite(e, t, n) {
 		e.ok !== !1 && t.tag(1, Q.Varint).bool(e.ok), e.signedUploadUrl !== "" && t.tag(2, Q.LengthDelimited).string(e.signedUploadUrl), e.message !== "" && t.tag(3, Q.LengthDelimited).string(e.message);
 		let r = n.writeUnknownFields;
-		return r !== !1 && (r == 1 ? iE.onWrite : r)(this.typeName, e, t), t;
+		return r !== !1 && (r == 1 ? dD.onWrite : r)(this.typeName, e, t), t;
 	}
-}(), hD = new class extends cD {
+}(), SO = new class extends hO {
 	constructor() {
 		super("github.actions.results.api.v1.FinalizeCacheEntryUploadRequest", [
 			{
 				no: 1,
 				name: "metadata",
 				kind: "message",
-				T: () => fD
+				T: () => yO
 			},
 			{
 				no: 2,
@@ -35717,10 +36494,10 @@ var uD = class {
 			sizeBytes: "0",
 			version: ""
 		};
-		return globalThis.Object.defineProperty(t, BE, {
+		return globalThis.Object.defineProperty(t, qD, {
 			enumerable: !1,
 			value: this
-		}), e !== void 0 && eD(this, t, e), t;
+		}), e !== void 0 && sO(this, t, e), t;
 	}
 	internalBinaryRead(e, t, n, r) {
 		let i = r ?? this.create(), a = e.pos + t;
@@ -35728,7 +36505,7 @@ var uD = class {
 			let [t, r] = e.tag();
 			switch (t) {
 				case 1:
-					i.metadata = fD.internalBinaryRead(e, e.uint32(), n, i.metadata);
+					i.metadata = yO.internalBinaryRead(e, e.uint32(), n, i.metadata);
 					break;
 				case 2:
 					i.key = e.string();
@@ -35743,17 +36520,17 @@ var uD = class {
 					let a = n.readUnknownField;
 					if (a === "throw") throw new globalThis.Error(`Unknown field ${t} (wire type ${r}) for ${this.typeName}`);
 					let o = e.skip(r);
-					a !== !1 && (a === !0 ? iE.onRead : a)(this.typeName, i, t, r, o);
+					a !== !1 && (a === !0 ? dD.onRead : a)(this.typeName, i, t, r, o);
 			}
 		}
 		return i;
 	}
 	internalBinaryWrite(e, t, n) {
-		e.metadata && fD.internalBinaryWrite(e.metadata, t.tag(1, Q.LengthDelimited).fork(), n).join(), e.key !== "" && t.tag(2, Q.LengthDelimited).string(e.key), e.sizeBytes !== "0" && t.tag(3, Q.Varint).int64(e.sizeBytes), e.version !== "" && t.tag(4, Q.LengthDelimited).string(e.version);
+		e.metadata && yO.internalBinaryWrite(e.metadata, t.tag(1, Q.LengthDelimited).fork(), n).join(), e.key !== "" && t.tag(2, Q.LengthDelimited).string(e.key), e.sizeBytes !== "0" && t.tag(3, Q.Varint).int64(e.sizeBytes), e.version !== "" && t.tag(4, Q.LengthDelimited).string(e.version);
 		let r = n.writeUnknownFields;
-		return r !== !1 && (r == 1 ? iE.onWrite : r)(this.typeName, e, t), t;
+		return r !== !1 && (r == 1 ? dD.onWrite : r)(this.typeName, e, t), t;
 	}
-}(), gD = new class extends cD {
+}(), CO = new class extends hO {
 	constructor() {
 		super("github.actions.results.api.v1.FinalizeCacheEntryUploadResponse", [
 			{
@@ -35782,10 +36559,10 @@ var uD = class {
 			entryId: "0",
 			message: ""
 		};
-		return globalThis.Object.defineProperty(t, BE, {
+		return globalThis.Object.defineProperty(t, qD, {
 			enumerable: !1,
 			value: this
-		}), e !== void 0 && eD(this, t, e), t;
+		}), e !== void 0 && sO(this, t, e), t;
 	}
 	internalBinaryRead(e, t, n, r) {
 		let i = r ?? this.create(), a = e.pos + t;
@@ -35805,7 +36582,7 @@ var uD = class {
 					let a = n.readUnknownField;
 					if (a === "throw") throw new globalThis.Error(`Unknown field ${t} (wire type ${r}) for ${this.typeName}`);
 					let o = e.skip(r);
-					a !== !1 && (a === !0 ? iE.onRead : a)(this.typeName, i, t, r, o);
+					a !== !1 && (a === !0 ? dD.onRead : a)(this.typeName, i, t, r, o);
 			}
 		}
 		return i;
@@ -35813,16 +36590,16 @@ var uD = class {
 	internalBinaryWrite(e, t, n) {
 		e.ok !== !1 && t.tag(1, Q.Varint).bool(e.ok), e.entryId !== "0" && t.tag(2, Q.Varint).int64(e.entryId), e.message !== "" && t.tag(3, Q.LengthDelimited).string(e.message);
 		let r = n.writeUnknownFields;
-		return r !== !1 && (r == 1 ? iE.onWrite : r)(this.typeName, e, t), t;
+		return r !== !1 && (r == 1 ? dD.onWrite : r)(this.typeName, e, t), t;
 	}
-}(), _D = new class extends cD {
+}(), wO = new class extends hO {
 	constructor() {
 		super("github.actions.results.api.v1.GetCacheEntryDownloadURLRequest", [
 			{
 				no: 1,
 				name: "metadata",
 				kind: "message",
-				T: () => fD
+				T: () => yO
 			},
 			{
 				no: 2,
@@ -35851,10 +36628,10 @@ var uD = class {
 			restoreKeys: [],
 			version: ""
 		};
-		return globalThis.Object.defineProperty(t, BE, {
+		return globalThis.Object.defineProperty(t, qD, {
 			enumerable: !1,
 			value: this
-		}), e !== void 0 && eD(this, t, e), t;
+		}), e !== void 0 && sO(this, t, e), t;
 	}
 	internalBinaryRead(e, t, n, r) {
 		let i = r ?? this.create(), a = e.pos + t;
@@ -35862,7 +36639,7 @@ var uD = class {
 			let [t, r] = e.tag();
 			switch (t) {
 				case 1:
-					i.metadata = fD.internalBinaryRead(e, e.uint32(), n, i.metadata);
+					i.metadata = yO.internalBinaryRead(e, e.uint32(), n, i.metadata);
 					break;
 				case 2:
 					i.key = e.string();
@@ -35877,19 +36654,19 @@ var uD = class {
 					let a = n.readUnknownField;
 					if (a === "throw") throw new globalThis.Error(`Unknown field ${t} (wire type ${r}) for ${this.typeName}`);
 					let o = e.skip(r);
-					a !== !1 && (a === !0 ? iE.onRead : a)(this.typeName, i, t, r, o);
+					a !== !1 && (a === !0 ? dD.onRead : a)(this.typeName, i, t, r, o);
 			}
 		}
 		return i;
 	}
 	internalBinaryWrite(e, t, n) {
-		e.metadata && fD.internalBinaryWrite(e.metadata, t.tag(1, Q.LengthDelimited).fork(), n).join(), e.key !== "" && t.tag(2, Q.LengthDelimited).string(e.key);
+		e.metadata && yO.internalBinaryWrite(e.metadata, t.tag(1, Q.LengthDelimited).fork(), n).join(), e.key !== "" && t.tag(2, Q.LengthDelimited).string(e.key);
 		for (let n = 0; n < e.restoreKeys.length; n++) t.tag(3, Q.LengthDelimited).string(e.restoreKeys[n]);
 		e.version !== "" && t.tag(4, Q.LengthDelimited).string(e.version);
 		let r = n.writeUnknownFields;
-		return r !== !1 && (r == 1 ? iE.onWrite : r)(this.typeName, e, t), t;
+		return r !== !1 && (r == 1 ? dD.onWrite : r)(this.typeName, e, t), t;
 	}
-}(), vD = new class extends cD {
+}(), TO = new class extends hO {
 	constructor() {
 		super("github.actions.results.api.v1.GetCacheEntryDownloadURLResponse", [
 			{
@@ -35918,10 +36695,10 @@ var uD = class {
 			signedDownloadUrl: "",
 			matchedKey: ""
 		};
-		return globalThis.Object.defineProperty(t, BE, {
+		return globalThis.Object.defineProperty(t, qD, {
 			enumerable: !1,
 			value: this
-		}), e !== void 0 && eD(this, t, e), t;
+		}), e !== void 0 && sO(this, t, e), t;
 	}
 	internalBinaryRead(e, t, n, r) {
 		let i = r ?? this.create(), a = e.pos + t;
@@ -35941,7 +36718,7 @@ var uD = class {
 					let a = n.readUnknownField;
 					if (a === "throw") throw new globalThis.Error(`Unknown field ${t} (wire type ${r}) for ${this.typeName}`);
 					let o = e.skip(r);
-					a !== !1 && (a === !0 ? iE.onRead : a)(this.typeName, i, t, r, o);
+					a !== !1 && (a === !0 ? dD.onRead : a)(this.typeName, i, t, r, o);
 			}
 		}
 		return i;
@@ -35949,56 +36726,56 @@ var uD = class {
 	internalBinaryWrite(e, t, n) {
 		e.ok !== !1 && t.tag(1, Q.Varint).bool(e.ok), e.signedDownloadUrl !== "" && t.tag(2, Q.LengthDelimited).string(e.signedDownloadUrl), e.matchedKey !== "" && t.tag(3, Q.LengthDelimited).string(e.matchedKey);
 		let r = n.writeUnknownFields;
-		return r !== !1 && (r == 1 ? iE.onWrite : r)(this.typeName, e, t), t;
+		return r !== !1 && (r == 1 ? dD.onWrite : r)(this.typeName, e, t), t;
 	}
 }();
-new uD("github.actions.results.api.v1.CacheService", [
+new _O("github.actions.results.api.v1.CacheService", [
 	{
 		name: "CreateCacheEntry",
 		options: {},
-		I: pD,
-		O: mD
+		I: bO,
+		O: xO
 	},
 	{
 		name: "FinalizeCacheEntryUpload",
 		options: {},
-		I: hD,
-		O: gD
+		I: SO,
+		O: CO
 	},
 	{
 		name: "GetCacheEntryDownloadURL",
 		options: {},
-		I: _D,
-		O: vD
+		I: wO,
+		O: TO
 	}
 ]);
-var yD = class {
+var EO = class {
 	constructor(e) {
 		this.rpc = e, this.CreateCacheEntry.bind(this), this.FinalizeCacheEntryUpload.bind(this), this.GetCacheEntryDownloadURL.bind(this);
 	}
 	CreateCacheEntry(e) {
-		let t = pD.toJson(e, {
+		let t = bO.toJson(e, {
 			useProtoFieldName: !0,
 			emitDefaultValues: !1
 		});
-		return this.rpc.request("github.actions.results.api.v1.CacheService", "CreateCacheEntry", "application/json", t).then((e) => mD.fromJson(e, { ignoreUnknownFields: !0 }));
+		return this.rpc.request("github.actions.results.api.v1.CacheService", "CreateCacheEntry", "application/json", t).then((e) => xO.fromJson(e, { ignoreUnknownFields: !0 }));
 	}
 	FinalizeCacheEntryUpload(e) {
-		let t = hD.toJson(e, {
+		let t = SO.toJson(e, {
 			useProtoFieldName: !0,
 			emitDefaultValues: !1
 		});
-		return this.rpc.request("github.actions.results.api.v1.CacheService", "FinalizeCacheEntryUpload", "application/json", t).then((e) => gD.fromJson(e, { ignoreUnknownFields: !0 }));
+		return this.rpc.request("github.actions.results.api.v1.CacheService", "FinalizeCacheEntryUpload", "application/json", t).then((e) => CO.fromJson(e, { ignoreUnknownFields: !0 }));
 	}
 	GetCacheEntryDownloadURL(e) {
-		let t = _D.toJson(e, {
+		let t = wO.toJson(e, {
 			useProtoFieldName: !0,
 			emitDefaultValues: !1
 		});
-		return this.rpc.request("github.actions.results.api.v1.CacheService", "GetCacheEntryDownloadURL", "application/json", t).then((e) => vD.fromJson(e, { ignoreUnknownFields: !0 }));
+		return this.rpc.request("github.actions.results.api.v1.CacheService", "GetCacheEntryDownloadURL", "application/json", t).then((e) => TO.fromJson(e, { ignoreUnknownFields: !0 }));
 	}
 };
-function bD(e) {
+function DO(e) {
 	if (e) try {
 		let t = new URL(e).searchParams.get("sig");
 		t && (Tr(t), Tr(encodeURIComponent(t)));
@@ -36006,14 +36783,14 @@ function bD(e) {
 		z(`Failed to parse URL: ${e} ${t instanceof Error ? t.message : String(t)}`);
 	}
 }
-function xD(e) {
+function OO(e) {
 	if (typeof e != "object" || !e) {
 		z("body is not an object or is null");
 		return;
 	}
-	"signed_upload_url" in e && typeof e.signed_upload_url == "string" && bD(e.signed_upload_url), "signed_download_url" in e && typeof e.signed_download_url == "string" && bD(e.signed_download_url);
+	"signed_upload_url" in e && typeof e.signed_upload_url == "string" && DO(e.signed_upload_url), "signed_download_url" in e && typeof e.signed_download_url == "string" && DO(e.signed_download_url);
 }
-var SD = function(e, t, n, r) {
+var kO = function(e, t, n, r) {
 	function i(e) {
 		return e instanceof n ? e : new n(function(t) {
 			t(e);
@@ -36039,19 +36816,19 @@ var SD = function(e, t, n, r) {
 		}
 		c((r = r.apply(e, t || [])).next());
 	});
-}, CD = class {
+}, AO = class {
 	constructor(e, t, n, r) {
 		this.maxAttempts = 5, this.baseRetryIntervalMilliseconds = 3e3, this.retryMultiplier = 1.5;
-		let i = Xa();
-		this.baseUrl = mT(), t && (this.maxAttempts = t), n && (this.baseRetryIntervalMilliseconds = n), r && (this.retryMultiplier = r), this.httpClient = new Mn(e, [new Fn(i)]);
+		let i = Uo();
+		this.baseUrl = xE(), t && (this.maxAttempts = t), n && (this.baseRetryIntervalMilliseconds = n), r && (this.retryMultiplier = r), this.httpClient = new Mn(e, [new Fn(i)]);
 	}
 	request(e, t, n, r) {
-		return SD(this, void 0, void 0, function* () {
+		return kO(this, void 0, void 0, function* () {
 			let i = new URL(`/twirp/${e}/${t}`, this.baseUrl).href;
 			z(`[Request] ${t} ${i}`);
 			let a = { "Content-Type": n };
 			try {
-				let { body: e } = yield this.retryableRequest(() => SD(this, void 0, void 0, function* () {
+				let { body: e } = yield this.retryableRequest(() => kO(this, void 0, void 0, function* () {
 					return this.httpClient.post(i, JSON.stringify(r), a);
 				}));
 				return e;
@@ -36061,7 +36838,7 @@ var SD = function(e, t, n, r) {
 		});
 	}
 	retryableRequest(e) {
-		return SD(this, void 0, void 0, function* () {
+		return kO(this, void 0, void 0, function* () {
 			let t = 0, n = "", r = "";
 			for (; t < this.maxAttempts;) {
 				let i = !1;
@@ -36069,12 +36846,12 @@ var SD = function(e, t, n, r) {
 					let t = yield e(), a = t.message.statusCode;
 					r = yield t.readBody(), z(`[Response] - ${t.message.statusCode}`), z(`Headers: ${JSON.stringify(t.message.headers, null, 2)}`);
 					let o = JSON.parse(r);
-					if (xD(o), z(`Body: ${JSON.stringify(o, null, 2)}`), this.isSuccessStatusCode(a)) return {
+					if (OO(o), z(`Body: ${JSON.stringify(o, null, 2)}`), this.isSuccessStatusCode(a)) return {
 						response: t,
 						body: o
 					};
 					if (i = this.isRetryableHttpStatusCode(a), n = `Failed request: (${a}) ${t.message.statusMessage}`, o.msg) {
-						if (Hw.isUsageErrorMessage(o.msg)) throw new Hw();
+						if (YT.isUsageErrorMessage(o.msg)) throw new YT();
 						n = `${n}: ${o.msg}`;
 					}
 					if (a === Sn.TooManyRequests) {
@@ -36083,11 +36860,11 @@ var SD = function(e, t, n, r) {
 							let t = parseInt(e, 10);
 							!isNaN(t) && t > 0 && Mr(`You've hit a rate limit, your rate limit will reset in ${t} seconds`);
 						}
-						throw new Uw(`Rate limited: ${n}`);
+						throw new XT(`Rate limited: ${n}`);
 					}
 				} catch (e) {
-					if (e instanceof SyntaxError && z(`Raw Body: ${r}`), e instanceof Hw || e instanceof Uw) throw e;
-					if (Vw.isNetworkErrorCode(e?.code)) throw new Vw(e?.code);
+					if (e instanceof SyntaxError && z(`Raw Body: ${r}`), e instanceof YT || e instanceof XT) throw e;
+					if (JT.isNetworkErrorCode(e?.code)) throw new JT(e?.code);
 					i = !0, n = e.message;
 				}
 				if (!i) throw Error(`Received non-retryable error: ${n}`);
@@ -36110,7 +36887,7 @@ var SD = function(e, t, n, r) {
 		].includes(e) : !1;
 	}
 	sleep(e) {
-		return SD(this, void 0, void 0, function* () {
+		return kO(this, void 0, void 0, function* () {
 			return new Promise((t) => setTimeout(t, e));
 		});
 	}
@@ -36121,10 +36898,10 @@ var SD = function(e, t, n, r) {
 		return Math.trunc(Math.random() * (n - t) + t);
 	}
 };
-function wD(e) {
-	return new yD(new CD(LT(), e?.maxAttempts, e?.retryIntervalMs, e?.retryMultiplier));
+function jO(e) {
+	return new EO(new AO(WE(), e?.maxAttempts, e?.retryIntervalMs, e?.retryMultiplier));
 }
-var TD = function(e, t, n, r) {
+var MO = function(e, t, n, r) {
 	function i(e) {
 		return e instanceof n ? e : new n(function(t) {
 			t(e);
@@ -36150,19 +36927,19 @@ var TD = function(e, t, n, r) {
 		}
 		c((r = r.apply(e, t || [])).next());
 	});
-}, ED = process.platform === "win32";
-function DD() {
-	return TD(this, void 0, void 0, function* () {
+}, NO = process.platform === "win32";
+function PO() {
+	return MO(this, void 0, void 0, function* () {
 		switch (process.platform) {
 			case "win32": {
-				let e = yield qa(), t = Pa;
+				let e = yield Bo(), t = Do;
 				if (e) return {
 					path: e,
-					type: Aa.GNU
+					type: Co.GNU
 				};
 				if (s(t)) return {
 					path: t,
-					type: Aa.BSD
+					type: Co.BSD
 				};
 				break;
 			}
@@ -36170,26 +36947,26 @@ function DD() {
 				let e = yield dr("gtar", !1);
 				return e ? {
 					path: e,
-					type: Aa.GNU
+					type: Co.GNU
 				} : {
 					path: yield dr("tar", !0),
-					type: Aa.BSD
+					type: Co.BSD
 				};
 			}
 			default: break;
 		}
 		return {
 			path: yield dr("tar", !0),
-			type: Aa.GNU
+			type: Co.GNU
 		};
 	});
 }
-function OD(e, t, n) {
-	return TD(this, arguments, void 0, function* (e, t, n, r = "") {
-		let i = [`"${e.path}"`], a = Ka(t), o = "cache.tar", s = AD(), c = e.type === Aa.BSD && t !== ka.Gzip && ED;
+function FO(e, t, n) {
+	return MO(this, arguments, void 0, function* (e, t, n, r = "") {
+		let i = [`"${e.path}"`], a = zo(t), o = "cache.tar", s = LO(), c = e.type === Co.BSD && t !== So.Gzip && NO;
 		switch (n) {
 			case "create":
-				i.push("--posix", "-cf", c ? o : a.replace(RegExp(`\\${u.sep}`, "g"), "/"), "--exclude", c ? o : a.replace(RegExp(`\\${u.sep}`, "g"), "/"), "-P", "-C", s.replace(RegExp(`\\${u.sep}`, "g"), "/"), "--files-from", Ia);
+				i.push("--posix", "-cf", c ? o : a.replace(RegExp(`\\${u.sep}`, "g"), "/"), "--exclude", c ? o : a.replace(RegExp(`\\${u.sep}`, "g"), "/"), "-P", "-C", s.replace(RegExp(`\\${u.sep}`, "g"), "/"), "--files-from", ko);
 				break;
 			case "extract":
 				i.push("-xf", c ? o : r.replace(RegExp(`\\${u.sep}`, "g"), "/"), "-P", "-C", s.replace(RegExp(`\\${u.sep}`, "g"), "/"));
@@ -36198,7 +36975,7 @@ function OD(e, t, n) {
 				i.push("-tf", c ? o : r.replace(RegExp(`\\${u.sep}`, "g"), "/"), "-P");
 				break;
 		}
-		if (e.type === Aa.GNU) switch (process.platform) {
+		if (e.type === Co.GNU) switch (process.platform) {
 			case "win32":
 				i.push("--force-local");
 				break;
@@ -36209,53 +36986,53 @@ function OD(e, t, n) {
 		return i;
 	});
 }
-function kD(e, t) {
-	return TD(this, arguments, void 0, function* (e, t, n = "") {
-		let r, i = yield DD(), a = yield OD(i, e, t, n), o = t === "create" ? yield MD(i, e) : yield jD(i, e, n), s = i.type === Aa.BSD && e !== ka.Gzip && ED;
+function IO(e, t) {
+	return MO(this, arguments, void 0, function* (e, t, n = "") {
+		let r, i = yield PO(), a = yield FO(i, e, t, n), o = t === "create" ? yield zO(i, e) : yield RO(i, e, n), s = i.type === Co.BSD && e !== So.Gzip && NO;
 		return r = s && t !== "create" ? [[...o].join(" "), [...a].join(" ")] : [[...a].join(" "), [...o].join(" ")], s ? r : [r.join(" ")];
 	});
 }
-function AD() {
+function LO() {
 	return process.env.GITHUB_WORKSPACE ?? process.cwd();
 }
-function jD(e, t, n) {
-	return TD(this, void 0, void 0, function* () {
-		let r = e.type === Aa.BSD && t !== ka.Gzip && ED;
+function RO(e, t, n) {
+	return MO(this, void 0, void 0, function* () {
+		let r = e.type === Co.BSD && t !== So.Gzip && NO;
 		switch (t) {
-			case ka.Zstd: return r ? [
+			case So.Zstd: return r ? [
 				"zstd -d --long=30 --force -o",
-				Fa,
+				Oo,
 				n.replace(RegExp(`\\${u.sep}`, "g"), "/")
-			] : ["--use-compress-program", ED ? "\"zstd -d --long=30\"" : "unzstd --long=30"];
-			case ka.ZstdWithoutLong: return r ? [
+			] : ["--use-compress-program", NO ? "\"zstd -d --long=30\"" : "unzstd --long=30"];
+			case So.ZstdWithoutLong: return r ? [
 				"zstd -d --force -o",
-				Fa,
+				Oo,
 				n.replace(RegExp(`\\${u.sep}`, "g"), "/")
-			] : ["--use-compress-program", ED ? "\"zstd -d\"" : "unzstd"];
+			] : ["--use-compress-program", NO ? "\"zstd -d\"" : "unzstd"];
 			default: return ["-z"];
 		}
 	});
 }
-function MD(e, t) {
-	return TD(this, void 0, void 0, function* () {
-		let n = Ka(t), r = e.type === Aa.BSD && t !== ka.Gzip && ED;
+function zO(e, t) {
+	return MO(this, void 0, void 0, function* () {
+		let n = zo(t), r = e.type === Co.BSD && t !== So.Gzip && NO;
 		switch (t) {
-			case ka.Zstd: return r ? [
+			case So.Zstd: return r ? [
 				"zstd -T0 --long=30 --force -o",
 				n.replace(RegExp(`\\${u.sep}`, "g"), "/"),
-				Fa
-			] : ["--use-compress-program", ED ? "\"zstd -T0 --long=30\"" : "zstdmt --long=30"];
-			case ka.ZstdWithoutLong: return r ? [
+				Oo
+			] : ["--use-compress-program", NO ? "\"zstd -T0 --long=30\"" : "zstdmt --long=30"];
+			case So.ZstdWithoutLong: return r ? [
 				"zstd -T0 --force -o",
 				n.replace(RegExp(`\\${u.sep}`, "g"), "/"),
-				Fa
-			] : ["--use-compress-program", ED ? "\"zstd -T0\"" : "zstdmt"];
+				Oo
+			] : ["--use-compress-program", NO ? "\"zstd -T0\"" : "zstdmt"];
 			default: return ["-z"];
 		}
 	});
 }
-function ND(e, t) {
-	return TD(this, void 0, void 0, function* () {
+function BO(e, t) {
+	return MO(this, void 0, void 0, function* () {
 		for (let n of e) try {
 			yield Sr(n, void 0, {
 				cwd: t,
@@ -36266,22 +37043,22 @@ function ND(e, t) {
 		}
 	});
 }
-function PD(e, t) {
-	return TD(this, void 0, void 0, function* () {
-		yield ND(yield kD(t, "list", e));
+function VO(e, t) {
+	return MO(this, void 0, void 0, function* () {
+		yield BO(yield IO(t, "list", e));
 	});
 }
-function FD(e, t) {
-	return TD(this, void 0, void 0, function* () {
-		yield ur(AD()), yield ND(yield kD(t, "extract", e));
+function HO(e, t) {
+	return MO(this, void 0, void 0, function* () {
+		yield ur(LO()), yield BO(yield IO(t, "extract", e));
 	});
 }
-function ID(e, t, n) {
-	return TD(this, void 0, void 0, function* () {
-		l(u.join(e, Ia), t.join("\n")), yield ND(yield kD(n, "create"), e);
+function UO(e, t, n) {
+	return MO(this, void 0, void 0, function* () {
+		l(u.join(e, ko), t.join("\n")), yield BO(yield IO(n, "create"), e);
 	});
 }
-var LD = function(e, t, n, r) {
+var WO = function(e, t, n, r) {
 	function i(e) {
 		return e instanceof n ? e : new n(function(t) {
 			t(e);
@@ -36307,135 +37084,135 @@ var LD = function(e, t, n, r) {
 		}
 		c((r = r.apply(e, t || [])).next());
 	});
-}, RD = class e extends Error {
+}, GO = class e extends Error {
 	constructor(t) {
 		super(t), this.name = "ValidationError", Object.setPrototypeOf(this, e.prototype);
 	}
-}, zD = class e extends Error {
+}, KO = class e extends Error {
 	constructor(t) {
 		super(t), this.name = "ReserveCacheError", Object.setPrototypeOf(this, e.prototype);
 	}
-}, BD = class e extends Error {
+}, qO = class e extends Error {
 	constructor(t) {
 		super(t), this.name = "FinalizeCacheError", Object.setPrototypeOf(this, e.prototype);
 	}
 };
-function VD(e) {
-	if (!e || e.length === 0) throw new RD("Path Validation Error: At least one directory or file path is required");
+function JO(e) {
+	if (!e || e.length === 0) throw new GO("Path Validation Error: At least one directory or file path is required");
 }
-function HD(e) {
-	if (e.length > 512) throw new RD(`Key Validation Error: ${e} cannot be larger than 512 characters.`);
-	if (!/^[^,]*$/.test(e)) throw new RD(`Key Validation Error: ${e} cannot contain commas.`);
+function YO(e) {
+	if (e.length > 512) throw new GO(`Key Validation Error: ${e} cannot be larger than 512 characters.`);
+	if (!/^[^,]*$/.test(e)) throw new GO(`Key Validation Error: ${e} cannot contain commas.`);
 }
-function UD(e, t, n, r) {
-	return LD(this, arguments, void 0, function* (e, t, n, r, i = !1) {
-		let a = pT();
-		switch (z(`Cache service version: ${a}`), VD(e), a) {
-			case "v2": return yield GD(e, t, n, r, i);
-			default: return yield WD(e, t, n, r, i);
+function XO(e, t, n, r) {
+	return WO(this, arguments, void 0, function* (e, t, n, r, i = !1) {
+		let a = bE();
+		switch (z(`Cache service version: ${a}`), JO(e), a) {
+			case "v2": return yield QO(e, t, n, r, i);
+			default: return yield ZO(e, t, n, r, i);
 		}
 	});
 }
-function WD(e, t, n, r) {
-	return LD(this, arguments, void 0, function* (e, t, n, r, i = !1) {
+function ZO(e, t, n, r) {
+	return WO(this, arguments, void 0, function* (e, t, n, r, i = !1) {
 		n ||= [];
 		let a = [t, ...n];
-		if (z("Resolved Keys:"), z(JSON.stringify(a)), a.length > 10) throw new RD("Key Validation Error: Keys are limited to a maximum of 10.");
-		for (let e of a) HD(e);
-		let o = yield Ga(), s = "";
+		if (z("Resolved Keys:"), z(JSON.stringify(a)), a.length > 10) throw new GO("Key Validation Error: Keys are limited to a maximum of 10.");
+		for (let e of a) YO(e);
+		let o = yield Ro(), s = "";
 		try {
-			let t = yield UT(a, e, {
+			let t = yield XE(a, e, {
 				compressionMethod: o,
 				enableCrossOsArchive: i
 			});
 			if (!t?.archiveLocation) return;
 			if (r?.lookupOnly) return Nr("Lookup only - skipping download"), t.cacheKey;
-			s = u.join(yield Ba(), Ka(o)), z(`Archive Path: ${s}`), yield GT(t.archiveLocation, s, r), Ar() && (yield PD(s, o));
-			let n = Va(s);
-			return Nr(`Cache Size: ~${Math.round(n / (1024 * 1024))} MB (${n} B)`), yield FD(s, o), Nr("Cache restored successfully"), t.cacheKey;
+			s = u.join(yield No(), zo(o)), z(`Archive Path: ${s}`), yield QE(t.archiveLocation, s, r), Ar() && (yield VO(s, o));
+			let n = Po(s);
+			return Nr(`Cache Size: ~${Math.round(n / (1024 * 1024))} MB (${n} B)`), yield HO(s, o), Nr("Cache restored successfully"), t.cacheKey;
 		} catch (e) {
 			let t = e;
-			if (t.name === RD.name) throw e;
+			if (t.name === GO.name) throw e;
 			t instanceof An && typeof t.statusCode == "number" && t.statusCode >= 500 ? jr(`Failed to restore: ${e.message}`) : Mr(`Failed to restore: ${e.message}`);
 		} finally {
 			try {
-				yield Ua(s);
+				yield Io(s);
 			} catch (e) {
 				z(`Failed to delete archive: ${e}`);
 			}
 		}
 	});
 }
-function GD(e, t, n, r) {
-	return LD(this, arguments, void 0, function* (e, t, n, r, i = !1) {
+function QO(e, t, n, r) {
+	return WO(this, arguments, void 0, function* (e, t, n, r, i = !1) {
 		r = Object.assign(Object.assign({}, r), { useAzureSdk: !0 }), n ||= [];
 		let a = [t, ...n];
-		if (z("Resolved Keys:"), z(JSON.stringify(a)), a.length > 10) throw new RD("Key Validation Error: Keys are limited to a maximum of 10.");
-		for (let e of a) HD(e);
+		if (z("Resolved Keys:"), z(JSON.stringify(a)), a.length > 10) throw new GO("Key Validation Error: Keys are limited to a maximum of 10.");
+		for (let e of a) YO(e);
 		let o = "";
 		try {
-			let s = wD(), c = yield Ga(), l = {
+			let s = jO(), c = yield Ro(), l = {
 				key: t,
 				restoreKeys: n,
-				version: Ya(e, c, i)
+				version: Ho(e, c, i)
 			}, d = yield s.GetCacheEntryDownloadURL(l);
 			if (!d.ok) {
 				z(`Cache not found for version ${l.version} of keys: ${a.join(", ")}`);
 				return;
 			}
 			if (l.key === d.matchedKey ? Nr(`Cache hit for: ${d.matchedKey}`) : Nr(`Cache hit for restore-key: ${d.matchedKey}`), r?.lookupOnly) return Nr("Lookup only - skipping download"), d.matchedKey;
-			o = u.join(yield Ba(), Ka(c)), z(`Archive path: ${o}`), z(`Starting download of archive to: ${o}`), yield GT(d.signedDownloadUrl, o, r);
-			let f = Va(o);
-			return Nr(`Cache Size: ~${Math.round(f / (1024 * 1024))} MB (${f} B)`), Ar() && (yield PD(o, c)), yield FD(o, c), Nr("Cache restored successfully"), d.matchedKey;
+			o = u.join(yield No(), zo(c)), z(`Archive path: ${o}`), z(`Starting download of archive to: ${o}`), yield QE(d.signedDownloadUrl, o, r);
+			let f = Po(o);
+			return Nr(`Cache Size: ~${Math.round(f / (1024 * 1024))} MB (${f} B)`), Ar() && (yield VO(o, c)), yield HO(o, c), Nr("Cache restored successfully"), d.matchedKey;
 		} catch (e) {
 			let t = e;
-			if (t.name === RD.name) throw e;
+			if (t.name === GO.name) throw e;
 			t instanceof An && typeof t.statusCode == "number" && t.statusCode >= 500 ? jr(`Failed to restore: ${e.message}`) : Mr(`Failed to restore: ${e.message}`);
 		} finally {
 			try {
-				o && (yield Ua(o));
+				o && (yield Io(o));
 			} catch (e) {
 				z(`Failed to delete archive: ${e}`);
 			}
 		}
 	});
 }
-function KD(e, t, n) {
-	return LD(this, arguments, void 0, function* (e, t, n, r = !1) {
-		let i = pT();
-		switch (z(`Cache service version: ${i}`), VD(e), HD(t), i) {
-			case "v2": return yield JD(e, t, n, r);
-			default: return yield qD(e, t, n, r);
+function $O(e, t, n) {
+	return WO(this, arguments, void 0, function* (e, t, n, r = !1) {
+		let i = bE();
+		switch (z(`Cache service version: ${i}`), JO(e), YO(t), i) {
+			case "v2": return yield tk(e, t, n, r);
+			default: return yield ek(e, t, n, r);
 		}
 	});
 }
-function qD(e, t, n) {
-	return LD(this, arguments, void 0, function* (e, t, n, r = !1) {
-		let i = yield Ga(), a = -1, o = yield Ha(e);
+function ek(e, t, n) {
+	return WO(this, arguments, void 0, function* (e, t, n, r = !1) {
+		let i = yield Ro(), a = -1, o = yield Fo(e);
 		if (z("Cache Paths:"), z(`${JSON.stringify(o)}`), o.length === 0) throw Error("Path Validation Error: Path(s) specified in the action for caching do(es) not exist, hence no cache is being saved.");
-		let s = yield Ba(), c = u.join(s, Ka(i));
+		let s = yield No(), c = u.join(s, zo(i));
 		z(`Archive Path: ${c}`);
 		try {
-			yield ID(s, o, i), Ar() && (yield PD(c, i));
-			let l = Va(c);
-			if (z(`File Size: ${l}`), l > 10737418240 && !fT()) throw Error(`Cache size of ~${Math.round(l / (1024 * 1024))} MB (${l} B) is over the 10GB limit, not saving cache.`);
+			yield UO(s, o, i), Ar() && (yield VO(c, i));
+			let l = Po(c);
+			if (z(`File Size: ${l}`), l > 10737418240 && !yE()) throw Error(`Cache size of ~${Math.round(l / (1024 * 1024))} MB (${l} B) is over the 10GB limit, not saving cache.`);
 			z("Reserving Cache");
-			let u = yield KT(t, e, {
+			let u = yield $E(t, e, {
 				compressionMethod: i,
 				enableCrossOsArchive: r,
 				cacheSize: l
 			});
 			if (u?.result?.cacheId) a = u?.result?.cacheId;
 			else if (u?.statusCode === 400) throw Error(u?.error?.message ?? `Cache size of ~${Math.round(l / (1024 * 1024))} MB (${l} B) is over the data cap limit, not saving cache.`);
-			else throw new zD(`Unable to reserve cache with key ${t}, another job may be creating this cache. More details: ${u?.error?.message}`);
-			z(`Saving Cache (ID: ${a})`), yield ZT(a, c, "", n);
+			else throw new KO(`Unable to reserve cache with key ${t}, another job may be creating this cache. More details: ${u?.error?.message}`);
+			z(`Saving Cache (ID: ${a})`), yield iD(a, c, "", n);
 		} catch (e) {
 			let t = e;
-			if (t.name === RD.name) throw e;
-			t.name === zD.name ? Nr(`Failed to save: ${t.message}`) : t instanceof An && typeof t.statusCode == "number" && t.statusCode >= 500 ? jr(`Failed to save: ${t.message}`) : Mr(`Failed to save: ${t.message}`);
+			if (t.name === GO.name) throw e;
+			t.name === KO.name ? Nr(`Failed to save: ${t.message}`) : t instanceof An && typeof t.statusCode == "number" && t.statusCode >= 500 ? jr(`Failed to save: ${t.message}`) : Mr(`Failed to save: ${t.message}`);
 		} finally {
 			try {
-				yield Ua(c);
+				yield Io(c);
 			} catch (e) {
 				z(`Failed to delete archive: ${e}`);
 			}
@@ -36443,22 +37220,22 @@ function qD(e, t, n) {
 		return a;
 	});
 }
-function JD(e, t, n) {
-	return LD(this, arguments, void 0, function* (e, t, n, r = !1) {
+function tk(e, t, n) {
+	return WO(this, arguments, void 0, function* (e, t, n, r = !1) {
 		n = Object.assign(Object.assign({}, n), {
 			uploadChunkSize: 64 * 1024 * 1024,
 			uploadConcurrency: 8,
 			useAzureSdk: !0
 		});
-		let i = yield Ga(), a = wD(), o = -1, s = yield Ha(e);
+		let i = yield Ro(), a = jO(), o = -1, s = yield Fo(e);
 		if (z("Cache Paths:"), z(`${JSON.stringify(s)}`), s.length === 0) throw Error("Path Validation Error: Path(s) specified in the action for caching do(es) not exist, hence no cache is being saved.");
-		let c = yield Ba(), l = u.join(c, Ka(i));
+		let c = yield No(), l = u.join(c, zo(i));
 		z(`Archive Path: ${l}`);
 		try {
-			yield ID(c, s, i), Ar() && (yield PD(l, i));
-			let u = Va(l);
+			yield UO(c, s, i), Ar() && (yield VO(l, i));
+			let u = Po(l);
 			z(`File Size: ${u}`), n.archiveSizeBytes = u, z("Reserving Cache");
-			let d = Ya(e, i, r), f = {
+			let d = Ho(e, i, r), f = {
 				key: t,
 				version: d
 			}, p;
@@ -36467,23 +37244,23 @@ function JD(e, t, n) {
 				if (!e.ok) throw e.message && Mr(`Cache reservation failed: ${e.message}`), Error(e.message || "Response was not ok");
 				p = e.signedUploadUrl;
 			} catch (e) {
-				throw z(`Failed to reserve cache: ${e}`), new zD(`Unable to reserve cache with key ${t}, another job may be creating this cache.`);
+				throw z(`Failed to reserve cache: ${e}`), new KO(`Unable to reserve cache with key ${t}, another job may be creating this cache.`);
 			}
-			z(`Attempting to upload cache located at: ${l}`), yield ZT(o, l, p, n);
+			z(`Attempting to upload cache located at: ${l}`), yield iD(o, l, p, n);
 			let m = {
 				key: t,
 				version: d,
 				sizeBytes: `${u}`
 			}, h = yield a.FinalizeCacheEntryUpload(m);
-			if (z(`FinalizeCacheEntryUploadResponse: ${h.ok}`), !h.ok) throw h.message ? new BD(h.message) : Error(`Unable to finalize cache with key ${t}, another job may be finalizing this cache.`);
+			if (z(`FinalizeCacheEntryUploadResponse: ${h.ok}`), !h.ok) throw h.message ? new qO(h.message) : Error(`Unable to finalize cache with key ${t}, another job may be finalizing this cache.`);
 			o = parseInt(h.entryId);
 		} catch (e) {
 			let t = e;
-			if (t.name === RD.name) throw e;
-			t.name === zD.name ? Nr(`Failed to save: ${t.message}`) : t.name === BD.name ? Mr(t.message) : t instanceof An && typeof t.statusCode == "number" && t.statusCode >= 500 ? jr(`Failed to save: ${t.message}`) : Mr(`Failed to save: ${t.message}`);
+			if (t.name === GO.name) throw e;
+			t.name === KO.name ? Nr(`Failed to save: ${t.message}`) : t.name === qO.name ? Mr(t.message) : t instanceof An && typeof t.statusCode == "number" && t.statusCode >= 500 ? jr(`Failed to save: ${t.message}`) : Mr(`Failed to save: ${t.message}`);
 		} finally {
 			try {
-				yield Ua(l);
+				yield Io(l);
 			} catch (e) {
 				z(`Failed to delete archive: ${e}`);
 			}
@@ -36491,36 +37268,36 @@ function JD(e, t, n) {
 		return o;
 	});
 }
-var YD = "version", XD = "edition", ZD = "architecture", QD = "platform", $D = "email", eO = "token", tO = "i-agree-to-the-eula", nO = "max-auth-attempts", rO = "clean-old-cached-versions", iO = "version", aO = "path", oO = "flyway", sO = "setup-flyway-action", cO = "setup-flyway", lO = "https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline", uO = `${lO}/maven-metadata.xml`, dO = (e, t, n) => `${cO}-${t}-${n}-${e}`, fO = (e) => {
+var nk = "version", rk = "edition", ik = "architecture", ak = "platform", ok = "email", sk = "token", ck = "i-agree-to-the-eula", lk = "max-auth-attempts", uk = "clean-old-cached-versions", dk = "version", fk = "path", pk = "flyway", mk = "setup-flyway-action", hk = "setup-flyway", gk = "https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline", _k = `${gk}/maven-metadata.xml`, vk = (e, t, n) => `${hk}-${t}-${n}-${e}`, yk = (e) => {
 	let t = process.env.RUNNER_TOOL_CACHE ?? "";
-	return u.join(t, oO, e);
-}, pO = async (e, t, n) => {
-	let r = dO(e, t, n), i = fO(e);
+	return u.join(t, pk, e);
+}, bk = async (e, t, n) => {
+	let r = vk(e, t, n), i = yk(e);
 	try {
-		return await UD([i], r) ? (z(`Restored Flyway ${e} from GitHub Actions cache`), !0) : (z("GitHub Actions cache miss"), !1);
+		return await XO([i], r) ? (z(`Restored Flyway ${e} from GitHub Actions cache`), !0) : (z("GitHub Actions cache miss"), !1);
 	} catch (e) {
 		return z(`Failed to restore from cache: ${e instanceof Error ? e.message : String(e)}`), !1;
 	}
-}, mO = async (e, t, n) => {
-	let r = dO(e, t, n), i = fO(e);
+}, xk = async (e, t, n) => {
+	let r = vk(e, t, n), i = yk(e);
 	try {
-		await KD([i], r), z(`Saved Flyway ${e} to GitHub Actions cache`);
+		await $O([i], r), z(`Saved Flyway ${e} to GitHub Actions cache`);
 	} catch (e) {
-		e instanceof zD ? z(`Cache entry already exists for key: ${r}`) : z(`Failed to save to cache: ${e instanceof Error ? e.message : String(e)}`);
+		e instanceof KO ? z(`Cache entry already exists for key: ${r}`) : z(`Failed to save to cache: ${e instanceof Error ? e.message : String(e)}`);
 	}
-}, hO = /* @__PURE__ */ function(e) {
+}, Sk = /* @__PURE__ */ function(e) {
 	return e.X64 = "x64", e.ARM64 = "arm64", e.JAVA = "java", e;
-}(hO || {}), gO = /* @__PURE__ */ function(e) {
+}(Sk || {}), Ck = /* @__PURE__ */ function(e) {
 	return e.COMMUNITY = "community", e.TEAMS = "teams", e.ENTERPRISE = "enterprise", e;
-}(gO || {}), _O = /* @__PURE__ */ function(e) {
+}(Ck || {}), wk = /* @__PURE__ */ function(e) {
 	return e.WINDOWS = "windows", e.MACOSX = "macosx", e.LINUX = "linux", e.LINUX_ALPINE = "linux-alpine", e;
-}(_O || {}), vO = () => {
-	let e = Dr(YD, { required: !0 }), t = yO(XD, gO), n = bO(ZD, hO, SO), r = bO(QD, _O, xO);
+}(wk || {}), Tk = () => {
+	let e = Dr(nk, { required: !0 }), t = Ek(rk, Ck), n = Dk(ik, Sk, kk), r = Dk(ak, wk, Ok);
 	z(`Inputs: version: ${e}, architecture: ${n}, platform: ${r}`);
-	let i = Dr($D), a = i?.trim() ? i.trim() : void 0, o = Dr(eO), s = o?.trim() ? o.trim() : void 0, c = Dr(tO, { required: !0 }).trim().toLowerCase() === "true", l = Dr(nO), u = l?.trim() ? parseInt(l.trim(), 10) : 2;
+	let i = Dr(ok), a = i?.trim() ? i.trim() : void 0, o = Dr(sk), s = o?.trim() ? o.trim() : void 0, c = Dr(ck, { required: !0 }).trim().toLowerCase() === "true", l = Dr(lk), u = l?.trim() ? parseInt(l.trim(), 10) : 2;
 	if (isNaN(u) || u < 1) throw Error(`Invalid value '${l}' for input 'max-auth-attempts'. Must be a positive integer.`);
-	let d = Dr(rO)?.trim().toLowerCase() !== "false";
-	if (!CO(r, n)) throw Error(`Unsupported platform: ${r}-${n}`);
+	let d = Dr(uk)?.trim().toLowerCase() !== "false";
+	if (!Ak(r, n)) throw Error(`Unsupported platform: ${r}-${n}`);
 	return {
 		versionSpec: e,
 		edition: t,
@@ -36532,20 +37309,20 @@ var YD = "version", XD = "edition", ZD = "architecture", QD = "platform", $D = "
 		maxAuthAttempts: u,
 		cleanOldCachedVersions: d
 	};
-}, yO = (e, t) => {
+}, Ek = (e, t) => {
 	let n = Dr(e, { required: !0 }), r = t[n.toUpperCase()];
 	if (!r) {
 		let r = Object.values(t).join(", ");
 		throw Error(`Invalid value '${n}' for input '${e}'. Allowed values: ${r}`);
 	}
 	return r;
-}, bO = (e, t, n) => {
+}, Dk = (e, t, n) => {
 	let r = Dr(e);
 	if (r == null || r.trim().length === 0) return n();
 	let i = t[r.toUpperCase()];
 	if (!i) throw Error(`Unrecognized input value: ${r}`);
 	return i;
-}, xO = () => {
+}, Ok = () => {
 	let e = process.platform;
 	switch (e) {
 		case "darwin": return "macosx";
@@ -36553,7 +37330,7 @@ var YD = "version", XD = "edition", ZD = "architecture", QD = "platform", $D = "
 		case "linux": return "linux";
 		default: throw Error(`Unsupported platform: ${e}`);
 	}
-}, SO = () => {
+}, kk = () => {
 	let e = n.arch();
 	switch (e) {
 		case "x64": return "x64";
@@ -36561,50 +37338,50 @@ var YD = "version", XD = "edition", ZD = "architecture", QD = "platform", $D = "
 		case "arm64": return "arm64";
 		default: throw Error(`Unsupported architecture: ${e}`);
 	}
-}, CO = (e, t) => {
+}, Ak = (e, t) => {
 	let n = `${e}-${t}`;
-	return t == hO.JAVA || [
+	return t == Sk.JAVA || [
 		"windows-x64",
 		"linux-x64",
 		"macosx-arm64",
 		"macosx-x64",
 		"linux-alpine-x64"
 	].includes(n);
-}, wO = async () => TO(await EO()), TO = async (e) => {
-	let t = new Bp().parse(e).metadata.versioning;
+}, jk = async () => Mk(await Nk()), Mk = async (e) => {
+	let t = new Um().parse(e).metadata.versioning;
 	return {
 		latest: t.release,
 		availableVersions: t.versions.version
 	};
-}, EO = async () => {
-	let e = uO;
-	return z(`Using metadata endpoint: ${e}`), await DO(e);
-}, DO = async (e) => {
-	let t = await new Mn(sO).get(e);
+}, Nk = async () => {
+	let e = _k;
+	return z(`Using metadata endpoint: ${e}`), await Pk(e);
+}, Pk = async (e) => {
+	let t = await new Mn(mk).get(e);
 	if (t.message.statusCode !== 200) throw Error(`Failed to fetch versions from URL. Status code: ${t.message.statusCode}`);
 	let n = t.message.headers["content-type"];
-	if (!OO(n)) throw Error(`Unexpected content type: ${n}`);
+	if (!Fk(n)) throw Error(`Unexpected content type: ${n}`);
 	return await t.readBody();
-}, OO = (e) => {
+}, Fk = (e) => {
 	let t = e?.split(";")[0];
 	return t === "application/xml" || t === "text/plain";
-}, kO = async (e, t, n) => {
-	let r = NO(e, t, n);
+}, Ik = async (e, t, n) => {
+	let r = Bk(e, t, n);
 	return {
 		downloadUrl: r,
 		pathToArchive: await Ni(r)
 	};
-}, AO = (e) => e === "windows" ? "zip" : "tar.gz", jO = (e, t, n) => e == "latest" ? n : Ei.maxSatisfying(t, e), MO = async (e, t) => {
+}, Lk = (e) => e === "windows" ? "zip" : "tar.gz", Rk = (e, t, n) => e == "latest" ? n : Ha.maxSatisfying(t, e), zk = async (e, t) => {
 	switch (t || (t = e.endsWith(".tar.gz") ? "tar.gz" : d.extname(e), t.startsWith(".") && (t = t.substring(1))), t) {
 		case "tar.gz":
 		case "tar": return await Ii(e);
 		case "zip": return await Li(e);
 		default: return await Fi(e);
 	}
-}, NO = (e, t, n) => {
-	let r = AO(t), i = lO;
-	return n == hO.JAVA ? `${i}/${e}/flyway-commandline-${e}.${r}` : `${i}/${e}/flyway-commandline-${e}-${t}-${n}.${r}`;
-}, PO = async (e) => {
+}, Bk = (e, t, n) => {
+	let r = Lk(t), i = gk;
+	return n == Sk.JAVA ? `${i}/${e}/flyway-commandline-${e}.${r}` : `${i}/${e}/flyway-commandline-${e}-${t}-${n}.${r}`;
+}, Vk = async (e) => {
 	let t = "", n = await Sr("flyway", ["--version"], {
 		silent: !0,
 		ignoreReturnCode: !0,
@@ -36619,7 +37396,7 @@ var YD = "version", XD = "edition", ZD = "architecture", QD = "platform", $D = "
 	}
 	let i = r ? r[1].toLowerCase() : "community";
 	if (i !== e) throw Error(`Edition mismatch: expected '${e}' but Flyway reported '${i}'`);
-}, FO = async (e, t, n, r) => {
+}, Hk = async (e, t, n, r) => {
 	Tr(t);
 	let i = [
 		"auth",
@@ -36635,45 +37412,45 @@ var YD = "version", XD = "edition", ZD = "architecture", QD = "platform", $D = "
 		if (e >= r) throw t;
 		Nr(`Auth attempt ${e} failed: ${n}. Retrying...`);
 	}
-}, IO = async (e, t) => {
+}, Uk = async (e, t) => {
 	if (process.env.RUNNER_ENVIRONMENT === "github-hosted") return;
-	let n = Hi(oO, t).filter((t) => Ei.lt(t, e));
+	let n = Hi(pk, t).filter((t) => Ha.lt(t, e));
 	if (n.length !== 0) {
 		Nr(`Cleaning ${n.length} older Flyway version(s) from tool cache: ${n.join(", ")}`);
 		for (let e of n) {
-			let t = fO(e);
+			let t = yk(e);
 			try {
 				await j.rm(t, {
 					recursive: !0,
 					force: !0
-				}), Nr(`Removed ${oO} ${e} from tool cache`);
+				}), Nr(`Removed ${pk} ${e} from tool cache`);
 			} catch (t) {
-				Mr(`Failed to remove ${oO} ${e}: ${t instanceof Error ? t.message : String(t)}`);
+				Mr(`Failed to remove ${pk} ${e}: ${t instanceof Error ? t.message : String(t)}`);
 			}
 		}
 	}
-}, LO = async (e, t, n) => {
-	let r = Vi(oO, e, n);
-	if (r || await pO(e, t, n) && (r = Vi(oO, e, n)), !r) {
-		let i = await kO(e, t, n), a = i.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz", o = await MO(i.pathToArchive, a);
-		r = await Bi(u.join(o, `flyway-${e}`), oO, e, n), await mO(e, t, n);
+}, Wk = async (e, t, n) => {
+	let r = Vi(pk, e, n);
+	if (r || await bk(e, t, n) && (r = Vi(pk, e, n)), !r) {
+		let i = await Ik(e, t, n), a = i.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz", o = await zk(i.pathToArchive, a);
+		r = await Bi(u.join(o, `flyway-${e}`), pk, e, n), await xk(e, t, n);
 	}
 	return r;
 };
 process.argv[1].endsWith("index.js") && await (async () => {
 	try {
-		let e = vO(), { versionSpec: t, architecture: n, platform: r } = e;
-		Pr(`Installing ${oO}`);
-		let i = await wO();
+		let e = Tk(), { versionSpec: t, architecture: n, platform: r } = e;
+		Pr(`Installing ${pk}`);
+		let i = await jk();
 		Nr(`Latest version: ${i.latest}`), z(`Available versions: ${i.availableVersions.join(", ")}`);
-		let a = jO(t, i.availableVersions, i.latest);
+		let a = Rk(t, i.availableVersions, i.latest);
 		if (a == null) {
 			kr(`Version specification ${t} is not available`);
 			return;
 		}
-		Nr(`Resolved ${t} to version: ${a}`), e.cleanOldCachedVersions && await IO(a, n);
-		let o = await LO(a, r, n);
-		Or(iO, a), Or(aO, o), wr(`FLYWAY_HOME_${a}`, o), Er(o), Fr(), e.email && e.token && (Pr("Authenticating Flyway"), await FO(e.email, e.token, e.agreeToEula, e.maxAuthAttempts), Fr()), Pr("Verifying Flyway edition"), await PO(e.edition), Fr();
+		Nr(`Resolved ${t} to version: ${a}`), e.cleanOldCachedVersions && await Uk(a, n);
+		let o = await Wk(a, r, n);
+		Or(dk, a), Or(fk, o), wr(`FLYWAY_HOME_${a}`, o), Er(o), Fr(), e.email && e.token && (Pr("Authenticating Flyway"), await Hk(e.email, e.token, e.agreeToEula, e.maxAuthAttempts), Fr()), Pr("Verifying Flyway edition"), await Vk(e.edition), Fr();
 	} catch (e) {
 		kr(e instanceof Error ? e.message : String(e));
 	}
