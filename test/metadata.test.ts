@@ -1,26 +1,31 @@
-import nock from "nock";
-import { URL } from "url";
-import { getAvailableVersions, privateExports } from "../src/metadata.js";
 import { METADATA_URL } from "../src/constants.js";
 import { loadFixture } from "./utils/fixtures.js";
+
+const mockGet = vi.fn();
+vi.doMock("@actions/http-client", () => ({
+  HttpClient: vi.fn(function () {
+    return { get: mockGet };
+  }),
+}));
+
+const { getAvailableVersions, privateExports } = await import("../src/metadata.js");
+
+const reply = (statusCode: number, body: string, contentType?: string) => ({
+  message: { statusCode, headers: contentType ? { "content-type": contentType } : {} },
+  readBody: () => Promise.resolve(body),
+});
 
 describe("metadata", () => {
   const metadataContent = loadFixture("maven.xml");
   const metadata = privateExports.functions!;
 
-  afterEach(() => {
-    nock.cleanAll();
-  });
-
   it("should load remote metadata", async () => {
-    const url = new URL(METADATA_URL);
-    const scope = nock(url.origin).get(url.pathname).reply(200, metadataContent, {
-      "Content-Type": "text/plain",
-    });
+    mockGet.mockResolvedValue(reply(200, metadataContent, "text/plain"));
 
     const versions = await metadata.downloadToolMetadata(METADATA_URL);
+
     expect(versions).toBe(metadataContent);
-    expect(scope.isDone()).toBe(true);
+    expect(mockGet).toHaveBeenCalledWith(METADATA_URL);
   });
 
   it("parses the versions", async () => {
@@ -30,19 +35,16 @@ describe("metadata", () => {
   });
 
   it("should get available versions end-to-end", async () => {
-    const url = new URL(METADATA_URL);
-    nock(url.origin).get(url.pathname).reply(200, metadataContent, {
-      "Content-Type": "application/xml",
-    });
+    mockGet.mockResolvedValue(reply(200, metadataContent, "application/xml"));
 
     const result = await getAvailableVersions();
+
     expect(result.latest).toBe("10.11.0");
     expect(result.availableVersions).toHaveLength(18);
   });
 
   it("throws when server returns non-200 status", async () => {
-    const url = new URL(METADATA_URL);
-    nock(url.origin).get(url.pathname).reply(404);
+    mockGet.mockResolvedValue(reply(404, ""));
 
     await expect(metadata.downloadToolMetadata(METADATA_URL)).rejects.toThrow(
       "Failed to fetch versions from URL. Status code: 404",
@@ -50,10 +52,7 @@ describe("metadata", () => {
   });
 
   it("throws when server returns unexpected content type", async () => {
-    const url = new URL(METADATA_URL);
-    nock(url.origin).get(url.pathname).reply(200, "<xml/>", {
-      "Content-Type": "application/json",
-    });
+    mockGet.mockResolvedValue(reply(200, "<xml/>", "application/json"));
 
     await expect(metadata.downloadToolMetadata(METADATA_URL)).rejects.toThrow(
       "Unexpected content type: application/json",

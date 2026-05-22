@@ -1,4 +1,3 @@
-import nock from "nock";
 import { BASE_URL } from "../src/constants.js";
 
 const downloadTool = vi.fn();
@@ -16,10 +15,6 @@ vi.doMock("@actions/tool-cache", () => ({
 const util = await import("../src/util.js");
 
 describe("util", () => {
-  afterEach(() => {
-    nock.cleanAll();
-  });
-
   it("can get download URL for linux", async () => {
     const target = util.getDownloadUrl("10.11.0", "linux", "arm64");
     expect(target).toBe(`${BASE_URL}/10.11.0/flyway-commandline-10.11.0-linux-arm64.tar.gz`);
