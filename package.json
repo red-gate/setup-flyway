@@ -28,7 +28,7 @@
   },
   "packageManager": "yarn@4.14.1",
   "dependencies": {
-    "@actions/cache": "6.0.0",
+    "@actions/cache": "6.0.1",
     "@actions/core": "3.0.1",
     "@actions/exec": "3.0.0",
     "@actions/http-client": "4.0.1",
@@ -36,7 +36,7 @@
     "@protobuf-ts/runtime": "2.11.1",
     "@protobuf-ts/runtime-rpc": "2.11.1",
     "fast-xml-parser": "5.8.0",
-    "semver": "7.8.0"
+    "semver": "7.8.1"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
