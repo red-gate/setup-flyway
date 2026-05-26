@@ -11249,9 +11249,9 @@ var Ir = /* @__PURE__ */ I(((e, t) => {
 			if (this.options = r, this.loose = !!r.loose, this.includePrerelease = !!r.includePrerelease, this.raw = t.trim().replace(n, " "), this.set = this.raw.split("||").map((e) => this.parseRange(e.trim())).filter((e) => e.length), !this.set.length) throw TypeError(`Invalid SemVer Range: ${this.raw}`);
 			if (this.set.length > 1) {
 				let e = this.set[0];
-				if (this.set = this.set.filter((e) => !h(e[0])), this.set.length === 0) this.set = [e];
+				if (this.set = this.set.filter((e) => !_(e[0])), this.set.length === 0) this.set = [e];
 				else if (this.set.length > 1) {
-					for (let e of this.set) if (e.length === 1 && g(e[0])) {
+					for (let e of this.set) if (e.length === 1 && v(e[0])) {
 						this.set = [e];
 						break;
 					}
@@ -11277,24 +11277,25 @@ var Ir = /* @__PURE__ */ I(((e, t) => {
 			return this.range;
 		}
 		parseRange(e) {
-			let t = ((this.options.includePrerelease && p) | (this.options.loose && m)) + ":" + e, n = r.get(t);
+			e = e.replace(g, "");
+			let t = ((this.options.includePrerelease && m) | (this.options.loose && h)) + ":" + e, n = r.get(t);
 			if (n) return n;
-			let i = this.options.loose, s = i ? c[l.HYPHENRANGELOOSE] : c[l.HYPHENRANGE];
-			e = e.replace(s, O(this.options.includePrerelease)), o("hyphen replace", e), e = e.replace(c[l.COMPARATORTRIM], u), o("comparator trim", e), e = e.replace(c[l.TILDETRIM], d), o("tilde trim", e), e = e.replace(c[l.CARETTRIM], f), o("caret trim", e);
-			let g = e.split(" ").map((e) => v(e, this.options)).join(" ").split(/\s+/).map((e) => D(e, this.options));
-			i && (g = g.filter((e) => (o("loose invalid filter", e, this.options), !!e.match(c[l.COMPARATORLOOSE])))), o("range list", g);
-			let _ = /* @__PURE__ */ new Map(), y = g.map((e) => new a(e, this.options));
+			let i = this.options.loose, s = i ? c[u.HYPHENRANGELOOSE] : c[u.HYPHENRANGE];
+			e = e.replace(s, A(this.options.includePrerelease)), o("hyphen replace", e), e = e.replace(c[u.COMPARATORTRIM], d), o("comparator trim", e), e = e.replace(c[u.TILDETRIM], f), o("tilde trim", e), e = e.replace(c[u.CARETTRIM], p), o("caret trim", e);
+			let l = e.split(" ").map((e) => b(e, this.options)).join(" ").split(/\s+/).map((e) => k(e, this.options));
+			i && (l = l.filter((e) => (o("loose invalid filter", e, this.options), !!e.match(c[u.COMPARATORLOOSE])))), o("range list", l);
+			let v = /* @__PURE__ */ new Map(), y = l.map((e) => new a(e, this.options));
 			for (let e of y) {
-				if (h(e)) return [e];
-				_.set(e.value, e);
+				if (_(e)) return [e];
+				v.set(e.value, e);
 			}
-			_.size > 1 && _.has("") && _.delete("");
-			let b = [..._.values()];
-			return r.set(t, b), b;
+			v.size > 1 && v.has("") && v.delete("");
+			let x = [...v.values()];
+			return r.set(t, x), x;
 		}
 		intersects(t, n) {
 			if (!(t instanceof e)) throw TypeError("a Range is required");
-			return this.set.some((e) => _(e, n) && t.set.some((t) => _(t, n) && e.every((e) => t.every((t) => e.intersects(t, n)))));
+			return this.set.some((e) => y(e, n) && t.set.some((t) => y(t, n) && e.every((e) => t.every((t) => e.intersects(t, n)))));
 		}
 		test(e) {
 			if (!e) return !1;
@@ -11303,38 +11304,38 @@ var Ir = /* @__PURE__ */ I(((e, t) => {
 			} catch {
 				return !1;
 			}
-			for (let t = 0; t < this.set.length; t++) if (k(this.set[t], e, this.options)) return !0;
+			for (let t = 0; t < this.set.length; t++) if (j(this.set[t], e, this.options)) return !0;
 			return !1;
 		}
 	};
-	var r = new (fi())(), i = zr(), a = mi(), o = Lr(), s = Vr(), { safeRe: c, t: l, comparatorTrimReplace: u, tildeTrimReplace: d, caretTrimReplace: f } = Rr(), { FLAG_INCLUDE_PRERELEASE: p, FLAG_LOOSE: m } = Ir(), h = (e) => e.value === "<0.0.0-0", g = (e) => e.value === "", _ = (e, t) => {
+	var r = new (fi())(), i = zr(), a = mi(), o = Lr(), s = Vr(), { safeRe: c, src: l, t: u, comparatorTrimReplace: d, tildeTrimReplace: f, caretTrimReplace: p } = Rr(), { FLAG_INCLUDE_PRERELEASE: m, FLAG_LOOSE: h } = Ir(), g = new RegExp(l[u.BUILD], "g"), _ = (e) => e.value === "<0.0.0-0", v = (e) => e.value === "", y = (e, t) => {
 		let n = !0, r = e.slice(), i = r.pop();
 		for (; n && r.length;) n = r.every((e) => i.intersects(e, t)), i = r.pop();
 		return n;
-	}, v = (e, t) => (e = e.replace(c[l.BUILD], ""), o("comp", e, t), e = S(e, t), o("caret", e), e = b(e, t), o("tildes", e), e = w(e, t), o("xrange", e), e = E(e, t), o("stars", e), e), y = (e) => !e || e.toLowerCase() === "x" || e === "*", b = (e, t) => e.trim().split(/\s+/).map((e) => x(e, t)).join(" "), x = (e, t) => {
-		let n = t.loose ? c[l.TILDELOOSE] : c[l.TILDE];
+	}, b = (e, t) => (e = e.replace(c[u.BUILD], ""), o("comp", e, t), e = w(e, t), o("caret", e), e = S(e, t), o("tildes", e), e = E(e, t), o("xrange", e), e = O(e, t), o("stars", e), e), x = (e) => !e || e.toLowerCase() === "x" || e === "*", S = (e, t) => e.trim().split(/\s+/).map((e) => C(e, t)).join(" "), C = (e, t) => {
+		let n = t.loose ? c[u.TILDELOOSE] : c[u.TILDE];
 		return e.replace(n, (t, n, r, i, a) => {
 			o("tilde", e, t, n, r, i, a);
 			let s;
-			return y(n) ? s = "" : y(r) ? s = `>=${n}.0.0 <${+n + 1}.0.0-0` : y(i) ? s = `>=${n}.${r}.0 <${n}.${+r + 1}.0-0` : a ? (o("replaceTilde pr", a), s = `>=${n}.${r}.${i}-${a} <${n}.${+r + 1}.0-0`) : s = `>=${n}.${r}.${i} <${n}.${+r + 1}.0-0`, o("tilde return", s), s;
+			return x(n) ? s = "" : x(r) ? s = `>=${n}.0.0 <${+n + 1}.0.0-0` : x(i) ? s = `>=${n}.${r}.0 <${n}.${+r + 1}.0-0` : a ? (o("replaceTilde pr", a), s = `>=${n}.${r}.${i}-${a} <${n}.${+r + 1}.0-0`) : s = `>=${n}.${r}.${i} <${n}.${+r + 1}.0-0`, o("tilde return", s), s;
 		});
-	}, S = (e, t) => e.trim().split(/\s+/).map((e) => C(e, t)).join(" "), C = (e, t) => {
+	}, w = (e, t) => e.trim().split(/\s+/).map((e) => T(e, t)).join(" "), T = (e, t) => {
 		o("caret", e, t);
-		let n = t.loose ? c[l.CARETLOOSE] : c[l.CARET], r = t.includePrerelease ? "-0" : "";
+		let n = t.loose ? c[u.CARETLOOSE] : c[u.CARET], r = t.includePrerelease ? "-0" : "";
 		return e.replace(n, (t, n, i, a, s) => {
 			o("caret", e, t, n, i, a, s);
 			let c;
-			return y(n) ? c = "" : y(i) ? c = `>=${n}.0.0${r} <${+n + 1}.0.0-0` : y(a) ? c = n === "0" ? `>=${n}.${i}.0${r} <${n}.${+i + 1}.0-0` : `>=${n}.${i}.0${r} <${+n + 1}.0.0-0` : s ? (o("replaceCaret pr", s), c = n === "0" ? i === "0" ? `>=${n}.${i}.${a}-${s} <${n}.${i}.${+a + 1}-0` : `>=${n}.${i}.${a}-${s} <${n}.${+i + 1}.0-0` : `>=${n}.${i}.${a}-${s} <${+n + 1}.0.0-0`) : (o("no pr"), c = n === "0" ? i === "0" ? `>=${n}.${i}.${a}${r} <${n}.${i}.${+a + 1}-0` : `>=${n}.${i}.${a}${r} <${n}.${+i + 1}.0-0` : `>=${n}.${i}.${a} <${+n + 1}.0.0-0`), o("caret return", c), c;
+			return x(n) ? c = "" : x(i) ? c = `>=${n}.0.0${r} <${+n + 1}.0.0-0` : x(a) ? c = n === "0" ? `>=${n}.${i}.0${r} <${n}.${+i + 1}.0-0` : `>=${n}.${i}.0${r} <${+n + 1}.0.0-0` : s ? (o("replaceCaret pr", s), c = n === "0" ? i === "0" ? `>=${n}.${i}.${a}-${s} <${n}.${i}.${+a + 1}-0` : `>=${n}.${i}.${a}-${s} <${n}.${+i + 1}.0-0` : `>=${n}.${i}.${a}-${s} <${+n + 1}.0.0-0`) : (o("no pr"), c = n === "0" ? i === "0" ? `>=${n}.${i}.${a}${r} <${n}.${i}.${+a + 1}-0` : `>=${n}.${i}.${a}${r} <${n}.${+i + 1}.0-0` : `>=${n}.${i}.${a} <${+n + 1}.0.0-0`), o("caret return", c), c;
 		});
-	}, w = (e, t) => (o("replaceXRanges", e, t), e.split(/\s+/).map((e) => T(e, t)).join(" ")), T = (e, t) => {
+	}, E = (e, t) => (o("replaceXRanges", e, t), e.split(/\s+/).map((e) => D(e, t)).join(" ")), D = (e, t) => {
 		e = e.trim();
-		let n = t.loose ? c[l.XRANGELOOSE] : c[l.XRANGE];
+		let n = t.loose ? c[u.XRANGELOOSE] : c[u.XRANGE];
 		return e.replace(n, (n, r, i, a, s, c) => {
 			o("xRange", e, n, r, i, a, s, c);
-			let l = y(i), u = l || y(a), d = u || y(s), f = d;
+			let l = x(i), u = l || x(a), d = u || x(s), f = d;
 			return r === "=" && f && (r = ""), c = t.includePrerelease ? "-0" : "", l ? n = r === ">" || r === "<" ? "<0.0.0-0" : "*" : r && f ? (u && (a = 0), s = 0, r === ">" ? (r = ">=", u ? (i = +i + 1, a = 0, s = 0) : (a = +a + 1, s = 0)) : r === "<=" && (r = "<", u ? i = +i + 1 : a = +a + 1), r === "<" && (c = "-0"), n = `${r + i}.${a}.${s}${c}`) : u ? n = `>=${i}.0.0${c} <${+i + 1}.0.0-0` : d && (n = `>=${i}.${a}.0${c} <${i}.${+a + 1}.0-0`), o("xRange return", n), n;
 		});
-	}, E = (e, t) => (o("replaceStars", e, t), e.trim().replace(c[l.STAR], "")), D = (e, t) => (o("replaceGTE0", e, t), e.trim().replace(c[t.includePrerelease ? l.GTE0PRE : l.GTE0], "")), O = (e) => (t, n, r, i, a, o, s, c, l, u, d, f) => (n = y(r) ? "" : y(i) ? `>=${r}.0.0${e ? "-0" : ""}` : y(a) ? `>=${r}.${i}.0${e ? "-0" : ""}` : o ? `>=${n}` : `>=${n}${e ? "-0" : ""}`, c = y(l) ? "" : y(u) ? `<${+l + 1}.0.0-0` : y(d) ? `<${l}.${+u + 1}.0-0` : f ? `<=${l}.${u}.${d}-${f}` : e ? `<${l}.${u}.${+d + 1}-0` : `<=${c}`, `${n} ${c}`.trim()), k = (e, t, n) => {
+	}, O = (e, t) => (o("replaceStars", e, t), e.trim().replace(c[u.STAR], "")), k = (e, t) => (o("replaceGTE0", e, t), e.trim().replace(c[t.includePrerelease ? u.GTE0PRE : u.GTE0], "")), A = (e) => (t, n, r, i, a, o, s, c, l, u, d, f) => (n = x(r) ? "" : x(i) ? `>=${r}.0.0${e ? "-0" : ""}` : x(a) ? `>=${r}.${i}.0${e ? "-0" : ""}` : o ? `>=${n}` : `>=${n}${e ? "-0" : ""}`, c = x(l) ? "" : x(u) ? `<${+l + 1}.0.0-0` : x(d) ? `<${l}.${+u + 1}.0-0` : f ? `<=${l}.${u}.${d}-${f}` : e ? `<${l}.${u}.${+d + 1}-0` : `<=${c}`, `${n} ${c}`.trim()), j = (e, t, n) => {
 		for (let n = 0; n < e.length; n++) if (!e[n].test(t)) return !1;
 		if (t.prerelease.length && !n.includePrerelease) {
 			for (let n = 0; n < e.length; n++) if (o(e[n].semver), e[n].semver !== a.ANY && e[n].semver.prerelease.length > 0) {
@@ -11537,12 +11538,12 @@ var Ir = /* @__PURE__ */ I(((e, t) => {
 			if (_ = _ || e.operator === ">" || e.operator === ">=", g = g || e.operator === "<" || e.operator === "<=", s) {
 				if (y && e.semver.prerelease && e.semver.prerelease.length && e.semver.major === y.major && e.semver.minor === y.minor && e.semver.patch === y.patch && (y = !1), e.operator === ">" || e.operator === ">=") {
 					if (m = d(s, e, n), m === e && m !== s) return !1;
-				} else if (s.operator === ">=" && !a(s.semver, String(e), n)) return !1;
+				} else if (s.operator === ">=" && !e.test(s.semver)) return !1;
 			}
 			if (u) {
 				if (v && e.semver.prerelease && e.semver.prerelease.length && e.semver.major === v.major && e.semver.minor === v.minor && e.semver.patch === v.patch && (v = !1), e.operator === "<" || e.operator === "<=") {
 					if (h = f(u, e, n), h === e && h !== u) return !1;
-				} else if (u.operator === "<=" && !a(u.semver, String(e), n)) return !1;
+				} else if (u.operator === "<=" && !e.test(u.semver)) return !1;
 			}
 			if (!e.operator && (u || s) && p !== 0) return !1;
 		}
@@ -13320,9 +13321,9 @@ var No = w.custom, Po = "REDACTED", Fo = /* @__PURE__ */ "x-ms-client-request-id
 				name: n.name,
 				message: n.message
 			};
-			if (e === "headers") return this.sanitizeHeaders(n);
-			if (e === "url") return this.sanitizeUrl(n);
-			if (e === "query") return this.sanitizeQuery(n);
+			if (e === "headers" && jo(n)) return this.sanitizeHeaders(n);
+			if (e === "url" && typeof n == "string") return this.sanitizeUrl(n);
+			if (e === "query" && jo(n)) return this.sanitizeQuery(n);
 			if (e !== "body" && e !== "response" && e !== "operationSpec") {
 				if (Array.isArray(n) || jo(n)) {
 					if (t.has(n)) return "[Circular]";
@@ -13573,17 +13574,25 @@ function ns(e = {}) {
 }
 var rs = "redirectPolicy", is = ["GET", "HEAD"];
 function as(e = {}) {
-	let { maxRetries: t = 20 } = e;
+	let { maxRetries: t = 20, allowCrossOriginRedirects: n = !1 } = e;
 	return {
 		name: rs,
-		async sendRequest(e, n) {
-			return os(n, await n(e), t);
+		async sendRequest(e, r) {
+			return os(r, await r(e), t, n);
 		}
 	};
 }
-async function os(e, t, n, r = 0) {
-	let { request: i, status: a, headers: o } = t, s = o.get("location");
-	return s && (a === 300 || a === 301 && is.includes(i.method) || a === 302 && is.includes(i.method) || a === 303 && i.method === "POST" || a === 307) && r < n ? (i.url = new URL(s, i.url).toString(), a === 303 && (i.method = "GET", i.headers.delete("Content-Length"), delete i.body), i.headers.delete("Authorization"), os(e, await e(i), n, r + 1)) : t;
+async function os(e, t, n, r, i = 0) {
+	let { request: a, status: o, headers: s } = t, c = s.get("location");
+	if (c && (o === 300 || o === 301 && is.includes(a.method) || o === 302 && is.includes(a.method) || o === 303 && a.method === "POST" || o === 307) && i < n) {
+		let s = new URL(c, a.url);
+		if (!r) {
+			let e = new URL(a.url);
+			if (s.origin !== e.origin) return Ho.verbose(`Skipping cross-origin redirect from ${e.origin} to ${s.origin}.`), t;
+		}
+		return a.url = s.toString(), o === 303 && (a.method = "GET", a.headers.delete("Content-Length"), delete a.body), a.headers.delete("Authorization"), os(e, await e(a), n, r, i + 1);
+	}
+	return t;
 }
 var ss = "decompressResponsePolicy";
 function cs() {
@@ -13682,8 +13691,8 @@ function Es(e, t = { maxRetries: 3 }) {
 				try {
 					n.info(`Retry ${s}: Attempting to send request`, r.requestId), a = await i(r), n.info(`Retry ${s}: Received a response from request`, r.requestId);
 				} catch (e) {
-					if (n.error(`Retry ${s}: Received an error from request`, r.requestId), o = e, !e || o.name !== "RestError") throw e;
-					a = o.response;
+					if (n.error(`Retry ${s}: Received an error from request`, r.requestId), !Bo(e)) throw e;
+					o = e, a = e.response;
 				}
 				if (r.abortSignal?.aborted) throw n.error(`Retry ${s}: Request aborted.`), new Qa();
 				if (s >= (t.maxRetries ?? 3)) {
@@ -14346,9 +14355,7 @@ function ac(e) {
 function oc(e, t, n) {
 	if (e.agent) return;
 	let r = new URL(e.url).protocol !== "https:";
-	e.tlsSettings && Ho.warning("TLS settings are not supported in combination with custom Proxy, certificates provided to the client will be ignored.");
-	let i = e.headers.toJSON();
-	r ? (t.httpProxyAgent ||= new Ws.HttpProxyAgent(n, { headers: i }), e.agent = t.httpProxyAgent) : (t.httpsProxyAgent ||= new Us.HttpsProxyAgent(n, { headers: i }), e.agent = t.httpsProxyAgent);
+	e.tlsSettings && Ho.warning("TLS settings are not supported in combination with custom Proxy, certificates provided to the client will be ignored."), r ? (t.httpProxyAgent ||= new Ws.HttpProxyAgent(n), e.agent = t.httpProxyAgent) : (t.httpsProxyAgent ||= new Us.HttpsProxyAgent(n), e.agent = t.httpsProxyAgent);
 }
 function sc(e, t) {
 	Zs || Xs.push(...nc());
@@ -14375,7 +14382,7 @@ function dc(e) {
 	};
 }
 function fc(e) {
-	return typeof e.stream == "function";
+	return typeof Blob < "u" && e instanceof Blob;
 }
 async function* pc() {
 	let e = this.getReader();
@@ -14491,7 +14498,7 @@ async function Ic(e) {
 		n.bun ? e.set("Bun", `${n.bun} (${t})`) : n.deno ? e.set("Deno", `${n.deno} (${t})`) : n.node && e.set("Node", `${n.node} (${t})`);
 	}
 }
-var Lc = "1.22.2";
+var Lc = "1.22.3";
 function Rc(e) {
 	let t = [];
 	for (let [n, r] of e) {
@@ -33540,7 +33547,7 @@ tT.isNetworkErrorCode = (e) => e ? [
 ].includes(e) : !1;
 var nT = class extends Error {
 	constructor() {
-		super("Cache storage quota has been hit. Unable to upload any new cache entries. Usage is recalculated every 6-12 hours.\nMore info on storage limits: https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions#calculating-minute-and-storage-spending"), this.name = "UsageError";
+		super("Cache storage quota has been hit. Unable to upload any new cache entries.\nMore info on storage limits: https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions#calculating-minute-and-storage-spending"), this.name = "UsageError";
 	}
 };
 nT.isUsageErrorMessage = (e) => e ? e.includes("insufficient usage") : !1;
@@ -33945,7 +33952,7 @@ var kT = /* @__PURE__ */ de({
 	types: () => LT,
 	version: () => jT
 }), AT, jT, MT, NT, PT, FT, IT, LT, RT, zT, BT, VT, HT, UT, WT, GT, KT, qT, JT, YT = ue((() => {
-	AT = "@actions/cache", jT = "6.0.0", MT = "Actions cache lib", NT = [
+	AT = "@actions/cache", jT = "6.0.1", MT = "Actions cache lib", NT = [
 		"github",
 		"actions",
 		"cache"
@@ -33964,20 +33971,20 @@ var kT = /* @__PURE__ */ de({
 		test: "echo \"Error: run tests from root\" && exit 1",
 		tsc: "tsc && cp src/internal/shared/package-version.cjs lib/internal/shared/"
 	}, WT = { url: "https://github.com/actions/toolkit/issues" }, GT = {
-		"@actions/core": "^3.0.0",
+		"@actions/core": "^3.0.1",
 		"@actions/exec": "^3.0.0",
 		"@actions/glob": "^0.6.1",
-		"@actions/http-client": "^4.0.0",
-		"@actions/io": "^3.0.0",
-		"@azure/core-rest-pipeline": "^1.22.0",
-		"@azure/storage-blob": "^12.30.0",
+		"@actions/http-client": "^4.0.1",
+		"@actions/io": "^3.0.2",
+		"@azure/core-rest-pipeline": "^1.23.0",
+		"@azure/storage-blob": "^12.31.0",
 		"@protobuf-ts/runtime-rpc": "^2.11.1",
-		semver: "^7.7.3"
+		semver: "^7.7.4"
 	}, KT = {
-		"@protobuf-ts/plugin": "^2.9.4",
-		"@types/node": "^25.1.0",
+		"@protobuf-ts/plugin": "^2.11.1",
+		"@types/node": "^25.6.0",
 		"@types/semver": "^7.7.1",
-		typescript: "^5.2.2"
+		typescript: "^5.9.3"
 	}, qT = {
 		"uri-js": "npm:uri-js-replace@^1.0.1",
 		"node-fetch": "^3.3.2"
