@@ -35,8 +35,10 @@ jobs:
           sudo mv licensed /usr/local/bin/licensed
       - name: Check cached dependency records
         run: licensed status
-      - name: Dependabot license Check
+      - name: Dependabot license check
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/dependency-review-action@v5
+        with:
+          config-file: './.github/dependency-review-config.yml'
       - name: Audit packages
         run: yarn npm audit
