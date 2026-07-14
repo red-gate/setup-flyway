@@ -4658,7 +4658,7 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 			this.#e = e, this.#t = n;
 		}
 		get #o() {
-			return this.#n.noProxy === void 0 ? this.#e !== this.#s : !1;
+			return this.#n.noProxy === void 0 && this.#e !== this.#s;
 		}
 		get #s() {
 			return process.env.no_proxy ?? process.env.NO_PROXY ?? "";
@@ -4881,7 +4881,7 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 			return this.off(e, ...t);
 		}
 		push(e) {
-			return this[u] && e !== null ? (T(this[u], e), this[d] ? super.push(e) : !0) : super.push(e);
+			return this[u] && e !== null ? (T(this[u], e), !this[d] || super.push(e)) : super.push(e);
 		}
 		async text() {
 			return b(this, "text");
@@ -5210,7 +5210,7 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 		}
 		onData(e) {
 			let { res: t } = this;
-			return t ? t.write(e) : !0;
+			return !t || t.write(e);
 		}
 		onComplete(e) {
 			let { res: t } = this;
@@ -5510,7 +5510,7 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 })), Dt = /* @__PURE__ */ F(((e, t) => {
 	var { MockNotMatchedError: n } = Tt(), { kDispatches: r, kMockAgent: i, kOriginalDispatch: a, kOrigin: o, kGetNetConnect: s } = Et(), { buildURL: c } = R(), { STATUS_CODES: l } = L("node:http"), { types: { isPromise: u } } = L("node:util");
 	function d(e, t) {
-		return typeof e == "string" ? e === t : e instanceof RegExp ? e.test(t) : typeof e == "function" ? e(t) === !0 : !1;
+		return typeof e == "string" ? e === t : e instanceof RegExp ? e.test(t) : typeof e == "function" && e(t) === !0;
 	}
 	function f(e) {
 		return Object.fromEntries(Object.entries(e).map(([e, t]) => [e.toLocaleLowerCase(), t]));
@@ -5542,7 +5542,7 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 		return n.sort(), [...t, n.toString()].join("?");
 	}
 	function _(e, { path: t, method: n, body: r, headers: i }) {
-		let a = d(e.path, t), o = d(e.method, n), s = e.body === void 0 ? !0 : d(e.body, r), c = h(e, i);
+		let a = d(e.path, t), o = d(e.method, n), s = e.body === void 0 || d(e.body, r), c = h(e, i);
 		return a && o && s && c;
 	}
 	function v(e) {
@@ -5552,7 +5552,7 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 		let r = t.query ? c(t.path, t.query) : t.path, i = typeof r == "string" ? g(r) : r, a = e.filter(({ consumed: e }) => !e).filter(({ path: e }) => d(g(e), i));
 		if (a.length === 0) throw new n(`Mock dispatch not matched for path '${i}'`);
 		if (a = a.filter(({ method: e }) => d(e, t.method)), a.length === 0) throw new n(`Mock dispatch not matched for method '${t.method}' on path '${i}'`);
-		if (a = a.filter(({ body: e }) => e === void 0 ? !0 : d(e, t.body)), a.length === 0) throw new n(`Mock dispatch not matched for body '${t.body}' on path '${i}'`);
+		if (a = a.filter(({ body: e }) => e === void 0 || d(e, t.body)), a.length === 0) throw new n(`Mock dispatch not matched for body '${t.body}' on path '${i}'`);
 		if (a = a.filter((e) => h(e, t.headers)), a.length === 0) throw new n(`Mock dispatch not matched for headers '${typeof t.headers == "object" ? JSON.stringify(t.headers) : t.headers}' on path '${i}'`);
 		return a[0];
 	}
@@ -5648,7 +5648,7 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 	}
 	function O(e, t) {
 		let n = new URL(t);
-		return e === !0 ? !0 : !!(Array.isArray(e) && e.some((e) => d(e, n.host)));
+		return e === !0 || !!(Array.isArray(e) && e.some((e) => d(e, n.host)));
 	}
 	function k(e) {
 		if (e) {
@@ -10620,9 +10620,9 @@ function fr(e) {
 }
 function pr(e) {
 	return {
-		force: e.force == null ? !0 : e.force,
+		force: e.force == null || e.force,
 		recursive: !!e.recursive,
-		copySourceDirectory: e.copySourceDirectory == null ? !0 : !!e.copySourceDirectory
+		copySourceDirectory: e.copySourceDirectory == null || !!e.copySourceDirectory
 	};
 }
 function mr(e, t, n, r) {
@@ -11455,7 +11455,7 @@ var Ir = /* @__PURE__ */ F(((e, t) => {
 		}
 		intersects(t, n) {
 			if (!(t instanceof e)) throw TypeError("a Comparator is required");
-			return this.operator === "" ? this.value === "" ? !0 : new l(t.value, n).test(this.value) : t.operator === "" ? t.value === "" ? !0 : new l(this.value, n).test(t.semver) : (n = r(n), n.includePrerelease && (this.value === "<0.0.0-0" || t.value === "<0.0.0-0") || !n.includePrerelease && (this.value.startsWith("<0.0.0") || t.value.startsWith("<0.0.0")) ? !1 : !!(this.operator.startsWith(">") && t.operator.startsWith(">") || this.operator.startsWith("<") && t.operator.startsWith("<") || this.semver.version === t.semver.version && this.operator.includes("=") && t.operator.includes("=") || o(this.semver, "<", t.semver, n) && this.operator.startsWith(">") && t.operator.startsWith("<") || o(this.semver, ">", t.semver, n) && this.operator.startsWith("<") && t.operator.startsWith(">")));
+			return this.operator === "" ? this.value === "" || new l(t.value, n).test(this.value) : t.operator === "" ? t.value === "" || new l(this.value, n).test(t.semver) : (n = r(n), n.includePrerelease && (this.value === "<0.0.0-0" || t.value === "<0.0.0-0") || !n.includePrerelease && (this.value.startsWith("<0.0.0") || t.value.startsWith("<0.0.0")) ? !1 : !!(this.operator.startsWith(">") && t.operator.startsWith(">") || this.operator.startsWith("<") && t.operator.startsWith("<") || this.semver.version === t.semver.version && this.operator.includes("=") && t.operator.includes("=") || o(this.semver, "<", t.semver, n) && this.operator.startsWith(">") && t.operator.startsWith("<") || o(this.semver, ">", t.semver, n) && this.operator.startsWith("<") && t.operator.startsWith(">")));
 		}
 	};
 	var r = zr(), { safeRe: i, t: a } = Rr(), o = li(), s = Lr(), c = Vr(), l = pi();
@@ -12483,7 +12483,7 @@ var Qi = /* @__PURE__ */ F(((e, t) => {
 		}
 		intersects(t, n) {
 			if (!(t instanceof e)) throw TypeError("a Comparator is required");
-			return this.operator === "" ? this.value === "" ? !0 : new l(t.value, n).test(this.value) : t.operator === "" ? t.value === "" ? !0 : new l(this.value, n).test(t.semver) : (n = r(n), n.includePrerelease && (this.value === "<0.0.0-0" || t.value === "<0.0.0-0") || !n.includePrerelease && (this.value.startsWith("<0.0.0") || t.value.startsWith("<0.0.0")) ? !1 : !!(this.operator.startsWith(">") && t.operator.startsWith(">") || this.operator.startsWith("<") && t.operator.startsWith("<") || this.semver.version === t.semver.version && this.operator.includes("=") && t.operator.includes("=") || o(this.semver, "<", t.semver, n) && this.operator.startsWith(">") && t.operator.startsWith("<") || o(this.semver, ">", t.semver, n) && this.operator.startsWith("<") && t.operator.startsWith(">")));
+			return this.operator === "" ? this.value === "" || new l(t.value, n).test(this.value) : t.operator === "" ? t.value === "" || new l(this.value, n).test(t.semver) : (n = r(n), n.includePrerelease && (this.value === "<0.0.0-0" || t.value === "<0.0.0-0") || !n.includePrerelease && (this.value.startsWith("<0.0.0") || t.value.startsWith("<0.0.0")) ? !1 : !!(this.operator.startsWith(">") && t.operator.startsWith(">") || this.operator.startsWith("<") && t.operator.startsWith("<") || this.semver.version === t.semver.version && this.operator.includes("=") && t.operator.includes("=") || o(this.semver, "<", t.semver, n) && this.operator.startsWith(">") && t.operator.startsWith("<") || o(this.semver, ">", t.semver, n) && this.operator.startsWith("<") && t.operator.startsWith(">")));
 		}
 	};
 	var r = ta(), { safeRe: i, t: a } = ea(), o = Ta(), s = $i(), c = ra(), l = ka();
@@ -13208,7 +13208,7 @@ var ro = /* @__PURE__ */ F(((e, t) => {
 			var s = i[o], c = e;
 			if (r.matchBase && s.length === 1 && (c = [a]), this.matchOne(c, s, t)) return r.flipNegate ? !0 : !this.negate;
 		}
-		return r.flipNegate ? !1 : this.negate;
+		return !r.flipNegate && this.negate;
 	}, g.prototype.matchOne = function(e, t, n) {
 		return t.indexOf(r) === -1 ? this._matchOne(e, t, n, 0, 0) : this._matchGlobstar(e, t, n, 0, 0);
 	}, g.prototype._matchGlobstar = function(e, t, n, i, a) {
@@ -14185,7 +14185,7 @@ var Es = w.custom, Ds = "REDACTED", Os = /* @__PURE__ */ "x-ms-client-request-id
 	}
 };
 function Ns(e) {
-	return e instanceof Ms ? !0 : Ts(e) && e.name === "RestError";
+	return e instanceof Ms || Ts(e) && e.name === "RestError";
 }
 function Ps(e, t) {
 	return Buffer.from(e, t);
@@ -14859,7 +14859,7 @@ var Oc = /* @__PURE__ */ F(((e, t) => {
 				if (typeof e.protocol == "string") return e.protocol === "https:";
 			}
 			let { stack: t } = /* @__PURE__ */ Error();
-			return typeof t == "string" ? t.split("\n").some((e) => e.indexOf("(https.js:") !== -1 || e.indexOf("node:https:") !== -1) : !1;
+			return typeof t == "string" && t.split("\n").some((e) => e.indexOf("(https.js:") !== -1 || e.indexOf("node:https:") !== -1);
 		}
 		incrementSockets(e) {
 			if (this.maxSockets === Infinity && this.maxTotalSockets === Infinity) return null;
@@ -15937,7 +15937,7 @@ var $u = class {
 				let e = i.xml.xmlCharKey;
 				t.$ !== void 0 && t[e] !== void 0 && (t = t[e]);
 			}
-			o.match(/^Number$/i) === null ? o.match(/^Boolean$/i) === null ? o.match(/^(String|Enum|Object|Stream|Uuid|TimeSpan|any)$/i) === null ? o.match(/^(Date|DateTime|DateTimeRfc1123)$/i) === null ? o.match(/^UnixTime$/i) === null ? o.match(/^ByteArray$/i) === null ? o.match(/^Base64Url$/i) === null ? o.match(/^Sequence$/i) === null ? o.match(/^Dictionary$/i) !== null && (a = xd(this, e, t, n, i)) : a = Sd(this, e, t, n, i) : a = rd(t) : a = Gu(t) : a = od(t) : a = new Date(t) : a = t : a = t === "true" ? !0 : t === "false" ? !1 : t : (a = parseFloat(t), isNaN(a) && (a = t));
+			o.match(/^Number$/i) === null ? o.match(/^Boolean$/i) === null ? o.match(/^(String|Enum|Object|Stream|Uuid|TimeSpan|any)$/i) === null ? o.match(/^(Date|DateTime|DateTimeRfc1123)$/i) === null ? o.match(/^UnixTime$/i) === null ? o.match(/^ByteArray$/i) === null ? o.match(/^Base64Url$/i) === null ? o.match(/^Sequence$/i) === null ? o.match(/^Dictionary$/i) !== null && (a = xd(this, e, t, n, i)) : a = Sd(this, e, t, n, i) : a = rd(t) : a = Gu(t) : a = od(t) : a = new Date(t) : a = t : a = t === "true" || t !== "false" && t : (a = parseFloat(t), isNaN(a) && (a = t));
 		}
 		return e.isConstant && (a = e.defaultValue), a;
 	}
@@ -17077,11 +17077,11 @@ function Qf(e, t) {
 		}
 		n += e[t];
 	}
-	return r === "" ? {
+	return r === "" && {
 		value: n,
 		index: t,
 		tagClosed: i
-	} : !1;
+	};
 }
 var $f = /* @__PURE__ */ RegExp("(\\s*)([^\\s=]+)(\\s*=)?(\\s*(['\"])(([\\s\\S])*?)\\5)?", "g");
 function ep(e, t) {
@@ -20055,7 +20055,7 @@ function eh(e, t, n, r) {
 	return e &&= (r === void 0 && (r = t.child.length === 0), e = this.parseTextData(e, t.tagname, n, !1, t[":@"] ? Object.keys(t[":@"]).length !== 0 : !1, r), e !== void 0 && e !== "" && t.add(this.options.textNodeName, e), ""), e;
 }
 function th() {
-	return this.stopNodeExpressionsSet.size === 0 ? !1 : this.matcher.matchesAny(this.stopNodeExpressionsSet);
+	return this.stopNodeExpressionsSet.size !== 0 && this.matcher.matchesAny(this.stopNodeExpressionsSet);
 }
 function nh(e, t, n = ">") {
 	let r = 0, i = e.length, a = n.charCodeAt(0), o = n.length > 1 ? n.charCodeAt(1) : -1, s = "", c = t;
@@ -20126,7 +20126,7 @@ function oh(e, t, n) {
 function sh(e, t, n) {
 	if (t && typeof e == "string") {
 		let t = e.trim();
-		return t === "true" ? !0 : t === "false" ? !1 : _m(e, n);
+		return t === "true" || t !== "false" && _m(e, n);
 	} else if (Hf(e)) return e;
 	else return "";
 }
@@ -22039,19 +22039,19 @@ function v_(e) {
 	return t;
 }
 function y_(e) {
-	return e instanceof Mg ? !0 : e.constructor.name === "StorageSharedKeyCredential";
+	return e instanceof Mg || e.constructor.name === "StorageSharedKeyCredential";
 }
 function b_(e) {
-	return e instanceof Tg ? !0 : e.constructor.name === "AnonymousCredential";
+	return e instanceof Tg || e.constructor.name === "AnonymousCredential";
 }
 function x_(e) {
 	return Bu(e.credential);
 }
 function S_(e) {
-	return e instanceof xg ? !0 : e.constructor.name === "StorageBrowserPolicyFactory";
+	return e instanceof xg || e.constructor.name === "StorageBrowserPolicyFactory";
 }
 function C_(e) {
-	return e instanceof Rg ? !0 : e.constructor.name === "StorageRetryPolicyFactory";
+	return e instanceof Rg || e.constructor.name === "StorageRetryPolicyFactory";
 }
 function w_(e) {
 	return e.constructor.name === "TelemetryPolicyFactory";
@@ -35536,7 +35536,7 @@ function VE(e) {
 	return e ? e >= 200 && e < 300 : !1;
 }
 function HE(e) {
-	return e ? e >= 500 : !0;
+	return !e || e >= 500;
 }
 function UE(e) {
 	return e ? [
@@ -35803,10 +35803,10 @@ function cD() {
 	return (process.env.ACTIONS_CACHE_MODE || "").trim().toLowerCase();
 }
 function lD(e) {
-	return sD.includes(e) ? e === "read" || e === "write" : !0;
+	return !sD.includes(e) || e === "read" || e === "write";
 }
 function uD(e) {
-	return sD.includes(e) ? e === "write" || e === "write-only" : !0;
+	return !sD.includes(e) || e === "write" || e === "write-only";
 }
 function dD() {
 	let e = oD();
@@ -36563,12 +36563,12 @@ var BO;
 	e[e.NO = 0] = "NO", e[e.PACKED = 1] = "PACKED", e[e.UNPACKED = 2] = "UNPACKED";
 })(BO ||= {});
 function VO(e) {
-	return e.localName = e.localName ?? RO(e.name), e.jsonName = e.jsonName ?? RO(e.name), e.repeat = e.repeat ?? BO.NO, e.opt = e.opt ?? (e.repeat || e.oneof ? !1 : e.kind == "message"), e;
+	return e.localName = e.localName ?? RO(e.name), e.jsonName = e.jsonName ?? RO(e.name), e.repeat = e.repeat ?? BO.NO, e.opt = e.opt ?? (!e.repeat && !e.oneof && e.kind == "message"), e;
 }
 function HO(e) {
 	if (typeof e != "object" || !e || !e.hasOwnProperty("oneofKind")) return !1;
 	switch (typeof e.oneofKind) {
-		case "string": return e[e.oneofKind] === void 0 ? !1 : Object.keys(e).length == 2;
+		case "string": return e[e.oneofKind] !== void 0 && Object.keys(e).length == 2;
 		case "undefined": return Object.keys(e).length == 1;
 		default: return !1;
 	}
@@ -36682,7 +36682,7 @@ var UO = class {
 			case $.SFIXED32:
 			case $.SINT32:
 			case $.UINT32: return this.scalars(r.slice(0, n).map((e) => parseInt(e)), t, n);
-			case $.BOOL: return this.scalars(r.slice(0, n).map((e) => e == "true" ? !0 : e == "false" ? !1 : e), t, n);
+			case $.BOOL: return this.scalars(r.slice(0, n).map((e) => e == "true" || e != "false" && e), t, n);
 			default: return this.scalars(r, t, n, zO.STRING);
 		}
 	}
@@ -36746,7 +36746,7 @@ var GO = class {
 					}
 					this.assert(a !== void 0, e.name + " map value", i);
 					let o = r;
-					e.K == $.BOOL && (o = o == "true" ? !0 : o == "false" ? !1 : o), o = this.scalar(o, e.K, zO.STRING, e.name).toString(), t[o] = a;
+					e.K == $.BOOL && (o = o == "true" || o != "false" && o), o = this.scalar(o, e.K, zO.STRING, e.name).toString(), t[o] = a;
 				}
 			} else if (e.repeat) {
 				if (a === null) continue;
@@ -36985,7 +36985,7 @@ var GO = class {
 			case $.FLOAT: kO(t);
 			case $.DOUBLE: return t === 0 ? a ? 0 : void 0 : (xO(typeof t == "number"), Number.isNaN(t) ? "NaN" : t === Infinity ? "Infinity" : t === -Infinity ? "-Infinity" : t);
 			case $.STRING: return t === "" ? a ? "" : void 0 : (xO(typeof t == "string"), t);
-			case $.BOOL: return t === !1 ? a ? !1 : void 0 : (xO(typeof t == "boolean"), t);
+			case $.BOOL: return t === !1 ? !a && void 0 : (xO(typeof t == "boolean"), t);
 			case $.UINT64:
 			case $.FIXED64:
 				xO(typeof t == "number" || typeof t == "string" || typeof t == "bigint");
