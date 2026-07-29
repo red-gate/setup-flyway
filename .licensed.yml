@@ -6,6 +6,7 @@ allowed:
   - 0bsd
   - bsd-2-clause
   - bsd-3-clause
+  - blueoak-1.0.0
   - isc
   - mit
   - cc0-1.0
