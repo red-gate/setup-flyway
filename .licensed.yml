@@ -14,3 +14,16 @@ allowed:
 
 reviewed:
   npm:
+    # lightningcss (pulled in by vite) is MPL-2.0, but it's a dev-only dependency that is never shipped in distributed output
+    - lightningcss
+    - lightningcss-android-arm64
+    - lightningcss-darwin-arm64
+    - lightningcss-darwin-x64
+    - lightningcss-freebsd-x64
+    - lightningcss-linux-arm-gnueabihf
+    - lightningcss-linux-arm64-gnu
+    - lightningcss-linux-arm64-musl
+    - lightningcss-linux-x64-gnu
+    - lightningcss-linux-x64-musl
+    - lightningcss-win32-arm64-msvc
+    - lightningcss-win32-x64-msvc

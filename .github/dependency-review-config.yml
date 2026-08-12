@@ -8,3 +8,18 @@ allow_licenses:
   - 'MIT'
   - 'CC0-1.0'
   - 'Unlicense'
+
+allow_dependencies_licenses:
+  # lightningcss (pulled in by vite) is MPL-2.0, but it's a dev-only dependency that is never shipped in distributed output
+  - 'pkg:npm/lightningcss'
+  - 'pkg:npm/lightningcss-android-arm64'
+  - 'pkg:npm/lightningcss-darwin-arm64'
+  - 'pkg:npm/lightningcss-darwin-x64'
+  - 'pkg:npm/lightningcss-freebsd-x64'
+  - 'pkg:npm/lightningcss-linux-arm-gnueabihf'
+  - 'pkg:npm/lightningcss-linux-arm64-gnu'
+  - 'pkg:npm/lightningcss-linux-arm64-musl'
+  - 'pkg:npm/lightningcss-linux-x64-gnu'
+  - 'pkg:npm/lightningcss-linux-x64-musl'
+  - 'pkg:npm/lightningcss-win32-arm64-msvc'
+  - 'pkg:npm/lightningcss-win32-x64-msvc'
