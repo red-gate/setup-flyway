@@ -36866,9 +36866,34 @@ function Pk(e, t) {
 		tagClosed: i
 	};
 }
-var Fk = /* @__PURE__ */ RegExp("(\\s*)([^\\s=]+)(\\s*=)?(\\s*(['\"])(([\\s\\S])*?)\\5)?", "g");
+function Fk(e) {
+	let t = [], n = e.length, r = 0;
+	for (; r < n;) {
+		let i = r;
+		for (; r < n && kk(e[r]);) r++;
+		if (r >= n) break;
+		if (e[r] === "=") {
+			r = i + 1;
+			continue;
+		}
+		let a = e.slice(i, r), o = r;
+		for (; r < n && !kk(e[r]) && e[r] !== "=";) r++;
+		let s = e.slice(o, r), c, l = r;
+		for (; l < n && kk(e[l]);) l++;
+		l < n && e[l] === "=" && (c = e.slice(r, l + 1), r = l + 1);
+		let u, d, f = r;
+		for (; f < n && kk(e[f]);) f++;
+		if (f < n && (e[f] === "\"" || e[f] === "'")) {
+			let t = f + 1, n = e.indexOf(e[f], t);
+			n !== -1 && (u = e[f], d = e.slice(t, n), r = n + 1);
+		}
+		let p = { startIndex: i };
+		p[1] = a, p[2] = s, p[3] = c, p[4] = u !== void 0 || void 0, p[5] = u, p[6] = d, t.push(p);
+	}
+	return t;
+}
 function Ik(e, t) {
-	let n = Sk(e, Fk), r = {};
+	let n = Fk(e), r = {};
 	for (let e = 0; e < n.length; e++) {
 		if (n[e][1].length === 0) return zk("InvalidAttr", "Attribute '" + n[e][2] + "' has no space in starting.", Uk(n[e]));
 		if (n[e][3] !== void 0 && n[e][4] === void 0) return zk("InvalidAttr", "Attribute '" + n[e][2] + "' is without value.", Uk(n[e]));
