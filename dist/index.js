@@ -756,7 +756,7 @@ var ke = class extends URL {
 		return e && !!(e.destroyed || e[r] || c.isDestroyed?.(e));
 	}
 	function ne(e, t) {
-		e == null || !S(e) || te(e) || (typeof e.destroy == "function" ? (Object.getPrototypeOf(e).constructor === s && (e.socket = null), e.destroy(t)) : t && queueMicrotask(() => {
+		e != null && S(e) && !te(e) && (typeof e.destroy == "function" ? (Object.getPrototypeOf(e).constructor === s && (e.socket = null), e.destroy(t)) : t && queueMicrotask(() => {
 			e.emit("error", t);
 		}), e.destroyed !== !0 && (e[r] = !0));
 	}
@@ -2413,9 +2413,7 @@ var ke = class extends URL {
 		return _(e instanceof URL), e = new URL(e), e.protocol === "file:" || e.protocol === "about:" || e.protocol === "blank:" ? "no-referrer" : (e.username = "", e.password = "", e.hash = "", t && (e.pathname = "", e.search = ""), e);
 	}
 	function fe(e) {
-		if (!(e instanceof URL)) return !1;
-		if (e.href === "about:blank" || e.href === "about:srcdoc" || e.protocol === "data:" || e.protocol === "file:") return !0;
-		return t(e.origin);
+		return e instanceof URL ? e.href === "about:blank" || e.href === "about:srcdoc" || e.protocol === "data:" || e.protocol === "file:" || t(e.origin) : !1;
 		function t(e) {
 			if (e == null || e === "null") return !1;
 			let t = new URL(e);
@@ -3255,7 +3253,7 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 			e !== this.timeoutValue || t & Oe ^ this.timeoutType & Oe ? (this.timeout &&= (a.clearTimeout(this.timeout), null), e && (t & Oe ? this.timeout = a.setFastTimeout(Pe, e, new WeakRef(this)) : (this.timeout = setTimeout(Pe, e, new WeakRef(this)), this.timeout.unref())), this.timeoutValue = e) : this.timeout && this.timeout.refresh && this.timeout.refresh(), this.timeoutType = t;
 		}
 		resume() {
-			this.socket.destroyed || !this.paused || (n(this.ptr != null), n(we == null), this.llhttp.llhttp_resume(this.ptr), n(this.timeoutType === Ae), this.timeout && this.timeout.refresh && this.timeout.refresh(), this.paused = !1, this.execute(this.socket.read() || me), this.readMore());
+			!this.socket.destroyed && this.paused && (n(this.ptr != null), n(we == null), this.llhttp.llhttp_resume(this.ptr), n(this.timeoutType === Ae), this.timeout && this.timeout.refresh && this.timeout.refresh(), this.paused = !1, this.execute(this.socket.read() || me), this.readMore());
 		}
 		readMore() {
 			for (; !this.paused && this.ptr;) {
@@ -3478,8 +3476,14 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 		let t = e[N];
 		if (t && !t.destroyed) {
 			if (e[w] === 0 ? !t[D] && t.unref && (t.unref(), t[D] = !0) : t[D] && t.ref && (t.ref(), t[D] = !1), e[S] === 0 && e[C] > 0 && t[ye]) {
-				if (t[_e] === 0) return Re(e, t), t[b].readMore(), t.destroyed, void 0;
-				if (t[_e] === 1) return t[b].readMore(), t.destroyed, void 0;
+				if (t[_e] === 0) {
+					Re(e, t), t[b].readMore(), t.destroyed;
+					return;
+				}
+				if (t[_e] === 1) {
+					t[b].readMore(), t.destroyed;
+					return;
+				}
 			}
 			if (e[S] === 0 && (t[b].readMore(), t.destroyed)) return;
 			if (e[w] === 0) t[b].timeoutType !== je && t[b].setTimeout(e[te], je);
@@ -5675,7 +5679,7 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 	}
 	function O(e, t) {
 		let n = new URL(t);
-		return e === !0 || !!(Array.isArray(e) && e.some((e) => d(e, n.host)));
+		return !!(e === !0 || Array.isArray(e) && e.some((e) => d(e, n.host)));
 	}
 	function k(e) {
 		if (e) {
@@ -9499,7 +9503,7 @@ ${e.format(t)}
 			n.brandCheck(this, e);
 			let r = "WebSocket.send";
 			if (n.argumentLengthCheck(arguments, 1, r), t = n.converters.WebSocketSendData(t, r, "data"), g(this)) throw new DOMException("Sent before connected.", "InvalidStateError");
-			if (!(!_(this) || v(this))) {
+			if (_(this) && !v(this)) {
 				if (typeof t == "string") {
 					let e = Buffer.byteLength(t);
 					this.#t += e, this.#i.add(t, () => {
@@ -12261,7 +12265,7 @@ var da = /* @__PURE__ */ P(((e, t) => {
 				var D = 0;
 				outer: for (var O = 0; O < w.length; O++) for (var k = x(w[O], t, r, !1), A = 0; A < k.length; A++) {
 					var j = k[A];
-					if (!(T && !j)) {
+					if (!T || j) {
 						if (C.length >= t || D + j.length > r) break outer;
 						C.push(j), D += j.length;
 					}
@@ -12568,8 +12572,7 @@ var da = /* @__PURE__ */ P(((e, t) => {
 		n.sep !== "/" && (e = e.split(n.sep).join("/")), e = e.split(f), this.debug(this.pattern, "split", e);
 		var i = this.set;
 		this.debug(this.pattern, "set", i);
-		var a, o;
-		for (o = e.length - 1; o >= 0 && (a = e[o], !a); o--);
+		for (var a, o = e.length - 1; o >= 0 && (a = e[o], !a); o--);
 		for (o = 0; o < i.length; o++) {
 			var s = i[o], c = e;
 			if (r.matchBase && s.length === 1 && (c = [a]), this.matchOne(c, s, t)) return r.flipNegate ? !0 : !this.negate;
@@ -12639,8 +12642,7 @@ var da = /* @__PURE__ */ P(((e, t) => {
 		}
 		return i || null;
 	}, g.prototype._matchOne = function(e, t, n, i, a) {
-		var o, s, c, l;
-		for (o = i, s = a, c = e.length, l = t.length; o < c && s < l; o++, s++) {
+		for (var o = i, s = a, c = e.length, l = t.length; o < c && s < l; o++, s++) {
 			this.debug("matchOne loop");
 			var u = t[s], d = e[o];
 			/* istanbul ignore if */
@@ -13442,7 +13444,7 @@ var ko = /* @__PURE__ */ new Set([
 		}
 		function u(n) {
 			n.hasRun = !0;
-			for (let r of n.policies) if (!(r.afterPhase && (!r.afterPhase.hasRun || r.afterPhase.policies.size)) && r.dependsOn.size === 0) {
+			for (let r of n.policies) if ((!r.afterPhase || r.afterPhase.hasRun && !r.afterPhase.policies.size) && r.dependsOn.size === 0) {
 				e.push(r.policy);
 				for (let e of r.dependants) e.dependsOn.delete(r);
 				t.delete(r.policy.name), n.policies.delete(r);
@@ -35152,7 +35154,7 @@ var BD = class {
 			gD(r);
 			return;
 		}
-		if (!(t === 0 && !i && !r)) return gD(typeof t == "number"), gD(Number.isInteger(t)), a || !e[1].hasOwnProperty(t) ? t : e[2] ? e[2] + e[1][t] : e[1][t];
+		if (t !== 0 || i || r) return gD(typeof t == "number"), gD(Number.isInteger(t)), a || !e[1].hasOwnProperty(t) ? t : e[2] ? e[2] + e[1][t] : e[1][t];
 	}
 	message(e, t, n, r) {
 		return t === void 0 ? r.emitDefaultValues ? null : void 0 : e.internalJsonWrite(t, r);
@@ -35283,9 +35285,7 @@ var UD = class {
 			case "enum":
 				o = 0;
 				break;
-			case "message":
-				o = e.V.T().create();
-				break;
+			case "message": o = e.V.T().create();
 		}
 		return [a, o];
 	}
@@ -35456,9 +35456,7 @@ function GD(e) {
 				case "enum":
 					t[e] = 0;
 					break;
-				case "map":
-					t[e] = {};
-					break;
+				case "map": t[e] = {};
 			}
 		}
 	}
