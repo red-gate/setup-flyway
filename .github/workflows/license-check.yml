@@ -33,8 +33,8 @@ jobs:
           curl -Lfs -o licensed.tar.gz https://github.com/github/licensed/releases/download/3.9.0/licensed-3.9.0-linux-x64.tar.gz
           sudo tar -xzf licensed.tar.gz
           sudo mv licensed /usr/local/bin/licensed
-      - name: Check cached dependency records
-        run: licensed status
+      - name: Check licenses
+        run: licensed status --data-source=configuration
       - name: Dependabot license check
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/dependency-review-action@v5
