@@ -1,0 +1,41 @@
+name: Generate Licenses
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-licenses:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'yarn'
+          cache-dependency-path: 'yarn.lock'
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Install licensed tool
+        run: |
+          cd "$RUNNER_TEMP"
+          curl -Lfs -o licensed.tar.gz https://github.com/github/licensed/releases/download/3.9.0/licensed-3.9.0-linux-x64.tar.gz
+          sudo tar -xzf licensed.tar.gz
+          sudo mv licensed /usr/local/bin/licensed
+      - name: Check licenses
+        run: licensed status --data-source=configuration
+      - name: Generate licenses
+        run: mkdir .licenses && licensed notices --computed && mv .licenses/NOTICE third_party_licenses.txt
+      - name: Commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add third_party_licenses.txt
+          git commit -m 'generate licenses'
+          git push
