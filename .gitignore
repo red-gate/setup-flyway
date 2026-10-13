@@ -3,6 +3,7 @@ node_modules/
 __tests__/runner/*
 
 .yarn/
+.licenses/
 
 # Ignore ESBuild metafiles
 meta.json
