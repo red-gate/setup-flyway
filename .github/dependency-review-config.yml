@@ -23,3 +23,7 @@ allow_dependencies_licenses:
   - 'pkg:npm/lightningcss-linux-x64-musl'
   - 'pkg:npm/lightningcss-win32-arm64-msvc'
   - 'pkg:npm/lightningcss-win32-x64-msvc'
+  # spdx (pulled in by license-checker-rseidelsohn) is a dev-only dependency that is never shipped in distributed output
+  - 'pkg:npm/spdx-exceptions'
+  - 'pkg:npm/spdx-ranges'
+  - 'pkg:npm/spdx-satisfies'

@@ -35,6 +35,14 @@ jobs:
           sudo mv licensed /usr/local/bin/licensed
       - name: Check licenses
         run: licensed status --data-source=configuration
+      - name: Generate licenses
+        run: yarn download-licenses
+      - name: Check third party licenses are up to date
+        run: |
+          git diff --exit-code 'third_party_licenses.txt' || (
+            echo "Error: third party licenses are out of date. Run 'yarn download-licenses' and commit the changes."
+            exit 1
+          )
       - name: Dependabot license check
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/dependency-review-action@v5
