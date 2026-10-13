@@ -3,9 +3,6 @@ node_modules/
 __tests__/runner/*
 
 .yarn/
-.pnp
-.pnp.cjs
-.pnp.loader.mjs
 
 # Ignore ESBuild metafiles
 meta.json
