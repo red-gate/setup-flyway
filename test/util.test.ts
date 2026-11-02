@@ -1,3 +1,4 @@
+import path from "path";
 import { BASE_URL } from "../src/constants.js";
 
 const downloadTool = vi.fn();
@@ -65,13 +66,33 @@ describe("util", () => {
 });
 
 describe("downloadTool", () => {
+  beforeEach(() => {
+    vi.stubEnv("RUNNER_TEMP", "/runner/temp");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
   it("downloads the tool and returns the URL and path", async () => {
     downloadTool.mockResolvedValue("/tmp/flyway-archive");
 
     const result = await util.downloadTool("10.11.0", "linux", "x64");
     expect(result.downloadUrl).toBe(`${BASE_URL}/10.11.0/flyway-commandline-10.11.0-linux-x64.tar.gz`);
     expect(result.pathToArchive).toBe("/tmp/flyway-archive");
-    expect(downloadTool).toHaveBeenCalledWith(result.downloadUrl);
+    expect(downloadTool).toHaveBeenCalledWith(result.downloadUrl, expect.any(String));
+  });
+
+  test.each([
+    ["windows", "x64", /^[0-9a-f-]{36}\.zip$/],
+    ["linux", "x64", /^[0-9a-f-]{36}\.tar\.gz$/],
+    ["macosx", "arm64", /^[0-9a-f-]{36}\.tar\.gz$/],
+  ])("downloads the %s %s archive into RUNNER_TEMP with the archive extension", async (platform, arch, fileName) => {
+    await util.downloadTool("10.11.0", platform, arch);
+
+    const dest = downloadTool.mock.calls[0][1];
+    expect(path.dirname(dest)).toBe("/runner/temp");
+    expect(path.basename(dest)).toMatch(fileName);
   });
 });
 

@@ -37128,10 +37128,11 @@ var EA = "version", DA = "edition", OA = "architecture", kA = "platform", AA = "
 	let t = e?.split(";")[0];
 	return t === "application/xml" || t === "text/plain";
 }, oj = async (e, t, n) => {
-	let r = uj(e, t, n);
+	let r = uj(e, t, n), a = process.env.RUNNER_TEMP;
+	if (!a) throw Error("Expected RUNNER_TEMP to be defined");
 	return {
 		downloadUrl: r,
-		pathToArchive: await Pi(r)
+		pathToArchive: await Pi(r, u.join(a, `${i.randomUUID()}.${sj(t)}`))
 	};
 }, sj = (e) => e === "windows" ? "zip" : "tar.gz", cj = (e, t, n) => e == "latest" ? n : Di.maxSatisfying(t, e), lj = async (e, t) => {
 	switch (t || (t = e.endsWith(".tar.gz") ? "tar.gz" : u.extname(e), t.startsWith(".") && (t = t.substring(1))), t) {
