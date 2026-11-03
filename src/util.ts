@@ -1,3 +1,4 @@
+import * as crypto from "crypto";
 import path from "path";
 import * as semver from "semver";
 import * as tc from "@actions/tool-cache";
@@ -6,7 +7,12 @@ import { Architecture } from "./inputs.js";
 
 const downloadTool = async (version: string, platform: string, architecture: string) => {
   const downloadUrl = getDownloadUrl(version, platform, architecture);
-  const pathToDownload = await tc.downloadTool(downloadUrl);
+  const tempDirectory = process.env.RUNNER_TEMP;
+  if (!tempDirectory) {
+    throw new Error("Expected RUNNER_TEMP to be defined");
+  }
+  const destination = path.join(tempDirectory, `${crypto.randomUUID()}.${getDownloadArchiveExtension(platform)}`);
+  const pathToDownload = await tc.downloadTool(downloadUrl, destination);
   return { downloadUrl, pathToArchive: pathToDownload };
 };
 
