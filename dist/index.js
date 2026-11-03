@@ -1274,52 +1274,55 @@ var ke = class extends URL {
 	};
 	t.exports = r;
 })), Re = /* @__PURE__ */ P(((e, t) => {
-	var n = Le(), { ClientDestroyedError: r, ClientClosedError: i, InvalidArgumentError: a } = L(), { kDestroy: o, kClose: s, kClosed: c, kDestroyed: l, kDispatch: u, kInterceptors: d } = Me(), f = Symbol("onDestroyed"), p = Symbol("onClosed"), m = Symbol("Intercepted Dispatch"), h = Symbol("webSocketOptions");
-	t.exports = class extends n {
+	var n = I("node:buffer"), r = Le(), { ClientDestroyedError: i, ClientClosedError: a, InvalidArgumentError: o } = L(), { kDestroy: s, kClose: c, kClosed: l, kDestroyed: u, kDispatch: d, kInterceptors: f } = Me(), p = Symbol("onDestroyed"), m = Symbol("onClosed"), h = Symbol("Intercepted Dispatch"), g = Symbol("webSocketOptions"), _ = Symbol("eventSourceOptions");
+	t.exports = class extends r {
 		constructor(e) {
-			super(), this[l] = !1, this[f] = null, this[c] = !1, this[p] = [], this[h] = e?.webSocket ?? {};
+			super(), this[u] = !1, this[p] = null, this[l] = !1, this[m] = [], this[g] = e?.webSocket ?? {}, this[_] = e?.eventSource ?? {};
 		}
 		get webSocketOptions() {
 			return {
-				maxFragments: this[h].maxFragments ?? 131072,
-				maxPayloadSize: this[h].maxPayloadSize ?? 134217728
+				maxFragments: this[g].maxFragments ?? 131072,
+				maxPayloadSize: this[g].maxPayloadSize ?? 134217728
 			};
 		}
+		get eventSourceOptions() {
+			return { maxEventSize: this[_].maxEventSize ?? n.kStringMaxLength };
+		}
 		get destroyed() {
-			return this[l];
+			return this[u];
 		}
 		get closed() {
-			return this[c];
+			return this[l];
 		}
 		get interceptors() {
-			return this[d];
+			return this[f];
 		}
 		set interceptors(e) {
 			if (e) {
-				for (let t = e.length - 1; t >= 0; t--) if (typeof this[d][t] != "function") throw new a("interceptor must be an function");
+				for (let t = e.length - 1; t >= 0; t--) if (typeof this[f][t] != "function") throw new o("interceptor must be an function");
 			}
-			this[d] = e;
+			this[f] = e;
 		}
 		close(e) {
 			if (e === void 0) return new Promise((e, t) => {
 				this.close((n, r) => n ? t(n) : e(r));
 			});
-			if (typeof e != "function") throw new a("invalid callback");
+			if (typeof e != "function") throw new o("invalid callback");
+			if (this[u]) {
+				queueMicrotask(() => e(new i(), null));
+				return;
+			}
 			if (this[l]) {
-				queueMicrotask(() => e(new r(), null));
+				this[m] ? this[m].push(e) : queueMicrotask(() => e(null, null));
 				return;
 			}
-			if (this[c]) {
-				this[p] ? this[p].push(e) : queueMicrotask(() => e(null, null));
-				return;
-			}
-			this[c] = !0, this[p].push(e);
+			this[l] = !0, this[m].push(e);
 			let t = () => {
-				let e = this[p];
-				this[p] = null;
+				let e = this[m];
+				this[m] = null;
 				for (let t = 0; t < e.length; t++) e[t](null, null);
 			};
-			this[s]().then(() => this.destroy()).then(() => {
+			this[c]().then(() => this.destroy()).then(() => {
 				queueMicrotask(t);
 			});
 		}
@@ -1327,36 +1330,36 @@ var ke = class extends URL {
 			if (typeof e == "function" && (t = e, e = null), t === void 0) return new Promise((t, n) => {
 				this.destroy(e, (e, r) => e ? /* istanbul ignore next: should never error */ n(e) : t(r));
 			});
-			if (typeof t != "function") throw new a("invalid callback");
-			if (this[l]) {
-				this[f] ? this[f].push(t) : queueMicrotask(() => t(null, null));
+			if (typeof t != "function") throw new o("invalid callback");
+			if (this[u]) {
+				this[p] ? this[p].push(t) : queueMicrotask(() => t(null, null));
 				return;
 			}
-			e ||= new r(), this[l] = !0, this[f] = this[f] || [], this[f].push(t);
+			e ||= new i(), this[u] = !0, this[p] = this[p] || [], this[p].push(t);
 			let n = () => {
-				let e = this[f];
-				this[f] = null;
+				let e = this[p];
+				this[p] = null;
 				for (let t = 0; t < e.length; t++) e[t](null, null);
 			};
-			this[o](e).then(() => {
+			this[s](e).then(() => {
 				queueMicrotask(n);
 			});
 		}
-		[m](e, t) {
-			if (!this[d] || this[d].length === 0) return this[m] = this[u], this[u](e, t);
-			let n = this[u].bind(this);
-			for (let e = this[d].length - 1; e >= 0; e--) n = this[d][e](n);
-			return this[m] = n, n(e, t);
+		[h](e, t) {
+			if (!this[f] || this[f].length === 0) return this[h] = this[d], this[d](e, t);
+			let n = this[d].bind(this);
+			for (let e = this[f].length - 1; e >= 0; e--) n = this[f][e](n);
+			return this[h] = n, n(e, t);
 		}
 		dispatch(e, t) {
-			if (!t || typeof t != "object") throw new a("handler must be an object");
+			if (!t || typeof t != "object") throw new o("handler must be an object");
 			try {
-				if (!e || typeof e != "object") throw new a("opts must be an object.");
-				if (this[l] || this[f]) throw new r();
-				if (this[c]) throw new i();
-				return this[m](e, t);
+				if (!e || typeof e != "object") throw new o("opts must be an object.");
+				if (this[u] || this[p]) throw new i();
+				if (this[l]) throw new a();
+				return this[h](e, t);
 			} catch (e) {
-				if (typeof t.onError != "function") throw new a("invalid onError method");
+				if (typeof t.onError != "function") throw new o("invalid onError method");
 				return t.onError(e), !1;
 			}
 		}
@@ -3423,7 +3426,6 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 	}
 	async function Ie(e, t) {
 		e[N] = t, Se || (Se = await Ce, Ce = null), t[D] = !1, t[T] = !1, t[v] = !1, t[x] = !1, t[_e] = 0, t[ve] = null, t[ye] = !1, t[b] = new Ne(e, t, Se), he(t, "error", function(e) {
-			n(e.code !== "ERR_TLS_CERT_ALTNAME_INVALID");
 			let t = this[b];
 			if (e.code === "ECONNRESET" && t.statusCode && !t.shouldKeepAlive) {
 				let e = t.finish();
@@ -3712,7 +3714,7 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 				}
 			}
 		}), r.unref(), e[C] = r, t[C] = r, a.addListener(t, "error", function(e) {
-			n(e.code !== "ERR_TLS_CERT_ALTNAME_INVALID"), this[v] = e, this[f][x](e);
+			this[v] = e, this[f][x](e);
 		}), a.addListener(t, "end", function() {
 			a.destroy(this, new c("other side closed", a.getSocketInfo(this)));
 		}), a.addListener(t, "close", function() {
@@ -3747,7 +3749,7 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 		t?.destroyed === !1 && (e[T] === 0 && e[S] === 0 ? (t.unref(), e[C].unref()) : (t.ref(), e[C].ref()));
 	}
 	function ce(e) {
-		n(e.code !== "ERR_TLS_CERT_ALTNAME_INVALID"), this[y][v] = e, this[f][x](e);
+		this[y][v] = e, this[f][x](e);
 	}
 	function le(e, t, n) {
 		if (n === 0) {
@@ -4005,8 +4007,11 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 		return e[j] ?? e[F]?.defaultPipelining ?? 1;
 	}
 	var Ce = class extends c {
-		constructor(e, { interceptors: t, maxHeaderSize: n, headersTimeout: o, socketTimeout: s, requestTimeout: c, connectTimeout: u, bodyTimeout: d, idleTimeout: h, keepAlive: g, keepAliveTimeout: _, maxKeepAliveTimeout: y, keepAliveMaxTimeout: b, keepAliveTimeoutThreshold: x, socketPath: C, pipelining: w, tls: A, strictContentLength: ce, maxCachedSessions: le, maxRedirections: ue, connect: de, maxRequestsPerClient: I, localAddress: _e, maxResponseSize: ve, autoSelectFamily: xe, autoSelectFamilyAttemptTimeout: Se, maxConcurrentStreams: Ce, allowH2: Ee, webSocket: De } = {}) {
-			if (super({ webSocket: De }), g !== void 0) throw new l("unsupported keepAlive, use pipelining=0 instead");
+		constructor(e, { interceptors: t, maxHeaderSize: n, headersTimeout: o, socketTimeout: s, requestTimeout: c, connectTimeout: u, bodyTimeout: d, idleTimeout: h, keepAlive: g, keepAliveTimeout: _, maxKeepAliveTimeout: y, keepAliveMaxTimeout: b, keepAliveTimeoutThreshold: x, socketPath: C, pipelining: w, tls: A, strictContentLength: ce, maxCachedSessions: le, maxRedirections: ue, connect: de, maxRequestsPerClient: I, localAddress: _e, maxResponseSize: ve, autoSelectFamily: xe, autoSelectFamilyAttemptTimeout: Se, maxConcurrentStreams: Ce, allowH2: Ee, webSocket: De, eventSource: ke } = {}) {
+			if (super({
+				webSocket: De,
+				eventSource: ke
+			}), g !== void 0) throw new l("unsupported keepAlive, use pipelining=0 instead");
 			if (s !== void 0) throw new l("unsupported socketTimeout, use headersTimeout & bodyTimeout instead");
 			if (c !== void 0) throw new l("unsupported requestTimeout, use headersTimeout & bodyTimeout instead");
 			if (h !== void 0) throw new l("unsupported idleTimeout, use keepAliveTimeout instead");
@@ -4470,14 +4475,15 @@ Content-Type: ${c.type || "application/octet-stream"}\r\n\r\n`);
 		return t && t.connections === 1 ? new d(e, t) : new u(e, t);
 	}
 	t.exports = class extends l {
-		constructor({ factory: e = x, maxRedirections: t = 0, connect: i, ...a } = {}) {
+		constructor({ factory: e = x, maxRedirections: t = 0, connect: i, tls: a, ...o } = {}) {
 			if (typeof e != "function") throw new n("factory must be a function.");
 			if (i != null && typeof i != "function" && typeof i != "object") throw new n("connect must be a function or an object");
 			if (!Number.isInteger(t) || t < 0) throw new n("maxRedirections must be a positive number");
-			super(a), i && typeof i != "function" && (i = { ...i }), this[c] = a.interceptors?.Agent && Array.isArray(a.interceptors.Agent) ? a.interceptors.Agent : [p({ maxRedirections: t })], this[b] = {
-				...f.deepClone(a),
-				connect: i
-			}, this[b].interceptors = a.interceptors ? { ...a.interceptors } : void 0, this[_] = t, this[y] = e, this[r] = /* @__PURE__ */ new Map(), this[v] = (e, t) => {
+			super(o), i && typeof i != "function" && (i = { ...i }), a && typeof a != "function" && (a = { ...a }), this[c] = o.interceptors?.Agent && Array.isArray(o.interceptors.Agent) ? o.interceptors.Agent : [p({ maxRedirections: t })], this[b] = {
+				...f.deepClone(o),
+				connect: i,
+				tls: a
+			}, this[b].interceptors = o.interceptors ? { ...o.interceptors } : void 0, this[_] = t, this[y] = e, this[r] = /* @__PURE__ */ new Map(), this[v] = (e, t) => {
 				this.emit("drain", e, [this, ...t]);
 			}, this[m] = (e, t) => {
 				this.emit("connect", e, [this, ...t]);
@@ -7400,7 +7406,7 @@ ${e.format(t)}
 			stream: m,
 			source: null,
 			length: null
-		}, e.controller.onAborted = h, e.controller.on("terminated", h), e.controller.resume = async () => {
+		}, e.controller.resume || e.controller.on("terminated", h), e.controller.resume = async () => {
 			for (;;) {
 				let t, n;
 				try {
@@ -7452,41 +7458,42 @@ ${e.format(t)}
 				},
 				onHeaders(e, t, n, r) {
 					if (e < 200) return;
-					let c = "", l = new s();
-					for (let e = 0; e < t.length; e += 2) l.append(Te(t[e]), t[e + 1].toString("latin1"), !0);
-					c = l.get("location", !0), this.body = new ye({ read: n });
-					let d = [], f = c && o.redirect === "follow" && me.has(e);
-					if (o.method !== "HEAD" && o.method !== "CONNECT" && !F.includes(e) && !f) {
-						let e = l.get("content-encoding", !0), t = e ? e.toLowerCase().split(",") : [];
-						if (t.length > 5) return a(/* @__PURE__ */ Error(`too many content-encodings in response: ${t.length}, maximum allowed is 5`)), !0;
+					let a = "", c = new s();
+					for (let e = 0; e < t.length; e += 2) c.append(Te(t[e]), t[e + 1].toString("latin1"), !0);
+					a = c.get("location", !0);
+					let l = [], d = a && o.redirect === "follow" && me.has(e);
+					if (o.method !== "HEAD" && o.method !== "CONNECT" && !F.includes(e) && !d) {
+						let e = c.get("content-encoding", !0), t = e ? e.toLowerCase().split(",") : [];
+						if (t.length > 5) return this.abort(/* @__PURE__ */ Error(`too many content-encodings in response: ${t.length}, maximum allowed is 5`)), !0;
 						for (let e = t.length - 1; e >= 0; --e) {
 							let n = t[e].trim();
-							if (n === "x-gzip" || n === "gzip") d.push(u.createGunzip({
+							if (n === "x-gzip" || n === "gzip") l.push(u.createGunzip({
 								flush: u.constants.Z_SYNC_FLUSH,
 								finishFlush: u.constants.Z_SYNC_FLUSH
 							}));
-							else if (n === "deflate") d.push(ce({
+							else if (n === "deflate") l.push(ce({
 								flush: u.constants.Z_SYNC_FLUSH,
 								finishFlush: u.constants.Z_SYNC_FLUSH
 							}));
-							else if (n === "br") d.push(u.createBrotliDecompress({
+							else if (n === "br") l.push(u.createBrotliDecompress({
 								flush: u.constants.BROTLI_OPERATION_FLUSH,
 								finishFlush: u.constants.BROTLI_OPERATION_FLUSH
 							}));
 							else {
-								d.length = 0;
+								l.length = 0;
 								break;
 							}
 						}
 					}
-					let p = this.onError.bind(this);
+					this.body = new ye({ read: n });
+					let f = this.onError.bind(this);
 					return i({
 						status: e,
 						statusText: r,
-						headersList: l,
-						body: d.length ? be(this.body, ...d, (e) => {
+						headersList: c,
+						body: l.length ? be(this.body, ...l, (e) => {
 							e && this.onError(e);
-						}).on("error", p) : this.body.on("error", p)
+						}).on("error", f) : this.body.on("error", f)
 					}), !0;
 				},
 				onData(t) {
@@ -7495,7 +7502,7 @@ ${e.format(t)}
 					return l.encodedBodySize += n.byteLength, this.body.push(n);
 				},
 				onComplete() {
-					this.abort && e.controller.off("terminated", this.abort), e.controller.onAborted && e.controller.off("terminated", e.controller.onAborted), e.controller.ended = !0, this.body.push(null);
+					this.abort && e.controller.off("terminated", this.abort), e.controller.ended = !0, this.body.push(null);
 				},
 				onError(t) {
 					this.abort && e.controller.off("terminated", this.abort), this.body?.destroy(t), e.controller.terminate(t), a(t);
@@ -9258,8 +9265,16 @@ ${e.format(t)}
 			} else if (this.#i === i.READ_DATA) {
 				if (this.#n < this.#a.payloadLength) return e();
 				let t = this.consume(this.#a.payloadLength);
-				if (y(this.#a.opcode)) this.#r = this.parseControlFrame(t), this.#i = i.INFO;
-				else if (this.#a.compressed) {
+				if (y(this.#a.opcode)) {
+					this.#r = this.parseControlFrame(t), this.#i = i.INFO;
+					let n = this.ws[d].socket;
+					if (this.#r && n.writableNeedDrain) {
+						this.#r = !1, n.once("drain", () => {
+							this.destroyed || (this.#r = !0, this.run(e));
+						});
+						return;
+					}
+				} else if (this.#a.compressed) {
 					this.#s.get("permessage-deflate").decompress(t, this.#a.fin, (t, n) => {
 						if (t) {
 							let e = t instanceof T ? 1009 : 1007;
@@ -9614,26 +9629,30 @@ ${e.format(t)}
 		delay: i
 	};
 })), gn = /* @__PURE__ */ P(((e, t) => {
-	var { Transform: n } = I("node:stream"), { isASCIINumber: r, isValidLastEventId: i } = hn(), a = [
+	var n = I("node:buffer"), { Transform: r } = I("node:stream"), { isASCIINumber: i, isValidLastEventId: a } = hn(), o = [
 		239,
 		187,
 		191
-	], o = 10, s = 13, c = 58, l = 32, u = Buffer.from("data"), d = Buffer.from("event"), f = Buffer.from("id"), p = Buffer.from("retry");
-	function m(e, t) {
+	], s = 10, c = 13, l = 58, u = 32, d = n.kStringMaxLength, f = Buffer.from("data"), p = Buffer.from("event"), m = Buffer.from("id"), h = Buffer.from("retry"), g = 1024, _ = 131072, v = 128;
+	function y(e, t) {
 		if (t >= e.length) return !1;
 		for (let n = t; n < e.length; n++) if (e[n] < 48 || e[n] > 57) return !1;
 		return !0;
 	}
-	function h(e, t) {
+	function b(e, t) {
 		for (let n = t; n < e.length; n++) if (e[n] === 0) return !1;
 		return !0;
 	}
-	function g(e, t, n) {
+	function x(e, t, n) {
 		if (t !== n.length) return !1;
 		for (let r = 0; r < t; r++) if (e[r] !== n[r]) return !1;
 		return !0;
 	}
-	t.exports = { EventSourceStream: class extends n {
+	function S() {
+		let e = /* @__PURE__ */ Error("EventSource message size exceeded");
+		return e.aborted = !1, e;
+	}
+	t.exports = { EventSourceStream: class extends r {
 		state = null;
 		checkBOM = !0;
 		crlfCheck = !1;
@@ -9643,6 +9662,18 @@ ${e.format(t)}
 		pos = 0;
 		lineChunkIndex = 0;
 		linePos = 0;
+		lineLength = 0;
+		eventSize = 0;
+		eventFieldSizes = {
+			data: 0,
+			event: 0,
+			id: 0,
+			retry: 0
+		};
+		dataLineCount = 0;
+		maxEventSize;
+		maxDataLines;
+		maxBufferedChunks;
 		event = {
 			data: void 0,
 			event: void 0,
@@ -9650,49 +9681,73 @@ ${e.format(t)}
 			retry: void 0
 		};
 		constructor(e = {}) {
-			e.readableObjectMode = !0, super(e), this.state = e.eventSourceSettings || {}, e.push && (this.push = e.push);
+			e.readableObjectMode = !0, super(e), this.state = e.eventSourceSettings || {}, this.maxEventSize = e.maxEventSize ?? d;
+			let t = this.maxEventSize > 0 ? Math.min(_, Math.max(g, Math.floor(this.maxEventSize / v))) : 0;
+			this.maxDataLines = t, this.maxBufferedChunks = t, e.push && (this.push = e.push);
 		}
 		_transform(e, t, n) {
 			if (e.length === 0) n();
+			else if (this.maxEventSize > 0 && this.chunks.length >= this.maxBufferedChunks && e[0] !== s && e[0] !== c) n(S());
 			else if (this.chunks.push(e), this.checkBOM && this.handleBOM()) n();
 			else {
 				for (; this.hasCurrentByte();) {
 					let e = this.currentByte();
 					if (this.eventEndCheck) {
 						if (this.crlfCheck) {
-							if (e === o) {
+							if (e === s) {
 								this.crlfCheck = !1, this.consumeCurrentByte();
 								continue;
 							}
 							this.crlfCheck = !1;
 						}
-						if (e === o || e === s) {
-							e === s && (this.crlfCheck = !0), this.consumeCurrentByte(), this.hasPendingEvent() && this.processEvent(this.event), this.clearEvent();
+						if (e === s || e === c) {
+							e === c && (this.crlfCheck = !0), this.consumeCurrentByte(), this.hasPendingEvent() && this.processEvent(this.event), this.clearEvent();
 							continue;
 						}
 						this.eventEndCheck = !1;
-					} else e === o || e === s ? (e === s && (this.crlfCheck = !0), this.parseLine(this.readLine(), this.event), this.consumeCurrentByte(), this.eventEndCheck = !0) : this.advanceCursor();
+					} else if (e === s || e === c) {
+						e === c && (this.crlfCheck = !0);
+						try {
+							this.parseLine(this.readLine(), this.event);
+						} catch (e) {
+							n(e);
+							return;
+						}
+						this.consumeCurrentByte(), this.eventEndCheck = !0;
+					} else {
+						if (this.maxEventSize > 0 && ++this.lineLength > this.maxEventSize + 7) {
+							n(S());
+							return;
+						}
+						this.advanceCursor();
+					}
 				}
 				n();
 			}
 		}
+		_destroy(e, t) {
+			this.chunks.length = 0, this.clearEvent(), super._destroy(e, t);
+		}
 		parseLine(e, t) {
 			if (e.length === 0) return;
-			let n = e.indexOf(c);
+			let n = e.indexOf(l);
 			if (n === 0) return;
 			let r = e.length, i = e.length;
-			if (n !== -1 && (r = n, i = n + 1, e[i] === l && ++i), g(e, r, u)) {
-				let n = e.toString("utf8", i);
-				t.data === void 0 ? t.data = n : t.data += `\n${n}`;
-			} else if (g(e, r, p)) m(e, i) && (t.retry = e.toString("utf8", i));
-			else if (g(e, r, f)) h(e, i) && (t.id = e.toString("utf8", i));
-			else if (g(e, r, d)) {
-				let n = e.toString("utf8", i);
-				n.length > 0 && (t.event = n);
-			}
+			if (n !== -1 && (r = n, i = n + 1, e[i] === u && ++i), x(e, r, f)) {
+				if (this.maxEventSize > 0 && this.dataLineCount >= this.maxDataLines) throw S();
+				let n = e.length - i, r = this.eventFieldSizes.data + (t.data === void 0 ? 0 : 1) + n;
+				this.setEventFieldSize("data", r);
+				let a = e.toString("utf8", i);
+				t.data === void 0 ? t.data = a : t.data += `\n${a}`, this.dataLineCount++;
+			} else x(e, r, h) ? y(e, i) && (this.setEventFieldSize("retry", e.length - i), t.retry = e.toString("utf8", i)) : x(e, r, m) ? b(e, i) && (this.setEventFieldSize("id", e.length - i), t.id = e.toString("utf8", i)) : x(e, r, p) && i < e.length && (this.setEventFieldSize("event", e.length - i), t.event = e.toString("utf8", i));
+		}
+		setEventFieldSize(e, t) {
+			let n = this.eventSize - this.eventFieldSizes[e] + t;
+			if (this.maxEventSize > 0 && n > this.maxEventSize) throw S();
+			this.eventSize = n, this.eventFieldSizes[e] = t;
 		}
 		processEvent(e) {
-			e.retry && r(e.retry) && (this.state.reconnectionTime = parseInt(e.retry, 10)), e.id && i(e.id) && (this.state.lastEventId = e.id), e.data !== void 0 && this.push({
+			e.retry && i(e.retry) && (this.state.reconnectionTime = parseInt(e.retry, 10)), e.id && a(e.id) && (this.state.lastEventId = e.id), e.data !== void 0 && this.push({
 				type: e.event || "message",
 				options: {
 					data: e.data,
@@ -9702,7 +9757,7 @@ ${e.format(t)}
 			});
 		}
 		clearEvent() {
-			this.event.data = void 0, this.event.event = void 0, this.event.id = void 0, this.event.retry = void 0;
+			this.event.data = void 0, this.event.event = void 0, this.event.id = void 0, this.event.retry = void 0, this.eventSize = 0, this.dataLineCount = 0, this.eventFieldSizes.data = 0, this.eventFieldSizes.event = 0, this.eventFieldSizes.id = 0, this.eventFieldSizes.retry = 0;
 		}
 		hasPendingEvent() {
 			return this.event.data !== void 0 || this.event.event !== void 0 || this.event.id !== void 0 || this.event.retry !== void 0;
@@ -9720,10 +9775,13 @@ ${e.format(t)}
 			for (this.pos++; this.chunkIndex < this.chunks.length && this.pos >= this.chunks[this.chunkIndex].length;) this.chunkIndex++, this.pos = 0;
 		}
 		syncLineStartToCursor() {
-			this.lineChunkIndex = this.chunkIndex, this.linePos = this.pos, this.dropConsumedChunks();
+			this.lineChunkIndex = this.chunkIndex, this.linePos = this.pos, this.lineLength = 0, this.dropConsumedChunks();
 		}
 		dropConsumedChunks() {
-			for (; this.lineChunkIndex > 0;) this.chunks.shift(), this.lineChunkIndex--, this.chunkIndex--;
+			if (this.lineChunkIndex > 0) {
+				let e = this.lineChunkIndex;
+				this.chunks.splice(0, e), this.lineChunkIndex = 0, this.chunkIndex -= e;
+			}
 			this.chunkIndex === this.chunks.length && (this.chunks.length = 0, this.chunkIndex = 0, this.pos = 0, this.lineChunkIndex = 0, this.linePos = 0);
 		}
 		readLine() {
@@ -9752,11 +9810,11 @@ ${e.format(t)}
 		}
 		handleBOM() {
 			let e = this.peekBufferedByte(0), t = this.peekBufferedByte(1), n = this.peekBufferedByte(2);
-			return t === void 0 ? (e === a[0] || (this.checkBOM = !1), !0) : n === void 0 ? e === a[0] && t === a[1] || (this.checkBOM = !1, !1) : (e === a[0] && t === a[1] && n === a[2] && this.discardLeadingBytes(3), this.checkBOM = !1, !this.hasCurrentByte());
+			return t === void 0 ? (e === o[0] || (this.checkBOM = !1), !0) : n === void 0 ? e === o[0] && t === o[1] || (this.checkBOM = !1, !1) : (e === o[0] && t === o[1] && n === o[2] && this.discardLeadingBytes(3), this.checkBOM = !1, !this.hasCurrentByte());
 		}
 	} };
 })), _n = /* @__PURE__ */ P(((e, t) => {
-	var { pipeline: n } = I("node:stream"), { fetching: r } = Wt(), { makeRequest: i } = Ut(), { webidl: a } = Je(), { EventSourceStream: o } = gn(), { parseMIMEType: s } = qe(), { createFastMessageEvent: c } = an(), { isNetworkError: l } = Vt(), { delay: u } = hn(), { kEnumerableProperty: d } = R(), { environmentSettingsObject: f } = Ye(), p = !1, m = 3e3, h = 0, g = 1, _ = 2, v = "anonymous", y = "use-credentials", b = class e extends EventTarget {
+	var { pipeline: n } = I("node:stream"), { fetching: r } = Wt(), { makeRequest: i } = Ut(), { webidl: a } = Je(), { EventSourceStream: o } = gn(), { parseMIMEType: s } = qe(), { createFastMessageEvent: c } = an(), { isNetworkError: l } = Vt(), { delay: u } = hn(), { kEnumerableProperty: d } = R(), { environmentSettingsObject: f } = Ye(), { getGlobalDispatcher: p } = Pt(), m = !1, h = 3e3, g = 0, _ = 1, v = 2, y = "anonymous", b = "use-credentials", x = class e extends EventTarget {
 		#e = {
 			open: null,
 			error: null,
@@ -9764,7 +9822,7 @@ ${e.format(t)}
 		};
 		#t = null;
 		#n = !1;
-		#r = h;
+		#r = g;
 		#i = null;
 		#a = null;
 		#o;
@@ -9772,9 +9830,9 @@ ${e.format(t)}
 		constructor(e, t = {}) {
 			super(), a.util.markAsUncloneable(this);
 			let n = "EventSource constructor";
-			a.argumentLengthCheck(arguments, 1, n), p || (p = !0, process.emitWarning("EventSource is experimental, expect them to change at any time.", { code: "UNDICI-ES" })), e = a.converters.USVString(e, n, "url"), t = a.converters.EventSourceInitDict(t, n, "eventSourceInitDict"), this.#o = t.dispatcher, this.#s = {
+			a.argumentLengthCheck(arguments, 1, n), m || (m = !0, process.emitWarning("EventSource is experimental, expect them to change at any time.", { code: "UNDICI-ES" })), e = a.converters.USVString(e, n, "url"), t = a.converters.EventSourceInitDict(t, n, "eventSourceInitDict"), this.#o = t.dispatcher, this.#s = {
 				lastEventId: "",
-				reconnectionTime: m
+				reconnectionTime: h
 			};
 			let r = f, o;
 			try {
@@ -9783,8 +9841,8 @@ ${e.format(t)}
 				throw new DOMException(e, "SyntaxError");
 			}
 			this.#t = o.href;
-			let s = v;
-			t.withCredentials && (s = y, this.#n = !0);
+			let s = y;
+			t.withCredentials && (s = b, this.#n = !0);
 			let c = {
 				redirect: "follow",
 				keepalive: !0,
@@ -9807,8 +9865,8 @@ ${e.format(t)}
 			return this.#n;
 		}
 		#c() {
-			if (this.#r === _) return;
-			this.#r = h;
+			if (this.#r === v) return;
+			this.#r = g;
 			let e = {
 				request: this.#i,
 				dispatcher: this.#o
@@ -9829,9 +9887,10 @@ ${e.format(t)}
 					this.close(), this.dispatchEvent(new Event("error"));
 					return;
 				}
-				this.#r = g, this.dispatchEvent(new Event("open")), this.#s.origin = e.urlList[e.urlList.length - 1].origin;
+				this.#r = _, this.dispatchEvent(new Event("open")), this.#s.origin = e.urlList[e.urlList.length - 1].origin;
 				let a = new o({
 					eventSourceSettings: this.#s,
+					maxEventSize: this.#o.eventSourceOptions?.maxEventSize,
 					push: (e) => {
 						this.dispatchEvent(c(e.type, e.options));
 					}
@@ -9842,10 +9901,10 @@ ${e.format(t)}
 			}, this.#a = r(e);
 		}
 		async #l() {
-			this.#r !== _ && (this.#r = h, this.dispatchEvent(new Event("error")), await u(this.#s.reconnectionTime), this.#r === h && (this.#s.lastEventId.length && this.#i.headersList.set("last-event-id", this.#s.lastEventId, !0), this.#c()));
+			this.#r !== v && (this.#r = g, this.dispatchEvent(new Event("error")), await u(this.#s.reconnectionTime), this.#r === g && (this.#s.lastEventId.length && this.#i.headersList.set("last-event-id", this.#s.lastEventId, !0), this.#c()));
 		}
 		close() {
-			a.brandCheck(this, e), this.#r !== _ && (this.#r = _, this.#a.abort(), this.#i = null);
+			a.brandCheck(this, e), this.#r !== v && (this.#r = v, this.#a.abort(), this.#i = null);
 		}
 		get onopen() {
 			return this.#e.open;
@@ -9865,30 +9924,30 @@ ${e.format(t)}
 		set onerror(e) {
 			this.#e.error && this.removeEventListener("error", this.#e.error), typeof e == "function" ? (this.#e.error = e, this.addEventListener("error", e)) : this.#e.error = null;
 		}
-	}, x = {
+	}, S = {
 		CONNECTING: {
-			__proto__: null,
-			configurable: !1,
-			enumerable: !0,
-			value: h,
-			writable: !1
-		},
-		OPEN: {
 			__proto__: null,
 			configurable: !1,
 			enumerable: !0,
 			value: g,
 			writable: !1
 		},
-		CLOSED: {
+		OPEN: {
 			__proto__: null,
 			configurable: !1,
 			enumerable: !0,
 			value: _,
 			writable: !1
+		},
+		CLOSED: {
+			__proto__: null,
+			configurable: !1,
+			enumerable: !0,
+			value: v,
+			writable: !1
 		}
 	};
-	Object.defineProperties(b, x), Object.defineProperties(b.prototype, x), Object.defineProperties(b.prototype, {
+	Object.defineProperties(x, S), Object.defineProperties(x.prototype, S), Object.defineProperties(x.prototype, {
 		close: d,
 		onerror: d,
 		onmessage: d,
@@ -9902,10 +9961,11 @@ ${e.format(t)}
 		defaultValue: () => !1
 	}, {
 		key: "dispatcher",
-		converter: a.converters.any
+		converter: a.converters.any,
+		defaultValue: () => p()
 	}]), t.exports = {
-		EventSource: b,
-		defaultReconnectionTime: m
+		EventSource: x,
+		defaultReconnectionTime: h
 	};
 })), vn = /* @__PURE__ */ P(((e, t) => {
 	var n = at(), r = Le(), i = lt(), a = ut(), o = dt(), s = ft(), c = pt(), l = ht(), u = L(), d = R(), { InvalidArgumentError: f } = u, p = wt(), m = Be(), h = kt(), g = Nt(), _ = At(), v = Tt(), y = mt(), { getGlobalDispatcher: b, setGlobalDispatcher: x } = Pt(), S = Ft(), C = rt(), w = it();
