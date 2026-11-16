@@ -40410,7 +40410,7 @@ var EP = class {
 	let t = e?.split(";")[0];
 	return t === "application/xml" || t === "text/plain";
 }, MP = async (e, t, n) => {
-	let r = IP(e, t, n), a = process.env.RUNNER_TEMP;
+	let r = LP(e, t, n), a = process.env.RUNNER_TEMP;
 	if (!a) throw Error("Expected RUNNER_TEMP to be defined");
 	return {
 		downloadUrl: r,
@@ -40423,10 +40423,19 @@ var EP = class {
 		case "zip": return await Ri(e);
 		default: return await Ii(e);
 	}
-}, IP = (e, t, n) => {
+}, IP = async (e, t = process.platform) => {
+	if (t === "win32") return;
+	let n = u.join(e, "flyway");
+	try {
+		let { mode: e } = await j.stat(n);
+		(e & 73) != 73 && await j.chmod(n, e & 4095 | 73);
+	} catch (e) {
+		Mr(`Failed to make ${n} executable: ${e instanceof Error ? e.message : String(e)}`);
+	}
+}, LP = (e, t, n) => {
 	let r = NP(t), i = TM;
 	return n == jM.JAVA ? `${i}/${e}/flyway-commandline-${e}.${r}` : `${i}/${e}/flyway-commandline-${e}-${t}-${n}.${r}`;
-}, LP = async (e) => {
+}, RP = async (e) => {
 	let t = "", n = await Sr("flyway", ["--version"], {
 		silent: !0,
 		ignoreReturnCode: !0,
@@ -40441,7 +40450,7 @@ var EP = class {
 	}
 	let i = r ? r[1].toLowerCase() : "community";
 	if (i !== e) throw Error(`Edition mismatch: expected '${e}' but Flyway reported '${i}'`);
-}, RP = async (e, t, n, r) => {
+}, zP = async (e, t, n, r) => {
 	Tr(t);
 	let i = [
 		"auth",
@@ -40457,7 +40466,7 @@ var EP = class {
 		if (e >= r) throw t;
 		Nr(`Auth attempt ${e} failed: ${n}. Retrying...`);
 	}
-}, zP = async (e, t) => {
+}, BP = async (e, t) => {
 	if (process.env.RUNNER_ENVIRONMENT === "github-hosted") return;
 	let n = Ui(SM, t).filter((t) => Wa.lt(t, e));
 	if (n.length !== 0) {
@@ -40474,7 +40483,7 @@ var EP = class {
 			}
 		}
 	}
-}, BP = async (e, t, n) => {
+}, VP = async (e, t, n) => {
 	let r = Hi(SM, e, n);
 	if (r || await kM(e, t, n) && (r = Hi(SM, e, n)), !r) {
 		let i = await MP(e, t, n), a = i.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz", o = await FP(i.pathToArchive, a);
@@ -40493,9 +40502,9 @@ process.argv[1].endsWith("index.js") && await (async () => {
 			kr(`Version specification ${t} is not available`);
 			return;
 		}
-		Nr(`Resolved ${t} to version: ${a}`), e.cleanOldCachedVersions && await zP(a, n);
-		let o = await BP(a, r, n);
-		Or(bM, a), Or(xM, o), wr(`FLYWAY_HOME_${a}`, o), Er(o), Fr(), e.email && e.token && (Pr("Authenticating Flyway"), await RP(e.email, e.token, e.agreeToEula, e.maxAuthAttempts), Fr()), Pr("Verifying Flyway edition"), await LP(e.edition), Fr();
+		Nr(`Resolved ${t} to version: ${a}`), e.cleanOldCachedVersions && await BP(a, n);
+		let o = await VP(a, r, n);
+		await IP(o), Or(bM, a), Or(xM, o), wr(`FLYWAY_HOME_${a}`, o), Er(o), Fr(), e.email && e.token && (Pr("Authenticating Flyway"), await zP(e.email, e.token, e.agreeToEula, e.maxAuthAttempts), Fr()), Pr("Verifying Flyway edition"), await RP(e.edition), Fr();
 	} catch (e) {
 		kr(e instanceof Error ? e.message : String(e));
 	}
