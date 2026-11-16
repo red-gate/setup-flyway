@@ -1,3 +1,5 @@
+import * as fs from "fs/promises";
+import os from "os";
 import path from "path";
 import { BASE_URL } from "../src/constants.js";
 
@@ -5,12 +7,17 @@ const downloadTool = vi.fn();
 const extractTar = vi.fn();
 const extractZip = vi.fn();
 const extract7z = vi.fn();
+const warning = vi.fn();
 
 vi.doMock("@actions/tool-cache", () => ({
   downloadTool,
   extractTar,
   extractZip,
   extract7z,
+}));
+
+vi.doMock("@actions/core", () => ({
+  warning,
 }));
 
 const util = await import("../src/util.js");
@@ -151,5 +158,58 @@ describe("extractTool", () => {
     const result = await util.extractTool("/tmp/archive.exe");
     expect(result).toBe("/extracted/path");
     expect(extract7z).toHaveBeenCalledWith("/tmp/archive.exe");
+  });
+});
+
+describe("ensureFlywayIsExecutable", () => {
+  let toolPath: string;
+  let flywayPath: string;
+
+  const writeFlyway = async (mode: number) => {
+    await fs.writeFile(flywayPath, "#!/bin/sh\n");
+    await fs.chmod(flywayPath, mode);
+  };
+
+  const getMode = async () => (await fs.stat(flywayPath)).mode & 0o7777;
+
+  beforeEach(async () => {
+    toolPath = await fs.mkdtemp(path.join(os.tmpdir(), "setup-flyway-"));
+    flywayPath = path.join(toolPath, "flyway");
+  });
+
+  afterEach(async () => {
+    await fs.rm(toolPath, { recursive: true, force: true });
+  });
+
+  it("adds the missing execute bits", async () => {
+    await writeFlyway(0o744);
+
+    await util.ensureFlywayIsExecutable(toolPath, "linux");
+
+    expect(await getMode()).toBe(0o755);
+  });
+
+  it("leaves an already executable file alone", async () => {
+    await writeFlyway(0o755);
+    const { ctimeMs } = await fs.stat(flywayPath);
+
+    await util.ensureFlywayIsExecutable(toolPath, "linux");
+
+    expect(await getMode()).toBe(0o755);
+    expect((await fs.stat(flywayPath)).ctimeMs).toBe(ctimeMs);
+  });
+
+  it("skips Windows", async () => {
+    await writeFlyway(0o744);
+
+    await util.ensureFlywayIsExecutable(toolPath, "win32");
+
+    expect(await getMode()).toBe(0o744);
+  });
+
+  it("warns and carries on when the file cannot be made executable", async () => {
+    await util.ensureFlywayIsExecutable(toolPath, "linux");
+
+    expect(warning).toHaveBeenCalledWith(expect.stringContaining(`Failed to make ${flywayPath} executable: ENOENT`));
   });
 });

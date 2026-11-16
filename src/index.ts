@@ -8,7 +8,7 @@ import { getToolCacheVersionPath, tryRestoreCache, trySaveCache } from "./cache.
 import * as constants from "./constants.js";
 import { getInputs } from "./inputs.js";
 import * as metadata from "./metadata.js";
-import { downloadTool, extractTool, getSemanticVersion } from "./util.js";
+import { downloadTool, ensureFlywayIsExecutable, extractTool, getSemanticVersion } from "./util.js";
 
 const verifyEdition = async (expectedEdition: string): Promise<void> => {
   let versionOutput = "";
@@ -126,6 +126,7 @@ const run = async () => {
       await cleanOldCachedVersions(version, architecture);
     }
     const cachedPath = await installOrGetCached(version, platform, architecture);
+    await ensureFlywayIsExecutable(cachedPath);
 
     core.setOutput(constants.OUTPUT_VERSION, version);
     core.setOutput(constants.OUTPUT_PATH, cachedPath);
