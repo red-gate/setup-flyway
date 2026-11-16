@@ -1,6 +1,8 @@
 import * as crypto from "crypto";
+import * as fs from "fs/promises";
 import path from "path";
 import * as semver from "semver";
+import * as core from "@actions/core";
 import * as tc from "@actions/tool-cache";
 import * as constants from "./constants.js";
 import { Architecture } from "./inputs.js";
@@ -42,6 +44,22 @@ const extractTool = async (archivePath: string, extension?: string) => {
   }
 };
 
+const ensureFlywayIsExecutable = async (toolPath: string, platform: NodeJS.Platform = process.platform) => {
+  if (platform === "win32") {
+    return;
+  }
+  const flywayPath = path.join(toolPath, "flyway");
+  try {
+    const { mode } = await fs.stat(flywayPath);
+    if ((mode & 0o111) !== 0o111) {
+      await fs.chmod(flywayPath, (mode & 0o7777) | 0o111);
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    core.warning(`Failed to make ${flywayPath} executable: ${message}`);
+  }
+};
+
 const getDownloadUrl = (version: string, platform: string, arch: string) => {
   const extension = getDownloadArchiveExtension(platform);
   const baseUrl = constants.BASE_URL;
@@ -50,4 +68,4 @@ const getDownloadUrl = (version: string, platform: string, arch: string) => {
     : `${baseUrl}/${version}/flyway-commandline-${version}-${platform}-${arch}.${extension}`;
 };
 
-export { downloadTool, getSemanticVersion, extractTool, getDownloadUrl };
+export { downloadTool, getSemanticVersion, extractTool, getDownloadUrl, ensureFlywayIsExecutable };
