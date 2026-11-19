@@ -38894,7 +38894,7 @@ function eN(e) {
 		for (; r < n && JM(e[r]);) r++;
 		if (r >= n) break;
 		if (e[r] === "=") {
-			r = i + 1;
+			r++;
 			continue;
 		}
 		let a = e.slice(i, r), o = r;
@@ -40008,7 +40008,7 @@ function $N(e) {
 }
 var eP = class {
 	constructor(e, t) {
-		this.options = e, this.currentNode = null, this.tagsNodeStack = [], this.parseXml = aP, this.parseTextData = tP, this.resolveNameSpace = nP, this.buildAttributesMap = iP, this.isItStopNode = uP, this.replaceEntitiesValue = cP, this.readStopNodeData = hP, this.saveTextToParentTag = lP, this.addChild = sP, this.ignoreAttributesFn = jN(this.options.ignoreAttributes), this.entityExpansionCount = 0, this.currentExpandedLength = 0, this.doctypefound = !1;
+		this.options = e, this.currentNode = null, this.tagsNodeStack = [], this.parseXml = oP, this.parseTextData = tP, this.resolveNameSpace = nP, this.buildAttributesMap = aP, this.isItStopNode = dP, this.replaceEntitiesValue = lP, this.readStopNodeData = gP, this.saveTextToParentTag = uP, this.addChild = cP, this.ignoreAttributesFn = jN(this.options.ignoreAttributes), this.entityExpansionCount = 0, this.currentExpandedLength = 0, this.doctypefound = !1;
 		let n = { ...Rh };
 		this.options.entityDecoder ? this.entityDecoder = this.options.entityDecoder : (typeof this.options.htmlEntities == "object" ? n = this.options.htmlEntities : this.options.htmlEntities === !0 && (n = {
 			...zh,
@@ -40041,7 +40041,7 @@ function tP(e, t, n, r, i, a, o) {
 	if (e !== void 0 && (s.trimValues && !r && (e = e.trim()), e.length > 0)) {
 		o || (e = this.replaceEntitiesValue(e, t, n));
 		let r = s.jPath ? n.toString() : n, c = s.tagValueProcessor(t, e, r, i, a);
-		return c == null ? e : typeof c != typeof e || c !== e ? c : s.trimValues || e.trim() === e ? gP(e, s.parseTagValue, s.numberParseOptions) : e;
+		return c == null ? e : typeof c != typeof e || c !== e ? c : s.trimValues || e.trim() === e ? _P(e, s.parseTagValue, s.numberParseOptions) : e;
 	}
 }
 function nP(e) {
@@ -40052,13 +40052,16 @@ function nP(e) {
 	}
 	return e;
 }
-var rP = /* @__PURE__ */ RegExp("([^\\s=]+)\\s*(=\\s*(['\"])([\\s\\S]*?)\\3)?", "gm");
-function iP(e, t, n, r = !1) {
+var rP = /([^\s=]+)\s*(=\s*(?:"([^"]*)"|'([^']*)'))?/gm;
+function iP(e) {
+	return e[3] === void 0 ? e[4] : e[3];
+}
+function aP(e, t, n, r = !1) {
 	let i = this.options;
 	if (r === !0 || i.ignoreAttributes !== !0 && typeof e == "string") {
 		let r = VM(e, rP), a = r.length, o = {}, s = Array(a), c = !1, l = {};
 		for (let e = 0; e < a; e++) {
-			let t = this.resolveNameSpace(r[e][1]), a = r[e][4];
+			let t = this.resolveNameSpace(r[e][1]), a = iP(r[e]);
 			if (t.length && a !== void 0) {
 				let r = a;
 				i.trimValues && (r = r.trim()), r = this.replaceEntitiesValue(r, n, this.readonlyMatcher), s[e] = r, l[t] = r, c = !0;
@@ -40071,9 +40074,9 @@ function iP(e, t, n, r = !1) {
 			if (this.ignoreAttributesFn(t, u)) continue;
 			let n = i.attributeNamePrefix + t;
 			if (t.length) {
-				if (i.transformAttributeName && (n = i.transformAttributeName(n)), n = vP(n, i), r[e][4] !== void 0) {
+				if (i.transformAttributeName && (n = i.transformAttributeName(n)), n = yP(n, i), iP(r[e]) !== void 0) {
 					let r = s[e], a = i.attributeValueProcessor(t, r, u);
-					a == null ? o[n] = r : typeof a != typeof r || a !== r ? o[n] = a : o[n] = gP(r, i.parseAttributeValue, i.numberParseOptions), d = !0;
+					a == null ? o[n] = r : typeof a != typeof r || a !== r ? o[n] = a : o[n] = _P(r, i.parseAttributeValue, i.numberParseOptions), d = !0;
 				} else i.allowBooleanAttributes && (o[n] = !0, d = !0);
 			}
 		}
@@ -40085,7 +40088,7 @@ function iP(e, t, n, r = !1) {
 		return o;
 	}
 }
-var aP = function(e) {
+var oP = function(e) {
 	let t = this.options, n = t.captureMetaData ? [] : void 0;
 	e = e.replace(/\r\n?/g, t.captureMetaData ? (e, t) => (e.length === 2 && n.push(t - n.length), "\n") : "\n");
 	let r = new hN("!xml"), i = r, a = "";
@@ -40094,17 +40097,17 @@ var aP = function(e) {
 	for (let c = 0; c < s; c++) if (e[c] === "<") {
 		let l = e.charCodeAt(c + 1);
 		if (l === 47) {
-			let o = fP(e, ">", c, "Closing Tag is not closed."), s = e.substring(c + 2, o).trim();
+			let o = pP(e, ">", c, "Closing Tag is not closed."), s = e.substring(c + 2, o).trim();
 			if (t.removeNSPrefix) {
 				let e = s.indexOf(":");
 				e !== -1 && (s = s.substr(e + 1));
 			}
-			s = _P(t.transformTagName, s, "", t).tagName, i && (a = this.saveTextToParentTag(a, i, this.readonlyMatcher));
+			s = vP(t.transformTagName, s, "", t).tagName, i && (a = this.saveTextToParentTag(a, i, this.readonlyMatcher));
 			let l = this.matcher.getCurrentTag();
 			if (s && t.unpairedTagsSet.has(s)) throw Error(`Unpaired tag can not be used as closing tag: </${s}>`);
-			l && t.unpairedTagsSet.has(l) && (this.matcher.pop(), this.tagsNodeStack.pop()), this.matcher.pop(), this.isCurrentNodeStopNode = !1, i = this.tagsNodeStack.pop() || r, t.captureMetaData && i && i.addEndIndex(oP(o + 1, n)), a = "", c = o;
+			l && t.unpairedTagsSet.has(l) && (this.matcher.pop(), this.tagsNodeStack.pop()), this.matcher.pop(), this.isCurrentNodeStopNode = !1, i = this.tagsNodeStack.pop() || r, t.captureMetaData && i && i.addEndIndex(sP(o + 1, n)), a = "", c = o;
 		} else if (l === 63) {
-			let r = mP(e, c, !1, "?>");
+			let r = hP(e, c, !1, "?>");
 			if (!r) throw Error("Pi Tag is not closed.");
 			a = this.saveTextToParentTag(a, i, this.readonlyMatcher);
 			let s = this.buildAttributesMap(r.tagExp, this.matcher, r.tagName, !0);
@@ -40115,12 +40118,12 @@ var aP = function(e) {
 			if (!(t.ignoreDeclaration && r.tagName === "?xml" || t.ignorePiTags)) {
 				let e = new hN(r.tagName);
 				e.add(t.textNodeName, ""), r.tagName !== r.tagExp && r.attrExpPresent && t.ignoreAttributes !== !0 && (e[":@"] = s);
-				let a = t.captureMetaData ? oP(c, n) : c;
-				this.addChild(i, e, this.readonlyMatcher, a), t.captureMetaData && i.addEndIndex(oP(r.closeIndex + 2, n));
+				let a = t.captureMetaData ? sP(c, n) : c;
+				this.addChild(i, e, this.readonlyMatcher, a), t.captureMetaData && i.addEndIndex(sP(r.closeIndex + 2, n));
 			}
 			c = r.closeIndex + 1;
 		} else if (l === 33 && e.charCodeAt(c + 2) === 45 && e.charCodeAt(c + 3) === 45) {
-			let n = fP(e, "-->", c + 4, "Comment is not closed.");
+			let n = pP(e, "-->", c + 4, "Comment is not closed.");
 			if (t.commentPropName) {
 				let r = e.substring(c + 4, n - 2);
 				a = this.saveTextToParentTag(a, i, this.readonlyMatcher), i.add(t.commentPropName, [{ [t.textNodeName]: r }]);
@@ -40132,18 +40135,18 @@ var aP = function(e) {
 			let t = o.readDocType(e, c);
 			this.entityDecoder.addInputEntities(t.entities), c = t.i;
 		} else if (l === 33 && e.charCodeAt(c + 2) === 91) {
-			let n = fP(e, "]]>", c, "CDATA is not closed.") - 2, r = e.substring(c + 9, n);
+			let n = pP(e, "]]>", c, "CDATA is not closed.") - 2, r = e.substring(c + 9, n);
 			a = this.saveTextToParentTag(a, i, this.readonlyMatcher);
 			let o = this.parseTextData(r, i.tagname, this.readonlyMatcher, !0, !1, !0, !0);
 			o ??= "", t.cdataPropName ? i.add(t.cdataPropName, [{ [t.textNodeName]: r }]) : i.add(t.textNodeName, o), c = n + 2;
 		} else {
-			let o = mP(e, c, t.removeNSPrefix);
+			let o = hP(e, c, t.removeNSPrefix);
 			if (!o) {
 				let t = e.substring(Math.max(0, c - 50), Math.min(s, c + 50));
 				throw Error(`readTagExp returned undefined at position ${c}. Context: "${t}"`);
 			}
 			let l = o.tagName, u = o.rawTagName, d = o.tagExp, f = o.attrExpPresent, p = o.closeIndex;
-			if ({tagName: l, tagExp: d} = _P(t.transformTagName, l, d, t), t.strictReservedNames && (l === t.commentPropName || l === t.cdataPropName || l === t.textNodeName || l === t.attributesGroupName)) throw Error(`Invalid tag name: ${l}`);
+			if ({tagName: l, tagExp: d} = vP(t.transformTagName, l, d, t), t.strictReservedNames && (l === t.commentPropName || l === t.cdataPropName || l === t.textNodeName || l === t.attributesGroupName)) throw Error(`Invalid tag name: ${l}`);
 			i && a && i.tagname !== "!xml" && (a = this.saveTextToParentTag(a, i, this.readonlyMatcher, !1));
 			let m = i;
 			m && t.unpairedTagsSet.has(m.tagname) && (i = this.tagsNodeStack.pop(), this.matcher.pop());
@@ -40151,7 +40154,7 @@ var aP = function(e) {
 			d.length > 0 && d.lastIndexOf("/") === d.length - 1 && (h = !0, l[l.length - 1] === "/" ? (l = l.substr(0, l.length - 1), d = l) : d = d.substr(0, d.length - 1), f = l !== d);
 			let g = null, _;
 			_ = $N(u), l !== r.tagname && this.matcher.push(l, {}, _), l !== d && f && (g = this.buildAttributesMap(d, this.matcher, l), g && QN(g, t)), l !== r.tagname && (this.isCurrentNodeStopNode = this.isItStopNode());
-			let v = t.captureMetaData ? oP(c, n) : c;
+			let v = t.captureMetaData ? sP(c, n) : c;
 			if (this.isCurrentNodeStopNode) {
 				let r = "";
 				if (h) c = o.closeIndex;
@@ -40162,15 +40165,15 @@ var aP = function(e) {
 					c = t.i, r = t.tagContent;
 				}
 				let a = new hN(l);
-				g && (a[":@"] = g), a.add(t.textNodeName, r), this.matcher.pop(), this.isCurrentNodeStopNode = !1, this.addChild(i, a, this.readonlyMatcher, v), t.captureMetaData && i.addEndIndex(oP(c + 1, n));
+				g && (a[":@"] = g), a.add(t.textNodeName, r), this.matcher.pop(), this.isCurrentNodeStopNode = !1, this.addChild(i, a, this.readonlyMatcher, v), t.captureMetaData && i.addEndIndex(sP(c + 1, n));
 			} else {
 				if (h) {
-					({tagName: l, tagExp: d} = _P(t.transformTagName, l, d, t));
+					({tagName: l, tagExp: d} = vP(t.transformTagName, l, d, t));
 					let e = new hN(l);
-					g && (e[":@"] = g), this.addChild(i, e, this.readonlyMatcher, v), t.captureMetaData && i.addEndIndex(oP(p + 1, n)), this.matcher.pop(), this.isCurrentNodeStopNode = !1;
+					g && (e[":@"] = g), this.addChild(i, e, this.readonlyMatcher, v), t.captureMetaData && i.addEndIndex(sP(p + 1, n)), this.matcher.pop(), this.isCurrentNodeStopNode = !1;
 				} else if (t.unpairedTagsSet.has(l)) {
 					let e = new hN(l);
-					g && (e[":@"] = g), this.addChild(i, e, this.readonlyMatcher, v), t.captureMetaData && i.addEndIndex(oP(o.closeIndex + 1, n)), this.matcher.pop(), this.isCurrentNodeStopNode = !1, c = o.closeIndex;
+					g && (e[":@"] = g), this.addChild(i, e, this.readonlyMatcher, v), t.captureMetaData && i.addEndIndex(sP(o.closeIndex + 1, n)), this.matcher.pop(), this.isCurrentNodeStopNode = !1, c = o.closeIndex;
 					continue;
 				} else {
 					let e = new hN(l);
@@ -40183,7 +40186,7 @@ var aP = function(e) {
 	} else a += e[c];
 	return r.child;
 };
-function oP(e, t) {
+function sP(e, t) {
 	let n = 0, r = t.length;
 	for (; n < r;) {
 		let i = Math.floor((n + r) / 2);
@@ -40191,12 +40194,12 @@ function oP(e, t) {
 	}
 	return e + n;
 }
-function sP(e, t, n, r) {
+function cP(e, t, n, r) {
 	this.options.captureMetaData || (r = void 0);
 	let i = this.options.jPath ? n.toString() : n, a = this.options.updateTag(t.tagname, i, t[":@"]);
 	a === !1 || (typeof a == "string" && (t.tagname = a), e.addChild(t, r));
 }
-function cP(e, t, n) {
+function lP(e, t, n) {
 	let r = this.options.processEntities;
 	if (!r || !r.enabled) return e;
 	if (r.allowedTags) {
@@ -40209,43 +40212,43 @@ function cP(e, t, n) {
 	}
 	return this.entityDecoder.decode(e);
 }
-function lP(e, t, n, r) {
+function uP(e, t, n, r) {
 	return e &&= (r === void 0 && (r = t.child.length === 0), e = this.parseTextData(e, t.tagname, n, !1, t[":@"] ? Object.keys(t[":@"]).length !== 0 : !1, r), e !== void 0 && e !== "" && t.add(this.options.textNodeName, e), ""), e;
 }
-function uP() {
+function dP() {
 	return this.stopNodeExpressionsSet.size !== 0 && this.matcher.matchesAny(this.stopNodeExpressionsSet);
 }
-function dP(e, t, n = ">") {
-	let r = 0, i = e.length, a = n.charCodeAt(0), o = n.length > 1 ? n.charCodeAt(1) : -1, s = "", c = t;
-	for (let n = t; n < i; n++) {
+function fP(e, t, n = ">") {
+	let r = e.length, i = n.charCodeAt(0), a = n.length > 1 ? n.charCodeAt(1) : -1, o = "", s = t;
+	for (let n = t; n < r; n++) {
 		let t = e.charCodeAt(n);
-		if (r) t === r && (r = 0);
-		else if (t === 34 || t === 39) r = t;
-		else if (t === a) {
-			if (o !== -1) {
-				if (e.charCodeAt(n + 1) === o) return s += e.substring(c, n), {
-					data: s,
+		if (t === 34 || t === 39) {
+			if (n = e.indexOf(e[n], n + 1), n === -1) return;
+		} else if (t === i) {
+			if (a !== -1) {
+				if (e.charCodeAt(n + 1) === a) return o += e.substring(s, n), {
+					data: o,
 					index: n
 				};
-			} else return s += e.substring(c, n), {
-				data: s,
+			} else return o += e.substring(s, n), {
+				data: o,
 				index: n
 			};
-		} else t === 9 && !r && (s += e.substring(c, n) + " ", c = n + 1);
+		} else t === 9 && (o += e.substring(s, n) + " ", s = n + 1);
 	}
-}
-function fP(e, t, n, r) {
-	let i = e.indexOf(t, n);
-	if (i === -1) throw Error(r);
-	return i + t.length - 1;
 }
 function pP(e, t, n, r) {
 	let i = e.indexOf(t, n);
 	if (i === -1) throw Error(r);
+	return i + t.length - 1;
+}
+function mP(e, t, n, r) {
+	let i = e.indexOf(t, n);
+	if (i === -1) throw Error(r);
 	return i;
 }
-function mP(e, t, n, r = ">") {
-	let i = dP(e, t + 1, r);
+function hP(e, t, n, r = ">") {
+	let i = fP(e, t + 1, r);
 	if (!i) return;
 	let a = i.data, o = i.index, s = a.search(/\s/), c = a, l = !0;
 	s !== -1 && (c = a.substring(0, s), a = a.substring(s + 1).trimStart());
@@ -40262,22 +40265,22 @@ function mP(e, t, n, r = ">") {
 		rawTagName: u
 	};
 }
-function hP(e, t, n) {
+function gP(e, t, n) {
 	let r = n, i = 1, a = !1, o = -1, s = e.length;
 	for (; n < s; n++) if (e[n] === "<") {
 		let s = e.charCodeAt(n + 1);
 		if (s === 47) {
-			let a = pP(e, ">", n, `${t} is not closed`);
+			let a = mP(e, ">", n, `${t} is not closed`);
 			if (e.substring(n + 2, a).trim() === t && (i--, i === 0)) return {
 				tagContent: e.substring(r, n),
 				i: a
 			};
 			n = a;
-		} else if (s === 63) n = fP(e, "?>", n + 1, "StopNode is not closed.");
-		else if (s === 33 && e.charCodeAt(n + 2) === 45 && e.charCodeAt(n + 3) === 45) n = fP(e, "-->", n + 3, "StopNode is not closed.");
-		else if (s === 33 && e.charCodeAt(n + 2) === 91) n = fP(e, "]]>", n, "StopNode is not closed.") - 2;
+		} else if (s === 63) n = pP(e, "?>", n + 1, "StopNode is not closed.");
+		else if (s === 33 && e.charCodeAt(n + 2) === 45 && e.charCodeAt(n + 3) === 45) n = pP(e, "-->", n + 3, "StopNode is not closed.");
+		else if (s === 33 && e.charCodeAt(n + 2) === 91) n = pP(e, "]]>", n, "StopNode is not closed.") - 2;
 		else {
-			let r = a ? void 0 : mP(e, n, !1);
+			let r = a ? void 0 : hP(e, n, !1);
 			if (r) r.tagName === t && r.tagExp[r.tagExp.length - 1] !== "/" && i++, n = r.closeIndex;
 			else {
 				if (a = !0, o < n && (o = e.indexOf(">", n), o === -1)) return;
@@ -40290,29 +40293,29 @@ function hP(e, t, n) {
 		}
 	}
 }
-function gP(e, t, n) {
+function _P(e, t, n) {
 	if (t && typeof e == "string") {
 		let t = e.trim();
 		return t === "true" || t !== "false" && TN(e, n);
 	}
 	return UM(e) ? e : "";
 }
-function _P(e, t, n, r) {
+function vP(e, t, n, r) {
 	if (e) {
 		let r = e(t);
 		n === t && (n = r), t = r;
 	}
-	return t = vP(t, r), {
+	return t = yP(t, r), {
 		tagName: t,
 		tagExp: n
 	};
 }
-function vP(e, t) {
+function yP(e, t) {
 	if (GM.includes(e)) throw Error(`[SECURITY] Invalid name: "${e}" is a reserved JavaScript keyword that could cause prototype pollution`);
 	return WM.includes(e) ? t.onDangerousProperty(e) : e;
 }
-var yP = hN.getMetaDataSymbol();
-function bP(e, t) {
+var bP = hN.getMetaDataSymbol();
+function xP(e, t) {
 	if (!e || typeof e != "object") return {};
 	if (!t) return e;
 	let n = {};
@@ -40322,22 +40325,22 @@ function bP(e, t) {
 	} else n[r] = e[r];
 	return n;
 }
-function xP(e, t, n, r) {
-	return SP(e, t, n, r);
-}
 function SP(e, t, n, r) {
+	return CP(e, t, n, r);
+}
+function CP(e, t, n, r) {
 	let i, a = {};
 	for (let o = 0; o < e.length; o++) {
-		let s = e[o], c = CP(s);
+		let s = e[o], c = wP(s);
 		if (c !== void 0 && c !== t.textNodeName) {
-			let e = bP(s[":@"] || {}, t.attributeNamePrefix);
+			let e = xP(s[":@"] || {}, t.attributeNamePrefix);
 			n.push(c, e);
 		}
 		if (c === t.textNodeName) i === void 0 ? i = s[c] : i += "" + s[c];
 		else if (c === void 0) continue;
 		else if (s[c]) {
-			let e = SP(s[c], t, n, r), i = TP(e, t);
-			if (Object.keys(e).length === 0 && t.alwaysCreateTextNode && (e[t.textNodeName] = ""), s[":@"] ? wP(e, s[":@"], r, t) : Object.keys(e).length === 1 && e[t.textNodeName] !== void 0 && !t.alwaysCreateTextNode ? e = e[t.textNodeName] : Object.keys(e).length === 0 && (t.alwaysCreateTextNode ? e[t.textNodeName] = "" : e = ""), s[yP] !== void 0 && typeof e == "object" && e && (e[yP] = s[yP]), a[c] !== void 0 && Object.prototype.hasOwnProperty.call(a, c)) Array.isArray(a[c]) || (a[c] = [a[c]]), a[c].push(e);
+			let e = CP(s[c], t, n, r), i = EP(e, t);
+			if (Object.keys(e).length === 0 && t.alwaysCreateTextNode && (e[t.textNodeName] = ""), s[":@"] ? TP(e, s[":@"], r, t) : Object.keys(e).length === 1 && e[t.textNodeName] !== void 0 && !t.alwaysCreateTextNode ? e = e[t.textNodeName] : Object.keys(e).length === 0 && (t.alwaysCreateTextNode ? e[t.textNodeName] = "" : e = ""), s[bP] !== void 0 && typeof e == "object" && e && (e[bP] = s[bP]), a[c] !== void 0 && Object.prototype.hasOwnProperty.call(a, c)) Array.isArray(a[c]) || (a[c] = [a[c]]), a[c].push(e);
 			else {
 				let n = t.jPath ? r.toString() : r;
 				a[c] = t.isArray(c, n, i) ? [e] : e;
@@ -40347,14 +40350,14 @@ function SP(e, t, n, r) {
 	}
 	return typeof i == "string" ? i.length > 0 && (a[t.textNodeName] = i) : i !== void 0 && (a[t.textNodeName] = i), a;
 }
-function CP(e) {
+function wP(e) {
 	let t = Object.keys(e);
 	for (let e = 0; e < t.length; e++) {
 		let n = t[e];
 		if (n !== ":@") return n;
 	}
 }
-function wP(e, t, n, r) {
+function TP(e, t, n, r) {
 	if (t) {
 		let i = Object.keys(t), a = i.length;
 		for (let o = 0; o < a; o++) {
@@ -40363,11 +40366,11 @@ function wP(e, t, n, r) {
 		}
 	}
 }
-function TP(e, t) {
+function EP(e, t) {
 	let { textNodeName: n } = t, r = Object.keys(e).length;
 	return !!(r === 0 || r === 1 && (e[n] || typeof e[n] == "boolean" || e[n] === 0));
 }
-var EP = class {
+var DP = class {
 	constructor(e) {
 		this.externalEntities = {}, this.options = pN(e);
 	}
@@ -40380,7 +40383,7 @@ var EP = class {
 			if (n !== !0) throw Error(`${n.err.msg}:${n.err.line}:${n.err.col}`);
 		}
 		let n = new eP(this.options, this.externalEntities), r = n.parseXml(e);
-		return this.options.preserveOrder || r === void 0 ? r : xP(r, this.options, n.matcher, n.readonlyMatcher);
+		return this.options.preserveOrder || r === void 0 ? r : SP(r, this.options, n.matcher, n.readonlyMatcher);
 	}
 	addEntity(e, t) {
 		if (t.indexOf("&") !== -1) throw Error("Entity value can't have '&'");
@@ -40391,39 +40394,39 @@ var EP = class {
 	static getMetaDataSymbol() {
 		return hN.getMetaDataSymbol();
 	}
-}, DP = async () => OP(await kP()), OP = async (e) => {
-	let t = new EP().parse(e).metadata.versioning;
+}, OP = async () => kP(await AP()), kP = async (e) => {
+	let t = new DP().parse(e).metadata.versioning;
 	return {
 		latest: t.release,
 		availableVersions: t.versions.version
 	};
-}, kP = async () => {
+}, AP = async () => {
 	let e = EM;
-	return z(`Using metadata endpoint: ${e}`), await AP(e);
-}, AP = async (e) => {
+	return z(`Using metadata endpoint: ${e}`), await jP(e);
+}, jP = async (e) => {
 	let t = await new Mn(CM).get(e);
 	if (t.message.statusCode !== 200) throw Error(`Failed to fetch versions from URL. Status code: ${t.message.statusCode}`);
 	let n = t.message.headers["content-type"];
-	if (!jP(n)) throw Error(`Unexpected content type: ${n}`);
+	if (!MP(n)) throw Error(`Unexpected content type: ${n}`);
 	return await t.readBody();
-}, jP = (e) => {
+}, MP = (e) => {
 	let t = e?.split(";")[0];
 	return t === "application/xml" || t === "text/plain";
-}, MP = async (e, t, n) => {
-	let r = LP(e, t, n), a = process.env.RUNNER_TEMP;
+}, NP = async (e, t, n) => {
+	let r = RP(e, t, n), a = process.env.RUNNER_TEMP;
 	if (!a) throw Error("Expected RUNNER_TEMP to be defined");
 	return {
 		downloadUrl: r,
-		pathToArchive: await Pi(r, u.join(a, `${i.randomUUID()}.${NP(t)}`))
+		pathToArchive: await Pi(r, u.join(a, `${i.randomUUID()}.${PP(t)}`))
 	};
-}, NP = (e) => e === "windows" ? "zip" : "tar.gz", PP = (e, t, n) => e == "latest" ? n : Wa.maxSatisfying(t, e), FP = async (e, t) => {
+}, PP = (e) => e === "windows" ? "zip" : "tar.gz", FP = (e, t, n) => e == "latest" ? n : Wa.maxSatisfying(t, e), IP = async (e, t) => {
 	switch (t || (t = e.endsWith(".tar.gz") ? "tar.gz" : u.extname(e), t.startsWith(".") && (t = t.substring(1))), t) {
 		case "tar.gz":
 		case "tar": return await Li(e);
 		case "zip": return await Ri(e);
 		default: return await Ii(e);
 	}
-}, IP = async (e, t = process.platform) => {
+}, LP = async (e, t = process.platform) => {
 	if (t === "win32") return;
 	let n = u.join(e, "flyway");
 	try {
@@ -40432,10 +40435,10 @@ var EP = class {
 	} catch (e) {
 		Mr(`Failed to make ${n} executable: ${e instanceof Error ? e.message : String(e)}`);
 	}
-}, LP = (e, t, n) => {
-	let r = NP(t), i = TM;
+}, RP = (e, t, n) => {
+	let r = PP(t), i = TM;
 	return n == jM.JAVA ? `${i}/${e}/flyway-commandline-${e}.${r}` : `${i}/${e}/flyway-commandline-${e}-${t}-${n}.${r}`;
-}, RP = async (e) => {
+}, zP = async (e) => {
 	let t = "", n = await Sr("flyway", ["--version"], {
 		silent: !0,
 		ignoreReturnCode: !0,
@@ -40450,7 +40453,7 @@ var EP = class {
 	}
 	let i = r ? r[1].toLowerCase() : "community";
 	if (i !== e) throw Error(`Edition mismatch: expected '${e}' but Flyway reported '${i}'`);
-}, zP = async (e, t, n, r) => {
+}, BP = async (e, t, n, r) => {
 	Tr(t);
 	let i = [
 		"auth",
@@ -40466,7 +40469,7 @@ var EP = class {
 		if (e >= r) throw t;
 		Nr(`Auth attempt ${e} failed: ${n}. Retrying...`);
 	}
-}, BP = async (e, t) => {
+}, VP = async (e, t) => {
 	if (process.env.RUNNER_ENVIRONMENT === "github-hosted") return;
 	let n = Ui(SM, t).filter((t) => Wa.lt(t, e));
 	if (n.length !== 0) {
@@ -40483,10 +40486,10 @@ var EP = class {
 			}
 		}
 	}
-}, VP = async (e, t, n) => {
+}, HP = async (e, t, n) => {
 	let r = Hi(SM, e, n);
 	if (r || await kM(e, t, n) && (r = Hi(SM, e, n)), !r) {
-		let i = await MP(e, t, n), a = i.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz", o = await FP(i.pathToArchive, a);
+		let i = await NP(e, t, n), a = i.downloadUrl.endsWith(".zip") ? "zip" : "tar.gz", o = await IP(i.pathToArchive, a);
 		r = await Vi(d.join(o, `flyway-${e}`), SM, e, n), await AM(e, t, n);
 	}
 	return r;
@@ -40495,16 +40498,16 @@ process.argv[1].endsWith("index.js") && await (async () => {
 	try {
 		let e = PM(), { versionSpec: t, architecture: n, platform: r } = e;
 		Pr(`Installing ${SM}`);
-		let i = await DP();
+		let i = await OP();
 		Nr(`Latest version: ${i.latest}`), z(`Available versions: ${i.availableVersions.join(", ")}`);
-		let a = PP(t, i.availableVersions, i.latest);
+		let a = FP(t, i.availableVersions, i.latest);
 		if (a == null) {
 			kr(`Version specification ${t} is not available`);
 			return;
 		}
-		Nr(`Resolved ${t} to version: ${a}`), e.cleanOldCachedVersions && await BP(a, n);
-		let o = await VP(a, r, n);
-		await IP(o), Or(bM, a), Or(xM, o), wr(`FLYWAY_HOME_${a}`, o), Er(o), Fr(), e.email && e.token && (Pr("Authenticating Flyway"), await zP(e.email, e.token, e.agreeToEula, e.maxAuthAttempts), Fr()), Pr("Verifying Flyway edition"), await RP(e.edition), Fr();
+		Nr(`Resolved ${t} to version: ${a}`), e.cleanOldCachedVersions && await VP(a, n);
+		let o = await HP(a, r, n);
+		await LP(o), Or(bM, a), Or(xM, o), wr(`FLYWAY_HOME_${a}`, o), Er(o), Fr(), e.email && e.token && (Pr("Authenticating Flyway"), await BP(e.email, e.token, e.agreeToEula, e.maxAuthAttempts), Fr()), Pr("Verifying Flyway edition"), await zP(e.edition), Fr();
 	} catch (e) {
 		kr(e instanceof Error ? e.message : String(e));
 	}
