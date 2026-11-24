@@ -45,7 +45,7 @@ jobs:
           )
       - name: Dependabot license check
         if: ${{ github.event_name == 'pull_request' }}
-        uses: actions/dependency-review-action@v5.0.0
+        uses: actions/dependency-review-action@v5.0.1
         with:
           config-file: './.github/dependency-review-config.yml'
       - name: Audit packages
